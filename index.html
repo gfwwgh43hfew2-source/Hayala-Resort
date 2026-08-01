@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>منتجع حياله - النظام المالي والإداري</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+    <style>
+        /* ===== RESET & BASE ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Cairo', 'Segoe UI', Tahoma, Arial, sans-serif;
+            background: #0a0f1f;
+            color: #eee;
+            direction: rtl;
+            overflow-x: hidden;
+        }
+        a { text-decoration: none; color: inherit; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
+
+        /* ===== HEADER (مثل كسر زيرو) ===== */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: linear-gradient(180deg, #010832, #010b46);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        header .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo h1 {
+            font-size: 1.6rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #f5c842, #d4a020);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .logo span {
+            color: #fff;
+            -webkit-text-fill-color: #fff;
+            font-weight: 700;
+        }
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+        nav a {
+            color: rgba(255,255,255,0.8);
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            position: relative;
+        }
+        nav a:hover { color: #f5c842; }
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: #f5c842;
+            transition: 0.3s;
+        }
+        nav a:hover::after { width: 100%; }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .header-actions button {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .header-actions button:hover {
+            background: rgba(245,200,66,0.15);
+            border-color: rgba(245,200,66,0.3);
+        }
+        .hamburger {
+            display: none;
+            font-size: 1.5rem;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        /* ===== HERO (مثل كسر زيرو) ===== */
+        .hero {
+            position: relative;
+            min-height: 500px;
+            padding: 80px 0;
+            background: linear-gradient(145deg, #000214, #010832, #040e4e, #010960);
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(245,200,66,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(245,200,66,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+        }
+        .hero .container {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 40px;
+        }
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 15px;
+        }
+        .hero-content h1 .gold {
+            background: linear-gradient(135deg, #f5c842, #d4a020);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-content p {
+            color: rgba(255,255,255,0.7);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            max-width: 500px;
+            margin-bottom: 25px;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #f5c842, #d4a020);
+            color: #0a0f1f;
+            padding: 14px 35px;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 25px rgba(245,200,66,0.25);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 40px rgba(245,200,66,0.4);
+        }
+        .btn-secondary {
+            border: 2px solid #f5c842;
+            color: #f5c842;
+            padding: 14px 35px;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-secondary:hover {
+            background: #f5c842;
+            color: #0a0f1f;
+        }
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 40px;
+        }
+        .hero-stat {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+        }
+        .hero-stat .number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #f5c842;
+        }
+        .hero-stat .label {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.5);
+        }
+        .hero-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .hero-image .card-mockup {
+            background: linear-gradient(145deg, #121a2e, #0e1525);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(245,200,66,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        .hero-image .card-mockup .mockup-icon {
+            font-size: 4rem;
+            color: #f5c842;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .hero-image .card-mockup .mockup-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .hero-image .card-mockup .mockup-desc {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.5);
+            text-align: center;
+        }
+
+        /* ===== KPI CARDS ===== */
+        .kpi-section {
+            padding: 60px 0;
+            background: #0a0f1f;
+        }
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .kpi-card {
+            background: linear-gradient(145deg, #121a2e, #0e1525);
+            padding: 25px;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid rgba(245,200,66,0.08);
+            transition: 0.3s;
+        }
+        .kpi-card:hover {
+            border-color: rgba(245,200,66,0.2);
+            transform: translateY(-3px);
+        }
+        .kpi-card .icon { font-size: 2rem; color: #f5c842; margin-bottom: 8px; }
+        .kpi-card .number { font-size: 2.2rem; font-weight: 800; color: #f5c842; }
+        .kpi-card .label { font-size: 0.8rem; color: rgba(255,255,255,0.6); margin-top: 4px; }
+
+        /* ===== QUICK NAV (مثل كسر زيرو) ===== */
+        .quick-nav {
+            padding: 30px 0;
+            background: rgba(255,255,255,0.015);
+            border-top: 1px solid rgba(245,200,66,0.05);
+            border-bottom: 1px solid rgba(245,200,66,0.05);
+        }
+        .quick-nav .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+        }
+        .quick-nav .btn {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 14px 12px;
+            border-radius: 12px;
+            text-align: center;
+            color: rgba(255,255,255,0.7);
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: 0.3s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .quick-nav .btn:hover {
+            background: rgba(245,200,66,0.08);
+            border-color: rgba(245,200,66,0.2);
+            color: #f5c842;
+        }
+        .quick-nav .btn .icon { color: #f5c842; }
+
+        /* ===== TABLE ===== */
+        .table-section {
+            padding: 40px 0;
+        }
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #f5c842;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 2px solid rgba(245,200,66,0.1);
+            padding-bottom: 12px;
+        }
+        .table-wrapper {
+            background: #121a2e;
+            border-radius: 16px;
+            overflow-x: auto;
+            border: 1px solid rgba(245,200,66,0.05);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+            min-width: 900px;
+        }
+        th {
+            background: #1a2f44;
+            color: #f5c842;
+            padding: 12px 10px;
+            text-align: right;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        td {
+            padding: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            color: #c0d0e0;
+        }
+        tr:hover td { background: rgba(245,200,66,0.03); }
+        .badge {
+            display: inline-block;
+            padding: 3px 14px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .badge-paid { background: #2b8a3e; color: #fff; }
+        .badge-balance { background: #c92a2a; color: #fff; }
+        .badge-type { background: #1a2f44; color: #8a9ab0; }
+
+        /* ===== COMPANY DATA ===== */
+        .company-box {
+            background: linear-gradient(145deg, #121a2e, #0e1525);
+            border-radius: 16px;
+            padding: 25px;
+            border: 1px solid rgba(245,200,66,0.05);
+            margin: 30px 0;
+        }
+        .company-box .title {
+            color: #f5c842;
+            font-weight: 700;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+        .company-box .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px 25px;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.02);
+        }
+        .company-box .row:last-child { border-bottom: none; }
+        .company-box .label { color: rgba(255,255,255,0.5); font-size: 0.8rem; min-width: 100px; }
+        .company-box .value { color: #c0d0e0; font-size: 0.85rem; font-weight: 500; }
+
+        /* ===== FOOTER (مثل كسر زيرو) ===== */
+        footer {
+            background: #060a16;
+            padding: 40px 0;
+            border-top: 1px solid rgba(245,200,66,0.05);
+            margin-top: 40px;
+        }
+        footer .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+        footer h4 {
+            color: #f5c842;
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+        }
+        footer ul { list-style: none; }
+        footer ul li { margin-bottom: 8px; }
+        footer ul a {
+            color: rgba(255,255,255,0.4);
+            font-size: 0.8rem;
+            transition: 0.3s;
+        }
+        footer ul a:hover { color: #f5c842; }
+        footer .socials {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        footer .socials a {
+            color: rgba(255,255,255,0.3);
+            font-size: 1.3rem;
+            transition: 0.3s;
+        }
+        footer .socials a:hover { color: #f5c842; }
+        footer .copyright {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: rgba(255,255,255,0.2);
+            font-size: 0.75rem;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.03);
+            margin-top: 20px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 992px) {
+            .hero .container { grid-template-columns: 1fr; text-align: center; }
+            .hero-content p { margin: 0 auto 25px; }
+            .hero-buttons { justify-content: center; }
+            .hero-stats { grid-template-columns: repeat(3, 1fr); }
+            nav { display: none; }
+            .hamburger { display: block; }
+            .hero h1 { font-size: 2.5rem; }
+        }
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 1.8rem; }
+            .hero-stats { grid-template-columns: 1fr; }
+            .kpi-grid { grid-template-columns: 1fr 1fr; }
+            .quick-nav .grid { grid-template-columns: 1fr 1fr; }
+            table { font-size: 0.65rem; min-width: 700px; }
+        }
+        @media (max-width: 400px) {
+            .kpi-grid { grid-template-columns: 1fr; }
+            .quick-nav .grid { grid-template-columns: 1fr; }
+        }
+
+        /* ===== LOADING ===== */
+        .loading, .error {
+            text-align: center;
+            padding: 40px 20px;
+            font-size: 1rem;
+        }
+        .loading { color: #f5c842; }
+        .error { color: #ff6b6b; }
+        .error small {
+            display: block;
+            margin-top: 10px;
+            color: rgba(255,255,255,0.4);
+            font-size: 0.8rem;
+        }
+        .table-note {
+            text-align: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 0.7rem;
+            padding: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>الاكسيل <span>للجميع</span></h1>
+            </div>
+            <nav>
+                <a href="#">الرئيسية</a>
+                <a href="#">الحجوزات</a>
+                <a href="#">المصاريف</a>
+                <a href="#">التقارير</a>
+                <a href="#">تواصل</a>
+            </nav>
+            <div class="header-actions">
+                <button aria-label="بحث"><i class="fas fa-search"></i></button>
+                <button aria-label="الإشعارات"><i class="fas fa-bell"></i></button>
+                <div class="hamburger"><i class="fas fa-bars"></i></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>
+                    <span class="gold">منتجع حياله</span><br />
+                    النظام المالي والإداري الشامل
+                </h1>
+                <p>
+                    إدارة متكاملة للحجوزات، المصاريف، والإيرادات<br />
+                    تحديث تلقائي من Google Sheets • متابعة لحظية من أي مكان
+                </p>
+                <div class="hero-buttons">
+                    <a href="#table" class="btn-primary"><i class="fas fa-chart-line"></i> استعرض البيانات</a>
+                    <a href="https://wa.me/201010422057" class="btn-secondary"><i class="fab fa-whatsapp"></i> تواصل واتساب</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="number" id="statBookings">0</div>
+                        <div class="label">إجمالي الحجوزات</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="number" id="statRevenue">0</div>
+                        <div class="label">إجمالي الإيرادات</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="number" id="statFuture">0</div>
+                        <div class="label">حجوزات مستقبلية</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="card-mockup">
+                    <div class="mockup-icon"><i class="fas fa-building"></i></div>
+                    <div class="mockup-title">منتجع حياله - القصيم</div>
+                    <div class="mockup-desc">
+                        نظام إدارة متكامل<br />
+                        <span style="color:#f5c842;">شيتات Excel ذكية</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== KPI ===== -->
+    <section class="kpi-section">
+        <div class="container">
+            <div class="kpi-grid" id="kpiGrid">
+                <div class="kpi-card">
+                    <div class="icon"><i class="fas fa-coins"></i></div>
+                    <div class="number" id="kpiRevenue">0</div>
+                    <div class="label">إجمالي الإيرادات</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="icon"><i class="fas fa-hand-holding-usd"></i></div>
+                    <div class="number" id="kpiProfit">0</div>
+                    <div class="label">صافي الربح</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="icon"><i class="fas fa-money-bill-wave"></i></div>
+                    <div class="number" id="kpiExpenses">0</div>
+                    <div class="label">إجمالي المصاريف</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="icon"><i class="fas fa-calendar-check"></i></div>
+                    <div class="number" id="kpiFuture">0</div>
+                    <div class="label">حجوزات مستقبلية</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== QUICK NAV ===== -->
+    <section class="quick-nav">
+        <div class="container">
+            <div class="grid">
+                <a href="#" class="btn"><span class="icon">📊</span> لوحة التحكم</a>
+                <a href="#" class="btn"><span class="icon">📋</span> سجل الحجوزات</a>
+                <a href="expenses.html" class="btn"><span class="icon">💰</span> المصاريف والتشغيل</a>
+                <a href="future.html" class="btn"><span class="icon">📅</span> حجوزات مستقبلية</a>
+                <a href="filter.html" class="btn"><span class="icon">📆</span> فلترة حسب الفترة</a>
+                <a href="#" class="btn"><span class="icon">📈</span> التقارير</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TABLE ===== -->
+    <section class="table-section" id="table">
+        <div class="container">
+            <div class="section-title">
+                <i class="fas fa-table"></i>
+                سجل الحجوزات
+            </div>
+            <div id="tableContainer"><div class="loading">⏳ جاري تحميل البيانات...</div></div>
+        </div>
+    </section>
+
+    <!-- ===== COMPANY DATA ===== -->
+    <section>
+        <div class="container">
+            <div class="company-box">
+                <div class="title">🏢 بيانات المنشأة الأساسية</div>
+                <div class="row"><span class="label">اسم المنشأة</span><span class="value">منتجع وشاليهات حيالة القصيم</span></div>
+                <div class="row"><span class="label">العنوان / الموقع</span><span class="value">القصيم / بريدة - حي الخليج</span></div>
+                <div class="row"><span class="label">جوال المنشأة</span><span class="value">📱 +966509982400</span></div>
+                <div class="row"><span class="label">الرقم الضريبي</span><span class="value" style="color:rgba(255,255,255,0.3);">(اختياري)</span></div>
+                <div class="row"><span class="label">نسبة عمولة أبو زيد</span><span class="value" style="color:#f5c842;">20%</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="container">
+            <div>
+                <h4>منتجع حياله</h4>
+                <ul>
+                    <li><a href="#">الرئيسية</a></li>
+                    <li><a href="#">الحجوزات</a></li>
+                    <li><a href="#">المصاريف</a></li>
+                    <li><a href="#">التقارير</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>الخدمات</h4>
+                <ul>
+                    <li><a href="#">لوحة التحكم</a></li>
+                    <li><a href="#">سجل الحجوزات</a></li>
+                    <li><a href="#">المصاريف والتشغيل</a></li>
+                    <li><a href="#">التقارير المالية</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>الدعم</h4>
+                <ul>
+                    <li><a href="#">تواصل معنا</a></li>
+                    <li><a href="#">الأسئلة الشائعة</a></li>
+                    <li><a href="#">سياسة الخصوصية</a></li>
+                    <li><a href="#">الشروط والأحكام</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>تابعنا</h4>
+                <div class="socials">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="https://wa.me/201010422057" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                </div>
+                <div style="margin-top:15px;">
+                    <p style="color:rgba(255,255,255,0.3);font-size:0.75rem;">تصميم محاسب: محمد خلاف</p>
+                    <p style="color:rgba(255,255,255,0.2);font-size:0.7rem;">📱 +201010422057</p>
+                </div>
+            </div>
+            <div class="copyright">
+                © 2026 منتجع حياله - القصيم · جميع الحقوق محفوظة
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // =============================================
+        // 🔑 بيانات الشيت
+        // =============================================
+        const SHEET_ID = '1u6SM7bWGk2fdiBJLS-N9BO7XXb45QnAp2OqYIw0STpg';
+        const SHEET_NAME = 'سجل الحجوزات';
+
+        async function fetchSheetData() {
+            try {
+                const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${SHEET_NAME}`;
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const csvText = await response.text();
+                const lines = csvText.split('\n').filter(line => line.trim() !== '');
+                return lines.map(line => {
+                    const row = [];
+                    let current = '', insideQuotes = false;
+                    for (let i = 0; i < line.length; i++) {
+                        const char = line[i];
+                        if (char === '"') insideQuotes = !insideQuotes;
+                        else if (char === ',' && !insideQuotes) { row.push(current.trim()); current = ''; }
+                        else current += char;
+                    }
+                    row.push(current.trim());
+                    return row;
+                });
+            } catch (error) { console.error(error); return null; }
+        }
+
+        function cleanNumber(value) {
+            if (!value) return 0;
+            if (typeof value === 'number') return value;
+            const cleaned = String(value).replace(/[^0-9.]/g, '');
+            return parseFloat(cleaned) || 0;
+        }
+
+        function findColumnIndex(headers, target) {
+            const clean = s => String(s).trim().replace(/\s+/g, ' ');
+            let idx = headers.findIndex(h => clean(h) === clean(target));
+            if (idx !== -1) return idx;
+            return headers.findIndex(h => clean(h).includes(clean(target)));
+        }
+
+        function parseDate(dateStr) {
+            if (!dateStr) return null;
+            try {
+                let cleaned = String(dateStr).trim().replace(/\s+/g, ' ');
+                cleaned = cleaned.split(' ')[0];
+                let parts = cleaned.split('/');
+                if (parts.length === 3) {
+                    const day = parseInt(parts[0]);
+                    const month = parseInt(parts[1]) - 1;
+                    const year = parseInt(parts[2]);
+                    if (!isNaN(day) && !isNaN(month) && !isNaN(year) && year > 2000) {
+                        return new Date(year, month, day);
+                    }
+                }
+                parts = cleaned.split('-');
+                if (parts.length === 3) {
+                    const day = parseInt(parts[0]);
+                    const month = parseInt(parts[1]) - 1;
+                    const year = parseInt(parts[2]);
+                    if (!isNaN(day) && !isNaN(month) && !isNaN(year) && year > 2000) {
+                        return new Date(year, month, day);
+                    }
+                }
+                return null;
+            } catch(e) { return null; }
+        }
+
+        function displayData(data) {
+            const tableContainer = document.getElementById('tableContainer');
+
+            if (!data || data.length < 2) {
+                tableContainer.innerHTML = `<div class="error">❌ لا توجد بيانات</div>`;
+                return;
+            }
+
+            const headers = data[0].map(h => String(h).trim());
+            const rows = data.slice(1);
+
+            // ===== البحث عن الأعمدة =====
+            const idxNumber = findColumnIndex(headers, 'رقم الحجز');
+            const idxInvoiceDate = findColumnIndex(headers, 'تاريخ الفاتورة');
+            const idxCheckIn = findColumnIndex(headers, 'تاريخ الدخول');
+            const idxName = findColumnIndex(headers, 'اسم الحجز');
+            const idxType = findColumnIndex(headers, 'نوع الحجز (العقار)');
+            const idxNights = findColumnIndex(headers, 'عدد أيام المبيت');
+            const idxPaid = findColumnIndex(headers, 'المدفوع');
+            const idxRemaining = findColumnIndex(headers, 'المتبقي');
+            const idxTotal = findColumnIndex(headers, 'الإجمالي (صافي الإيراد)');
+            const idxStatus = findColumnIndex(headers, 'حالة السداد');
+
+            if (idxTotal === -1) {
+                tableContainer.innerHTML = `<div class="error">❌ لم يتم العثور على أعمدة البيانات</div>`;
+                return;
+            }
+
+            // ===== حساب الإحصائيات =====
+            let totalRevenue = 0, totalPaid = 0, totalRemaining = 0;
+            let fullyPaid = 0, balanceDue = 0;
+            let validRows = 0, futureBookings = 0;
+            const today = new Date();
+            const todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+            rows.forEach(row => {
+                if (!row || row.length === 0) return;
+                const total = row[idxTotal] ? cleanNumber(row[idxTotal]) : 0;
+                if (total === 0 && !row[idxName]) return;
+
+                validRows++;
+                totalRevenue += total;
+                totalPaid += (idxPaid !== -1 && row[idxPaid]) ? cleanNumber(row[idxPaid]) : 0;
+                totalRemaining += (idxRemaining !== -1 && row[idxRemaining]) ? cleanNumber(row[idxRemaining]) : 0;
+
+                if (idxStatus !== -1) {
+                    const status = String(row[idxStatus]).trim();
+                    if (status.includes('Fully Paid') || status.includes('مدفوع بالكامل')) fullyPaid++;
+                    else if (status.includes('Balance Due') || status.includes('متبقي')) balanceDue++;
+                }
+
+                if (idxCheckIn !== -1 && row[idxCheckIn]) {
+                    const checkInDate = parseDate(row[idxCheckIn]);
+                    if (checkInDate && checkInDate >= todayDate) futureBookings++;
+                }
+            });
+
+            const totalExpenses = 3046;
+            const netProfit = totalRevenue - totalExpenses;
+
+            // ===== تحديث الهيرو ستات =====
+            document.getElementById('statBookings').textContent = validRows;
+            document.getElementById('statRevenue').textContent = totalRevenue.toLocaleString();
+            document.getElementById('statFuture').textContent = futureBookings;
+
+            // ===== تحديث كي بي أي =====
+            document.getElementById('kpiRevenue').textContent = totalRevenue.toLocaleString() + ' ر.س';
+            document.getElementById('kpiProfit').textContent = netProfit.toLocaleString() + ' ر.س';
+            document.getElementById('kpiExpenses').textContent = totalExpenses.toLocaleString() + ' ر.س';
+            document.getElementById('kpiFuture').textContent = futureBookings;
+
+            // ===== عرض الجدول =====
+            let tableRows = '';
+            const displayRows = rows.slice(0, 30);
+            displayRows.forEach(row => {
+                if (!row || row.length === 0) return;
+                const total = row[idxTotal] ? cleanNumber(row[idxTotal]) : 0;
+                if (total === 0 && !row[idxName]) return;
+
+                let statusBadge = `<span class="badge badge-balance">متبقي</span>`;
+                if (idxStatus !== -1) {
+                    const status = String(row[idxStatus]).trim();
+                    if (status.includes('Fully Paid') || status.includes('مدفوع بالكامل')) {
+                        statusBadge = `<span class="badge badge-paid">مدفوع</span>`;
+                    }
+                }
+
+                const checkInDate = (idxCheckIn !== -1 && row[idxCheckIn]) ? row[idxCheckIn] : '-';
+                let isFuture = false;
+                if (idxCheckIn !== -1 && row[idxCheckIn]) {
+                    const d = parseDate(row[idxCheckIn]);
+                    if (d && d >= todayDate) isFuture = true;
+                }
+
+                tableRows += `<tr style="${isFuture ? 'background: rgba(245,200,66,0.05);' : ''}">
+                    <td>${(idxNumber !== -1 && row[idxNumber]) ? row[idxNumber] : '-'}</td>
+                    <td>${(idxInvoiceDate !== -1 && row[idxInvoiceDate]) ? row[idxInvoiceDate] : '-'}</td>
+                    <td>${checkInDate} ${isFuture ? '⭐' : ''}</td>
+                    <td>${(idxName !== -1 && row[idxName]) ? row[idxName] : '-'}</td>
+                    <td><span class="badge badge-type">${(idxType !== -1 && row[idxType]) ? row[idxType] : '-'}</span></td>
+                    <td>${(idxNights !== -1 && row[idxNights]) ? row[idxNights] : '0'}</td>
+                    <td>${(idxPaid !== -1 && row[idxPaid]) ? cleanNumber(row[idxPaid]).toLocaleString() : '0'}</td>
+                    <td>${(idxRemaining !== -1 && row[idxRemaining]) ? cleanNumber(row[idxRemaining]).toLocaleString() : '0'}</td>
+                    <td>${total.toLocaleString()}</td>
+                    <td>${statusBadge}</td>
+                </tr>`;
+            });
+
+            tableContainer.innerHTML = `
+                <div class="table-wrapper">
+                    <table>
+                        <thead><tr>
+                            <th>رقم الحجز</th>
+                            <th>تاريخ الفاتورة</th>
+                            <th>تاريخ الدخول</th>
+                            <th>اسم الحجز</th>
+                            <th>نوع العقار</th>
+                            <th>عدد الأيام</th>
+                            <th>المدفوع</th>
+                            <th>المتبقي</th>
+                            <th>الإجمالي</th>
+                            <th>الحالة</th>
+                        </tr></thead>
+                        <tbody>${tableRows || '<tr><td colspan="10" style="text-align:center;color:rgba(255,255,255,0.3);padding:20px;">لا توجد حجوزات</td></tr>'}</tbody>
+                    </table>
+                </div>
+                <div class="table-note">⭐ حجوزات مستقبلية · يعرض آخر 30 حجز</div>
+            `;
+        }
+
+        async function loadData() {
+            const data = await fetchSheetData();
+            if (data && data.length > 0) displayData(data);
+            else {
+                document.getElementById('tableContainer').innerHTML = `
+                    <div class="error">❌ حدث خطأ في تحميل البيانات
+                        <small>تأكد من أن الشيت عام للقراءة<br>وأن اسم التبويب "${SHEET_NAME}" صحيح</small>
+                    </div>
+                `;
+            }
+        }
+
+        loadData();
+        setInterval(loadData, 300000);
+    </script>
+
+</body>
+</html>
