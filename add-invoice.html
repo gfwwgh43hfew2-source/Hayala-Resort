@@ -1736,6 +1736,11 @@
             margin-left: 6px;
         }
 
+        .client-suggestions .suggestions-list .suggestion-item.selected {
+            background: var(--accent-soft);
+            border-right: 3px solid var(--accent);
+        }
+
         .client-suggestions .suggestions-list .loading-suggestions {
             padding: 12px 14px;
             text-align: center;
@@ -2208,6 +2213,7 @@
         var editingInvoiceNumber = '';
         var clientsList = [];
         var selectedClientId = null;
+        var selectedSuggestionIndex = -1;
 
         var settings = {
             companyName: 'منتجع حياله',
@@ -2926,10 +2932,11 @@
 
         /**
          * ============================================================
-         * CLIENT SUGGESTIONS
+         * CLIENT SUGGESTIONS SYSTEM - مع التنقل بالأسهم
          * ============================================================
          */
         var clientSuggestions = document.getElementById('clientSuggestions');
+        var clientNameInput = document.getElementById('clientName');
 
         function showClientSuggestions(input) {
             var searchTerm = input.trim().toLowerCase();
@@ -2937,6 +2944,7 @@
 
             if (!searchTerm || searchTerm.length < 1) {
                 suggestionsList.classList.remove('show');
+                selectedSuggestionIndex = -1;
                 return;
             }
 
@@ -2949,19 +2957,20 @@
 
             if (results.length === 0) {
                 suggestionsList.innerHTML = `
-                    <div class="suggestion-item add-new" onclick="openAddClientModal('${searchTerm}')">
+                    <div class="suggestion-item add-new" onclick="openAddClientModal('${searchTerm}')" data-index="0">
                         <span><i class="fas fa-plus-circle"></i> إضافة عميل جديد: "${searchTerm}"</span>
                     </div>
                     <div class="no-results">لا توجد نتائج مطابقة</div>
                 `;
                 suggestionsList.classList.add('show');
+                selectedSuggestionIndex = -1;
                 return;
             }
 
             var html = '';
-            results.forEach(function(client) {
+            results.forEach(function(client, index) {
                 html += `
-                    <div class="suggestion-item" onclick="selectClient('${client.id}', '${client.name}', '${client.phone || ''}')">
+                    <div class="suggestion-item" onclick="selectClient('${client.id}', '${client.name}', '${client.phone || ''}')" data-index="${index + 1}">
                         <span>${client.name}</span>
                         ${client.phone ? `<span class="client-phone">📱 ${client.phone}</span>` : ''}
                     </div>
@@ -2969,27 +2978,41 @@
             });
 
             html += `
-                <div class="suggestion-item add-new" onclick="openAddClientModal('${searchTerm}')">
+                <div class="suggestion-item add-new" onclick="openAddClientModal('${searchTerm}')" data-index="${results.length + 1}">
                     <span><i class="fas fa-plus-circle"></i> إضافة عميل جديد</span>
                 </div>
             `;
 
             suggestionsList.innerHTML = html;
             suggestionsList.classList.add('show');
+            selectedSuggestionIndex = -1;
+            updateSuggestionHighlight();
+        }
+
+        function updateSuggestionHighlight() {
+            var items = clientSuggestions.querySelectorAll('.suggestion-item');
+            items.forEach(function(item, index) {
+                item.classList.remove('selected');
+                if (index === selectedSuggestionIndex) {
+                    item.classList.add('selected');
+                    item.scrollIntoView({ block: 'nearest' });
+                }
+            });
         }
 
         function selectClient(id, name, phone) {
-            clientName.value = name;
+            clientNameInput.value = name;
             selectedClientId = id;
             clientSuggestions.classList.remove('show');
+            selectedSuggestionIndex = -1;
 
             if (phone && document.getElementById('clientPhone')) {
                 document.getElementById('clientPhone').value = phone;
             }
 
-            clientName.style.borderColor = 'var(--teal)';
+            clientNameInput.style.borderColor = 'var(--teal)';
             setTimeout(function() {
-                clientName.style.borderColor = '';
+                clientNameInput.style.borderColor = '';
             }, 2000);
         }
 
@@ -3048,8 +3071,6 @@
         }
 
         // Client input events
-        var clientNameInput = document.getElementById('clientName');
-
         clientNameInput.addEventListener('input', function() {
             var value = this.value.trim();
             if (value.length >= 1) {
@@ -3057,6 +3078,40 @@
             } else {
                 clientSuggestions.classList.remove('show');
                 selectedClientId = null;
+                selectedSuggestionIndex = -1;
+            }
+        });
+
+        clientNameInput.addEventListener('keydown', function(e) {
+            var items = clientSuggestions.querySelectorAll('.suggestion-item');
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (items.length > 0) {
+                    selectedSuggestionIndex = Math.min(selectedSuggestionIndex + 1, items.length - 1);
+                    updateSuggestionHighlight();
+                }
+            }
+
+            if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (items.length > 0) {
+                    selectedSuggestionIndex = Math.max(selectedSuggestionIndex - 1, 0);
+                    updateSuggestionHighlight();
+                }
+            }
+
+            if (e.key === 'Enter' && selectedSuggestionIndex >= 0) {
+                e.preventDefault();
+                var selectedItem = items[selectedSuggestionIndex];
+                if (selectedItem) {
+                    selectedItem.click();
+                }
+            }
+
+            if (e.key === 'Escape') {
+                clientSuggestions.classList.remove('show');
+                selectedSuggestionIndex = -1;
             }
         });
 
@@ -3064,26 +3119,16 @@
             setTimeout(function() {
                 if (!document.activeElement || !document.activeElement.closest('.client-suggestions')) {
                     clientSuggestions.classList.remove('show');
+                    selectedSuggestionIndex = -1;
                 }
             }, 200);
-        });
-
-        clientNameInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                clientSuggestions.classList.remove('show');
-            }
-            if (e.key === 'Enter' && clientSuggestions.classList.contains('show')) {
-                var firstItem = clientSuggestions.querySelector('.suggestion-item:not(.add-new)');
-                if (firstItem) {
-                    firstItem.click();
-                }
-            }
         });
 
         document.addEventListener('click', function(e) {
             var container = document.querySelector('.client-suggestions');
             if (container && !container.contains(e.target)) {
                 clientSuggestions.classList.remove('show');
+                selectedSuggestionIndex = -1;
             }
         });
 
@@ -3260,7 +3305,6 @@
                 return;
             }
 
-            // Check if client exists in database
             var existingClient = clientsList.find(function(c) {
                 return c.name.toLowerCase() === clientNameValue.toLowerCase();
             });
