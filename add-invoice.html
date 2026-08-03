@@ -2319,7 +2319,7 @@
 
         /**
          * ============================================================
-         * INVOICE NUMBER GENERATOR - Supabase
+         * INVOICE NUMBER GENERATOR - Supabase (المعدل)
          * ============================================================
          */
         async function generateInvoiceNumber() {
@@ -2348,13 +2348,16 @@
                     var lastBookingNumber = data[0].booking_number;
                     var parts = lastBookingNumber.split('-');
                     if (parts.length === 3) {
-                        lastNumber = parseInt(parts[2]) || 0;
+                        var lastSeq = parseInt(parts[2]) || 0;
+                        lastNumber = lastSeq;
                     }
                 }
 
                 var newNumber = lastNumber + 1;
                 var num = String(newNumber).padStart(4, '0');
                 invoiceNumber.value = 'INV-' + dateStr + '-' + num;
+
+                console.log('📌 آخر رقم:', lastNumber, '→ رقم جديد:', newNumber);
 
             } catch (error) {
                 console.error('❌ خطأ في توليد رقم الفاتورة:', error);
