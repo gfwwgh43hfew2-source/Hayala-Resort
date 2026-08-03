@@ -1,1047 +1,542 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>سجل الحجوزات - منتجع حياله</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>سجل الحجوزات · منتجع حياله</title>
+
+    <link rel="shortcut icon" href="#">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&display=swap" rel="stylesheet">
+
     <style>
-        /* ============================================================
-           ROOT VARIABLES
-           ============================================================ */
+        /* ==========================================================
+           DESIGN SYSTEM — منتجع حياله (موحّد مع لوحة التحكم)
+           ========================================================== */
         :root {
-            --primary: #0EA5E9;
-            --primary-dark: #0284C7;
-            --primary-gradient: linear-gradient(135deg, #0EA5E9, #3B82F6, #0EA5E9);
+            --canvas:      #f6f3ec;
+            --surface:     #ffffff;
+            --surface-2:   #fbf9f4;
+            --line:        rgba(33,29,26,0.11);
+            --line-soft:   rgba(33,29,26,0.06);
 
-            --secondary: #FCD34D;
-            --secondary-gradient: linear-gradient(135deg, #FCD34D, #F59E0B);
-            --secondary-dark: #B45309;
+            --ink:         #211d1a;
+            --ink-2:       #6e645a;
+            --ink-3:       #a69c90;
+            --ink-4:       #d8d0c4;
 
-            --bg-dark: #0F172A;
-            --bg-card: #1E293B;
-            --bg-card-hover: #2D3B52;
-            --bg-gradient: linear-gradient(145deg, #0F172A, #1E293B, #0F172A);
+            --prussian:      #1f4e6b;
+            --prussian-tint: #e7eef1;
+            --terracotta:      #b14b2b;
+            --terracotta-tint: #f7e7df;
+            --ochre:       #b98a1e;
+            --ochre-tint:  #f6efdd;
+            --viridian:      #2e7a5c;
+            --viridian-tint: #e7f1ec;
+            --oxide:       #a63a31;
+            --oxide-tint:  #f5e4e1;
 
-            --text-primary: #F8FAFC;
-            --text-secondary: #94A3B8;
-            --text-muted: #64748B;
-            --text-gold: #FCD34D;
+            --sidebar-w:   270px;
+            --header-h:    68px;
+            --r-lg:        18px;
+            --r-md:        12px;
+            --r-sm:        8px;
+            --ease:        cubic-bezier(0.22, 1, 0.36, 1);
 
-            --glow-primary: 0 0 30px rgba(14, 165, 233, 0.15);
-            --glow-secondary: 0 0 30px rgba(252, 211, 77, 0.15);
-            --glow-strong: 0 0 60px rgba(14, 165, 233, 0.25);
-
-            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.3);
-            --shadow-hover: 0 12px 48px rgba(0, 0, 0, 0.4);
+            --display:     'Bricolage Grotesque', 'Cairo', sans-serif;
         }
 
-        /* ===== RESET ===== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
         body {
-            font-family: 'Cairo', 'Segoe UI', Tahoma, Arial, sans-serif;
-            background: var(--bg-dark);
-            color: var(--text-primary);
+            font-family: 'Cairo', 'Segoe UI', system-ui, sans-serif;
+            background: var(--canvas);
+            color: var(--ink);
             direction: rtl;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
             min-height: 100vh;
-        }
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 24px;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* ===== SCROLLBAR ===== */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg-dark);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary-gradient);
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(14, 165, 233, 0.2);
-        }
-
-        /* ===== ANIMATIONS ===== */
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        .animate-fade-up {
-            opacity: 0;
-            animation: fadeUp 0.7s cubic-bezier(0.23, 1, 0.32, 1) forwards;
-        }
-        .delay-1 { animation-delay: 0.1s; }
-        .delay-2 { animation-delay: 0.2s; }
-        .delay-3 { animation-delay: 0.3s; }
-        .delay-4 { animation-delay: 0.4s; }
-        .delay-5 { animation-delay: 0.5s; }
-
-        /* ===== HEADER ===== */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            padding: 14px 0;
-            transition: all 0.4s ease;
-            background: transparent;
-        }
-        header.scrolled {
-            background: rgba(15, 23, 42, 0.92);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(14, 165, 233, 0.08);
-            padding: 10px 0;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
-        }
-        header .container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .logo-icon {
-            width: 38px;
-            height: 38px;
-            background: var(--primary-gradient);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            font-weight: 900;
-            color: #0F172A;
-            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
-        }
-        .logo-text h1 {
-            font-size: 1.3rem;
-            font-weight: 900;
-            background: var(--secondary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            line-height: 1.4;
-        }
-        .logo-text span {
-            font-size: 0.65rem;
-            color: var(--text-muted);
-            display: block;
-            -webkit-text-fill-color: var(--text-muted);
-        }
-        nav {
-            display: flex;
-            align-items: center;
-            gap: 28px;
-        }
-        nav a {
-            color: var(--text-secondary);
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: 0.3s;
-            position: relative;
-        }
-        nav a::after {
+        body::before {
             content: '';
-            position: absolute;
-            bottom: -4px;
-            right: 0;
-            width: 0;
-            height: 2px;
-            background: var(--primary-gradient);
-            transition: 0.3s;
-            border-radius: 10px;
-        }
-        nav a:hover {
-            color: var(--text-primary);
-        }
-        nav a:hover::after {
-            width: 100%;
-        }
-        nav a.active {
-            color: var(--secondary);
-        }
-        nav a.active::after {
-            width: 100%;
-        }
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .header-actions button {
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            background: rgba(255, 255, 255, 0.02);
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .header-actions button:hover {
-            background: rgba(14, 165, 233, 0.08);
-            border-color: rgba(14, 165, 233, 0.15);
-            color: var(--primary);
-        }
-        .hamburger {
-            display: none;
-            font-size: 1.2rem;
-            color: #fff;
-            cursor: pointer;
-            padding: 8px 12px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            background: rgba(255, 255, 255, 0.02);
-            transition: 0.3s;
-            z-index: 1001;
-        }
-        .hamburger:hover {
-            background: rgba(14, 165, 233, 0.08);
-            border-color: rgba(14, 165, 233, 0.15);
-            color: var(--primary);
+            position: fixed; inset: 0; pointer-events: none; z-index: 2000;
+            opacity: 0.025; mix-blend-mode: multiply;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
         }
 
-        /* ===== SIDEBAR ===== */
+        a { text-decoration: none; color: inherit; }
+        button { font-family: inherit; }
+        a, button { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--ink-4); border-radius: 10px; }
+
+        :focus-visible { outline: 2px solid var(--prussian); outline-offset: 2px; border-radius: 3px; }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+        }
+
+        /* ==========================================================
+           SIDEBAR
+           ========================================================== */
         .sidebar-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 1001;
-            backdrop-filter: blur(5px);
-            animation: overlayIn 0.3s ease;
-        }
-        .sidebar-overlay.active {
-            display: block;
-        }
-        .sidebar {
-            position: fixed;
-            top: 0;
-            right: -320px;
-            width: 300px;
-            height: 100%;
-            background: linear-gradient(180deg, #0F172A, #0A0E1A);
-            z-index: 1002;
-            padding: 30px 20px;
-            transition: right 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            border-left: 1px solid rgba(14, 165, 233, 0.05);
-            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
-            overflow-y: auto;
-        }
-        .sidebar.open {
-            right: 0;
-        }
-        .sidebar .sidebar-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-            margin-bottom: 25px;
-        }
-        .sidebar .sidebar-header .logo-mini {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .sidebar .sidebar-header .logo-mini .icon {
-            width: 36px;
-            height: 36px;
-            background: var(--primary-gradient);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            font-weight: 900;
-            color: #0F172A;
-        }
-        .sidebar .sidebar-header .logo-mini h2 {
-            font-size: 1rem;
-            font-weight: 700;
-            background: var(--secondary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .sidebar .close-sidebar {
-            background: rgba(255, 255, 255, 0.04);
-            border: none;
-            color: var(--text-muted);
-            font-size: 1.3rem;
-            cursor: pointer;
-            padding: 5px 10px;
-            border-radius: 8px;
-            transition: 0.3s;
-        }
-        .sidebar .close-sidebar:hover {
-            background: rgba(255, 0, 0, 0.08);
-            color: #ff6b6b;
-        }
-        .sidebar .sidebar-nav {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-        .sidebar .sidebar-nav a {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 14px 16px;
-            border-radius: 12px;
-            color: var(--text-secondary);
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: 0.3s;
-            border: 1px solid transparent;
-        }
-        .sidebar .sidebar-nav a:hover {
-            background: rgba(14, 165, 233, 0.06);
-            border-color: rgba(14, 165, 233, 0.08);
-            color: var(--primary);
-            transform: translateX(-5px);
-        }
-        .sidebar .sidebar-nav a.active {
-            background: rgba(252, 211, 77, 0.08);
-            border-color: rgba(252, 211, 77, 0.1);
-            color: var(--secondary);
-        }
-        .sidebar .sidebar-divider {
-            height: 1px;
-            background: rgba(255, 255, 255, 0.04);
-            margin: 15px 0;
-        }
-        .sidebar .sidebar-footer {
-            margin-top: 20px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255, 255, 255, 0.03);
-        }
-        .sidebar .sidebar-footer .user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 12px;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.02);
-        }
-        .sidebar .sidebar-footer .user-info .avatar {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: var(--primary-gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            color: #0F172A;
-        }
-        .sidebar .sidebar-footer .user-info .user-details .name {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-        .sidebar .sidebar-footer .user-info .user-details .email {
-            font-size: 0.65rem;
-            color: var(--text-muted);
-        }
-        .sidebar .sidebar-footer .logout-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-            padding: 12px;
-            margin-top: 10px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 0, 0, 0.08);
-            background: rgba(255, 0, 0, 0.04);
-            color: #ff6b6b;
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .sidebar .sidebar-footer .logout-btn:hover {
-            background: rgba(255, 0, 0, 0.08);
-            border-color: rgba(255, 0, 0, 0.15);
-        }
-
-        /* ===== MOBILE NAV ===== */
-        .mobile-nav {
-            display: none;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 999;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255, 255, 255, 0.04);
-            padding: 6px 0 calc(6px + env(safe-area-inset-bottom));
-        }
-        .mobile-nav ul {
-            display: flex;
-            justify-content: space-around;
-            list-style: none;
-        }
-        .mobile-nav ul li {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-            font-size: 0.55rem;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: 0.3s;
-            padding: 4px 12px;
-            border-radius: 10px;
-        }
-        .mobile-nav ul li i {
-            font-size: 1.1rem;
-        }
-        .mobile-nav ul li:hover,
-        .mobile-nav ul li.active {
-            color: var(--secondary);
-        }
-
-        /* ===== HERO ===== */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 90px 0 50px;
-            position: relative;
-            overflow: hidden;
-            background:
-                radial-gradient(ellipse at 20% 50%, rgba(14, 165, 233, 0.08) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 80%, rgba(252, 211, 77, 0.05) 0%, transparent 50%),
-                linear-gradient(145deg, #060A14, #0F172A, #1E293B, #060A14);
-        }
-        .hero::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image: linear-gradient(rgba(14, 165, 233, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(14, 165, 233, 0.02) 1px, transparent 1px);
-            background-size: 60px 60px;
+            display: none; position: fixed; inset: 0;
+            background: rgba(33,29,26,0.4);
+            z-index: 999; opacity: 0; transition: opacity .25s ease;
             pointer-events: none;
         }
-        .hero .container {
-            position: relative;
-            z-index: 1;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            align-items: center;
-            gap: 50px;
-        }
-        .hero-content h1 {
-            font-size: 3.5rem;
-            font-weight: 900;
-            line-height: 1.3;
-            margin-bottom: 18px;
-        }
-        .hero-content h1 .gold {
-            background: var(--secondary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: inline-block;
-        }
-        .hero-content p {
-            color: var(--text-secondary);
-            font-size: 1.05rem;
-            line-height: 1.8;
-            max-width: 460px;
-            margin-bottom: 28px;
-        }
-        .hero-buttons {
-            display: flex;
-            gap: 14px;
-            flex-wrap: wrap;
-            margin-bottom: 25px;
-        }
-        .btn-primary {
-            background: var(--secondary-gradient);
-            color: #0F172A;
-            padding: 14px 32px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 0.95rem;
-            transition: 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 4px 25px rgba(252, 211, 77, 0.25);
-        }
-        .btn-primary:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 8px 40px rgba(252, 211, 77, 0.4);
-        }
-        .btn-secondary {
-            border: 2px solid rgba(252, 211, 77, 0.25);
-            color: var(--secondary);
-            padding: 14px 32px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 0.95rem;
-            transition: 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: transparent;
-            cursor: pointer;
-        }
-        .btn-secondary:hover {
-            background: rgba(252, 211, 77, 0.05);
-            color: #fff;
-            transform: translateY(-3px);
-            border-color: var(--secondary);
-            box-shadow: 0 8px 30px rgba(252, 211, 77, 0.1);
-        }
-        .hero-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 14px;
-        }
-        .hero-stat {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            border-radius: 14px;
-            padding: 18px;
-            text-align: center;
-            transition: 0.3s;
-        }
-        .hero-stat:hover {
-            border-color: rgba(14, 165, 233, 0.15);
-            transform: translateY(-3px);
-            background: rgba(14, 165, 233, 0.02);
-        }
-        .hero-stat .number {
-            font-size: 2rem;
-            font-weight: 900;
-            color: var(--secondary);
-        }
-        .hero-stat .label {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            margin-top: 3px;
-            font-weight: 600;
-        }
+        .sidebar-overlay.active { opacity: 1; pointer-events: auto; }
 
-        .hero-image {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        .sidebar {
+            position: fixed; top: 0; right: 0;
+            width: var(--sidebar-w); height: 100vh;
+            background: var(--surface-2);
+            border-left: 1px solid var(--line);
+            z-index: 1000;
+            display: flex; flex-direction: column; overflow-y: auto;
+            transition: right .35s var(--ease);
         }
-        .hero-card {
-            background: linear-gradient(145deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.8));
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(14, 165, 233, 0.06);
-            border-radius: 20px;
-            padding: 35px;
-            width: 100%;
-            max-width: 380px;
-            text-align: center;
-            transition: 0.3s;
-            animation: float 6s ease-in-out infinite;
-        }
-        .hero-card .icon {
-            font-size: 3.8rem;
-            color: var(--secondary);
-            margin-bottom: 14px;
-        }
-        .hero-card h3 {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 6px;
-            color: var(--text-primary);
-        }
-        .hero-card p {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            line-height: 1.6;
-        }
-        .hero-card .badge-row {
-            display: flex;
-            justify-content: center;
-            gap: 6px;
-            margin-top: 14px;
-            flex-wrap: wrap;
-        }
-        .hero-card .badge-row span {
-            background: rgba(14, 165, 233, 0.05);
-            border: 1px solid rgba(14, 165, 233, 0.04);
-            padding: 3px 12px;
-            border-radius: 50px;
-            font-size: 0.65rem;
-            color: var(--text-secondary);
-        }
+        .sidebar.collapsed { right: calc(-1 * var(--sidebar-w)); }
 
-        /* ===== KPI ===== */
-        .kpi-section {
-            padding: 60px 0;
-            background: var(--bg-dark);
-            border-top: 1px solid rgba(255, 255, 255, 0.02);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+        .sidebar .brand {
+            padding: 24px 22px 20px;
+            display: flex; align-items: center; gap: 12px;
+            border-bottom: 1px solid var(--line);
+        }
+        .sidebar .brand .mark {
+            width: 34px; height: 34px; border-radius: 9px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+            background: var(--ink);
             position: relative;
         }
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+        .sidebar .brand .mark svg { width: 17px; height: 17px; }
+        .sidebar .brand .mark::after {
+            content: ''; position: absolute; bottom: -3px; left: -3px;
+            width: 9px; height: 9px; border-radius: 50%;
+            background: var(--terracotta); border: 2px solid var(--surface-2);
         }
-        .kpi-card {
-            background: linear-gradient(145deg, #1E293B, #0F172A);
-            padding: 24px 20px;
-            border-radius: 16px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            transition: 0.3s;
-            position: relative;
-            overflow: hidden;
-            box-shadow: var(--shadow-card);
-        }
-        .kpi-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--primary-gradient);
-            opacity: 0;
-            transition: 0.4s;
-        }
-        .kpi-card:hover::before {
-            opacity: 1;
-        }
-        .kpi-card:hover {
-            border-color: rgba(14, 165, 233, 0.08);
-            transform: translateY(-8px);
-            box-shadow: var(--glow-strong);
-            background: linear-gradient(145deg, #2D3B52, #1E293B);
-        }
-        .kpi-card .icon {
-            font-size: 2rem;
-            color: var(--primary);
-            background: rgba(14, 165, 233, 0.08);
-            width: 60px;
-            height: 60px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 12px;
-            transition: all 0.4s ease;
-            border: 1px solid rgba(14, 165, 233, 0.05);
-        }
-        .kpi-card:hover .icon {
-            transform: scale(1.1) rotate(-5deg);
-            background: rgba(14, 165, 233, 0.15);
-            border-color: rgba(14, 165, 233, 0.15);
-            box-shadow: var(--glow-primary);
-        }
-        .kpi-card .number {
-            font-size: 2rem;
-            font-weight: 900;
-            color: var(--text-primary);
-        }
-        .kpi-card .label {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-top: 3px;
-            font-weight: 600;
-        }
+        .sidebar .brand .text { font-weight: 800; font-size: 0.88rem; color: var(--ink); line-height: 1.3; }
+        .sidebar .brand .text span { display: block; font-size: 0.6rem; font-weight: 600; color: var(--ink-3); margin-top: 2px; }
 
-        /* ===== TABLE ===== */
-        .table-section {
-            padding: 50px 0;
+        .sidebar .menu { flex: 1; padding: 14px 12px; }
+        .sidebar .menu .label {
+            font-size: 0.6rem; color: var(--ink-3);
+            text-transform: uppercase; letter-spacing: 1px;
+            padding: 16px 10px 6px; font-weight: 700;
         }
-        .section-title {
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: var(--secondary);
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding-bottom: 16px;
-            border-bottom: 2px solid rgba(252, 211, 77, 0.08);
-            position: relative;
-        }
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            right: 0;
-            width: 60px;
-            height: 2px;
-            background: var(--secondary-gradient);
-            border-radius: 10px;
-        }
+        .sidebar .menu .label:first-child { padding-top: 4px; }
 
-        .table-wrapper {
-            background: linear-gradient(145deg, #1E293B, #0F172A);
-            border-radius: 16px;
-            overflow-x: auto;
-            border: 1px solid rgba(255, 255, 255, 0.03);
+        .sidebar .menu .item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 9px 12px; border-radius: var(--r-sm);
+            color: var(--ink-2); font-weight: 600; font-size: 0.82rem;
+            transition: background .15s ease, color .15s ease;
+            cursor: pointer; margin-bottom: 2px; position: relative;
+            border-inline-end: 3px solid transparent;
         }
-        table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 4px;
-            font-size: 0.8rem;
-            min-width: 1100px;
+        .sidebar .menu .item:hover { background: rgba(33,29,26,0.04); color: var(--ink); }
+        .sidebar .menu .item.active {
+            background: var(--surface); color: var(--ink);
+            box-shadow: 0 2px 10px rgba(33,29,26,0.08);
+            border-inline-end: 3px solid var(--swatch, var(--ink));
         }
-        th {
-            background: linear-gradient(145deg, rgba(14, 165, 233, 0.1), rgba(14, 165, 233, 0.05));
-            color: var(--primary);
-            padding: 14px 12px;
-            text-align: right;
-            font-weight: 700;
-            white-space: nowrap;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-bottom: 2px solid rgba(14, 165, 233, 0.08);
+        .sidebar .menu .item i { width: 16px; text-align: center; font-size: 0.86rem; opacity: 0.8; }
+        .sidebar .menu .item .chip {
+            width: 7px; height: 7px; border-radius: 2px; flex-shrink: 0; background: var(--swatch, var(--ink-4));
         }
-        td {
-            background: rgba(30, 41, 59, 0.3);
-            padding: 12px 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
-            color: var(--text-secondary);
-            font-size: 0.75rem;
+        .sidebar .menu .item .badge {
+            margin-right: auto; font-size: 0.58rem; font-weight: 700;
+            padding: 1px 8px; border-radius: 4px;
+            background: var(--ink-4); color: var(--surface-2);
         }
-        tr:hover td {
-            background: rgba(14, 165, 233, 0.04);
+        .sidebar .menu .item.active .badge { background: var(--swatch, var(--ink)); color: #fff; }
+
+        .sidebar .footer { padding: 14px 18px 20px; border-top: 1px solid var(--line); }
+        .sidebar .footer .user { display: flex; align-items: center; gap: 10px; }
+        .sidebar .footer .user .avatar {
+            width: 33px; height: 33px; border-radius: var(--r-sm);
+            background: var(--ink); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.8rem; flex-shrink: 0;
         }
+        .sidebar .footer .user .info .name { font-size: 0.8rem; font-weight: 700; }
+        .sidebar .footer .user .info .role { font-size: 0.62rem; color: var(--ink-3); margin-top: 1px; }
+        .sidebar .footer .logout {
+            margin-right: auto; width: 28px; height: 28px; border-radius: var(--r-sm);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--ink-3); border: 1px solid var(--line);
+            transition: .15s;
+        }
+        .sidebar .footer .logout:hover { color: var(--oxide); border-color: var(--oxide); }
+
+        /* ==========================================================
+           MAIN
+           ========================================================== */
+        .main { margin-right: var(--sidebar-w); min-height: 100vh; transition: margin-right .35s var(--ease); }
+        .main.expanded { margin-right: 0; }
+
+        .header {
+            position: sticky; top: 0; z-index: 100;
+            height: var(--header-h); padding: 0 30px;
+            background: rgba(246,243,236,0.88); backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--line);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .header .left { display: flex; align-items: center; gap: 16px; }
+        .header .hamburger {
+            display: flex; width: 34px; height: 34px; border-radius: var(--r-sm);
+            align-items: center; justify-content: center;
+            border: 1px solid var(--line); background: var(--surface);
+            color: var(--ink-2); cursor: pointer; transition: .15s;
+        }
+        .header .hamburger:hover { border-color: var(--ink-3); color: var(--ink); }
+        .header .breadcrumb { font-size: 0.79rem; color: var(--ink-3); }
+        .header .breadcrumb b { color: var(--ink); font-weight: 700; }
+
+        .header .search {
+            display: flex; align-items: center; gap: 8px;
+            background: var(--surface); border: 1px solid var(--line);
+            border-radius: 50px; padding: 8px 15px; width: 260px; color: var(--ink-3);
+        }
+        .header .search:focus-within { border-color: var(--prussian); }
+        .header .search i { font-size: 0.76rem; }
+        .header .search input { background: none; border: none; outline: none; color: var(--ink); font-family: inherit; font-size: 0.79rem; width: 100%; }
+        .header .search input::placeholder { color: var(--ink-3); }
+
+        .header .right { display: flex; align-items: center; gap: 9px; }
+        .header .right .notif {
+            position: relative; width: 36px; height: 36px; border-radius: var(--r-sm);
+            border: 1px solid var(--line); background: var(--surface);
+            color: var(--ink-2); cursor: pointer; transition: .15s;
+            display: flex; align-items: center; justify-content: center; font-size: 0.9rem;
+        }
+        .header .right .notif:hover { border-color: var(--ink-3); color: var(--ink); }
+        .header .right .refresh-btn {
+            display: inline-flex; align-items: center; gap: 7px;
+            padding: 8px 16px; border-radius: 50px;
+            background: var(--ink); color: #fff; font-weight: 700; font-size: 0.76rem;
+            border: none; cursor: pointer; transition: transform .2s var(--ease), background .2s ease;
+        }
+        .header .right .refresh-btn:hover { transform: translateY(-2px); background: #000; }
+        .header .right .refresh-btn i { font-size: 0.72rem; }
+        .header .right .refresh-btn.spinning i { animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .header .right .profile {
+            display: flex; align-items: center; gap: 8px;
+            padding: 3px 12px 3px 5px; border-radius: 50px; border: 1px solid var(--line);
+            cursor: pointer; transition: .15s; background: var(--surface);
+        }
+        .header .right .profile:hover { border-color: var(--ink-3); }
+        .header .right .profile .avatar {
+            width: 28px; height: 28px; border-radius: 50%;
+            background: var(--ink); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.7rem;
+        }
+        .header .right .profile .name { font-size: 0.77rem; font-weight: 700; }
+        .header .right .profile .name small { display: block; font-size: 0.58rem; font-weight: 500; color: var(--ink-3); }
+        .header .right .profile i { font-size: 0.6rem; color: var(--ink-3); }
+
+        .dash { padding: 26px 30px 60px; max-width: 1500px; }
+
+        /* ==========================================================
+           PAGE HEAD
+           ========================================================== */
+        .page-head {
+            display: flex; align-items: flex-end; justify-content: space-between;
+            gap: 20px; padding: 8px 6px 26px; flex-wrap: wrap;
+        }
+        .page-head .copy .eyebrow {
+            font-size: 0.68rem; letter-spacing: 1.4px; text-transform: uppercase;
+            color: var(--prussian); font-weight: 800; margin-bottom: 8px;
+        }
+        .page-head .copy h1 {
+            font-weight: 900; font-size: 1.85rem; color: var(--ink);
+            letter-spacing: -0.2px; line-height: 1.2;
+        }
+        .page-head .copy p { color: var(--ink-2); font-size: 0.87rem; margin-top: 10px; max-width: 46ch; }
+
+        .page-head .cta {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 11px 24px; border-radius: 50px;
+            background: var(--ink); color: #fff; font-weight: 800; font-size: 0.82rem;
+            transition: transform .2s var(--ease), background .2s ease; flex-shrink: 0;
+        }
+        .page-head .cta:hover { transform: translateY(-2px); background: #000; }
+
+        /* ==========================================================
+           STAT CARDS
+           ========================================================== */
+        .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+        .stat-card {
+            background: var(--surface); border: 1px solid var(--line);
+            border-radius: var(--r-md); padding: 0; overflow: hidden;
+            transition: transform .2s var(--ease), box-shadow .2s ease;
+        }
+        .stat-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px -10px rgba(33,29,26,0.2); }
+        .stat-card .bar { height: 3px; background: var(--swatch, var(--ink)); }
+        .stat-card .body { padding: 17px 18px; }
+        .stat-card .label { font-size: 0.71rem; color: var(--ink-3); font-weight: 600; display: flex; align-items: center; gap: 7px; }
+        .stat-card .label i { font-size: 0.72rem; color: var(--swatch, var(--ink-3)); }
+        .stat-card .number { font-family: var(--display); font-size: 1.48rem; font-weight: 700; margin-top: 9px; letter-spacing: -0.2px; color: var(--ink); }
+
+        /* ==========================================================
+           TABLE PANEL
+           ========================================================== */
+        .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 24px; margin-bottom: 20px; }
+        .panel .p-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; gap: 10px; }
+        .panel .p-title { font-size: 0.9rem; font-weight: 800; color: var(--ink); display: flex; align-items: center; gap: 9px; }
+        .panel .p-title .dot { width: 7px; height: 7px; border-radius: 2px; background: var(--viridian); }
+        .panel .p-sub { font-size: 0.72rem; color: var(--ink-3); margin-top: 3px; }
+        .panel .p-source { font-size: 0.68rem; color: var(--ink-3); font-weight: 600; display: flex; align-items: center; gap: 6px; }
+
+        .table-wrapper { overflow-x: auto; border-radius: var(--r-md); border: 1px solid var(--line-soft); }
+        table { width: 100%; border-collapse: collapse; font-size: 0.79rem; min-width: 1100px; }
+        thead th {
+            background: var(--surface-2); color: var(--ink-2);
+            padding: 11px 12px; text-align: right; font-weight: 700;
+            white-space: nowrap; font-size: 0.68rem; text-transform: uppercase;
+            letter-spacing: 0.4px; border-bottom: 1px solid var(--line);
+            position: sticky; top: 0;
+        }
+        tbody td {
+            padding: 11px 12px; border-bottom: 1px solid var(--line-soft);
+            color: var(--ink-2); font-size: 0.78rem; white-space: nowrap;
+        }
+        tbody tr:hover td { background: var(--surface-2); }
+        tbody tr.is-future td:first-child, tbody tr.is-future td:nth-child(3) { color: var(--prussian); font-weight: 700; }
+        tbody tr:last-child td { border-bottom: none; }
+
         .badge {
-            display: inline-block;
-            padding: 4px 16px;
-            border-radius: 50px;
-            font-size: 0.65rem;
-            font-weight: 600;
-            letter-spacing: 0.3px;
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 3px 12px; border-radius: 50px;
+            font-size: 0.65rem; font-weight: 700; letter-spacing: 0.2px;
         }
-        .badge-paid {
-            background: rgba(16, 185, 129, 0.12);
-            color: #34D399;
-            border: 1px solid rgba(16, 185, 129, 0.1);
-        }
-        .badge-balance {
-            background: rgba(239, 68, 68, 0.08);
-            color: #F87171;
-            border: 1px solid rgba(239, 68, 68, 0.05);
-        }
-        .badge-type {
-            background: rgba(14, 165, 233, 0.06);
-            color: var(--text-secondary);
-            border: 1px solid rgba(14, 165, 233, 0.04);
-        }
+        .badge-paid  { background: var(--viridian-tint); color: var(--viridian); }
+        .badge-balance { background: var(--oxide-tint); color: var(--oxide); }
+        .badge-type  { background: var(--prussian-tint); color: var(--prussian); }
+        .badge-future { background: var(--ochre-tint); color: var(--ochre); }
 
-        /* ===== CARDS (Mobile) ===== */
-        .cards-container {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 14px;
+        .table-note { text-align: center; color: var(--ink-3); font-size: 0.68rem; padding: 14px 0 2px; }
+
+        .loading, .error, .empty {
+            text-align: center; padding: 50px 20px; font-size: 0.86rem; color: var(--ink-2);
         }
+        .loading i { color: var(--prussian); animation: spin 0.9s linear infinite; margin-left: 6px; }
+        .error i { color: var(--oxide); font-size: 1.6rem; display: block; margin-bottom: 10px; }
+        .error small { display: block; margin-top: 8px; color: var(--ink-3); font-size: 0.72rem; }
+        .empty i { color: var(--ink-4); font-size: 2rem; display: block; margin-bottom: 10px; }
+        .retry-btn {
+            margin-top: 14px; background: var(--surface-2); border: 1px solid var(--line);
+            color: var(--ink); padding: 8px 20px; border-radius: 50px; cursor: pointer;
+            font-family: inherit; font-weight: 700; font-size: 0.76rem; transition: .15s;
+        }
+        .retry-btn:hover { border-color: var(--ink-3); }
+
+        /* ===== CARDS (mobile) ===== */
+        .cards-container { display: none; grid-template-columns: 1fr; gap: 12px; }
         .booking-card {
-            background: linear-gradient(145deg, #1E293B, #0F172A);
-            border-radius: 16px;
-            padding: 20px 18px;
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            transition: all 0.4s ease;
-            box-shadow: var(--shadow-card);
+            background: var(--surface); border: 1px solid var(--line);
+            border-radius: var(--r-md); padding: 16px;
+            transition: box-shadow .2s ease;
         }
-        .booking-card:hover {
-            border-color: rgba(14, 165, 233, 0.12);
-            transform: translateY(-4px);
-            box-shadow: var(--glow-primary);
-        }
-        .booking-card .card-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 4px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
-        }
-        .booking-card .card-row:last-child {
-            border-bottom: none;
-        }
-        .booking-card .card-label {
-            font-size: 0.65rem;
-            color: var(--text-muted);
-            font-weight: 600;
-        }
-        .booking-card .card-value {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            font-weight: 500;
-            text-align: left;
-        }
-        .booking-card .card-value.gold {
-            color: var(--secondary);
-            font-weight: 700;
-        }
+        .booking-card.is-future { border-color: var(--prussian); }
         .booking-card .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 10px;
-            margin-bottom: 8px;
-            border-bottom: 2px solid rgba(252, 211, 77, 0.04);
+            display: flex; align-items: center; justify-content: space-between;
+            padding-bottom: 10px; margin-bottom: 8px; border-bottom: 1px solid var(--line-soft);
         }
-        .booking-card .card-header .name {
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-        .booking-card .card-header .number {
-            font-size: 0.65rem;
-            color: var(--text-muted);
-            background: rgba(255, 255, 255, 0.02);
-            padding: 2px 10px;
-            border-radius: 50px;
-        }
-        .booking-card .future-badge {
-            display: inline-block;
-            font-size: 0.55rem;
-            color: var(--secondary);
-            background: rgba(252, 211, 77, 0.06);
-            padding: 2px 10px;
-            border-radius: 50px;
-            border: 1px solid rgba(252, 211, 77, 0.04);
-        }
+        .booking-card .card-header .name { font-size: 0.92rem; font-weight: 800; color: var(--ink); }
+        .booking-card .card-header .number { font-size: 0.64rem; color: var(--ink-3); background: var(--surface-2); padding: 2px 10px; border-radius: 50px; }
+        .booking-card .card-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; font-size: 0.76rem; }
+        .booking-card .card-label { color: var(--ink-3); font-weight: 600; }
+        .booking-card .card-value { color: var(--ink-2); font-weight: 600; }
+        .booking-card .card-value.gold { color: var(--terracotta); font-weight: 800; }
 
-        /* ===== LOADING ===== */
-        .loading,
-        .error {
-            text-align: center;
-            padding: 40px 20px;
-            font-size: 0.95rem;
-        }
-        .loading {
-            color: var(--secondary);
-        }
-        .loading i {
-            animation: spin 1s linear infinite;
-        }
-        .error {
-            color: #ef5350;
-        }
-        .error small {
-            display: block;
-            margin-top: 8px;
-            color: var(--text-muted);
-            font-size: 0.75rem;
-        }
-        .table-note {
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.65rem;
-            padding: 12px 0 4px;
-            opacity: 0.5;
-        }
-
-        /* ===== FLOATING BUTTON ===== */
+        /* ==========================================================
+           FLOATING BUTTON
+           ========================================================== */
         .floating-btn {
-            position: fixed;
-            bottom: 100px;
-            left: 24px;
-            z-index: 999;
-            background: linear-gradient(135deg, #1E40AF, #1E3A8A);
-            color: #FFFFFF;
-            padding: 16px 28px;
-            border-radius: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            font-size: 1rem;
-            font-weight: 700;
-            font-family: 'Cairo', 'Segoe UI', Tahoma, Arial, sans-serif;
-            box-shadow: 0 8px 32px rgba(30, 58, 138, 0.5);
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            border: none;
-            text-decoration: none;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
+            position: fixed; bottom: 26px; left: 26px; z-index: 500;
+            background: var(--ink); color: #fff;
+            padding: 15px 26px; border-radius: 50px;
+            display: flex; align-items: center; gap: 10px;
+            font-family: inherit; font-size: 0.85rem; font-weight: 800;
+            box-shadow: 0 12px 28px -8px rgba(33,29,26,0.4);
+            border: none; cursor: pointer;
+            transition: transform .25s var(--ease), background .2s ease;
         }
-        .floating-btn:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 12px 48px rgba(30, 58, 138, 0.7);
-        }
-        .floating-btn i {
-            font-size: 1.4rem;
-            transition: 0.3s;
-        }
-        .floating-btn:hover i {
-            transform: rotate(90deg);
-        }
+        .floating-btn:hover { transform: translateY(-4px) scale(1.03); background: #000; }
+        .floating-btn i { transition: .3s; }
+        .floating-btn:hover i { transform: rotate(90deg); }
 
-        /* ===== RESPONSIVE ===== */
-        @media (min-width: 769px) {
-            .table-wrapper {
-                display: block !important;
-            }
-            .cards-container {
-                display: none !important;
-            }
-            .sidebar-overlay {
-                display: none !important;
-            }
-            .sidebar {
-                display: none !important;
-            }
-        }
-
+        /* ==========================================================
+           RESPONSIVE
+           ========================================================== */
+        @media (max-width: 1180px) { .stats { grid-template-columns: repeat(2, 1fr); } .header .search { display: none; } }
+        @media (max-width: 992px)  { .page-head { flex-direction: column; align-items: stretch; } }
         @media (max-width: 768px) {
-            nav {
-                display: none !important;
-            }
-            .hamburger {
-                display: block !important;
-            }
-            .kpi-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 12px;
-            }
-            .kpi-card {
-                padding: 16px 12px;
-            }
-            .kpi-card .icon {
-                width: 48px;
-                height: 48px;
-                font-size: 1.4rem;
-            }
-            .kpi-card .number {
-                font-size: 1.4rem;
-            }
-            .hero .container {
-                gap: 20px;
-                grid-template-columns: 1fr;
-            }
-            .hero-content h1 {
-                font-size: 1.8rem;
-            }
-            .hero-buttons {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .btn-primary,
-            .btn-secondary {
-                width: 100%;
-                justify-content: center;
-            }
-            .hero-stats {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 8px;
-            }
-            .hero-stat {
-                padding: 12px 8px;
-            }
-            .hero-stat .number {
-                font-size: 1.3rem;
-            }
-            .hero-card {
-                max-width: 100%;
-                padding: 24px 16px;
-            }
-            .section-title {
-                font-size: 1.1rem;
-            }
-            .mobile-nav {
-                display: block !important;
-            }
-            .table-wrapper {
-                display: none !important;
-            }
-            .cards-container {
-                display: grid !important;
-            }
-            .floating-btn {
-                bottom: 80px;
-                left: 16px;
-                padding: 12px 18px;
-                font-size: 0.85rem;
-            }
+            .sidebar { right: calc(-1 * var(--sidebar-w)); }
+            .sidebar.open { right: 0; }
+            .sidebar-overlay { display: block; }
+            .main { margin-right: 0 !important; }
+            .stats { grid-template-columns: 1fr 1fr; }
+            .dash { padding: 18px 16px 90px; }
+            .header { padding: 0 16px; }
+            .header .right .profile .name { display: none; }
+            .header .right .refresh-btn span { display: none; }
+            .header .hamburger { width: 42px; height: 42px; font-size: 1rem; }
+            .page-head .copy h1 { font-size: 1.5rem; }
+            .table-wrapper { display: none; }
+            .cards-container { display: grid; }
+            .floating-btn span { display: none; }
+            .floating-btn { padding: 15px; bottom: 20px; left: 20px; }
         }
+        @media (max-width: 480px) { .stats { grid-template-columns: 1fr; } .header .breadcrumb { display: none; } }
 
-        @media (max-width: 480px) {
-            .kpi-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 8px;
-            }
-            .kpi-card {
-                padding: 12px 8px;
-            }
-            .kpi-card .icon {
-                width: 40px;
-                height: 40px;
-                font-size: 1.2rem;
-            }
-            .kpi-card .number {
-                font-size: 1.2rem;
-            }
-            .hero-content h1 {
-                font-size: 1.5rem;
-            }
-            .hero-stats {
-                grid-template-columns: 1fr 1fr 1fr;
-                gap: 4px;
-            }
-            .hero-stat {
-                padding: 8px 4px;
-            }
-            .hero-stat .number {
-                font-size: 1rem;
-            }
-            .hero-stat .label {
-                font-size: 0.5rem;
-            }
-            .sidebar {
-                width: 280px;
-                right: -290px;
-            }
-            .sidebar.open {
-                right: 0;
-            }
-        }
+        .fade-up { opacity: 0; transform: translateY(8px); animation: fadeUp .55s var(--ease) forwards; }
+        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ============================================================
+    SIDEBAR
+    ============================================================ -->
+    <nav class="sidebar" id="sidebar">
+        <div class="brand">
+            <div class="mark">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M4 19V9l8-5 8 5v10" stroke="#fff" stroke-width="2" stroke-linejoin="round"/><path d="M9 19v-6h6v6" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="text">
+                منتجع حياله
+                <span>النظام المالي والإداري الشامل</span>
+            </div>
+        </div>
+
+        <div class="menu">
+            <div class="label">القائمة الرئيسية</div>
+            <a href="index.html" class="item" style="--swatch:var(--ink)"><i class="fas fa-house"></i> الرئيسية</a>
+            <a href="bookings.html" class="item active" style="--swatch:var(--prussian)"><i class="fas fa-calendar-check"></i> سجل الحجوزات</a>
+            <a href="add-invoice.html" class="item" style="--swatch:var(--prussian)"><span class="chip"></span> فاتورة جديدة <span class="badge">جديد</span></a>
+            <a href="expenses.html" class="item" style="--swatch:var(--ochre)"><span class="chip"></span> المصاريف</a>
+            <a href="abuzeid.html" class="item" style="--swatch:var(--terracotta)"><span class="chip"></span> عمولة أبو زيد</a>
+            <a href="filter.html" class="item" style="--swatch:var(--viridian)"><span class="chip"></span> فلترة الحجوزات</a>
+            <a href="future.html" class="item" style="--swatch:var(--viridian)"><span class="chip"></span> حجوزات مستقبلية</a>
+
+            <div class="label">التقارير</div>
+            <a href="#" class="item"><i class="fas fa-file-lines"></i> تقارير المبيعات</a>
+            <a href="#" class="item"><i class="fas fa-file-invoice-dollar"></i> التقارير المالية</a>
+            <a href="#" class="item"><i class="fas fa-chart-pie"></i> تحليلات</a>
+
+            <div class="label">الإعدادات</div>
+            <a href="#" class="item"><i class="fas fa-gear"></i> الإعدادات</a>
+            <a href="#" class="item"><i class="fas fa-circle-question"></i> المساعدة</a>
+        </div>
+
+        <div class="footer">
+            <div class="user">
+                <div class="avatar">أ</div>
+                <div class="info">
+                    <div class="name">Admin</div>
+                    <div class="role">مدير النظام</div>
+                </div>
+                <a href="#" class="logout" title="تسجيل الخروج"><i class="fas fa-arrow-right-from-bracket"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ============================================================
+    MAIN
+    ============================================================ -->
+    <div class="main" id="main">
+
+        <header class="header">
+            <div class="left">
+                <button class="hamburger" id="hamburger" aria-label="فتح/إغلاق القائمة الجانبية"><i class="fas fa-bars"></i></button>
+                <div class="breadcrumb"><b>سجل الحجوزات</b> / متابعة الحجوزات والدفعات</div>
+            </div>
+            <div class="search">
+                <i class="fas fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="ابحث باسم العميل أو رقم الحجز...">
+            </div>
+            <div class="right">
+                <button class="refresh-btn" id="refreshBtn"><i class="fas fa-rotate"></i><span>تحديث</span></button>
+                <button class="notif" id="notifBtn"><i class="fas fa-bell"></i></button>
+                <div class="profile">
+                    <div class="avatar">أ</div>
+                    <div class="name">Admin<small>مدير النظام</small></div>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </header>
+
+        <div class="dash">
+
+            <!-- ===== PAGE HEAD ===== -->
+            <div class="page-head fade-up" style="animation-delay:.02s">
+                <div class="copy">
+                    <div class="eyebrow">Supabase · تحديث لحظي</div>
+                    <h1>سجل الحجوزات</h1>
+                    <p>عرض وتتبع جميع حجوزات منتجع حياله مع الحالة المالية لكل حجز، وتمييز الحجوزات المستقبلية تلقائيًا.</p>
+                </div>
+                <a href="add-invoice.html" class="cta"><i class="fas fa-plus"></i> حجز جديد</a>
+            </div>
+
+            <!-- ===== STAT CARDS ===== -->
+            <div class="stats">
+                <div class="stat-card fade-up" style="animation-delay:.05s;--swatch:var(--prussian)">
+                    <div class="bar"></div>
+                    <div class="body">
+                        <div class="label"><i class="fas fa-wallet"></i> إجمالي الإيرادات</div>
+                        <div class="number" id="kpiRevenue">—</div>
+                    </div>
+                </div>
+                <div class="stat-card fade-up" style="animation-delay:.08s;--swatch:var(--ink-3)">
+                    <div class="bar"></div>
+                    <div class="body">
+                        <div class="label"><i class="fas fa-file-invoice"></i> إجمالي الحجوزات</div>
+                        <div class="number" id="statBookings">—</div>
+                    </div>
+                </div>
+                <div class="stat-card fade-up" style="animation-delay:.11s;--swatch:var(--viridian)">
+                    <div class="bar"></div>
+                    <div class="body">
+                        <div class="label"><i class="fas fa-users"></i> عدد العملاء</div>
+                        <div class="number" id="kpiClients">—</div>
+                    </div>
+                </div>
+                <div class="stat-card fade-up" style="animation-delay:.14s;--swatch:var(--ochre)">
+                    <div class="bar"></div>
+                    <div class="body">
+                        <div class="label"><i class="fas fa-hand-holding-dollar"></i> عمولة أبو زيد</div>
+                        <div class="number" id="kpiCommission">—</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== TABLE PANEL ===== -->
+            <div class="panel fade-up" style="animation-delay:.16s">
+                <div class="p-head">
+                    <div>
+                        <div class="p-title"><span class="dot"></span> جميع الحجوزات</div>
+                        <div class="p-sub">آخر 100 حجز مرتبة حسب تاريخ الدخول</div>
+                    </div>
+                    <div class="p-source"><i class="fas fa-database"></i> متصل بقاعدة بيانات Supabase</div>
+                </div>
+                <div id="tableContainer">
+                    <div class="loading"><i class="fas fa-spinner"></i> جاري تحميل البيانات...</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
     <!-- ===== FLOATING BUTTON ===== -->
     <a href="add-invoice.html" class="floating-btn">
@@ -1049,225 +544,47 @@
         <span>حجز جديد</span>
     </a>
 
-    <!-- ===== HEADER ===== -->
-    <header id="header">
-        <div class="container">
-            <div class="logo">
-                <div class="logo-icon">ح</div>
-                <div class="logo-text">
-                    <h1>منتجع حياله</h1>
-                    <span>النظام المالي والإداري الشامل</span>
-                </div>
-            </div>
-            <nav>
-                <a href="index.html">الرئيسية</a>
-                <a href="#" class="active">سجل الحجوزات</a>
-                <a href="expenses.html">المصاريف</a>
-                <a href="abuzeid.html" style="color:var(--secondary);">عمولة أبو زيد</a>
-                <a href="#">التقارير</a>
-            </nav>
-            <div class="header-actions">
-                <button aria-label="بحث"><i class="fas fa-search"></i></button>
-                <button aria-label="إشعارات"><i class="fas fa-bell"></i></button>
-                <div class="hamburger" id="hamburger" onclick="toggleSidebar()">
-                    <i class="fas fa-bars"></i>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- ===== SIDEBAR ===== -->
-    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <div class="logo-mini">
-                <div class="icon">ح</div>
-                <h2>منتجع حياله</h2>
-            </div>
-            <button class="close-sidebar" onclick="closeSidebar()"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="sidebar-nav">
-            <a href="index.html"><i class="fas fa-home"></i><span>الرئيسية</span></a>
-            <a href="#" class="active"><i class="fas fa-calendar-check"></i><span>سجل الحجوزات</span></a>
-            <a href="expenses.html"><i class="fas fa-money-bill-wave"></i><span>المصاريف</span></a>
-            <a href="abuzeid.html" style="border-color:rgba(252,211,77,0.1);">
-                <i class="fas fa-hand-holding-heart" style="color:var(--secondary);"></i>
-                <span style="color:var(--secondary);">عمولة أبو زيد</span>
-            </a>
-            <a href="#"><i class="fas fa-chart-pie"></i><span>التقارير</span></a>
-        </div>
-        <div class="sidebar-divider"></div>
-        <div class="sidebar-nav">
-            <a href="filter.html"><i class="fas fa-filter"></i><span>فلترة الحجوزات</span></a>
-            <a href="future.html"><i class="fas fa-calendar-alt"></i><span>حجوزات مستقبلية</span></a>
-        </div>
-        <div class="sidebar-footer">
-            <div class="user-info">
-                <div class="avatar">أ</div>
-                <div class="user-details">
-                    <div class="name">Admin</div>
-                    <div class="email">admin@hayala.com</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== MOBILE NAV ===== -->
-    <nav class="mobile-nav">
-        <ul>
-            <li onclick="window.location.href='index.html'"><i class="fas fa-home"></i><span>الرئيسية</span></li>
-            <li class="active"><i class="fas fa-calendar-check"></i><span>الحجوزات</span></li>
-            <li onclick="window.location.href='expenses.html'"><i class="fas fa-money-bill-wave"></i><span>المصاريف</span></li>
-            <li onclick="window.location.href='abuzeid.html'" style="color:var(--secondary);">
-                <i class="fas fa-hand-holding-heart"></i><span>عمولة</span>
-            </li>
-            <li><i class="fas fa-phone"></i><span>تواصل</span></li>
-        </ul>
-    </nav>
-
-    <!-- ===== HERO ===== -->
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1 class="animate-fade-up">
-                    <span class="gold">سجل الحجوزات</span><br />
-                    منتجع حياله
-                </h1>
-                <p class="animate-fade-up delay-1">عرض وتتبع جميع الحجوزات مع الإحصائيات المالية</p>
-                <div class="hero-stats animate-fade-up delay-2">
-                    <div class="hero-stat">
-                        <div class="number" id="statBookings">0</div>
-                        <div class="label">إجمالي الحجوزات</div>
-                    </div>
-                    <div class="hero-stat">
-                        <div class="number" id="statRevenue">0</div>
-                        <div class="label">إجمالي الإيرادات</div>
-                    </div>
-                    <div class="hero-stat">
-                        <div class="number" id="statFuture">0</div>
-                        <div class="label">حجوزات مستقبلية</div>
-                    </div>
-                </div>
-            </div>
-            <div class="hero-image animate-fade-up delay-3">
-                <div class="hero-card">
-                    <div class="icon"><i class="fas fa-building"></i></div>
-                    <h3>منتجع حياله - القصيم</h3>
-                    <p>نظام إدارة متكامل يعتمد على Supabase</p>
-                    <div class="badge-row">
-                        <span><i class="fas fa-check-circle" style="color:var(--secondary);"></i> تحديث لحظي</span>
-                        <span><i class="fas fa-check-circle" style="color:var(--secondary);"></i> متابعة فورية</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===== KPI ===== -->
-    <section class="kpi-section">
-        <div class="container">
-            <div class="kpi-grid">
-                <div class="kpi-card animate-fade-up delay-1">
-                    <div class="icon"><i class="fas fa-coins"></i></div>
-                    <div class="number" id="kpiRevenue">0</div>
-                    <div class="label">إجمالي الإيرادات</div>
-                </div>
-                <div class="kpi-card animate-fade-up delay-2">
-                    <div class="icon"><i class="fas fa-calendar-check"></i></div>
-                    <div class="number" id="kpiFuture">0</div>
-                    <div class="label">حجوزات مستقبلية</div>
-                </div>
-                <div class="kpi-card animate-fade-up delay-3">
-                    <div class="icon"><i class="fas fa-users"></i></div>
-                    <div class="number" id="kpiClients">0</div>
-                    <div class="label">عدد العملاء</div>
-                </div>
-                <div class="kpi-card animate-fade-up delay-4" style="border-color:rgba(252,211,77,0.08);">
-                    <div class="icon" style="color:var(--secondary);background:rgba(252,211,77,0.06);">
-                        <i class="fas fa-hand-holding-heart"></i>
-                    </div>
-                    <div class="number" id="kpiCommission" style="color:var(--secondary);">0</div>
-                    <div class="label">عمولة أبو زيد</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===== TABLE ===== -->
-    <section class="table-section" id="table">
-        <div class="container">
-            <div class="section-title">
-                <i class="fas fa-table"></i>
-                سجل الحجوزات
-                <span style="font-size:0.7rem;color:var(--text-muted);font-weight:400;margin-right:auto;">
-                    <i class="fas fa-database"></i> Supabase
-                </span>
-            </div>
-            <div id="tableContainer">
-                <div class="loading"><i class="fas fa-spinner"></i> جاري تحميل البيانات...</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===== FOOTER ===== -->
-    <footer style="background:linear-gradient(145deg,#060A14,#0F172A);padding:50px 0 30px;border-top:1px solid rgba(14,165,233,0.05);margin-top:30px;">
-        <div class="container" style="display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:30px;">
-            <div class="brand">
-                <div class="logo" style="margin-bottom:6px;">
-                    <div class="logo-icon">ح</div>
-                    <div class="logo-text">
-                        <h1 style="font-size:1.2rem;">منتجع حياله</h1>
-                    </div>
-                </div>
-                <p style="color:var(--text-muted);font-size:0.8rem;line-height:1.7;margin-top:10px;max-width:280px;">
-                    نظام إدارة ذكي ومتكامل لمنتجع حياله، يوفر متابعة لحظية للحجوزات والمصاريف والإيرادات.
-                </p>
-            </div>
-            <div>
-                <h4 style="color:var(--secondary);font-size:0.9rem;font-weight:700;margin-bottom:16px;padding-bottom:10px;position:relative;">
-                    روابط سريعة
-                    <span style="position:absolute;bottom:0;right:0;width:30px;height:2px;background:var(--secondary-gradient);border-radius:10px;"></span>
-                </h4>
-                <ul style="list-style:none;">
-                    <li style="margin-bottom:8px;"><a href="index.html" style="color:var(--text-muted);font-size:0.75rem;transition:0.3s;">الرئيسية</a></li>
-                    <li style="margin-bottom:8px;"><a href="#" style="color:var(--secondary);font-size:0.75rem;transition:0.3s;">سجل الحجوزات</a></li>
-                    <li style="margin-bottom:8px;"><a href="expenses.html" style="color:var(--text-muted);font-size:0.75rem;transition:0.3s;">المصاريف</a></li>
-                    <li style="margin-bottom:8px;"><a href="abuzeid.html" style="color:var(--secondary);font-size:0.75rem;transition:0.3s;">عمولة أبو زيد</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 style="color:var(--secondary);font-size:0.9rem;font-weight:700;margin-bottom:16px;padding-bottom:10px;position:relative;">
-                    الخدمات
-                    <span style="position:absolute;bottom:0;right:0;width:30px;height:2px;background:var(--secondary-gradient);border-radius:10px;"></span>
-                </h4>
-                <ul style="list-style:none;">
-                    <li style="margin-bottom:8px;"><a href="#" style="color:var(--text-muted);font-size:0.75rem;transition:0.3s;">لوحة التحكم</a></li>
-                    <li style="margin-bottom:8px;"><a href="#" style="color:var(--text-muted);font-size:0.75rem;transition:0.3s;">سجل الحجوزات</a></li>
-                    <li style="margin-bottom:8px;"><a href="expenses.html" style="color:var(--text-muted);font-size:0.75rem;transition:0.3s;">المصاريف والتشغيل</a></li>
-                    <li style="margin-bottom:8px;"><a href="abuzeid.html" style="color:var(--secondary);font-size:0.75rem;transition:0.3s;">عمولة أبو زيد</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 style="color:var(--secondary);font-size:0.9rem;font-weight:700;margin-bottom:16px;padding-bottom:10px;position:relative;">
-                    تواصل معنا
-                    <span style="position:absolute;bottom:0;right:0;width:30px;height:2px;background:var(--secondary-gradient);border-radius:10px;"></span>
-                </h4>
-                <ul style="list-style:none;">
-                    <li style="margin-bottom:8px;"><a href="#" style="color:var(--text-muted);font-size:0.75rem;transition:0.3s;"><i class="fas fa-phone" style="margin-left:6px;"></i> +966509982400</a></li>
-                    <li style="margin-bottom:8px;"><a href="#" style="color:var(--text-muted);font-size:0.75rem;transition:0.3s;"><i class="fas fa-envelope" style="margin-left:6px;"></i> info@hayala-resort.com</a></li>
-                    <li style="margin-bottom:8px;"><a href="#" style="color:var(--text-muted);font-size:0.75rem;transition:0.3s;"><i class="fas fa-map-marker-alt" style="margin-left:6px;"></i> القصيم، بريدة</a></li>
-                </ul>
-            </div>
-            <div style="grid-column:1/-1;text-align:center;color:var(--text-muted);font-size:0.7rem;padding-top:20px;border-top:1px solid rgba(255,255,255,0.02);margin-top:25px;opacity:0.5;">
-                © 2026 منتجع حياله - القصيم · جميع الحقوق محفوظة
-            </div>
-        </div>
-    </footer>
-
-    <!-- ============================================================
-    JAVASCRIPT
-    ============================================================ -->
     <script>
+        /* ============================================================
+           SIDEBAR TOGGLE
+           ============================================================ */
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        const hamburger = document.getElementById('hamburger');
+        const main = document.getElementById('main');
+        let mobileOpen = false;
+
+        function toggleSidebar() {
+            if (window.innerWidth <= 768) {
+                mobileOpen = !mobileOpen;
+                sidebar.classList.toggle('open', mobileOpen);
+                overlay.classList.toggle('active', mobileOpen);
+                document.body.style.overflow = mobileOpen ? 'hidden' : '';
+                hamburger.innerHTML = mobileOpen ? '<i class="fas fa-xmark"></i>' : '<i class="fas fa-bars"></i>';
+            } else {
+                const nowCollapsed = sidebar.classList.toggle('collapsed');
+                main.classList.toggle('expanded', nowCollapsed);
+            }
+        }
+        hamburger.addEventListener('click', toggleSidebar);
+        overlay.addEventListener('click', () => { if (window.innerWidth <= 768 && mobileOpen) toggleSidebar(); });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && window.innerWidth <= 768 && mobileOpen) toggleSidebar();
+        });
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+                mobileOpen = false;
+                hamburger.innerHTML = '<i class="fas fa-bars"></i>';
+            }
+        });
+
+        document.getElementById('notifBtn').addEventListener('click', function () {
+            alert('📬 لا توجد إشعارات جديدة حاليًا');
+        });
+
         /**
          * ============================================================
          * بيانات الاتصال بـ Supabase
@@ -1276,40 +593,7 @@
         var SUPABASE_URL = 'https://zwuvcblrrrriuylajvba.supabase.co';
         var SUPABASE_ANON_KEY = 'sb_publishable_YFqwTEs-W_kprUgt4bgpCQ_tf5vVeFa';
 
-        /**
-         * ============================================================
-         * SIDEBAR
-         * ============================================================
-         */
-        function toggleSidebar() {
-            var sidebar = document.getElementById('sidebar');
-            var overlay = document.getElementById('sidebarOverlay');
-            sidebar.classList.toggle('open');
-            overlay.classList.toggle('active');
-            document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
-        }
-
-        function closeSidebar() {
-            var sidebar = document.getElementById('sidebar');
-            var overlay = document.getElementById('sidebarOverlay');
-            sidebar.classList.remove('open');
-            overlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        /**
-         * ============================================================
-         * HEADER SCROLL
-         * ============================================================
-         */
-        var header = document.getElementById('header');
-        window.addEventListener('scroll', function() {
-            if (window.pageYOffset > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        });
+        var allBookings = [];
 
         /**
          * ============================================================
@@ -1318,6 +602,8 @@
          */
         async function loadBookings() {
             var container = document.getElementById('tableContainer');
+            var refreshBtn = document.getElementById('refreshBtn');
+            refreshBtn.classList.add('spinning');
             container.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i> جاري تحميل البيانات...</div>';
 
             try {
@@ -1333,6 +619,7 @@
                 }
 
                 var bookings = await response.json();
+                allBookings = bookings;
                 console.log('✅ تم جلب الحجوزات:', bookings.length);
                 displayData(bookings);
 
@@ -1340,15 +627,17 @@
                 console.error('❌ خطأ:', error);
                 container.innerHTML = `
                     <div class="error">
-                        <i class="fas fa-exclamation-triangle"></i>
+                        <i class="fas fa-triangle-exclamation"></i>
                         حدث خطأ في تحميل البيانات
                         <small>${error.message}</small>
-                        <br><br>
-                        <button onclick="loadBookings()" style="background:rgba(14,165,233,0.06);border:1px solid rgba(14,165,233,0.08);color:var(--primary);padding:8px 20px;border-radius:8px;cursor:pointer;">
-                            <i class="fas fa-sync-alt"></i> إعادة المحاولة
+                        <br>
+                        <button class="retry-btn" onclick="loadBookings()">
+                            <i class="fas fa-rotate"></i> إعادة المحاولة
                         </button>
                     </div>
                 `;
+            } finally {
+                refreshBtn.classList.remove('spinning');
             }
         }
 
@@ -1362,53 +651,20 @@
 
             if (!bookings || bookings.length === 0) {
                 container.innerHTML = `
-                    <div class="error" style="color:var(--text-secondary);">
-                        <i class="fas fa-box-open" style="font-size:2rem;display:block;margin-bottom:10px;opacity:0.3;"></i>
+                    <div class="empty">
+                        <i class="fas fa-box-open"></i>
                         لا توجد حجوزات
-                        <small>أضف حجزاً جديداً من زر "حجز جديد"</small>
+                        <br><small>أضف حجزاً جديداً من زر "حجز جديد"</small>
                     </div>
                 `;
-                updateStats([]);
+                updateKpis([]);
                 return;
             }
 
-            // ===== حساب الإحصائيات =====
-            var totalRevenue = 0;
-            var futureBookings = 0;
-            var totalClients = new Set();
+            updateKpis(bookings);
+
             var today = new Date();
             var todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-
-            bookings.forEach(function(item) {
-                var total = parseFloat(item.total) || 0;
-                totalRevenue += total;
-
-                if (item.client_name) {
-                    totalClients.add(item.client_name);
-                }
-
-                if (item.check_in) {
-                    var checkInDate = new Date(item.check_in);
-                    var checkInOnly = new Date(checkInDate.getFullYear(), checkInDate.getMonth(), checkInDate
-                    .getDate());
-                    if (checkInOnly >= todayDate) {
-                        futureBookings++;
-                    }
-                }
-            });
-
-            // ===== تحديث الإحصائيات =====
-            animateNumber('statBookings', bookings.length);
-            animateNumber('statRevenue', totalRevenue);
-            animateNumber('statFuture', futureBookings);
-
-            document.getElementById('kpiRevenue').textContent = totalRevenue.toLocaleString() + ' ر.س';
-            document.getElementById('kpiFuture').textContent = futureBookings;
-            document.getElementById('kpiClients').textContent = totalClients.size;
-
-            // عمولة أبو زيد
-            var commission = totalRevenue * 0.2;
-            document.getElementById('kpiCommission').textContent = commission.toLocaleString() + ' ر.س';
 
             // ===== TABLE (Desktop) =====
             var tableRows = '';
@@ -1423,31 +679,21 @@
                 var discount = parseFloat(item.discount) || 0;
 
                 var statusBadge = item.payment_status === 'Fully Paid' ?
-                    '<span class="badge badge-paid">مدفوع</span>' :
-                    '<span class="badge badge-balance">متبقي</span>';
+                    '<span class="badge badge-paid"><i class="fas fa-check"></i> مدفوع</span>' :
+                    '<span class="badge badge-balance"><i class="fas fa-clock"></i> متبقي</span>';
 
-                var isFuture = false;
-                if (item.check_in) {
-                    var checkInDate = new Date(item.check_in);
-                    var checkInOnly = new Date(checkInDate.getFullYear(), checkInDate.getMonth(), checkInDate
-                    .getDate());
-                    if (checkInOnly >= todayDate) {
-                        isFuture = true;
-                    }
-                }
-
+                var isFuture = isFutureDate(item.check_in, todayDate);
                 var bookingNumberDisplay = item.booking_number || '#' + (index + 1);
 
-                // تنسيق التاريخ
                 var invoiceDate = item.invoice_date ? new Date(item.invoice_date).toLocaleDateString('ar-EG') : '-';
                 var checkIn = item.check_in ? new Date(item.check_in).toLocaleDateString('ar-EG') : '-';
                 var checkOut = item.check_out ? new Date(item.check_out).toLocaleDateString('ar-EG') : '-';
 
                 tableRows += `
-                    <tr style="${isFuture ? 'background:rgba(14,165,233,0.03);' : ''}">
-                        <td>${bookingNumberDisplay} ${isFuture ? '⭐' : ''}</td>
+                    <tr class="${isFuture ? 'is-future' : ''}">
+                        <td>${bookingNumberDisplay}</td>
                         <td>${invoiceDate}</td>
-                        <td>${checkIn} ${isFuture ? '⭐' : ''}</td>
+                        <td>${checkIn} ${isFuture ? '<span class="badge badge-future">مستقبلي</span>' : ''}</td>
                         <td>${checkOut}</td>
                         <td>${item.client_name || '-'}</td>
                         <td><span class="badge badge-type">${item.property_type || '-'}</span></td>
@@ -1456,7 +702,7 @@
                         <td>${discount.toFixed(2)}</td>
                         <td>${paid.toFixed(2)}</td>
                         <td>${remaining.toFixed(2)}</td>
-                        <td style="font-weight:700;color:var(--secondary);">${total.toFixed(2)}</td>
+                        <td style="font-weight:800;color:var(--ink);">${total.toFixed(2)}</td>
                         <td>${statusBadge}</td>
                         <td>${item.stay_type || '-'}</td>
                     </tr>
@@ -1485,7 +731,7 @@
                         <tbody>${tableRows}</tbody>
                     </table>
                 </div>
-                <div class="table-note">⭐ حجوزات مستقبلية · إجمالي الحجوزات: ${bookings.length}</div>
+                <div class="table-note">إجمالي الحجوزات المعروضة: ${displayRows.length} من ${bookings.length}</div>
             `;
 
             // ===== CARDS (Mobile) =====
@@ -1496,19 +742,10 @@
                 var remaining = parseFloat(item.remaining) || 0;
                 var nights = parseInt(item.nights) || 0;
 
-                var isFuture = false;
-                if (item.check_in) {
-                    var checkInDate = new Date(item.check_in);
-                    var checkInOnly = new Date(checkInDate.getFullYear(), checkInDate.getMonth(), checkInDate
-                    .getDate());
-                    if (checkInOnly >= todayDate) {
-                        isFuture = true;
-                    }
-                }
-
+                var isFuture = isFutureDate(item.check_in, todayDate);
                 var statusBadge = item.payment_status === 'Fully Paid' ?
-                    '<span class="badge badge-paid">مدفوع</span>' :
-                    '<span class="badge badge-balance">متبقي</span>';
+                    '<span class="badge badge-paid"><i class="fas fa-check"></i> مدفوع</span>' :
+                    '<span class="badge badge-balance"><i class="fas fa-clock"></i> متبقي</span>';
 
                 var bookingNumberDisplay = item.booking_number || '#' + (index + 1);
                 var invoiceDate = item.invoice_date ? new Date(item.invoice_date).toLocaleDateString('ar-EG') : '-';
@@ -1516,52 +753,22 @@
                 var checkOut = item.check_out ? new Date(item.check_out).toLocaleDateString('ar-EG') : '-';
 
                 cardsHTML += `
-                    <div class="booking-card" style="${isFuture ? 'border-color:rgba(14,165,233,0.08);' : ''}">
+                    <div class="booking-card ${isFuture ? 'is-future' : ''}">
                         <div class="card-header">
                             <span class="name">${item.client_name || 'عميل'}</span>
-                            <span class="number">#${bookingNumberDisplay} ${isFuture ? '⭐' : ''}</span>
-                            ${isFuture ? '<span class="future-badge">⭐ مستقبلي</span>' : ''}
+                            <span class="number">#${bookingNumberDisplay}</span>
                         </div>
-                        <div class="card-row">
-                            <span class="card-label">تاريخ الفاتورة</span>
-                            <span class="card-value">${invoiceDate}</span>
-                        </div>
-                        <div class="card-row">
-                            <span class="card-label">تاريخ الدخول</span>
-                            <span class="card-value">${checkIn} ${isFuture ? '⭐' : ''}</span>
-                        </div>
-                        <div class="card-row">
-                            <span class="card-label">تاريخ الخروج</span>
-                            <span class="card-value">${checkOut}</span>
-                        </div>
-                        <div class="card-row">
-                            <span class="card-label">نوع العقار</span>
-                            <span class="card-value"><span class="badge badge-type">${item.property_type || '-'}</span></span>
-                        </div>
-                        <div class="card-row">
-                            <span class="card-label">عدد الأيام</span>
-                            <span class="card-value">${nights}</span>
-                        </div>
-                        <div class="card-row">
-                            <span class="card-label">المدفوع</span>
-                            <span class="card-value">${paid.toFixed(2)} ر.س</span>
-                        </div>
-                        <div class="card-row">
-                            <span class="card-label">المتبقي</span>
-                            <span class="card-value">${remaining.toFixed(2)} ر.س</span>
-                        </div>
-                        <div class="card-row">
-                            <span class="card-label">الإجمالي</span>
-                            <span class="card-value gold">${total.toFixed(2)} ر.س</span>
-                        </div>
-                        <div class="card-row">
-                            <span class="card-label">الحالة</span>
-                            <span class="card-value">${statusBadge}</span>
-                        </div>
-                        <div class="card-row" style="border-bottom:none;">
-                            <span class="card-label">نوع الإقامة</span>
-                            <span class="card-value">${item.stay_type || '-'}</span>
-                        </div>
+                        ${isFuture ? '<div style="margin-bottom:8px;"><span class="badge badge-future">مستقبلي</span></div>' : ''}
+                        <div class="card-row"><span class="card-label">تاريخ الفاتورة</span><span class="card-value">${invoiceDate}</span></div>
+                        <div class="card-row"><span class="card-label">تاريخ الدخول</span><span class="card-value">${checkIn}</span></div>
+                        <div class="card-row"><span class="card-label">تاريخ الخروج</span><span class="card-value">${checkOut}</span></div>
+                        <div class="card-row"><span class="card-label">نوع العقار</span><span class="card-value"><span class="badge badge-type">${item.property_type || '-'}</span></span></div>
+                        <div class="card-row"><span class="card-label">عدد الأيام</span><span class="card-value">${nights}</span></div>
+                        <div class="card-row"><span class="card-label">المدفوع</span><span class="card-value">${paid.toFixed(2)} ر.س</span></div>
+                        <div class="card-row"><span class="card-label">المتبقي</span><span class="card-value">${remaining.toFixed(2)} ر.س</span></div>
+                        <div class="card-row"><span class="card-label">الإجمالي</span><span class="card-value gold">${total.toFixed(2)} ر.س</span></div>
+                        <div class="card-row"><span class="card-label">الحالة</span><span class="card-value">${statusBadge}</span></div>
+                        <div class="card-row"><span class="card-label">نوع الإقامة</span><span class="card-value">${item.stay_type || '-'}</span></div>
                     </div>
                 `;
             });
@@ -1570,31 +777,54 @@
             container.innerHTML = tableHTML + cardsHTML;
         }
 
+        function isFutureDate(dateStr, todayDate) {
+            if (!dateStr) return false;
+            var d = new Date(dateStr);
+            var dOnly = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+            return dOnly >= todayDate;
+        }
+
         /**
          * ============================================================
-         * تحديث الأرقام (Animation)
+         * تحديث الإحصائيات
          * ============================================================
          */
-        function animateNumber(elementId, targetValue) {
-            var el = document.getElementById(elementId);
-            if (!el) return;
-            var duration = 700;
-            var startTime = performance.now();
+        function updateKpis(bookings) {
+            var totalRevenue = 0;
+            var totalClients = new Set();
+            var today = new Date();
+            var todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
-            function update(currentTime) {
-                var elapsed = currentTime - startTime;
-                var progress = Math.min(elapsed / duration, 1);
-                var eased = 1 - Math.pow(1 - progress, 3);
-                var currentValue = Math.round(eased * targetValue);
-                el.textContent = currentValue.toLocaleString();
-                if (progress < 1) {
-                    requestAnimationFrame(update);
-                } else {
-                    el.textContent = targetValue.toLocaleString();
-                }
-            }
-            requestAnimationFrame(update);
+            bookings.forEach(function(item) {
+                totalRevenue += parseFloat(item.total) || 0;
+                if (item.client_name) totalClients.add(item.client_name);
+            });
+
+            var commission = totalRevenue * 0.2;
+
+            document.getElementById('statBookings').textContent = bookings.length.toLocaleString();
+            document.getElementById('kpiRevenue').textContent = totalRevenue.toLocaleString() + ' ر.س';
+            document.getElementById('kpiClients').textContent = totalClients.size.toLocaleString();
+            document.getElementById('kpiCommission').textContent = commission.toLocaleString() + ' ر.س';
         }
+
+        /**
+         * ============================================================
+         * بحث محلي
+         * ============================================================
+         */
+        document.getElementById('searchInput').addEventListener('input', function (e) {
+            var q = e.target.value.trim().toLowerCase();
+            if (!q) { displayData(allBookings); return; }
+            var filtered = allBookings.filter(function (item) {
+                var name = (item.client_name || '').toLowerCase();
+                var num = String(item.booking_number || '').toLowerCase();
+                return name.includes(q) || num.includes(q);
+            });
+            displayData(filtered);
+        });
+
+        document.getElementById('refreshBtn').addEventListener('click', loadBookings);
 
         /**
          * ============================================================
@@ -1603,9 +833,6 @@
          */
         document.addEventListener('DOMContentLoaded', function() {
             loadBookings();
-            console.log('📋 سجل الحجوزات - منتجع حياله');
-            console.log('📊 Supabase URL:', SUPABASE_URL);
-            console.log('✅ جاهز للعمل');
         });
 
         // تحديث كل 5 دقائق
