@@ -2322,52 +2322,65 @@
          * INVOICE NUMBER GENERATOR - Supabase (المعدل)
          * ============================================================
          */
-        async function generateInvoiceNumber() {
-            var today = new Date();
-            var year = today.getFullYear();
-            var month = String(today.getMonth() + 1).padStart(2, '0');
-            var day = String(today.getDate()).padStart(2, '0');
-            var dateStr = year + month + day;
+        /**
+ * ============================================================
+ * INVOICE NUMBER GENERATOR - Supabase (المعدل)
+ * ============================================================
+ */
+async function generateInvoiceNumber() {
+    var today = new Date();
+    var year = today.getFullYear();
+    var month = String(today.getMonth() + 1).padStart(2, '0');
+    var day = String(today.getDate()).padStart(2, '0');
+    var dateStr = year + month + day;
 
-            try {
-                var response = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=booking_number&order=booking_number.desc&limit=1', {
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error('فشل في جلب آخر رقم');
-                }
-
-                var data = await response.json();
-                var lastNumber = 0;
-
-                if (data && data.length > 0 && data[0].booking_number) {
-                    var lastBookingNumber = data[0].booking_number;
-                    var parts = lastBookingNumber.split('-');
-                    if (parts.length === 3) {
-                        var lastSeq = parseInt(parts[2]) || 0;
-                        lastNumber = lastSeq;
-                    }
-                }
-
-                var newNumber = lastNumber + 1;
-                var num = String(newNumber).padStart(4, '0');
-                invoiceNumber.value = 'INV-' + dateStr + '-' + num;
-
-                console.log('📌 آخر رقم:', lastNumber, '→ رقم جديد:', newNumber);
-
-            } catch (error) {
-                console.error('❌ خطأ في توليد رقم الفاتورة:', error);
-                var lastNumber = parseInt(localStorage.getItem('hayala_last_invoice_number')) || 0;
-                var newNumber = lastNumber + 1;
-                var num = String(newNumber).padStart(4, '0');
-                invoiceNumber.value = 'INV-' + dateStr + '-' + num;
-                localStorage.setItem('hayala_last_invoice_number', newNumber);
+    try {
+        // جلب جميع أرقام الفواتير من Supabase
+        var response = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=booking_number', {
+            headers: {
+                'apikey': SUPABASE_ANON_KEY,
+                'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
             }
+        });
+
+        if (!response.ok) {
+            throw new Error('فشل في جلب الأرقام');
         }
+
+        var data = await response.json();
+        var maxNumber = 0;
+
+        // البحث عن أكبر رقم فاتورة
+        if (data && data.length > 0) {
+            data.forEach(function(item) {
+                if (item.booking_number) {
+                    var parts = item.booking_number.split('-');
+                    if (parts.length === 3) {
+                        var num = parseInt(parts[2]) || 0;
+                        if (num > maxNumber) {
+                            maxNumber = num;
+                        }
+                    }
+                }
+            });
+        }
+
+        var newNumber = maxNumber + 1;
+        var num = String(newNumber).padStart(4, '0');
+        invoiceNumber.value = 'INV-' + dateStr + '-' + num;
+
+        console.log('📌 آخر رقم:', maxNumber, '→ رقم جديد:', newNumber);
+
+    } catch (error) {
+        console.error('❌ خطأ في توليد رقم الفاتورة:', error);
+        // Fallback: استخدام localStorage
+        var lastNumber = parseInt(localStorage.getItem('hayala_last_invoice_number')) || 0;
+        var newNumber = lastNumber + 1;
+        var num = String(newNumber).padStart(4, '0');
+        invoiceNumber.value = 'INV-' + dateStr + '-' + num;
+        localStorage.setItem('hayala_last_invoice_number', newNumber);
+    }
+}
 
         /**
          * ============================================================
