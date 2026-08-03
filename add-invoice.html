@@ -1674,6 +1674,81 @@
                 print-color-adjust: exact !important;
             }
         }
+
+        /* ============================================================
+           CLIENT SUGGESTIONS STYLES
+           ============================================================ */
+        .client-suggestions {
+            position: relative;
+            width: 100%;
+        }
+
+        .client-suggestions .suggestions-list {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            left: 0;
+            background: #ffffff;
+            border: 1px solid var(--line);
+            border-radius: var(--radius-sm);
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 999;
+            display: none;
+            box-shadow: var(--shadow);
+            margin-top: 2px;
+        }
+
+        .client-suggestions .suggestions-list.show {
+            display: block;
+        }
+
+        .client-suggestions .suggestions-list .suggestion-item {
+            padding: 8px 14px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--line);
+            font-size: 0.8rem;
+        }
+
+        .client-suggestions .suggestions-list .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .client-suggestions .suggestions-list .suggestion-item:hover {
+            background: var(--accent-soft);
+        }
+
+        .client-suggestions .suggestions-list .suggestion-item .client-phone {
+            font-size: 0.65rem;
+            color: var(--ink-mute);
+        }
+
+        .client-suggestions .suggestions-list .suggestion-item.add-new {
+            color: var(--teal);
+            font-weight: 700;
+        }
+
+        .client-suggestions .suggestions-list .suggestion-item.add-new i {
+            margin-left: 6px;
+        }
+
+        .client-suggestions .suggestions-list .loading-suggestions {
+            padding: 12px 14px;
+            text-align: center;
+            color: var(--ink-mute);
+            font-size: 0.75rem;
+        }
+
+        .no-results {
+            padding: 12px 14px;
+            text-align: center;
+            color: var(--ink-mute);
+            font-size: 0.75rem;
+        }
     </style>
 </head>
 <body>
@@ -1831,9 +1906,10 @@
 
                     <!-- Client -->
                     <div class="form-row client-row">
-                        <div class="form-group">
+                        <div class="form-group client-suggestions">
                             <label>اسم العميل <span class="required">*</span></label>
-                            <input type="text" id="clientName" placeholder="اسم العميل" />
+                            <input type="text" class="form-control" id="clientName" placeholder="اسم العميل" autocomplete="off" />
+                            <div class="suggestions-list" id="clientSuggestions"></div>
                         </div>
                         <div class="form-group">
                             <label>رقم الجوال <span class="optional-badge">اختياري</span></label>
@@ -2130,6 +2206,8 @@
         var editIndex = -1;
         var isEditingInvoice = false;
         var editingInvoiceNumber = '';
+        var clientsList = [];
+        var selectedClientId = null;
 
         var settings = {
             companyName: 'منتجع حياله',
@@ -2806,6 +2884,7 @@
             btnAddBooking.innerHTML = '<i class="fas fa-plus"></i> إضافة حجز';
             clientName.value = '';
             clientPhone.value = '';
+            selectedClientId = null;
             bookNumber.value = '';
             discountAmount.value = '0';
             paidAmount.value = '';
@@ -2818,6 +2897,195 @@
             calculateRemaining();
             showToast('🔄 جديد', 'تم تجهيز فاتورة جديدة', 'warning');
         }
+
+        /**
+         * ============================================================
+         * LOAD CLIENTS FROM SUPABASE
+         * ============================================================
+         */
+        async function loadClientsForSuggestions() {
+            try {
+                var response = await fetch(SUPABASE_URL + '/rest/v1/clients?select=id,name,phone&order=name', {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('فشل في جلب العملاء');
+                }
+
+                clientsList = await response.json();
+                console.log('👤 تم جلب العملاء:', clientsList.length);
+            } catch (error) {
+                console.error('❌ خطأ في جلب العملاء:', error);
+                clientsList = [];
+            }
+        }
+
+        /**
+         * ============================================================
+         * CLIENT SUGGESTIONS
+         * ============================================================
+         */
+        var clientSuggestions = document.getElementById('clientSuggestions');
+
+        function showClientSuggestions(input) {
+            var searchTerm = input.trim().toLowerCase();
+            var suggestionsList = clientSuggestions;
+
+            if (!searchTerm || searchTerm.length < 1) {
+                suggestionsList.classList.remove('show');
+                return;
+            }
+
+            var filtered = clientsList.filter(function(client) {
+                return client.name.toLowerCase().includes(searchTerm) ||
+                    (client.phone && client.phone.includes(searchTerm));
+            });
+
+            var results = filtered.slice(0, 10);
+
+            if (results.length === 0) {
+                suggestionsList.innerHTML = `
+                    <div class="suggestion-item add-new" onclick="openAddClientModal('${searchTerm}')">
+                        <span><i class="fas fa-plus-circle"></i> إضافة عميل جديد: "${searchTerm}"</span>
+                    </div>
+                    <div class="no-results">لا توجد نتائج مطابقة</div>
+                `;
+                suggestionsList.classList.add('show');
+                return;
+            }
+
+            var html = '';
+            results.forEach(function(client) {
+                html += `
+                    <div class="suggestion-item" onclick="selectClient('${client.id}', '${client.name}', '${client.phone || ''}')">
+                        <span>${client.name}</span>
+                        ${client.phone ? `<span class="client-phone">📱 ${client.phone}</span>` : ''}
+                    </div>
+                `;
+            });
+
+            html += `
+                <div class="suggestion-item add-new" onclick="openAddClientModal('${searchTerm}')">
+                    <span><i class="fas fa-plus-circle"></i> إضافة عميل جديد</span>
+                </div>
+            `;
+
+            suggestionsList.innerHTML = html;
+            suggestionsList.classList.add('show');
+        }
+
+        function selectClient(id, name, phone) {
+            clientName.value = name;
+            selectedClientId = id;
+            clientSuggestions.classList.remove('show');
+
+            if (phone && document.getElementById('clientPhone')) {
+                document.getElementById('clientPhone').value = phone;
+            }
+
+            clientName.style.borderColor = 'var(--teal)';
+            setTimeout(function() {
+                clientName.style.borderColor = '';
+            }, 2000);
+        }
+
+        function openAddClientModal(initialName) {
+            var name = initialName || '';
+            var newName = prompt('أدخل اسم العميل الجديد:', name || '');
+            if (!newName) return;
+
+            var newPhone = prompt('أدخل رقم الجوال (اختياري):', '');
+            var newEmail = prompt('أدخل البريد الإلكتروني (اختياري):', '');
+
+            addNewClient(newName, newPhone, newEmail);
+        }
+
+        async function addNewClient(name, phone, email) {
+            if (!name || name.trim() === '') {
+                showToast('⚠️ تنبيه', 'يرجى إدخال اسم العميل', 'warning');
+                return;
+            }
+
+            try {
+                var response = await fetch(SUPABASE_URL + '/rest/v1/clients', {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify({
+                        name: name.trim(),
+                        phone: phone || '',
+                        email: email || '',
+                        created_at: new Date().toISOString(),
+                        updated_at: new Date().toISOString()
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('فشل في إضافة العميل');
+                }
+
+                var newClient = await response.json();
+                var clientData = newClient[0] || newClient;
+                clientsList.push(clientData);
+
+                selectClient(clientData.id, clientData.name, clientData.phone || '');
+
+                showToast('✅ تم الإضافة', 'تم إضافة العميل "' + name + '" بنجاح', 'success');
+                loadClientsForSuggestions();
+
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+                showToast('❌ خطأ', 'فشل في إضافة العميل: ' + error.message, 'error');
+            }
+        }
+
+        // Client input events
+        var clientNameInput = document.getElementById('clientName');
+
+        clientNameInput.addEventListener('input', function() {
+            var value = this.value.trim();
+            if (value.length >= 1) {
+                showClientSuggestions(value);
+            } else {
+                clientSuggestions.classList.remove('show');
+                selectedClientId = null;
+            }
+        });
+
+        clientNameInput.addEventListener('blur', function() {
+            setTimeout(function() {
+                if (!document.activeElement || !document.activeElement.closest('.client-suggestions')) {
+                    clientSuggestions.classList.remove('show');
+                }
+            }, 200);
+        });
+
+        clientNameInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                clientSuggestions.classList.remove('show');
+            }
+            if (e.key === 'Enter' && clientSuggestions.classList.contains('show')) {
+                var firstItem = clientSuggestions.querySelector('.suggestion-item:not(.add-new)');
+                if (firstItem) {
+                    firstItem.click();
+                }
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            var container = document.querySelector('.client-suggestions');
+            if (container && !container.contains(e.target)) {
+                clientSuggestions.classList.remove('show');
+            }
+        });
 
         /**
          * ============================================================
@@ -2873,14 +3141,14 @@
             }
 
             var firstItem = invoiceData[0];
-            
+
             bookNumber.value = firstItem.booking_number || '';
             invoiceNumber.value = firstItem.booking_number || '';
-            
+
             if (firstItem.invoice_date) {
                 invoiceDate.value = firstItem.invoice_date;
             }
-            
+
             clientName.value = firstItem.client_name || '';
             clientPhone.value = firstItem.client_phone || '';
             discountAmount.value = firstItem.discount || '0';
@@ -2928,6 +3196,7 @@
             btnAddBooking.innerHTML = '<i class="fas fa-plus"></i> إضافة حجز';
             clientName.value = '';
             clientPhone.value = '';
+            selectedClientId = null;
             bookNumber.value = '';
             discountAmount.value = '0';
             paidAmount.value = '';
@@ -2959,7 +3228,7 @@
             var number = invoiceNumber.value.trim();
             var book = bookNumber.value.trim();
             var date = invoiceDate.value;
-            var client = clientName.value.trim();
+            var clientNameValue = clientName.value.trim();
             var phone = clientPhone.value.trim();
             var discount = parseFloat(discountAmount.value) || 0;
             var paid = parseFloat(paidAmount.value) || 0;
@@ -2980,8 +3249,8 @@
                 invoiceDate.focus();
                 return;
             }
-            if (!client) {
-                showToast('⚠️ تنبيه', 'يرجى إدخال اسم العميل', 'error');
+            if (!clientNameValue) {
+                showToast('⚠️ تنبيه', 'يرجى إدخال اسم العميل أو اختياره من القائمة', 'error');
                 clientName.focus();
                 return;
             }
@@ -2991,12 +3260,30 @@
                 return;
             }
 
+            // Check if client exists in database
+            var existingClient = clientsList.find(function(c) {
+                return c.name.toLowerCase() === clientNameValue.toLowerCase();
+            });
+
+            if (!existingClient) {
+                showToast('⚠️ عميل غير موجود', 'العميل "' + clientNameValue + '" غير مسجل. هل تريد إضافته؟', 'warning', [
+                    { label: 'إضافة', value: 'add', class: 'btn-yes' },
+                    { label: 'إلغاء', value: 'cancel', class: 'btn-no' }
+                ]).then(function(result) {
+                    if (result === 'add') {
+                        openAddClientModal(clientNameValue);
+                    }
+                });
+                return;
+            }
+
             var invoiceData = {
                 number: number,
                 book: book,
                 date: date,
-                client: client,
-                phone: phone,
+                client: clientNameValue,
+                client_id: existingClient.id,
+                phone: phone || existingClient.phone || '',
                 discount: discount,
                 paid: paid,
                 remaining: remaining,
@@ -3014,100 +3301,93 @@
          * ============================================================
          */
         async function saveInvoiceToSupabase(invoiceData) {
-    btnSaveInvoice.disabled = true;
-    btnSaveInvoice.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
+            btnSaveInvoice.disabled = true;
+            btnSaveInvoice.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
 
-    try {
-        var warnings = [];
-        var bookingsToSave = invoiceData.bookings.map(function(item, index) {
-            // تحقق من الحقول المهمة
-            if (!item.number) {
-                warnings.push('الحجز ' + (index + 1) + ': رقم الحجز فارغ');
-            }
-            if (!invoiceData.client) {
-                warnings.push('الحجز ' + (index + 1) + ': اسم العميل فارغ');
-            }
-            if (!item.property) {
-                warnings.push('الحجز ' + (index + 1) + ': نوع العقار فارغ');
-            }
-            if (!item.checkIn) {
-                warnings.push('الحجز ' + (index + 1) + ': تاريخ الدخول فارغ');
-            }
+            try {
+                var warnings = [];
+                var bookingsToSave = invoiceData.bookings.map(function(item, index) {
+                    if (!item.number) {
+                        warnings.push('الحجز ' + (index + 1) + ': رقم الحجز فارغ');
+                    }
+                    if (!invoiceData.client) {
+                        warnings.push('الحجز ' + (index + 1) + ': اسم العميل فارغ');
+                    }
+                    if (!item.property) {
+                        warnings.push('الحجز ' + (index + 1) + ': نوع العقار فارغ');
+                    }
+                    if (!item.checkIn) {
+                        warnings.push('الحجز ' + (index + 1) + ': تاريخ الدخول فارغ');
+                    }
 
-            return {
-                booking_number: item.number || invoiceData.number || '',
-                invoice_date: invoiceData.date || new Date().toISOString().split('T')[0],
-                check_in: item.checkIn || null,
-                check_out: item.checkOut || null,
-                client_name: invoiceData.client || '',
-                client_phone: invoiceData.phone || '',
-                property_type: item.property || '',
-                nights: parseInt(item.nights) || 0,
-                price_per_night: parseFloat(item.dailyPrice) || 0,
-                discount: parseFloat(invoiceData.discount) || 0,
-                paid: parseFloat(invoiceData.paid) || 0,
-                remaining: parseFloat(invoiceData.remaining) || 0,
-                total: parseFloat(item.total) || 0,
-                payment_status: parseFloat(invoiceData.remaining) <= 0 ? 'Fully Paid' : 'Balance Due',
-                stay_type: '',
-                check_in_time: item.checkInTime || null,
-                check_out_time: item.checkOutTime || null,
-                time_note: '',
-                notes: ''
-            };
-        });
+                    return {
+                        booking_number: item.number || invoiceData.number || '',
+                        invoice_date: invoiceData.date || new Date().toISOString().split('T')[0],
+                        check_in: item.checkIn || null,
+                        check_out: item.checkOut || null,
+                        client_name: invoiceData.client || '',
+                        client_phone: invoiceData.phone || '',
+                        property_type: item.property || '',
+                        nights: parseInt(item.nights) || 0,
+                        price_per_night: parseFloat(item.dailyPrice) || 0,
+                        discount: parseFloat(invoiceData.discount) || 0,
+                        paid: parseFloat(invoiceData.paid) || 0,
+                        remaining: parseFloat(invoiceData.remaining) || 0,
+                        total: parseFloat(item.total) || 0,
+                        payment_status: parseFloat(invoiceData.remaining) <= 0 ? 'Fully Paid' : 'Balance Due'
+                    };
+                });
 
-        var savePromises = bookingsToSave.map(function(booking) {
-            return fetch(SUPABASE_URL + '/rest/v1/bookings', {
-                method: 'POST',
-                headers: {
-                    'apikey': SUPABASE_ANON_KEY,
-                    'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
-                    'Content-Type': 'application/json',
-                    'Prefer': 'return=minimal'
-                },
-                body: JSON.stringify(booking)
-            });
-        });
+                var savePromises = bookingsToSave.map(function(booking) {
+                    return fetch(SUPABASE_URL + '/rest/v1/bookings', {
+                        method: 'POST',
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                            'Content-Type': 'application/json',
+                            'Prefer': 'return=minimal'
+                        },
+                        body: JSON.stringify(booking)
+                    });
+                });
 
-        var responses = await Promise.all(savePromises);
-        var allSuccess = responses.every(function(r) { return r.ok; });
+                var responses = await Promise.all(savePromises);
+                var allSuccess = responses.every(function(r) { return r.ok; });
 
-        if (!allSuccess) {
-            var errors = [];
-            responses.forEach(function(r, index) {
-                if (!r.ok) {
-                    errors.push('الحجز ' + (index + 1) + ': ' + r.status);
+                if (!allSuccess) {
+                    var errors = [];
+                    responses.forEach(function(r, index) {
+                        if (!r.ok) {
+                            errors.push('الحجز ' + (index + 1) + ': ' + r.status);
+                        }
+                    });
+                    throw new Error('فشل في حفظ بعض البيانات: ' + errors.join(', '));
                 }
-            });
-            throw new Error('فشل في حفظ بعض البيانات: ' + errors.join(', '));
-        }
 
-        btnSaveInvoice.disabled = false;
-        btnSaveInvoice.innerHTML = '<i class="fas fa-save"></i> حفظ';
+                btnSaveInvoice.disabled = false;
+                btnSaveInvoice.innerHTML = '<i class="fas fa-save"></i> حفظ';
 
-        // عرض تنبيهات إذا وجدت
-        if (warnings.length > 0) {
-            showToast('⚠️ تم الحفظ مع تنبيهات', 'تم حفظ الفاتورة ولكن هناك حقول ناقصة:\n' + warnings.join('\n'), 'warning');
-        } else {
-            showToast('✅ تم الحفظ', 'تم حفظ الفاتورة بنجاح في Supabase!', 'success', [
-                { label: 'معاينة', value: 'preview', class: 'btn-yes' },
-                { label: 'لا', value: 'no', class: 'btn-no' }
-            ]).then(function(result) {
-                if (result === 'preview') {
-                    previewInvoice();
+                if (warnings.length > 0) {
+                    showToast('⚠️ تم الحفظ مع تنبيهات', 'تم حفظ الفاتورة ولكن هناك حقول ناقصة:\n' + warnings.join('\n'), 'warning');
+                } else {
+                    showToast('✅ تم الحفظ', 'تم حفظ الفاتورة بنجاح في Supabase!', 'success', [
+                        { label: 'معاينة', value: 'preview', class: 'btn-yes' },
+                        { label: 'لا', value: 'no', class: 'btn-no' }
+                    ]).then(function(result) {
+                        if (result === 'preview') {
+                            previewInvoice();
+                        }
+                        resetForm();
+                    });
                 }
-                resetForm();
-            });
-        }
 
-    } catch (error) {
-        console.error('❌ خطأ:', error);
-        showToast('❌ خطأ', 'حدث خطأ في حفظ الفاتورة: ' + error.message, 'error');
-        btnSaveInvoice.disabled = false;
-        btnSaveInvoice.innerHTML = '<i class="fas fa-save"></i> حفظ';
-    }
-}
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+                showToast('❌ خطأ', 'حدث خطأ في حفظ الفاتورة: ' + error.message, 'error');
+                btnSaveInvoice.disabled = false;
+                btnSaveInvoice.innerHTML = '<i class="fas fa-save"></i> حفظ';
+            }
+        }
 
         /**
          * ============================================================
@@ -3136,12 +3416,15 @@
          * INIT
          * ============================================================
          */
-        console.log('🏕️ منتجع حياله - فاتورة المبيعات (Supabase)');
-        console.log('📌 Ctrl+F للبحث عن فاتورة');
-        console.log('📌 Ctrl+P لمعاينة الطباعة');
-        console.log('📌 Ctrl+Enter للحفظ');
-        console.log('📊 Supabase URL:', SUPABASE_URL);
-        console.log('✅ النظام جاهز للعمل مع Supabase');
+        document.addEventListener('DOMContentLoaded', function() {
+            loadClientsForSuggestions();
+            console.log('🏕️ منتجع حياله - فاتورة المبيعات (Supabase)');
+            console.log('📌 Ctrl+F للبحث عن فاتورة');
+            console.log('📌 Ctrl+P لمعاينة الطباعة');
+            console.log('📌 Ctrl+Enter للحفظ');
+            console.log('📊 Supabase URL:', SUPABASE_URL);
+            console.log('✅ النظام جاهز للعمل مع Supabase');
+        });
     </script>
 
 </body>
