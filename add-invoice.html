@@ -3051,7 +3051,7 @@
                             'apikey': SUPABASE_ANON_KEY,
                             'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
                             'Content-Type': 'application/json',
-                            'Prefer': 'return=representation'
+                            'Prefer': 'return=minimal'
                         },
                         body: JSON.stringify(booking)
                     });
@@ -3061,7 +3061,13 @@
                 var allSuccess = responses.every(function(r) { return r.ok; });
 
                 if (!allSuccess) {
-                    throw new Error('فشل في حفظ بعض البيانات');
+                    var errors = [];
+                    responses.forEach(function(r, index) {
+                        if (!r.ok) {
+                            errors.push('الحجز ' + (index + 1) + ': ' + r.status);
+                        }
+                    });
+                    throw new Error('فشل في حفظ بعض البيانات: ' + errors.join(', '));
                 }
 
                 btnSaveInvoice.disabled = false;
