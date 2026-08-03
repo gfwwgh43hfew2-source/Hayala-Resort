@@ -8,62 +8,65 @@
     <link rel="shortcut icon" href="#">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 
     <style>
         /* ==========================================================
-           DESIGN SYSTEM — منتجع حياله (موحّد مع لوحة التحكم)
+           DESIGN PLAN — منتجع حياله · "غروب الواحة"
+           لوحة ألوان مستوحاة من غروب الشمس فوق واحة صحراوية بالقصيم:
+           سماء بنفسجية-نيلية عميقة، تتدرج لبرتقالي-مرجاني، ثم كهرماني،
+           وخط تركوازي واحد يمثل الماء وسط الرمال.
            ========================================================== */
         :root {
-            --canvas:      #f6f3ec;
+            --bg:          #F4F5FB;
             --surface:     #ffffff;
-            --surface-2:   #fbf9f4;
-            --line:        rgba(33,29,26,0.11);
-            --line-soft:   rgba(33,29,26,0.06);
+            --surface-2:   #EEF0FA;
+            --line:        rgba(20,18,43,0.09);
+            --line-soft:   rgba(20,18,43,0.05);
 
-            --ink:         #211d1a;
-            --ink-2:       #6e645a;
-            --ink-3:       #a69c90;
-            --ink-4:       #d8d0c4;
+            --ink:         #15132B;
+            --ink-2:       #5B5876;
+            --ink-3:       #9A97B3;
+            --ink-4:       #D9D7E8;
 
-            --prussian:      #1f4e6b;
-            --prussian-tint: #e7eef1;
-            --terracotta:      #b14b2b;
-            --terracotta-tint: #f7e7df;
-            --ochre:       #b98a1e;
-            --ochre-tint:  #f6efdd;
-            --viridian:      #2e7a5c;
-            --viridian-tint: #e7f1ec;
-            --oxide:       #a63a31;
-            --oxide-tint:  #f5e4e1;
+            /* لوحة الغروب الزاهية */
+            --violet:      #6D28D9;
+            --violet-2:    #8B5CF6;
+            --coral:       #FF5A6E;
+            --amber:       #FFA53D;
+            --oasis:       #00CFC1;
+            --pink:        #EC4899;
 
-            --sidebar-w:   270px;
-            --header-h:    68px;
-            --r-lg:        18px;
-            --r-md:        12px;
-            --r-sm:        8px;
+            --violet-tint: #F1EBFD;
+            --coral-tint:  #FFE9EC;
+            --amber-tint:  #FFF3E1;
+            --oasis-tint:  #E1FBF8;
+            --pink-tint:   #FDEAF4;
+
+            --sunset: linear-gradient(120deg, #3B1E86 0%, #8B2FD6 28%, #FF5A6E 62%, #FFA53D 100%);
+            --sunset-soft: linear-gradient(120deg, rgba(59,30,134,0.08), rgba(255,90,110,0.06));
+
+            --sidebar-w:   272px;
+            --header-h:    70px;
+            --r-lg:        20px;
+            --r-md:        14px;
+            --r-sm:        9px;
             --ease:        cubic-bezier(0.22, 1, 0.36, 1);
 
-            --display:     'Bricolage Grotesque', 'Cairo', sans-serif;
+            --display:     'Cairo', sans-serif;
+            --body-font:   'Tajawal', 'Cairo', sans-serif;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
 
         body {
-            font-family: 'Cairo', 'Segoe UI', system-ui, sans-serif;
-            background: var(--canvas);
+            font-family: var(--body-font);
+            background: var(--bg);
             color: var(--ink);
             direction: rtl;
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
-        }
-
-        body::before {
-            content: '';
-            position: fixed; inset: 0; pointer-events: none; z-index: 2000;
-            opacity: 0.025; mix-blend-mode: multiply;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
         }
 
         a { text-decoration: none; color: inherit; }
@@ -73,8 +76,7 @@
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--ink-4); border-radius: 10px; }
-
-        :focus-visible { outline: 2px solid var(--prussian); outline-offset: 2px; border-radius: 3px; }
+        :focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; border-radius: 3px; }
 
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
@@ -85,17 +87,15 @@
            ========================================================== */
         .sidebar-overlay {
             display: none; position: fixed; inset: 0;
-            background: rgba(33,29,26,0.4);
-            z-index: 999; opacity: 0; transition: opacity .25s ease;
-            pointer-events: none;
+            background: rgba(21,19,43,0.45);
+            z-index: 999; opacity: 0; transition: opacity .25s ease; pointer-events: none;
         }
         .sidebar-overlay.active { opacity: 1; pointer-events: auto; }
 
         .sidebar {
             position: fixed; top: 0; right: 0;
             width: var(--sidebar-w); height: 100vh;
-            background: var(--surface-2);
-            border-left: 1px solid var(--line);
+            background: var(--ink);
             z-index: 1000;
             display: flex; flex-direction: column; overflow-y: auto;
             transition: right .35s var(--ease);
@@ -103,75 +103,68 @@
         .sidebar.collapsed { right: calc(-1 * var(--sidebar-w)); }
 
         .sidebar .brand {
-            padding: 24px 22px 20px;
+            padding: 26px 22px 22px;
             display: flex; align-items: center; gap: 12px;
-            border-bottom: 1px solid var(--line);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
         }
         .sidebar .brand .mark {
-            width: 34px; height: 34px; border-radius: 9px;
+            width: 38px; height: 38px; border-radius: 11px;
             display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-            background: var(--ink);
-            position: relative;
+            background: var(--sunset);
+            font-family: var(--display); font-weight: 900; color: #fff; font-size: 1rem;
+            box-shadow: 0 6px 16px -4px rgba(255,90,110,0.5);
         }
-        .sidebar .brand .mark svg { width: 17px; height: 17px; }
-        .sidebar .brand .mark::after {
-            content: ''; position: absolute; bottom: -3px; left: -3px;
-            width: 9px; height: 9px; border-radius: 50%;
-            background: var(--terracotta); border: 2px solid var(--surface-2);
-        }
-        .sidebar .brand .text { font-weight: 800; font-size: 0.88rem; color: var(--ink); line-height: 1.3; }
-        .sidebar .brand .text span { display: block; font-size: 0.6rem; font-weight: 600; color: var(--ink-3); margin-top: 2px; }
+        .sidebar .brand .text { font-weight: 800; font-size: 0.9rem; color: #fff; line-height: 1.3; }
+        .sidebar .brand .text span { display: block; font-size: 0.6rem; font-weight: 500; color: rgba(255,255,255,0.4); margin-top: 2px; }
 
-        .sidebar .menu { flex: 1; padding: 14px 12px; }
+        .sidebar .menu { flex: 1; padding: 16px 12px; }
         .sidebar .menu .label {
-            font-size: 0.6rem; color: var(--ink-3);
-            text-transform: uppercase; letter-spacing: 1px;
-            padding: 16px 10px 6px; font-weight: 700;
+            font-size: 0.6rem; color: rgba(255,255,255,0.32);
+            text-transform: uppercase; letter-spacing: 1.2px;
+            padding: 18px 10px 7px; font-weight: 700;
         }
         .sidebar .menu .label:first-child { padding-top: 4px; }
 
         .sidebar .menu .item {
-            display: flex; align-items: center; gap: 10px;
-            padding: 9px 12px; border-radius: var(--r-sm);
-            color: var(--ink-2); font-weight: 600; font-size: 0.82rem;
+            display: flex; align-items: center; gap: 11px;
+            padding: 10px 13px; border-radius: 10px;
+            color: rgba(255,255,255,0.62); font-weight: 600; font-size: 0.83rem;
             transition: background .15s ease, color .15s ease;
-            cursor: pointer; margin-bottom: 2px; position: relative;
-            border-inline-end: 3px solid transparent;
+            cursor: pointer; margin-bottom: 3px; position: relative;
         }
-        .sidebar .menu .item:hover { background: rgba(33,29,26,0.04); color: var(--ink); }
+        .sidebar .menu .item:hover { background: rgba(255,255,255,0.06); color: #fff; }
         .sidebar .menu .item.active {
-            background: var(--surface); color: var(--ink);
-            box-shadow: 0 2px 10px rgba(33,29,26,0.08);
-            border-inline-end: 3px solid var(--swatch, var(--ink));
+            background: var(--sunset); color: #fff;
+            box-shadow: 0 8px 20px -6px rgba(255,90,110,0.45);
         }
-        .sidebar .menu .item i { width: 16px; text-align: center; font-size: 0.86rem; opacity: 0.8; }
+        .sidebar .menu .item i { width: 16px; text-align: center; font-size: 0.86rem; opacity: 0.9; }
         .sidebar .menu .item .chip {
-            width: 7px; height: 7px; border-radius: 2px; flex-shrink: 0; background: var(--swatch, var(--ink-4));
+            width: 7px; height: 7px; border-radius: 2px; flex-shrink: 0; background: var(--swatch, rgba(255,255,255,0.3));
         }
+        .sidebar .menu .item.active .chip { background: #fff; }
         .sidebar .menu .item .badge {
             margin-right: auto; font-size: 0.58rem; font-weight: 700;
             padding: 1px 8px; border-radius: 4px;
-            background: var(--ink-4); color: var(--surface-2);
+            background: var(--oasis); color: #06332F;
         }
-        .sidebar .menu .item.active .badge { background: var(--swatch, var(--ink)); color: #fff; }
 
-        .sidebar .footer { padding: 14px 18px 20px; border-top: 1px solid var(--line); }
+        .sidebar .footer { padding: 16px 18px 22px; border-top: 1px solid rgba(255,255,255,0.08); }
         .sidebar .footer .user { display: flex; align-items: center; gap: 10px; }
         .sidebar .footer .user .avatar {
-            width: 33px; height: 33px; border-radius: var(--r-sm);
-            background: var(--ink); color: #fff;
+            width: 34px; height: 34px; border-radius: var(--r-sm);
+            background: var(--sunset); color: #fff;
             display: flex; align-items: center; justify-content: center;
             font-weight: 700; font-size: 0.8rem; flex-shrink: 0;
         }
-        .sidebar .footer .user .info .name { font-size: 0.8rem; font-weight: 700; }
-        .sidebar .footer .user .info .role { font-size: 0.62rem; color: var(--ink-3); margin-top: 1px; }
+        .sidebar .footer .user .info .name { font-size: 0.8rem; font-weight: 700; color: #fff; }
+        .sidebar .footer .user .info .role { font-size: 0.62rem; color: rgba(255,255,255,0.4); margin-top: 1px; }
         .sidebar .footer .logout {
             margin-right: auto; width: 28px; height: 28px; border-radius: var(--r-sm);
             display: flex; align-items: center; justify-content: center;
-            color: var(--ink-3); border: 1px solid var(--line);
+            color: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.12);
             transition: .15s;
         }
-        .sidebar .footer .logout:hover { color: var(--oxide); border-color: var(--oxide); }
+        .sidebar .footer .logout:hover { color: var(--coral); border-color: var(--coral); }
 
         /* ==========================================================
            MAIN
@@ -182,7 +175,7 @@
         .header {
             position: sticky; top: 0; z-index: 100;
             height: var(--header-h); padding: 0 30px;
-            background: rgba(246,243,236,0.88); backdrop-filter: blur(12px);
+            background: rgba(244,245,251,0.86); backdrop-filter: blur(14px);
             border-bottom: 1px solid var(--line);
             display: flex; align-items: center; justify-content: space-between;
         }
@@ -193,7 +186,7 @@
             border: 1px solid var(--line); background: var(--surface);
             color: var(--ink-2); cursor: pointer; transition: .15s;
         }
-        .header .hamburger:hover { border-color: var(--ink-3); color: var(--ink); }
+        .header .hamburger:hover { border-color: var(--violet); color: var(--violet); }
         .header .breadcrumb { font-size: 0.79rem; color: var(--ink-3); }
         .header .breadcrumb b { color: var(--ink); font-weight: 700; }
 
@@ -202,7 +195,7 @@
             background: var(--surface); border: 1px solid var(--line);
             border-radius: 50px; padding: 8px 15px; width: 260px; color: var(--ink-3);
         }
-        .header .search:focus-within { border-color: var(--prussian); }
+        .header .search:focus-within { border-color: var(--violet); box-shadow: 0 0 0 3px var(--violet-tint); }
         .header .search i { font-size: 0.76rem; }
         .header .search input { background: none; border: none; outline: none; color: var(--ink); font-family: inherit; font-size: 0.79rem; width: 100%; }
         .header .search input::placeholder { color: var(--ink-3); }
@@ -214,14 +207,15 @@
             color: var(--ink-2); cursor: pointer; transition: .15s;
             display: flex; align-items: center; justify-content: center; font-size: 0.9rem;
         }
-        .header .right .notif:hover { border-color: var(--ink-3); color: var(--ink); }
+        .header .right .notif:hover { border-color: var(--violet); color: var(--violet); }
         .header .right .refresh-btn {
             display: inline-flex; align-items: center; gap: 7px;
-            padding: 8px 16px; border-radius: 50px;
-            background: var(--ink); color: #fff; font-weight: 700; font-size: 0.76rem;
-            border: none; cursor: pointer; transition: transform .2s var(--ease), background .2s ease;
+            padding: 9px 18px; border-radius: 50px;
+            background: var(--sunset); color: #fff; font-weight: 800; font-size: 0.76rem;
+            border: none; cursor: pointer; transition: transform .2s var(--ease), box-shadow .2s ease;
+            box-shadow: 0 6px 16px -6px rgba(255,90,110,0.5);
         }
-        .header .right .refresh-btn:hover { transform: translateY(-2px); background: #000; }
+        .header .right .refresh-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 22px -6px rgba(255,90,110,0.6); }
         .header .right .refresh-btn i { font-size: 0.72rem; }
         .header .right .refresh-btn.spinning i { animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -231,10 +225,10 @@
             padding: 3px 12px 3px 5px; border-radius: 50px; border: 1px solid var(--line);
             cursor: pointer; transition: .15s; background: var(--surface);
         }
-        .header .right .profile:hover { border-color: var(--ink-3); }
+        .header .right .profile:hover { border-color: var(--violet); }
         .header .right .profile .avatar {
             width: 28px; height: 28px; border-radius: 50%;
-            background: var(--ink); color: #fff;
+            background: var(--sunset); color: #fff;
             display: flex; align-items: center; justify-content: center;
             font-weight: 700; font-size: 0.7rem;
         }
@@ -242,65 +236,92 @@
         .header .right .profile .name small { display: block; font-size: 0.58rem; font-weight: 500; color: var(--ink-3); }
         .header .right .profile i { font-size: 0.6rem; color: var(--ink-3); }
 
-        .dash { padding: 26px 30px 60px; max-width: 1500px; }
+        .dash { padding: 26px 30px 60px; max-width: 1540px; }
 
         /* ==========================================================
-           PAGE HEAD
+           HERO — دوائر الغروب + كثبان الواحة (العنصر المميز)
            ========================================================== */
-        .page-head {
-            display: flex; align-items: flex-end; justify-content: space-between;
-            gap: 20px; padding: 8px 6px 26px; flex-wrap: wrap;
+        .hero {
+            position: relative; overflow: hidden;
+            border-radius: var(--r-lg);
+            background: var(--sunset);
+            padding: 34px 34px 0;
+            margin-bottom: 22px;
+            color: #fff;
+            box-shadow: 0 20px 50px -20px rgba(139,47,214,0.45);
         }
-        .page-head .copy .eyebrow {
-            font-size: 0.68rem; letter-spacing: 1.4px; text-transform: uppercase;
-            color: var(--prussian); font-weight: 800; margin-bottom: 8px;
+        .hero .hero-top {
+            position: relative; z-index: 2;
+            display: flex; align-items: flex-start; justify-content: space-between;
+            gap: 24px; flex-wrap: wrap; padding-bottom: 30px;
         }
-        .page-head .copy h1 {
-            font-weight: 900; font-size: 1.85rem; color: var(--ink);
-            letter-spacing: -0.2px; line-height: 1.2;
+        .hero .eyebrow {
+            display: inline-flex; align-items: center; gap: 7px;
+            font-size: 0.68rem; letter-spacing: 1px; text-transform: uppercase;
+            color: #fff; font-weight: 800; background: rgba(255,255,255,0.16);
+            padding: 5px 13px; border-radius: 50px; margin-bottom: 14px;
         }
-        .page-head .copy p { color: var(--ink-2); font-size: 0.87rem; margin-top: 10px; max-width: 46ch; }
-
-        .page-head .cta {
+        .hero .eyebrow .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--oasis); box-shadow: 0 0 0 3px rgba(0,207,193,0.35); animation: pulse 1.6s ease infinite; }
+        @keyframes pulse { 0%,100%{ transform: scale(1); } 50%{ transform: scale(1.4); } }
+        .hero h1 { font-family: var(--display); font-weight: 900; font-size: 2rem; letter-spacing: -0.3px; }
+        .hero p { color: rgba(255,255,255,0.82); font-size: 0.88rem; margin-top: 10px; max-width: 46ch; line-height: 1.7; }
+        .hero .cta {
             display: inline-flex; align-items: center; gap: 8px;
-            padding: 11px 24px; border-radius: 50px;
-            background: var(--ink); color: #fff; font-weight: 800; font-size: 0.82rem;
-            transition: transform .2s var(--ease), background .2s ease; flex-shrink: 0;
+            padding: 13px 26px; border-radius: 50px;
+            background: #fff; color: var(--violet); font-weight: 800; font-size: 0.85rem;
+            transition: transform .2s var(--ease); flex-shrink: 0;
         }
-        .page-head .cta:hover { transform: translateY(-2px); background: #000; }
+        .hero .cta:hover { transform: translateY(-3px); }
+
+        /* كثبان الواحة — الخط التركوازي + السلسلة الرملية */
+        .hero .dunes { position: relative; z-index: 1; height: 64px; margin: 0 -34px; }
+        .hero .dunes svg { display: block; width: 100%; height: 100%; }
 
         /* ==========================================================
-           STAT CARDS
+           STAT CARDS — ألوان صريحة زاهية
            ========================================================== */
-        .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+        .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 22px; }
         .stat-card {
-            background: var(--surface); border: 1px solid var(--line);
-            border-radius: var(--r-md); padding: 0; overflow: hidden;
+            border-radius: var(--r-md); padding: 20px; color: #fff; position: relative; overflow: hidden;
             transition: transform .2s var(--ease), box-shadow .2s ease;
         }
-        .stat-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px -10px rgba(33,29,26,0.2); }
-        .stat-card .bar { height: 3px; background: var(--swatch, var(--ink)); }
-        .stat-card .body { padding: 17px 18px; }
-        .stat-card .label { font-size: 0.71rem; color: var(--ink-3); font-weight: 600; display: flex; align-items: center; gap: 7px; }
-        .stat-card .label i { font-size: 0.72rem; color: var(--swatch, var(--ink-3)); }
-        .stat-card .number { font-family: var(--display); font-size: 1.48rem; font-weight: 700; margin-top: 9px; letter-spacing: -0.2px; color: var(--ink); }
+        .stat-card:hover { transform: translateY(-4px); }
+        .stat-card::after {
+            content: ''; position: absolute; left: -20px; bottom: -30px; width: 90px; height: 90px;
+            border-radius: 50%; background: rgba(255,255,255,0.12);
+        }
+        .stat-card.violet { background: linear-gradient(135deg, var(--violet), var(--violet-2)); box-shadow: 0 14px 30px -14px rgba(109,40,217,0.6); }
+        .stat-card.coral  { background: linear-gradient(135deg, #FF5A6E, #FF8A5B); box-shadow: 0 14px 30px -14px rgba(255,90,110,0.55); }
+        .stat-card.oasis  { background: linear-gradient(135deg, #00CFC1, #00A6E8); box-shadow: 0 14px 30px -14px rgba(0,207,193,0.5); }
+        .stat-card.amber  { background: linear-gradient(135deg, #FFA53D, #FF6F91); box-shadow: 0 14px 30px -14px rgba(255,165,61,0.5); }
+
+        .stat-card .icon-wrap {
+            width: 38px; height: 38px; border-radius: 10px; background: rgba(255,255,255,0.2);
+            display: flex; align-items: center; justify-content: center; margin-bottom: 14px; font-size: 0.95rem;
+            position: relative; z-index: 1;
+        }
+        .stat-card .label { font-size: 0.75rem; font-weight: 700; opacity: 0.92; position: relative; z-index: 1; }
+        .stat-card .number { font-family: var(--display); font-size: 1.6rem; font-weight: 800; margin-top: 8px; position: relative; z-index: 1; }
 
         /* ==========================================================
            TABLE PANEL
            ========================================================== */
-        .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 24px; margin-bottom: 20px; }
+        .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 26px; margin-bottom: 20px; }
         .panel .p-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; gap: 10px; }
-        .panel .p-title { font-size: 0.9rem; font-weight: 800; color: var(--ink); display: flex; align-items: center; gap: 9px; }
-        .panel .p-title .dot { width: 7px; height: 7px; border-radius: 2px; background: var(--viridian); }
+        .panel .p-title { font-size: 0.94rem; font-weight: 800; color: var(--ink); display: flex; align-items: center; gap: 9px; }
+        .panel .p-title .dot { width: 8px; height: 8px; border-radius: 3px; background: var(--sunset); }
         .panel .p-sub { font-size: 0.72rem; color: var(--ink-3); margin-top: 3px; }
-        .panel .p-source { font-size: 0.68rem; color: var(--ink-3); font-weight: 600; display: flex; align-items: center; gap: 6px; }
+        .panel .p-source {
+            font-size: 0.68rem; color: var(--violet); font-weight: 700; display: flex; align-items: center; gap: 6px;
+            background: var(--violet-tint); padding: 5px 12px; border-radius: 50px;
+        }
 
         .table-wrapper { overflow-x: auto; border-radius: var(--r-md); border: 1px solid var(--line-soft); }
         table { width: 100%; border-collapse: collapse; font-size: 0.79rem; min-width: 1100px; }
         thead th {
             background: var(--surface-2); color: var(--ink-2);
-            padding: 11px 12px; text-align: right; font-weight: 700;
-            white-space: nowrap; font-size: 0.68rem; text-transform: uppercase;
+            padding: 12px 12px; text-align: right; font-weight: 700;
+            white-space: nowrap; font-size: 0.67rem; text-transform: uppercase;
             letter-spacing: 0.4px; border-bottom: 1px solid var(--line);
             position: sticky; top: 0;
         }
@@ -308,8 +329,8 @@
             padding: 11px 12px; border-bottom: 1px solid var(--line-soft);
             color: var(--ink-2); font-size: 0.78rem; white-space: nowrap;
         }
-        tbody tr:hover td { background: var(--surface-2); }
-        tbody tr.is-future td:first-child, tbody tr.is-future td:nth-child(3) { color: var(--prussian); font-weight: 700; }
+        tbody tr:hover td { background: var(--violet-tint); }
+        tbody tr.is-future td:first-child, tbody tr.is-future td:nth-child(3) { color: var(--violet); font-weight: 800; }
         tbody tr:last-child td { border-bottom: none; }
 
         .badge {
@@ -317,35 +338,32 @@
             padding: 3px 12px; border-radius: 50px;
             font-size: 0.65rem; font-weight: 700; letter-spacing: 0.2px;
         }
-        .badge-paid  { background: var(--viridian-tint); color: var(--viridian); }
-        .badge-balance { background: var(--oxide-tint); color: var(--oxide); }
-        .badge-type  { background: var(--prussian-tint); color: var(--prussian); }
-        .badge-future { background: var(--ochre-tint); color: var(--ochre); }
+        .badge-paid  { background: var(--oasis-tint); color: #049184; }
+        .badge-balance { background: var(--coral-tint); color: #E1274A; }
+        .badge-type  { background: var(--violet-tint); color: var(--violet); }
+        .badge-future { background: var(--amber-tint); color: #C1750B; }
 
         .table-note { text-align: center; color: var(--ink-3); font-size: 0.68rem; padding: 14px 0 2px; }
 
-        .loading, .error, .empty {
-            text-align: center; padding: 50px 20px; font-size: 0.86rem; color: var(--ink-2);
-        }
-        .loading i { color: var(--prussian); animation: spin 0.9s linear infinite; margin-left: 6px; }
-        .error i { color: var(--oxide); font-size: 1.6rem; display: block; margin-bottom: 10px; }
+        .loading, .error, .empty { text-align: center; padding: 50px 20px; font-size: 0.86rem; color: var(--ink-2); }
+        .loading i { color: var(--violet); animation: spin 0.9s linear infinite; margin-left: 6px; }
+        .error i { color: var(--coral); font-size: 1.6rem; display: block; margin-bottom: 10px; }
         .error small { display: block; margin-top: 8px; color: var(--ink-3); font-size: 0.72rem; }
         .empty i { color: var(--ink-4); font-size: 2rem; display: block; margin-bottom: 10px; }
         .retry-btn {
-            margin-top: 14px; background: var(--surface-2); border: 1px solid var(--line);
-            color: var(--ink); padding: 8px 20px; border-radius: 50px; cursor: pointer;
+            margin-top: 14px; background: var(--sunset); border: none;
+            color: #fff; padding: 9px 22px; border-radius: 50px; cursor: pointer;
             font-family: inherit; font-weight: 700; font-size: 0.76rem; transition: .15s;
         }
-        .retry-btn:hover { border-color: var(--ink-3); }
+        .retry-btn:hover { transform: translateY(-2px); }
 
         /* ===== CARDS (mobile) ===== */
         .cards-container { display: none; grid-template-columns: 1fr; gap: 12px; }
         .booking-card {
             background: var(--surface); border: 1px solid var(--line);
             border-radius: var(--r-md); padding: 16px;
-            transition: box-shadow .2s ease;
         }
-        .booking-card.is-future { border-color: var(--prussian); }
+        .booking-card.is-future { border-color: var(--violet); box-shadow: 0 0 0 3px var(--violet-tint); }
         .booking-card .card-header {
             display: flex; align-items: center; justify-content: space-between;
             padding-bottom: 10px; margin-bottom: 8px; border-bottom: 1px solid var(--line-soft);
@@ -355,22 +373,22 @@
         .booking-card .card-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; font-size: 0.76rem; }
         .booking-card .card-label { color: var(--ink-3); font-weight: 600; }
         .booking-card .card-value { color: var(--ink-2); font-weight: 600; }
-        .booking-card .card-value.gold { color: var(--terracotta); font-weight: 800; }
+        .booking-card .card-value.gold { color: var(--coral); font-weight: 800; }
 
         /* ==========================================================
            FLOATING BUTTON
            ========================================================== */
         .floating-btn {
             position: fixed; bottom: 26px; left: 26px; z-index: 500;
-            background: var(--ink); color: #fff;
+            background: var(--sunset); color: #fff;
             padding: 15px 26px; border-radius: 50px;
             display: flex; align-items: center; gap: 10px;
             font-family: inherit; font-size: 0.85rem; font-weight: 800;
-            box-shadow: 0 12px 28px -8px rgba(33,29,26,0.4);
+            box-shadow: 0 16px 34px -10px rgba(255,90,110,0.55);
             border: none; cursor: pointer;
-            transition: transform .25s var(--ease), background .2s ease;
+            transition: transform .25s var(--ease);
         }
-        .floating-btn:hover { transform: translateY(-4px) scale(1.03); background: #000; }
+        .floating-btn:hover { transform: translateY(-4px) scale(1.03); }
         .floating-btn i { transition: .3s; }
         .floating-btn:hover i { transform: rotate(90deg); }
 
@@ -378,7 +396,7 @@
            RESPONSIVE
            ========================================================== */
         @media (max-width: 1180px) { .stats { grid-template-columns: repeat(2, 1fr); } .header .search { display: none; } }
-        @media (max-width: 992px)  { .page-head { flex-direction: column; align-items: stretch; } }
+        @media (max-width: 992px)  { .hero .hero-top { flex-direction: column; } .hero .cta { align-self: flex-start; } }
         @media (max-width: 768px) {
             .sidebar { right: calc(-1 * var(--sidebar-w)); }
             .sidebar.open { right: 0; }
@@ -390,7 +408,9 @@
             .header .right .profile .name { display: none; }
             .header .right .refresh-btn span { display: none; }
             .header .hamburger { width: 42px; height: 42px; font-size: 1rem; }
-            .page-head .copy h1 { font-size: 1.5rem; }
+            .hero { padding: 26px 20px 0; }
+            .hero .dunes { margin: 0 -20px; }
+            .hero h1 { font-size: 1.5rem; }
             .table-wrapper { display: none; }
             .cards-container { display: grid; }
             .floating-btn span { display: none; }
@@ -398,7 +418,7 @@
         }
         @media (max-width: 480px) { .stats { grid-template-columns: 1fr; } .header .breadcrumb { display: none; } }
 
-        .fade-up { opacity: 0; transform: translateY(8px); animation: fadeUp .55s var(--ease) forwards; }
+        .fade-up { opacity: 0; transform: translateY(10px); animation: fadeUp .6s var(--ease) forwards; }
         @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -411,9 +431,7 @@
     ============================================================ -->
     <nav class="sidebar" id="sidebar">
         <div class="brand">
-            <div class="mark">
-                <svg viewBox="0 0 24 24" fill="none"><path d="M4 19V9l8-5 8 5v10" stroke="#fff" stroke-width="2" stroke-linejoin="round"/><path d="M9 19v-6h6v6" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>
-            </div>
+            <div class="mark">ح</div>
             <div class="text">
                 منتجع حياله
                 <span>النظام المالي والإداري الشامل</span>
@@ -422,13 +440,13 @@
 
         <div class="menu">
             <div class="label">القائمة الرئيسية</div>
-            <a href="index.html" class="item" style="--swatch:var(--ink)"><i class="fas fa-house"></i> الرئيسية</a>
-            <a href="bookings.html" class="item active" style="--swatch:var(--prussian)"><i class="fas fa-calendar-check"></i> سجل الحجوزات</a>
-            <a href="add-invoice.html" class="item" style="--swatch:var(--prussian)"><span class="chip"></span> فاتورة جديدة <span class="badge">جديد</span></a>
-            <a href="expenses.html" class="item" style="--swatch:var(--ochre)"><span class="chip"></span> المصاريف</a>
-            <a href="abuzeid.html" class="item" style="--swatch:var(--terracotta)"><span class="chip"></span> عمولة أبو زيد</a>
-            <a href="filter.html" class="item" style="--swatch:var(--viridian)"><span class="chip"></span> فلترة الحجوزات</a>
-            <a href="future.html" class="item" style="--swatch:var(--viridian)"><span class="chip"></span> حجوزات مستقبلية</a>
+            <a href="index.html" class="item"><i class="fas fa-house"></i> الرئيسية</a>
+            <a href="bookings.html" class="item active"><i class="fas fa-calendar-check"></i> سجل الحجوزات</a>
+            <a href="add-invoice.html" class="item"><span class="chip"></span> فاتورة جديدة <span class="badge">جديد</span></a>
+            <a href="expenses.html" class="item"><span class="chip"></span> المصاريف</a>
+            <a href="abuzeid.html" class="item"><span class="chip"></span> عمولة أبو زيد</a>
+            <a href="filter.html" class="item"><span class="chip"></span> فلترة الحجوزات</a>
+            <a href="future.html" class="item"><span class="chip"></span> حجوزات مستقبلية</a>
 
             <div class="label">التقارير</div>
             <a href="#" class="item"><i class="fas fa-file-lines"></i> تقارير المبيعات</a>
@@ -479,50 +497,52 @@
 
         <div class="dash">
 
-            <!-- ===== PAGE HEAD ===== -->
-            <div class="page-head fade-up" style="animation-delay:.02s">
-                <div class="copy">
-                    <div class="eyebrow">Supabase · تحديث لحظي</div>
-                    <h1>سجل الحجوزات</h1>
-                    <p>عرض وتتبع جميع حجوزات منتجع حياله مع الحالة المالية لكل حجز، وتمييز الحجوزات المستقبلية تلقائيًا.</p>
+            <!-- ===== HERO — العنصر المميز: غروب الواحة ===== -->
+            <div class="hero fade-up" style="animation-delay:.02s">
+                <div class="hero-top">
+                    <div>
+                        <div class="eyebrow"><span class="live-dot"></span> Supabase · تحديث لحظي</div>
+                        <h1>سجل الحجوزات</h1>
+                        <p>عرض وتتبع جميع حجوزات منتجع حياله مع الحالة المالية لكل حجز، وتمييز الحجوزات المستقبلية تلقائيًا.</p>
+                    </div>
+                    <a href="add-invoice.html" class="cta"><i class="fas fa-plus"></i> حجز جديد</a>
                 </div>
-                <a href="add-invoice.html" class="cta"><i class="fas fa-plus"></i> حجز جديد</a>
+                <!-- كثبان الواحة: خط تركوازي يمثل الماء وسط تموجات الرمال عند الغروب -->
+                <div class="dunes">
+                    <svg viewBox="0 0 1200 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0,45 C150,15 300,60 450,35 C600,10 750,55 900,30 C1020,10 1120,40 1200,25 L1200,70 L0,70 Z" fill="rgba(255,255,255,0.14)"/>
+                        <path d="M0,58 C180,38 330,66 500,50 C650,36 800,62 980,44 C1080,34 1150,50 1200,42 L1200,70 L0,70 Z" fill="rgba(255,255,255,0.22)"/>
+                        <path d="M0,63 C200,58 400,63 600,60 C800,57 1000,64 1200,60 L1200,64 C1000,66 800,61 600,64 C400,67 200,62 0,66 Z" fill="#00CFC1" opacity="0.9"/>
+                    </svg>
+                </div>
             </div>
 
             <!-- ===== STAT CARDS ===== -->
             <div class="stats">
-                <div class="stat-card fade-up" style="animation-delay:.05s;--swatch:var(--prussian)">
-                    <div class="bar"></div>
-                    <div class="body">
-                        <div class="label"><i class="fas fa-wallet"></i> إجمالي الإيرادات</div>
-                        <div class="number" id="kpiRevenue">—</div>
-                    </div>
+                <div class="stat-card violet fade-up" style="animation-delay:.06s">
+                    <div class="icon-wrap"><i class="fas fa-wallet"></i></div>
+                    <div class="label">إجمالي الإيرادات</div>
+                    <div class="number" id="kpiRevenue">—</div>
                 </div>
-                <div class="stat-card fade-up" style="animation-delay:.08s;--swatch:var(--ink-3)">
-                    <div class="bar"></div>
-                    <div class="body">
-                        <div class="label"><i class="fas fa-file-invoice"></i> إجمالي الحجوزات</div>
-                        <div class="number" id="statBookings">—</div>
-                    </div>
+                <div class="stat-card coral fade-up" style="animation-delay:.09s">
+                    <div class="icon-wrap"><i class="fas fa-file-invoice"></i></div>
+                    <div class="label">إجمالي الحجوزات</div>
+                    <div class="number" id="statBookings">—</div>
                 </div>
-                <div class="stat-card fade-up" style="animation-delay:.11s;--swatch:var(--viridian)">
-                    <div class="bar"></div>
-                    <div class="body">
-                        <div class="label"><i class="fas fa-users"></i> عدد العملاء</div>
-                        <div class="number" id="kpiClients">—</div>
-                    </div>
+                <div class="stat-card oasis fade-up" style="animation-delay:.12s">
+                    <div class="icon-wrap"><i class="fas fa-users"></i></div>
+                    <div class="label">عدد العملاء</div>
+                    <div class="number" id="kpiClients">—</div>
                 </div>
-                <div class="stat-card fade-up" style="animation-delay:.14s;--swatch:var(--ochre)">
-                    <div class="bar"></div>
-                    <div class="body">
-                        <div class="label"><i class="fas fa-hand-holding-dollar"></i> عمولة أبو زيد</div>
-                        <div class="number" id="kpiCommission">—</div>
-                    </div>
+                <div class="stat-card amber fade-up" style="animation-delay:.15s">
+                    <div class="icon-wrap"><i class="fas fa-hand-holding-dollar"></i></div>
+                    <div class="label">عمولة أبو زيد</div>
+                    <div class="number" id="kpiCommission">—</div>
                 </div>
             </div>
 
             <!-- ===== TABLE PANEL ===== -->
-            <div class="panel fade-up" style="animation-delay:.16s">
+            <div class="panel fade-up" style="animation-delay:.18s">
                 <div class="p-head">
                     <div>
                         <div class="p-title"><span class="dot"></span> جميع الحجوزات</div>
@@ -595,11 +615,6 @@
 
         var allBookings = [];
 
-        /**
-         * ============================================================
-         * جلب البيانات من Supabase
-         * ============================================================
-         */
         async function loadBookings() {
             var container = document.getElementById('tableContainer');
             var refreshBtn = document.getElementById('refreshBtn');
@@ -641,11 +656,6 @@
             }
         }
 
-        /**
-         * ============================================================
-         * عرض البيانات
-         * ============================================================
-         */
         function displayData(bookings) {
             var container = document.getElementById('tableContainer');
 
@@ -666,7 +676,6 @@
             var today = new Date();
             var todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
-            // ===== TABLE (Desktop) =====
             var tableRows = '';
             var displayRows = bookings.slice(0, 100);
 
@@ -734,7 +743,6 @@
                 <div class="table-note">إجمالي الحجوزات المعروضة: ${displayRows.length} من ${bookings.length}</div>
             `;
 
-            // ===== CARDS (Mobile) =====
             var cardsHTML = '<div class="cards-container">';
             displayRows.forEach(function(item, index) {
                 var total = parseFloat(item.total) || 0;
@@ -784,16 +792,9 @@
             return dOnly >= todayDate;
         }
 
-        /**
-         * ============================================================
-         * تحديث الإحصائيات
-         * ============================================================
-         */
         function updateKpis(bookings) {
             var totalRevenue = 0;
             var totalClients = new Set();
-            var today = new Date();
-            var todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
             bookings.forEach(function(item) {
                 totalRevenue += parseFloat(item.total) || 0;
@@ -808,11 +809,6 @@
             document.getElementById('kpiCommission').textContent = commission.toLocaleString() + ' ر.س';
         }
 
-        /**
-         * ============================================================
-         * بحث محلي
-         * ============================================================
-         */
         document.getElementById('searchInput').addEventListener('input', function (e) {
             var q = e.target.value.trim().toLowerCase();
             if (!q) { displayData(allBookings); return; }
@@ -826,16 +822,10 @@
 
         document.getElementById('refreshBtn').addEventListener('click', loadBookings);
 
-        /**
-         * ============================================================
-         * تحميل الصفحة
-         * ============================================================
-         */
         document.addEventListener('DOMContentLoaded', function() {
             loadBookings();
         });
 
-        // تحديث كل 5 دقائق
         setInterval(loadBookings, 300000);
     </script>
 
