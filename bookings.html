@@ -85,10 +85,6 @@
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-15px); }
         }
-        @keyframes shimmer {
-            0% { background-position: -200% center; }
-            100% { background-position: 200% center; }
-        }
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
@@ -726,7 +722,7 @@
             border-collapse: separate;
             border-spacing: 0 4px;
             font-size: 0.8rem;
-            min-width: 750px;
+            min-width: 1100px;
         }
         th {
             background: linear-gradient(145deg, rgba(14, 165, 233, 0.1), rgba(14, 165, 233, 0.05));
@@ -1263,7 +1259,7 @@
                 </ul>
             </div>
             <div style="grid-column:1/-1;text-align:center;color:var(--text-muted);font-size:0.7rem;padding-top:20px;border-top:1px solid rgba(255,255,255,0.02);margin-top:25px;opacity:0.5;">
-                © 2026 منتجع حياله - القصيم · جميع الحقوق محفوظة · تصميم وتطوير محمد خلاف
+                © 2026 منتجع حياله - القصيم · جميع الحقوق محفوظة
             </div>
         </div>
     </footer>
@@ -1272,15 +1268,19 @@
     JAVASCRIPT
     ============================================================ -->
     <script>
-        // ============================================================
-        // بيانات الاتصال بـ Supabase
-        // ============================================================
+        /**
+         * ============================================================
+         * بيانات الاتصال بـ Supabase
+         * ============================================================
+         */
         var SUPABASE_URL = 'https://zwuvcblrrrriuylajvba.supabase.co';
         var SUPABASE_ANON_KEY = 'sb_publishable_YFqwTEs-W_kprUgt4bgpCQ_tf5vVeFa';
 
-        // ============================================================
-        // SIDEBAR
-        // ============================================================
+        /**
+         * ============================================================
+         * SIDEBAR
+         * ============================================================
+         */
         function toggleSidebar() {
             var sidebar = document.getElementById('sidebar');
             var overlay = document.getElementById('sidebarOverlay');
@@ -1297,9 +1297,11 @@
             document.body.style.overflow = '';
         }
 
-        // ============================================================
-        // HEADER SCROLL
-        // ============================================================
+        /**
+         * ============================================================
+         * HEADER SCROLL
+         * ============================================================
+         */
         var header = document.getElementById('header');
         window.addEventListener('scroll', function() {
             if (window.pageYOffset > 50) {
@@ -1309,15 +1311,17 @@
             }
         });
 
-        // ============================================================
-        // جلب البيانات من Supabase
-        // ============================================================
+        /**
+         * ============================================================
+         * جلب البيانات من Supabase
+         * ============================================================
+         */
         async function loadBookings() {
             var container = document.getElementById('tableContainer');
             container.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i> جاري تحميل البيانات...</div>';
 
             try {
-                var response = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=*&order=created_at.desc', {
+                var response = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=*&order=check_in.desc', {
                     headers: {
                         'apikey': SUPABASE_ANON_KEY,
                         'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
@@ -1325,28 +1329,34 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error('فشل في جلب البيانات');
+                    throw new Error('فشل في جلب البيانات - Status: ' + response.status);
                 }
 
                 var bookings = await response.json();
+                console.log('✅ تم جلب الحجوزات:', bookings.length);
                 displayData(bookings);
 
             } catch (error) {
                 console.error('❌ خطأ:', error);
                 container.innerHTML = `
                     <div class="error">
-                        ❌ حدث خطأ في تحميل البيانات
+                        <i class="fas fa-exclamation-triangle"></i>
+                        حدث خطأ في تحميل البيانات
                         <small>${error.message}</small>
                         <br><br>
-                        <button onclick="loadBookings()" style="background:rgba(14,165,233,0.06);border:1px solid rgba(14,165,233,0.08);color:var(--primary);padding:8px 20px;border-radius:8px;cursor:pointer;">إعادة المحاولة</button>
+                        <button onclick="loadBookings()" style="background:rgba(14,165,233,0.06);border:1px solid rgba(14,165,233,0.08);color:var(--primary);padding:8px 20px;border-radius:8px;cursor:pointer;">
+                            <i class="fas fa-sync-alt"></i> إعادة المحاولة
+                        </button>
                     </div>
                 `;
             }
         }
 
-        // ============================================================
-        // عرض البيانات
-        // ============================================================
+        /**
+         * ============================================================
+         * عرض البيانات
+         * ============================================================
+         */
         function displayData(bookings) {
             var container = document.getElementById('tableContainer');
 
@@ -1370,13 +1380,17 @@
             var todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
             bookings.forEach(function(item) {
-                totalRevenue += parseFloat(item.total) || 0;
+                var total = parseFloat(item.total) || 0;
+                totalRevenue += total;
+
                 if (item.client_name) {
                     totalClients.add(item.client_name);
                 }
+
                 if (item.check_in) {
                     var checkInDate = new Date(item.check_in);
-                    var checkInOnly = new Date(checkInDate.getFullYear(), checkInDate.getMonth(), checkInDate.getDate());
+                    var checkInOnly = new Date(checkInDate.getFullYear(), checkInDate.getMonth(), checkInDate
+                    .getDate());
                     if (checkInOnly >= todayDate) {
                         futureBookings++;
                     }
@@ -1392,23 +1406,31 @@
             document.getElementById('kpiFuture').textContent = futureBookings;
             document.getElementById('kpiClients').textContent = totalClients.size;
 
-            // ===== عمولة أبو زيد =====
+            // عمولة أبو زيد
             var commission = totalRevenue * 0.2;
             document.getElementById('kpiCommission').textContent = commission.toLocaleString() + ' ر.س';
 
             // ===== TABLE (Desktop) =====
             var tableRows = '';
-            var displayRows = bookings.slice(0, 50);
+            var displayRows = bookings.slice(0, 100);
 
             displayRows.forEach(function(item, index) {
-                var statusBadge = item.status === 'paid' ?
+                var total = parseFloat(item.total) || 0;
+                var paid = parseFloat(item.paid) || 0;
+                var remaining = parseFloat(item.remaining) || 0;
+                var nights = parseInt(item.nights) || 0;
+                var pricePerNight = parseFloat(item.price_per_night) || 0;
+                var discount = parseFloat(item.discount) || 0;
+
+                var statusBadge = item.payment_status === 'Fully Paid' ?
                     '<span class="badge badge-paid">مدفوع</span>' :
                     '<span class="badge badge-balance">متبقي</span>';
 
                 var isFuture = false;
                 if (item.check_in) {
                     var checkInDate = new Date(item.check_in);
-                    var checkInOnly = new Date(checkInDate.getFullYear(), checkInDate.getMonth(), checkInDate.getDate());
+                    var checkInOnly = new Date(checkInDate.getFullYear(), checkInDate.getMonth(), checkInDate
+                    .getDate());
                     if (checkInOnly >= todayDate) {
                         isFuture = true;
                     }
@@ -1416,19 +1438,27 @@
 
                 var bookingNumberDisplay = item.booking_number || '#' + (index + 1);
 
+                // تنسيق التاريخ
+                var invoiceDate = item.invoice_date ? new Date(item.invoice_date).toLocaleDateString('ar-EG') : '-';
+                var checkIn = item.check_in ? new Date(item.check_in).toLocaleDateString('ar-EG') : '-';
+                var checkOut = item.check_out ? new Date(item.check_out).toLocaleDateString('ar-EG') : '-';
+
                 tableRows += `
                     <tr style="${isFuture ? 'background:rgba(14,165,233,0.03);' : ''}">
                         <td>${bookingNumberDisplay} ${isFuture ? '⭐' : ''}</td>
-                        <td>${item.invoice_date || '-'}</td>
-                        <td>${item.check_in || '-'} ${isFuture ? '⭐' : ''}</td>
-                        <td>${item.check_out || '-'}</td>
+                        <td>${invoiceDate}</td>
+                        <td>${checkIn} ${isFuture ? '⭐' : ''}</td>
+                        <td>${checkOut}</td>
                         <td>${item.client_name || '-'}</td>
                         <td><span class="badge badge-type">${item.property_type || '-'}</span></td>
-                        <td>${item.nights || 0}</td>
-                        <td>${(item.paid || 0).toLocaleString()}</td>
-                        <td>${(item.remaining || 0).toLocaleString()}</td>
-                        <td style="font-weight:700;color:var(--secondary);">${(item.total || 0).toLocaleString()}</td>
+                        <td>${nights}</td>
+                        <td>${pricePerNight.toFixed(2)}</td>
+                        <td>${discount.toFixed(2)}</td>
+                        <td>${paid.toFixed(2)}</td>
+                        <td>${remaining.toFixed(2)}</td>
+                        <td style="font-weight:700;color:var(--secondary);">${total.toFixed(2)}</td>
                         <td>${statusBadge}</td>
+                        <td>${item.stay_type || '-'}</td>
                     </tr>
                 `;
             });
@@ -1444,10 +1474,13 @@
                             <th>اسم العميل</th>
                             <th>نوع العقار</th>
                             <th>عدد الأيام</th>
+                            <th>السعر اليومي</th>
+                            <th>الخصم</th>
                             <th>المدفوع</th>
                             <th>المتبقي</th>
                             <th>الإجمالي</th>
                             <th>الحالة</th>
+                            <th>نوع الإقامة</th>
                         </tr></thead>
                         <tbody>${tableRows}</tbody>
                     </table>
@@ -1458,20 +1491,29 @@
             // ===== CARDS (Mobile) =====
             var cardsHTML = '<div class="cards-container">';
             displayRows.forEach(function(item, index) {
+                var total = parseFloat(item.total) || 0;
+                var paid = parseFloat(item.paid) || 0;
+                var remaining = parseFloat(item.remaining) || 0;
+                var nights = parseInt(item.nights) || 0;
+
                 var isFuture = false;
                 if (item.check_in) {
                     var checkInDate = new Date(item.check_in);
-                    var checkInOnly = new Date(checkInDate.getFullYear(), checkInDate.getMonth(), checkInDate.getDate());
+                    var checkInOnly = new Date(checkInDate.getFullYear(), checkInDate.getMonth(), checkInDate
+                    .getDate());
                     if (checkInOnly >= todayDate) {
                         isFuture = true;
                     }
                 }
 
-                var statusBadge = item.status === 'paid' ?
+                var statusBadge = item.payment_status === 'Fully Paid' ?
                     '<span class="badge badge-paid">مدفوع</span>' :
                     '<span class="badge badge-balance">متبقي</span>';
 
                 var bookingNumberDisplay = item.booking_number || '#' + (index + 1);
+                var invoiceDate = item.invoice_date ? new Date(item.invoice_date).toLocaleDateString('ar-EG') : '-';
+                var checkIn = item.check_in ? new Date(item.check_in).toLocaleDateString('ar-EG') : '-';
+                var checkOut = item.check_out ? new Date(item.check_out).toLocaleDateString('ar-EG') : '-';
 
                 cardsHTML += `
                     <div class="booking-card" style="${isFuture ? 'border-color:rgba(14,165,233,0.08);' : ''}">
@@ -1482,15 +1524,15 @@
                         </div>
                         <div class="card-row">
                             <span class="card-label">تاريخ الفاتورة</span>
-                            <span class="card-value">${item.invoice_date || '-'}</span>
+                            <span class="card-value">${invoiceDate}</span>
                         </div>
                         <div class="card-row">
                             <span class="card-label">تاريخ الدخول</span>
-                            <span class="card-value">${item.check_in || '-'} ${isFuture ? '⭐' : ''}</span>
+                            <span class="card-value">${checkIn} ${isFuture ? '⭐' : ''}</span>
                         </div>
                         <div class="card-row">
                             <span class="card-label">تاريخ الخروج</span>
-                            <span class="card-value">${item.check_out || '-'}</span>
+                            <span class="card-value">${checkOut}</span>
                         </div>
                         <div class="card-row">
                             <span class="card-label">نوع العقار</span>
@@ -1498,23 +1540,27 @@
                         </div>
                         <div class="card-row">
                             <span class="card-label">عدد الأيام</span>
-                            <span class="card-value">${item.nights || 0}</span>
+                            <span class="card-value">${nights}</span>
                         </div>
                         <div class="card-row">
                             <span class="card-label">المدفوع</span>
-                            <span class="card-value">${(item.paid || 0).toLocaleString()} ر.س</span>
+                            <span class="card-value">${paid.toFixed(2)} ر.س</span>
                         </div>
                         <div class="card-row">
                             <span class="card-label">المتبقي</span>
-                            <span class="card-value">${(item.remaining || 0).toLocaleString()} ر.س</span>
+                            <span class="card-value">${remaining.toFixed(2)} ر.س</span>
                         </div>
                         <div class="card-row">
                             <span class="card-label">الإجمالي</span>
-                            <span class="card-value gold">${(item.total || 0).toLocaleString()} ر.س</span>
+                            <span class="card-value gold">${total.toFixed(2)} ر.س</span>
                         </div>
-                        <div class="card-row" style="border-bottom:none;padding-top:4px;">
+                        <div class="card-row">
                             <span class="card-label">الحالة</span>
                             <span class="card-value">${statusBadge}</span>
+                        </div>
+                        <div class="card-row" style="border-bottom:none;">
+                            <span class="card-label">نوع الإقامة</span>
+                            <span class="card-value">${item.stay_type || '-'}</span>
                         </div>
                     </div>
                 `;
@@ -1524,15 +1570,16 @@
             container.innerHTML = tableHTML + cardsHTML;
         }
 
-        // ============================================================
-        // تحديث الأرقام (Animation)
-        // ============================================================
+        /**
+         * ============================================================
+         * تحديث الأرقام (Animation)
+         * ============================================================
+         */
         function animateNumber(elementId, targetValue) {
             var el = document.getElementById(elementId);
             if (!el) return;
             var duration = 700;
             var startTime = performance.now();
-            var startValue = 0;
 
             function update(currentTime) {
                 var elapsed = currentTime - startTime;
@@ -1549,13 +1596,16 @@
             requestAnimationFrame(update);
         }
 
-        // ============================================================
-        // تحميل الصفحة
-        // ============================================================
+        /**
+         * ============================================================
+         * تحميل الصفحة
+         * ============================================================
+         */
         document.addEventListener('DOMContentLoaded', function() {
             loadBookings();
             console.log('📋 سجل الحجوزات - منتجع حياله');
             console.log('📊 Supabase URL:', SUPABASE_URL);
+            console.log('✅ جاهز للعمل');
         });
 
         // تحديث كل 5 دقائق
