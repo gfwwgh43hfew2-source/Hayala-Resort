@@ -765,15 +765,30 @@
             }
             
             .items-table-wrapper table {
-                font-size: calc(0.6rem * var(--scale-factor));
+                font-size: calc(0.55rem * var(--scale-factor));
             }
             .items-table-wrapper table thead th,
             .items-table-wrapper table tbody td {
-                padding: calc(4px * var(--scale-factor)) calc(5px * var(--scale-factor));
+                padding: calc(3px * var(--scale-factor)) calc(4px * var(--scale-factor));
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
+            
+            /* إخفاء الأعمدة غير المهمة في الموبايل */
             .items-table-wrapper table thead th:nth-child(3),
             .items-table-wrapper table tbody td:nth-child(3) {
                 display: none;
+            }
+            .items-table-wrapper table thead th:nth-child(4),
+            .items-table-wrapper table tbody td:nth-child(4) {
+                display: none;
+            }
+            
+            /* تصغير عرض نوع العقار */
+            .items-table-wrapper table tbody td:nth-child(2) {
+                max-width: calc(60px * var(--scale-factor));
+                font-size: calc(0.5rem * var(--scale-factor));
             }
             
             .toast-container {
@@ -818,11 +833,11 @@
                 height: calc(38px * var(--scale-factor));
             }
             .items-table-wrapper table {
-                font-size: calc(0.55rem * var(--scale-factor));
+                font-size: calc(0.5rem * var(--scale-factor));
             }
             .items-table-wrapper table thead th,
             .items-table-wrapper table tbody td {
-                padding: calc(3px * var(--scale-factor)) calc(4px * var(--scale-factor));
+                padding: calc(2px * var(--scale-factor)) calc(3px * var(--scale-factor));
             }
             .totals-section .total-item .value {
                 font-size: calc(0.75rem * var(--scale-factor));
@@ -1144,6 +1159,7 @@
             width: 100%;
             border-collapse: collapse;
             font-size: calc(0.7rem * var(--scale-factor));
+            table-layout: fixed;
         }
         .items-table-wrapper table thead th {
             background: var(--ink);
@@ -1158,6 +1174,8 @@
             top: 0;
             z-index: 10;
             white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .items-table-wrapper table tbody td {
             padding: calc(6px * var(--scale-factor)) calc(8px * var(--scale-factor));
@@ -1166,6 +1184,8 @@
             text-align: center;
             font-size: calc(0.7rem * var(--scale-factor));
             white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .items-table-wrapper table tbody tr:nth-child(even) td {
             background: rgba(18, 24, 33, 0.015);
@@ -1179,6 +1199,44 @@
         .items-table-wrapper table tbody td.num,
         .items-table-wrapper table tbody td.money {
             font-family: var(--font-mono);
+        }
+
+        /* تحديد عرض الأعمدة */
+        .items-table-wrapper table thead th:nth-child(1),
+        .items-table-wrapper table tbody td:nth-child(1) {
+            width: calc(30px * var(--scale-factor));
+            min-width: calc(30px * var(--scale-factor));
+        }
+
+        .items-table-wrapper table thead th:nth-child(2),
+        .items-table-wrapper table tbody td:nth-child(2) {
+            width: auto;
+            min-width: calc(70px * var(--scale-factor));
+            max-width: calc(130px * var(--scale-factor));
+        }
+
+        .items-table-wrapper table thead th:nth-child(3),
+        .items-table-wrapper table tbody td:nth-child(3) {
+            width: calc(45px * var(--scale-factor));
+            min-width: calc(45px * var(--scale-factor));
+        }
+
+        .items-table-wrapper table thead th:nth-child(4),
+        .items-table-wrapper table tbody td:nth-child(4) {
+            width: calc(55px * var(--scale-factor));
+            min-width: calc(55px * var(--scale-factor));
+        }
+
+        .items-table-wrapper table thead th:nth-child(5),
+        .items-table-wrapper table tbody td:nth-child(5) {
+            width: calc(65px * var(--scale-factor));
+            min-width: calc(65px * var(--scale-factor));
+        }
+
+        .items-table-wrapper table thead th:nth-child(6),
+        .items-table-wrapper table tbody td:nth-child(6) {
+            width: calc(75px * var(--scale-factor));
+            min-width: calc(75px * var(--scale-factor));
         }
 
         .items-table-wrapper table tbody td .btn-remove {
@@ -1945,6 +2003,45 @@
             display: inline-flex !important;
             visibility: visible !important;
             opacity: 1 !important;
+        }
+
+        /* ============================================================
+           تحسين عرض البطاقات في الموبايل
+           ============================================================ */
+        @media (max-width: 768px) {
+            .booking-card .card-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: calc(4px * var(--scale-factor)) 0;
+                font-size: calc(0.68rem * var(--scale-factor));
+                border-bottom: 1px solid rgba(0,0,0,0.03);
+            }
+            
+            .booking-card .card-row:last-child {
+                border-bottom: none;
+            }
+            
+            .booking-card .card-label {
+                font-size: calc(0.58rem * var(--scale-factor));
+                color: var(--ink-3);
+                font-weight: 600;
+                flex-shrink: 0;
+            }
+            
+            .booking-card .card-value {
+                font-size: calc(0.68rem * var(--scale-factor));
+                color: var(--ink-2);
+                font-weight: 600;
+                text-align: left;
+                direction: ltr;
+                unicode-bidi: plaintext;
+            }
+            
+            .booking-card .card-value.gold {
+                color: var(--teal);
+                font-weight: 800;
+            }
         }
     </style>
 </head>
