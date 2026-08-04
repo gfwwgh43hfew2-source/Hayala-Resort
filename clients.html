@@ -606,6 +606,7 @@
             width: 100%;
             border-collapse: collapse;
             font-size: calc(0.8rem * var(--scale-factor));
+            min-width: 700px;
         }
 
         table thead th {
@@ -952,6 +953,7 @@
 
             table {
                 font-size: 0.7rem;
+                min-width: 500px;
             }
 
             table thead th,
@@ -991,8 +993,13 @@
                 gap: 8px;
             }
 
-            table thead th:nth-child(4),
-            table tbody td:nth-child(4) {
+            table {
+                font-size: 0.6rem;
+                min-width: 400px;
+            }
+
+            table thead th:nth-child(3),
+            table tbody td:nth-child(3) {
                 display: none;
             }
         }
@@ -1360,8 +1367,6 @@
                             <th>اسم العميل</th>
                             <th>الجوال</th>
                             <th>البريد الإلكتروني</th>
-                            <th>عدد الحجوزات</th>
-                            <th>الإجمالي</th>
                             <th>الإجراءات</th>
                         </tr>
                     </thead>
@@ -1375,8 +1380,6 @@
                         <td><strong>${item.name}</strong></td>
                         <td>${item.phone || '-'}</td>
                         <td>${item.email || '-'}</td>
-                        <td>${item.total_bookings || 0}</td>
-                        <td>${item.total_spent ? item.total_spent.toLocaleString() + ' ر.س' : '0'}</td>
                         <td>
                             <div class="actions-cell">
                                 <button class="btn btn-warning btn-sm" onclick="openEditModal('${item.id}')">
