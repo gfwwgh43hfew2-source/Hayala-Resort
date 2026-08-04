@@ -30,11 +30,11 @@
             --ink: #121821;
             --ink-soft: #2c3644;
             --ink-mute: #6d7883;
-            --paper: #eef1ef;
+            --paper: #f0ede8;
             --surface: #ffffff;
-            --surface-muted: #f4f6f5;
-            --line: #dde3e0;
-            --line-strong: #c7d0cc;
+            --surface-muted: #faf8f4;
+            --line: #e8e4de;
+            --line-strong: #d5cfc6;
             --accent: #dd9f2e;
             --accent-ink: #7a5312;
             --accent-soft: #faead0;
@@ -43,16 +43,16 @@
             --rust: #bf4f30;
             --rust-soft: #fbe8e1;
             --blue: #2f5b8a;
-            --radius: 14px;
-            --radius-sm: 9px;
-            --shadow: 0 14px 34px -16px rgba(18,24,33,0.28);
-            --shadow-sm: 0 3px 10px -4px rgba(18,24,33,0.18);
+            --blue-soft: #e8eef5;
+            --radius: 16px;
+            --radius-sm: 10px;
+            --shadow: 0 12px 40px rgba(18,24,33,0.08);
+            --shadow-sm: 0 2px 12px rgba(18,24,33,0.06);
             --font-display: 'Cairo', 'Segoe UI', Tahoma, Arial, sans-serif;
             --font-mono: 'JetBrains Mono', ui-monospace, monospace;
             --header-height: 60px;
             --stripe-height: 4px;
             --mobile-nav-height: 56px;
-
             --scale-factor: 0.9;
         }
 
@@ -86,9 +86,6 @@
             color: inherit;
         }
 
-        /* ============================================================
-           SCROLLBAR
-           ============================================================ */
         ::-webkit-scrollbar {
             width: calc(5px * var(--scale-factor));
             height: calc(5px * var(--scale-factor));
@@ -131,14 +128,14 @@
         }
 
         /* ============================================================
-           HEADER
+           HEADER - احترافي
            ============================================================ */
         header {
             position: sticky;
             top: 0;
             z-index: 1000;
             padding: 0 calc(20px * var(--scale-factor));
-            background: rgba(255, 255, 255, 0.97);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--line);
             height: calc(var(--header-height) * var(--scale-factor));
@@ -252,7 +249,6 @@
             width: 40%;
             background: var(--accent);
         }
-
         nav a .nav-icon {
             font-size: calc(0.7rem * var(--scale-factor));
             opacity: 0.7;
@@ -260,9 +256,6 @@
         nav a.active .nav-icon {
             opacity: 1;
             color: var(--accent-ink);
-        }
-        nav a:hover .nav-icon {
-            opacity: 1;
         }
 
         .header-actions {
@@ -441,17 +434,7 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            padding: calc(14px * var(--scale-factor)) calc(18px * var(--scale-factor)) calc(16px * var(--scale-factor)) calc(18px * var(--scale-factor));
-        }
-
-        /* ===== القسم العلوي الثابت (KPI + HEADER) ===== */
-        .fixed-top-section {
-            flex-shrink: 0;
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            background: var(--paper);
-            padding-bottom: calc(10px * var(--scale-factor));
+            padding: calc(16px * var(--scale-factor)) calc(20px * var(--scale-factor)) calc(16px * var(--scale-factor)) calc(20px * var(--scale-factor));
         }
 
         .page-wrapper {
@@ -462,35 +445,48 @@
             width: 100%;
         }
 
+        .fixed-top-section {
+            flex-shrink: 0;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: var(--paper);
+            padding-bottom: calc(12px * var(--scale-factor));
+        }
+
         /* ============================================================
-           HEADER SECTION
+           PAGE HEADER - احترافي
            ============================================================ */
         .page-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 0 16px;
+            padding: 8px 0 16px;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 12px;
         }
 
-        .page-header h1 {
-            font-size: calc(1.3rem * var(--scale-factor));
-            font-weight: 800;
+        .page-header .title-section h1 {
+            font-size: calc(1.4rem * var(--scale-factor));
+            font-weight: 900;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            color: var(--ink);
+            letter-spacing: -0.3px;
         }
 
-        .page-header h1 i {
+        .page-header .title-section h1 i {
             color: var(--accent);
+            font-size: calc(1.2rem * var(--scale-factor));
         }
 
-        .page-header .subtitle {
+        .page-header .title-section .subtitle {
             font-size: calc(0.7rem * var(--scale-factor));
             color: var(--ink-mute);
             font-weight: 600;
             padding-right: 10px;
+            margin-top: 2px;
         }
 
         .page-header .actions {
@@ -501,58 +497,66 @@
         }
 
         /* ============================================================
-           BUTTONS
+           BUTTONS - احترافية
            ============================================================ */
         .btn {
-            padding: calc(8px * var(--scale-factor)) calc(16px * var(--scale-factor));
+            padding: calc(8px * var(--scale-factor)) calc(18px * var(--scale-factor));
             border: none;
             border-radius: calc(10px * var(--scale-factor));
             font-family: var(--font-display);
             font-weight: 700;
             font-size: calc(0.75rem * var(--scale-factor));
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            letter-spacing: 0.2px;
         }
 
         .btn-primary {
             background: var(--ink);
             color: #ffffff;
+            box-shadow: 0 2px 8px rgba(18,24,33,0.12);
         }
         .btn-primary:hover {
             background: var(--ink-soft);
             transform: translateY(calc(-2px * var(--scale-factor)));
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 6px 20px rgba(18,24,33,0.18);
         }
 
         .btn-success {
             background: var(--teal);
             color: #ffffff;
+            box-shadow: 0 2px 8px rgba(29,123,108,0.2);
         }
         .btn-success:hover {
             background: #156b5d;
             transform: translateY(calc(-2px * var(--scale-factor)));
+            box-shadow: 0 6px 20px rgba(29,123,108,0.3);
         }
 
         .btn-warning {
             background: var(--accent);
             color: var(--accent-ink);
+            box-shadow: 0 2px 8px rgba(221,159,46,0.2);
         }
         .btn-warning:hover {
             background: var(--accent-ink);
             color: #fff;
             transform: translateY(calc(-2px * var(--scale-factor)));
+            box-shadow: 0 6px 20px rgba(221,159,46,0.3);
         }
 
         .btn-danger {
             background: var(--rust);
             color: #ffffff;
+            box-shadow: 0 2px 8px rgba(191,79,48,0.2);
         }
         .btn-danger:hover {
             background: #a63a31;
             transform: translateY(calc(-2px * var(--scale-factor)));
+            box-shadow: 0 6px 20px rgba(191,79,48,0.3);
         }
 
         .btn-outline {
@@ -563,29 +567,32 @@
         .btn-outline:hover {
             background: var(--surface-muted);
             border-color: var(--line-strong);
+            transform: translateY(calc(-2px * var(--scale-factor)));
         }
 
         .btn-back {
             background: var(--blue);
             color: #ffffff;
+            box-shadow: 0 2px 8px rgba(47,91,138,0.2);
         }
         .btn-back:hover {
             background: #1a4a6b;
             transform: translateY(calc(-2px * var(--scale-factor)));
+            box-shadow: 0 6px 20px rgba(47,91,138,0.3);
         }
 
         .btn-sm {
-            padding: calc(4px * var(--scale-factor)) calc(10px * var(--scale-factor));
+            padding: calc(4px * var(--scale-factor)) calc(12px * var(--scale-factor));
             font-size: calc(0.65rem * var(--scale-factor));
             border-radius: calc(8px * var(--scale-factor));
         }
 
         /* ============================================================
-           KPI GRID
+           KPI GRID - احترافي
            ============================================================ */
         .kpi-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 12px;
             margin-bottom: 16px;
         }
@@ -593,45 +600,62 @@
         .kpi-card {
             background: var(--surface);
             border-radius: calc(14px * var(--scale-factor));
-            padding: calc(16px * var(--scale-factor)) calc(14px * var(--scale-factor));
+            padding: calc(16px * var(--scale-factor)) calc(16px * var(--scale-factor));
             border: 1px solid var(--line);
             box-shadow: var(--shadow-sm);
             text-align: center;
-            transition: 0.3s;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            position: relative;
+            overflow: hidden;
         }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            height: 3px;
+            background: var(--swatch, var(--accent));
+            opacity: 0.6;
+        }
+
         .kpi-card:hover {
-            transform: translateY(calc(-3px * var(--scale-factor)));
+            transform: translateY(calc(-4px * var(--scale-factor)));
             box-shadow: var(--shadow);
+            border-color: var(--line-strong);
         }
 
         .kpi-card .icon {
-            font-size: calc(1.2rem * var(--scale-factor));
-            color: var(--accent);
+            font-size: calc(1.3rem * var(--scale-factor));
+            color: var(--swatch, var(--accent));
             display: block;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
+
         .kpi-card .number {
-            font-size: calc(1.2rem * var(--scale-factor));
+            font-size: calc(1.4rem * var(--scale-factor));
             font-weight: 900;
             color: var(--ink);
+            font-family: var(--font-mono);
+            letter-spacing: -0.5px;
         }
+
         .kpi-card .label {
             font-size: calc(0.6rem * var(--scale-factor));
             color: var(--ink-mute);
             font-weight: 600;
-            margin-top: 2px;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
-        .kpi-card .sub-label {
-            font-size: calc(0.5rem * var(--scale-factor));
-            color: var(--ink-mute);
-            opacity: 0.6;
-        }
-        .kpi-card.electricity .icon {
-            color: var(--rust);
+
+        .kpi-card.electricity {
+            --swatch: var(--rust);
         }
 
         /* ============================================================
-           CARD
+           CARD - احترافي
            ============================================================ */
         .card {
             background: var(--surface);
@@ -639,10 +663,15 @@
             box-shadow: var(--shadow-sm);
             border: 1px solid var(--line);
             overflow: hidden;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow);
         }
 
         .card-header {
-            padding: calc(14px * var(--scale-factor)) calc(18px * var(--scale-factor));
+            padding: calc(14px * var(--scale-factor)) calc(20px * var(--scale-factor));
             border-bottom: 1px solid var(--line);
             display: flex;
             align-items: center;
@@ -660,7 +689,12 @@
             font-weight: 800;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            color: var(--ink);
+        }
+
+        .card-header h2 i {
+            color: var(--accent);
         }
 
         .card-header .badge {
@@ -670,17 +704,18 @@
             font-size: calc(0.6rem * var(--scale-factor));
             font-weight: 700;
             color: var(--ink-mute);
+            border: 1px solid var(--line);
         }
 
         .card-body {
-            padding: calc(16px * var(--scale-factor)) calc(18px * var(--scale-factor));
+            padding: calc(16px * var(--scale-factor)) calc(20px * var(--scale-factor));
             overflow-x: auto;
-            max-height: calc(100vh - 450px);
+            max-height: calc(100vh - 460px);
             overflow-y: auto;
         }
 
         /* ============================================================
-           TABLE
+           TABLE - احترافي
            ============================================================ */
         table {
             width: 100%;
@@ -691,7 +726,7 @@
 
         table thead th {
             background: var(--surface-muted);
-            padding: calc(8px * var(--scale-factor)) calc(10px * var(--scale-factor));
+            padding: calc(10px * var(--scale-factor)) calc(12px * var(--scale-factor));
             text-align: center;
             font-weight: 700;
             font-size: calc(0.6rem * var(--scale-factor));
@@ -706,10 +741,15 @@
         }
 
         table tbody td {
-            padding: calc(8px * var(--scale-factor)) calc(10px * var(--scale-factor));
+            padding: calc(10px * var(--scale-factor)) calc(12px * var(--scale-factor));
             text-align: center;
             border-bottom: 1px solid var(--line);
             color: var(--ink-soft);
+            font-size: calc(0.73rem * var(--scale-factor));
+        }
+
+        table tbody tr {
+            transition: background 0.15s ease;
         }
 
         table tbody tr:hover {
@@ -722,7 +762,7 @@
 
         .badge-expense {
             display: inline-block;
-            padding: calc(2px * var(--scale-factor)) calc(10px * var(--scale-factor));
+            padding: calc(3px * var(--scale-factor)) calc(12px * var(--scale-factor));
             border-radius: 50px;
             font-size: calc(0.55rem * var(--scale-factor));
             font-weight: 700;
@@ -777,12 +817,12 @@
         }
 
         .btn-action {
-            padding: calc(4px * var(--scale-factor)) calc(8px * var(--scale-factor));
+            padding: calc(5px * var(--scale-factor)) calc(9px * var(--scale-factor));
             border: none;
             border-radius: calc(6px * var(--scale-factor));
             cursor: pointer;
             font-size: calc(0.6rem * var(--scale-factor));
-            transition: 0.3s;
+            transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -794,39 +834,44 @@
         }
         .btn-edit:hover {
             background: rgba(14, 165, 233, 0.25);
+            transform: scale(1.05);
         }
+
         .btn-delete {
             background: rgba(239, 68, 68, 0.12);
             color: #EF4444;
         }
         .btn-delete:hover {
             background: rgba(239, 68, 68, 0.25);
+            transform: scale(1.05);
         }
+
         .btn-print {
             background: rgba(252, 211, 77, 0.15);
             color: var(--accent-ink);
         }
         .btn-print:hover {
             background: rgba(252, 211, 77, 0.3);
+            transform: scale(1.05);
         }
 
         .table-note {
             text-align: center;
             color: var(--ink-mute);
             font-size: calc(0.6rem * var(--scale-factor));
-            padding: 10px 0 4px;
+            padding: 12px 0 4px;
             opacity: 0.6;
         }
 
         /* ============================================================
-           MODAL
+           MODAL - احترافي
            ============================================================ */
         .modal-overlay {
             display: none;
             position: fixed;
             inset: 0;
             background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(6px);
             z-index: 9999;
             justify-content: center;
             align-items: center;
@@ -839,20 +884,20 @@
 
         .modal {
             background: var(--surface);
-            border-radius: calc(16px * var(--scale-factor));
+            border-radius: calc(18px * var(--scale-factor));
             max-width: 600px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
-            padding: calc(24px * var(--scale-factor)) calc(28px * var(--scale-factor));
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-            animation: modalIn 0.25s ease;
+            padding: calc(28px * var(--scale-factor)) calc(32px * var(--scale-factor));
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.2);
+            animation: modalIn 0.3s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         @keyframes modalIn {
             from {
                 opacity: 0;
-                transform: translateY(20px) scale(0.96);
+                transform: translateY(30px) scale(0.96);
             }
             to {
                 opacity: 1;
@@ -864,15 +909,20 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .modal-header h2 {
-            font-size: calc(1.1rem * var(--scale-factor));
+            font-size: calc(1.15rem * var(--scale-factor));
             font-weight: 800;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            color: var(--ink);
+        }
+
+        .modal-header h2 i {
+            color: var(--accent);
         }
 
         .modal-header h2 .edit-badge {
@@ -885,8 +935,8 @@
         }
 
         .modal-close {
-            width: calc(34px * var(--scale-factor));
-            height: calc(34px * var(--scale-factor));
+            width: calc(36px * var(--scale-factor));
+            height: calc(36px * var(--scale-factor));
             border-radius: 50%;
             border: none;
             background: var(--surface-muted);
@@ -901,13 +951,14 @@
 
         .modal-close:hover {
             background: var(--line);
+            color: var(--ink-soft);
         }
 
         /* ============================================================
-           FORM
+           FORM - احترافي
            ============================================================ */
         .form-group {
-            margin-bottom: calc(14px * var(--scale-factor));
+            margin-bottom: calc(16px * var(--scale-factor));
         }
 
         .form-group label {
@@ -915,16 +966,17 @@
             font-size: calc(0.7rem * var(--scale-factor));
             font-weight: 700;
             color: var(--ink-soft);
-            margin-bottom: 4px;
+            margin-bottom: 5px;
         }
 
         .form-group label .required {
             color: var(--rust);
+            margin-right: 2px;
         }
 
         .form-control {
             width: 100%;
-            padding: calc(8px * var(--scale-factor)) calc(12px * var(--scale-factor));
+            padding: calc(9px * var(--scale-factor)) calc(14px * var(--scale-factor));
             border: 1.5px solid var(--line);
             border-radius: calc(10px * var(--scale-factor));
             font-family: var(--font-display);
@@ -937,28 +989,30 @@
 
         .form-control:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 4px rgba(221, 159, 46, 0.12);
+            box-shadow: 0 0 0 4px rgba(221, 159, 46, 0.1);
         }
 
         .form-control::placeholder {
             color: var(--ink-mute);
+            opacity: 0.7;
         }
 
         select.form-control {
             appearance: auto;
+            cursor: pointer;
         }
 
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: calc(10px * var(--scale-factor));
+            gap: calc(12px * var(--scale-factor));
         }
 
         .form-actions {
             display: flex;
             gap: 10px;
-            margin-top: 20px;
-            padding-top: 16px;
+            margin-top: 24px;
+            padding-top: 20px;
             border-top: 1px solid var(--line);
         }
 
@@ -969,11 +1023,12 @@
 
         .message {
             text-align: center;
-            padding: 8px;
+            padding: 10px;
             border-radius: 8px;
-            margin-top: 8px;
+            margin-top: 10px;
             font-size: calc(0.75rem * var(--scale-factor));
             display: none;
+            font-weight: 600;
         }
         .message.success {
             display: block;
@@ -1019,7 +1074,7 @@
             align-items: center;
             gap: calc(10px * var(--scale-factor));
             transform: translateX(calc(20px * var(--scale-factor)));
-            transition: all 0.4s ease;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
             opacity: 0;
             pointer-events: auto;
             box-shadow: var(--shadow);
@@ -1081,20 +1136,22 @@
            ============================================================ */
         .empty-state {
             text-align: center;
-            padding: calc(40px * var(--scale-factor)) calc(20px * var(--scale-factor));
+            padding: calc(50px * var(--scale-factor)) calc(20px * var(--scale-factor));
             color: var(--ink-mute);
         }
 
         .empty-state i {
-            font-size: calc(2.5rem * var(--scale-factor));
-            opacity: 0.3;
-            margin-bottom: 12px;
+            font-size: calc(3rem * var(--scale-factor));
+            opacity: 0.25;
+            margin-bottom: 14px;
             display: block;
+            color: var(--ink-4);
         }
 
         .empty-state p {
             font-size: calc(0.85rem * var(--scale-factor));
             color: var(--ink-soft);
+            font-weight: 600;
         }
 
         .empty-state span {
@@ -1104,8 +1161,8 @@
 
         .spinner {
             display: inline-block;
-            width: calc(28px * var(--scale-factor));
-            height: calc(28px * var(--scale-factor));
+            width: calc(30px * var(--scale-factor));
+            height: calc(30px * var(--scale-factor));
             border: 3px solid var(--line);
             border-top: 3px solid var(--accent);
             border-radius: 50%;
@@ -1119,14 +1176,14 @@
         }
 
         /* ============================================================
-           PRINT DIALOG - محسّن مع الصورة
+           PRINT DIALOG - احترافي مع الصورة
            ============================================================ */
         .print-dialog-overlay {
             display: none;
             position: fixed;
             inset: 0;
             background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(6px);
             z-index: 99999;
             justify-content: center;
             align-items: center;
@@ -1139,14 +1196,14 @@
 
         .print-dialog-box {
             background: var(--surface);
-            border-radius: calc(16px * var(--scale-factor));
+            border-radius: calc(18px * var(--scale-factor));
             max-width: 700px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
-            padding: calc(24px * var(--scale-factor));
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            animation: modalIn 0.25s ease;
+            padding: calc(28px * var(--scale-factor));
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
+            animation: modalIn 0.3s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         .invoice-container {
@@ -1159,15 +1216,16 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 3px solid var(--ink);
-            padding-bottom: 12px;
-            margin-bottom: 12px;
-            gap: 12px;
+            padding-bottom: 14px;
+            margin-bottom: 14px;
+            gap: 14px;
+            flex-wrap: wrap;
         }
 
         .invoice-container .invoice-header .brand {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
         }
 
         .invoice-container .invoice-header .brand .logo-box {
@@ -1193,7 +1251,7 @@
 
         .invoice-container .invoice-header .brand .company-details h2 {
             color: var(--ink);
-            font-size: calc(1rem * var(--scale-factor));
+            font-size: calc(1.05rem * var(--scale-factor));
             font-weight: 900;
         }
 
@@ -1209,6 +1267,7 @@
         .invoice-container .invoice-header .invoice-number h3 {
             color: var(--ink);
             font-size: calc(0.85rem * var(--scale-factor));
+            font-weight: 800;
         }
 
         .invoice-container .invoice-header .invoice-number p {
@@ -1220,10 +1279,11 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 6px 20px;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             background: var(--surface-muted);
             padding: 12px 16px;
-            border-radius: 6px;
+            border-radius: 8px;
+            border: 1px solid var(--line);
         }
 
         .invoice-container .invoice-details .detail-item .label {
@@ -1233,7 +1293,7 @@
         }
 
         .invoice-container .invoice-details .detail-item .value {
-            font-size: calc(0.7rem * var(--scale-factor));
+            font-size: calc(0.72rem * var(--scale-factor));
             color: var(--ink);
             font-weight: 700;
         }
@@ -1241,20 +1301,21 @@
         .invoice-container .invoice-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             font-size: calc(0.7rem * var(--scale-factor));
         }
 
         .invoice-container .invoice-table th {
             background: var(--ink);
             color: #fff;
-            padding: 6px 8px;
+            padding: 6px 10px;
             text-align: right;
             font-size: calc(0.55rem * var(--scale-factor));
+            font-weight: 700;
         }
 
         .invoice-container .invoice-table td {
-            padding: 6px 8px;
+            padding: 6px 10px;
             border-bottom: 1px solid var(--line);
             color: var(--ink-soft);
             font-size: calc(0.7rem * var(--scale-factor));
@@ -1272,11 +1333,13 @@
 
         .invoice-container .invoice-footer {
             border-top: 1px solid var(--line);
-            padding-top: 10px;
+            padding-top: 12px;
             display: flex;
             justify-content: space-between;
             font-size: calc(0.55rem * var(--scale-factor));
             color: var(--ink-mute);
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .invoice-container .invoice-footer .signature {
@@ -1286,7 +1349,7 @@
         .invoice-container .invoice-footer .signature .line {
             width: 80px;
             border-bottom: 2px solid var(--ink);
-            margin-top: 3px;
+            margin-top: 4px;
         }
 
         .invoice-container .invoice-footer .signature p {
@@ -1296,7 +1359,7 @@
 
         .print-btn-container {
             text-align: center;
-            margin-top: 15px;
+            margin-top: 18px;
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
@@ -1306,13 +1369,13 @@
         .print-btn-container .btn-print-invoice {
             background: var(--ink);
             color: #fff;
-            padding: 8px 20px;
+            padding: 10px 24px;
             border: none;
             border-radius: 50px;
             font-weight: 700;
             font-size: calc(0.8rem * var(--scale-factor));
             cursor: pointer;
-            transition: 0.3s;
+            transition: all 0.25s ease;
             display: inline-flex;
             align-items: center;
             gap: 8px;
@@ -1321,6 +1384,7 @@
         .print-btn-container .btn-print-invoice:hover {
             background: var(--ink-soft);
             transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(18,24,33,0.2);
         }
 
         .print-btn-container .btn-close-print {
@@ -1383,6 +1447,7 @@
 
             .card-body {
                 padding: 12px 14px;
+                max-height: calc(100vh - 400px);
             }
 
             .form-row {
@@ -1431,13 +1496,24 @@
                 height: 45px;
             }
 
-            .card-body {
-                max-height: calc(100vh - 400px);
+            .invoice-container .invoice-header {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+
+            .invoice-container .invoice-header .brand {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .invoice-container .invoice-header .invoice-number {
+                text-align: center;
             }
         }
 
         @media (max-width: 480px) {
-            .page-header h1 {
+            .page-header .title-section h1 {
                 font-size: 1.1rem;
             }
             .kpi-grid {
@@ -1498,6 +1574,55 @@
 
             .invoice-container .invoice-header .brand .logo-box {
                 border-color: var(--ink) !important;
+            }
+        }
+
+        /* ============================================================
+           SCROLL STYLING FOR CARD BODY
+           ============================================================ */
+        .card-body::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+
+        .card-body::-webkit-scrollbar-track {
+            background: var(--surface-muted);
+            border-radius: 10px;
+        }
+
+        .card-body::-webkit-scrollbar-thumb {
+            background: var(--line-strong);
+            border-radius: 10px;
+        }
+
+        .card-body::-webkit-scrollbar-thumb:hover {
+            background: var(--ink-mute);
+        }
+
+        /* ============================================================
+           SEARCH INPUT STYLING
+           ============================================================ */
+        .search-input-wrapper {
+            position: relative;
+        }
+
+        .search-input-wrapper i {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--ink-mute);
+            font-size: 0.7rem;
+        }
+
+        .search-input-wrapper input {
+            padding-left: 32px;
+            width: 200px;
+        }
+
+        @media (max-width: 768px) {
+            .search-input-wrapper input {
+                width: 100%;
             }
         }
     </style>
@@ -1599,7 +1724,7 @@
 
                 <!-- ===== PAGE HEADER ===== -->
                 <div class="page-header">
-                    <div>
+                    <div class="title-section">
                         <h1>
                             <i class="fas fa-wallet"></i>
                             المصاريف والتشغيل
@@ -1629,7 +1754,7 @@
 
             </div>
 
-            <!-- ===== TABLE CARD (الجزء القابل للتمرير) ===== -->
+            <!-- ===== TABLE CARD ===== -->
             <div class="card">
                 <div class="card-header">
                     <h2>
@@ -1637,8 +1762,9 @@
                         سجل المصاريف
                         <span class="badge" id="countBadge">0</span>
                     </h2>
-                    <div>
-                        <input type="text" id="searchInput" placeholder="🔍 بحث عن مصروف..." class="form-control" style="width:200px;padding:6px 12px;font-size:0.7rem;" oninput="filterTable()">
+                    <div class="search-input-wrapper">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="بحث عن مصروف..." class="form-control" style="padding:6px 12px;font-size:0.7rem;width:200px;" oninput="filterTable()">
                     </div>
                 </div>
                 <div class="card-body" id="tableBody">
@@ -1997,32 +2123,32 @@
             // KPI
             kpiContainer.innerHTML = `
                 <div class="kpi-grid">
-                    <div class="kpi-card">
+                    <div class="kpi-card" style="--swatch:var(--accent)">
                         <span class="icon">💰</span>
                         <div class="number">${totalExpenses.toLocaleString()} ر.س</div>
                         <div class="label">إجمالي المصاريف</div>
                     </div>
-                    <div class="kpi-card">
+                    <div class="kpi-card" style="--swatch:var(--teal)">
                         <span class="icon">👤</span>
                         <div class="number">${totalSalaries.toLocaleString()} ر.س</div>
                         <div class="label">الرواتب</div>
                     </div>
-                    <div class="kpi-card">
+                    <div class="kpi-card" style="--swatch:var(--blue)">
                         <span class="icon">🔧</span>
                         <div class="number">${totalMaintenance.toLocaleString()} ر.س</div>
                         <div class="label">الصيانة</div>
                     </div>
-                    <div class="kpi-card">
+                    <div class="kpi-card" style="--swatch:#2563eb">
                         <span class="icon">🛒</span>
                         <div class="number">${totalPurchases.toLocaleString()} ر.س</div>
                         <div class="label">المشتريات</div>
                     </div>
-                    <div class="kpi-card">
+                    <div class="kpi-card" style="--swatch:#db2777">
                         <span class="icon">⚡</span>
                         <div class="number">${totalOperations.toLocaleString()} ر.س</div>
                         <div class="label">التشغيل</div>
                     </div>
-                    <div class="kpi-card electricity">
+                    <div class="kpi-card electricity" style="--swatch:var(--rust)">
                         <span class="icon">🔌</span>
                         <div class="number">${totalElectricity.toLocaleString()} ر.س</div>
                         <div class="label">الكهرباء</div>
@@ -2354,7 +2480,7 @@
 
         /**
          * ============================================================
-         * طباعة سند المصروف - محسّن مع الصورة
+         * طباعة سند المصروف
          * ============================================================
          */
         function printExpense(id) {
