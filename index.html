@@ -81,7 +81,7 @@
         ::-webkit-scrollbar-thumb { background: var(--ink-4); border-radius: 50px; }
 
         /* ==========================================================
-           SIDEBAR — مغلقة افتراضياً على الموبايل
+           SIDEBAR — نفس نظام باقي الصفحات (مغلقة افتراضياً على الموبايل)
            ========================================================== */
         .sidebar-overlay {
             display: none;
@@ -991,7 +991,7 @@
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <!-- ==========================================================
-    SIDEBAR — تم إضافة رابط "حسابات العملاء"
+    SIDEBAR — تم إضافة جميع الروابط المطلوبة
     ========================================================== -->
     <nav class="sidebar" id="sidebar">
         <div class="brand">
@@ -1022,6 +1022,7 @@
                 حسابات العملاء
                 <span class="badge" style="background: var(--primary); color: #fff;">متبقي</span>
             </a>
+            <!-- ===== زر إدارة المستخدمين (للـ Admin فقط) ===== -->
             <a href="users.html" class="item" style="border-color: rgba(14,165,233,0.1);">
                 <i class="fas fa-users-cog" style="color: var(--primary);"></i>
                 إدارة المستخدمين
@@ -1313,7 +1314,7 @@
         }
 
         /* ============================================================
-           SIDEBAR TOGGLE
+           SIDEBAR TOGGLE — نفس آلية باقي الصفحات
            ============================================================ */
         var sidebar = document.getElementById('sidebar');
         var overlay = document.getElementById('sidebarOverlay');
