@@ -1717,20 +1717,20 @@
 
                 var users = usersResponse.ok ? await usersResponse.json() : [];
 
-                // 4. جلب بيانات دفعات أبو زيد من جدول abuzaid_payments
-                var abuZaidResponse = await fetch(SUPABASE_URL + '/rest/v1/abuzaid_payments?select=amount', {
+                // 4. جلب بيانات المصروفات لحساب صافي الأرباح
+                var expensesResponse = await fetch(SUPABASE_URL + '/rest/v1/expenses?select=total,amount', {
                     headers: {
                         'apikey': SUPABASE_ANON_KEY,
                         'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
                     }
                 });
 
-                var abuZaidPayments = [];
-                if (abuZaidResponse.ok) {
-                    abuZaidPayments = await abuZaidResponse.json();
-                    console.log('✅ تم جلب دفعات أبو زيد:', abuZaidPayments.length);
+                var expenses = [];
+                if (expensesResponse.ok) {
+                    expenses = await expensesResponse.json();
+                    console.log('✅ تم جلب المصروفات:', expenses.length);
                 } else {
-                    console.warn('⚠️ فشل في جلب دفعات أبو زيد، سيتم استخدام بيانات فارغة');
+                    console.warn('⚠️ فشل في جلب المصروفات، سيتم استخدام 0');
                 }
 
                 // ===== معالجة البيانات =====
@@ -1747,6 +1747,7 @@
                 var propertyTypes = {};
                 var activities = [];
                 var clientBookings = {};
+                var totalExpenses = 0;
 
                 bookings.forEach(function(booking) {
                     // الإيرادات
@@ -1795,12 +1796,18 @@
                     }
                 });
 
-                // حساب إجمالي عمولة أبو زيد من جدول abuzaid_payments
-                var totalAbuZaidCommission = 0;
-                abuZaidPayments.forEach(function(payment) {
-                    var amount = parseFloat(payment.amount) || 0;
-                    totalAbuZaidCommission += amount;
+                // حساب إجمالي المصروفات
+                expenses.forEach(function(expense) {
+                    var amount = parseFloat(expense.total || expense.amount || 0);
+                    totalExpenses += amount;
                 });
+
+                // حساب صافي الأرباح
+                var netProfit = Math.max(0, totalRevenue - totalExpenses);
+
+                // حساب عمولة أبو زيد (20% من صافي الأرباح)
+                var commissionRate = 0.20;
+                var totalCommission = netProfit * commissionRate;
 
                 // ===== تحديث الإحصائيات =====
                 var totalRevenueEl = document.getElementById('totalRevenue');
@@ -1823,10 +1830,10 @@
                     upcomingBookingsEl.textContent = futureBookings.toLocaleString();
                 }
 
-                // عرض عمولة أبو زيد من جدول abuzaid_payments
+                // عرض عمولة أبو زيد (20% من صافي الأرباح)
                 var totalCommissionEl = document.getElementById('totalCommission');
                 if (totalCommissionEl) {
-                    totalCommissionEl.textContent = totalAbuZaidCommission.toLocaleString() + ' ر.س';
+                    totalCommissionEl.textContent = totalCommission.toLocaleString() + ' ر.س';
                 }
 
                 // ===== تحديث الـ Charts =====
@@ -1868,7 +1875,6 @@
                         return Math.round((v / totalProps) * 100);
                     });
                     
-                    // ضبط النسبة المئوية لتكون 100%
                     var sum = piePercentages.reduce(function(a, b) { return a + b; }, 0);
                     if (sum !== 100 && piePercentages.length > 0) {
                         piePercentages[piePercentages.length - 1] += (100 - sum);
@@ -1951,7 +1957,7 @@
                     dateEl.textContent = 'لوحة التحكم — ' + months[now.getMonth()] + ' ' + now.getFullYear();
                 }
 
-                // ===== تحديث Sparklines (بيانات عشوائية للتصميم) =====
+                // ===== تحديث Sparklines =====
                 var sparkData = [];
                 for (var i = 0; i < 8; i++) {
                     sparkData.push(Math.round(Math.random() * 100));
@@ -1987,7 +1993,7 @@
 
         // ===== تشغيل التحديث =====
         fetchDashboardData();
-        setInterval(fetchDashboardData, 300000); // تحديث كل 5 دقائق
+        setInterval(fetchDashboardData, 300000);
     </script>
 
 </body>
