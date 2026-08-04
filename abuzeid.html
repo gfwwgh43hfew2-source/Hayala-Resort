@@ -53,14 +53,9 @@
             --stripe-height: 4px;
             --mobile-nav-height: 56px;
             --sidebar-w: 270px;
-
-            /* ===== SCALE DOWN 10% ===== */
             --scale-factor: 0.9;
         }
 
-        /* ============================================================
-           GLOBAL RESET & SCALING
-           ============================================================ */
         * {
             margin: 0;
             padding: 0;
@@ -88,9 +83,6 @@
             color: inherit;
         }
 
-        /* ============================================================
-           SCROLLBAR STYLING
-           ============================================================ */
         ::-webkit-scrollbar {
             width: calc(5px * var(--scale-factor));
             height: calc(5px * var(--scale-factor));
@@ -106,9 +98,6 @@
             background: var(--ink-mute);
         }
 
-        /* ============================================================
-           SWATCH STRIPE
-           ============================================================ */
         .swatch-stripe {
             height: calc(var(--stripe-height) * var(--scale-factor));
             flex-shrink: 0;
@@ -119,22 +108,11 @@
         .swatch-stripe span {
             flex: 1;
         }
-        .swatch-stripe span:nth-child(1) {
-            background: var(--accent);
-        }
-        .swatch-stripe span:nth-child(2) {
-            background: var(--teal);
-        }
-        .swatch-stripe span:nth-child(3) {
-            background: var(--rust);
-        }
-        .swatch-stripe span:nth-child(4) {
-            background: var(--blue);
-        }
+        .swatch-stripe span:nth-child(1) { background: var(--accent); }
+        .swatch-stripe span:nth-child(2) { background: var(--teal); }
+        .swatch-stripe span:nth-child(3) { background: var(--rust); }
+        .swatch-stripe span:nth-child(4) { background: var(--blue); }
 
-        /* ============================================================
-           HEADER - تصميم محسّن
-           ============================================================ */
         header {
             position: sticky;
             top: 0;
@@ -175,18 +153,10 @@
         .logo-mark span {
             border-radius: calc(2px * var(--scale-factor));
         }
-        .logo-mark span:nth-child(1) {
-            background: var(--accent);
-        }
-        .logo-mark span:nth-child(2) {
-            background: var(--teal);
-        }
-        .logo-mark span:nth-child(3) {
-            background: var(--rust);
-        }
-        .logo-mark span:nth-child(4) {
-            background: var(--blue);
-        }
+        .logo-mark span:nth-child(1) { background: var(--accent); }
+        .logo-mark span:nth-child(2) { background: var(--teal); }
+        .logo-mark span:nth-child(3) { background: var(--rust); }
+        .logo-mark span:nth-child(4) { background: var(--blue); }
         .logo-text h1 {
             font-size: calc(0.95rem * var(--scale-factor));
             font-weight: 800;
@@ -201,7 +171,6 @@
             font-weight: 600;
         }
 
-        /* ===== القائمة العلوية - تصميم محسّن ===== */
         nav {
             display: flex;
             align-items: center;
@@ -255,7 +224,6 @@
             width: 40%;
             background: var(--accent);
         }
-
         nav a .nav-icon {
             font-size: calc(0.7rem * var(--scale-factor));
             opacity: 0.7;
@@ -437,7 +405,7 @@
         }
 
         /* ============================================================
-           MAIN CONTENT - تنسيق صفحة عمولة أبو زيد
+           MAIN CONTENT
            ============================================================ */
         .main-content {
             flex: 1;
@@ -455,9 +423,6 @@
             width: 100%;
         }
 
-        /* ============================================================
-           HEADER SECTION
-           ============================================================ */
         .page-header {
             display: flex;
             align-items: center;
@@ -466,7 +431,6 @@
             flex-wrap: wrap;
             gap: 12px;
         }
-
         .page-header h1 {
             font-size: calc(1.3rem * var(--scale-factor));
             font-weight: 800;
@@ -474,11 +438,9 @@
             align-items: center;
             gap: 10px;
         }
-
         .page-header h1 i {
             color: var(--accent);
         }
-
         .page-header .actions {
             display: flex;
             gap: 10px;
@@ -486,9 +448,6 @@
             flex-wrap: wrap;
         }
 
-        /* ============================================================
-           BUTTONS
-           ============================================================ */
         .btn {
             padding: calc(8px * var(--scale-factor)) calc(18px * var(--scale-factor));
             border: none;
@@ -502,7 +461,6 @@
             align-items: center;
             gap: 8px;
         }
-
         .btn-primary {
             background: var(--ink);
             color: #ffffff;
@@ -512,7 +470,6 @@
             transform: translateY(calc(-2px * var(--scale-factor)));
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
         }
-
         .btn-success {
             background: var(--teal);
             color: #ffffff;
@@ -521,7 +478,6 @@
             background: #156b5d;
             transform: translateY(calc(-2px * var(--scale-factor)));
         }
-
         .btn-warning {
             background: var(--accent);
             color: var(--accent-ink);
@@ -531,7 +487,6 @@
             color: #fff;
             transform: translateY(calc(-2px * var(--scale-factor)));
         }
-
         .btn-danger {
             background: var(--rust);
             color: #ffffff;
@@ -540,7 +495,6 @@
             background: #a63a31;
             transform: translateY(calc(-2px * var(--scale-factor)));
         }
-
         .btn-outline {
             background: transparent;
             border: 1.5px solid var(--line);
@@ -550,7 +504,6 @@
             background: var(--surface-muted);
             border-color: var(--line-strong);
         }
-
         .btn-sm {
             padding: calc(4px * var(--scale-factor)) calc(10px * var(--scale-factor));
             font-size: calc(0.65rem * var(--scale-factor));
@@ -566,7 +519,6 @@
             gap: 12px;
             margin-bottom: 18px;
         }
-
         .kpi-card {
             background: var(--surface);
             border-radius: calc(14px * var(--scale-factor));
@@ -578,7 +530,6 @@
             position: relative;
             overflow: hidden;
         }
-
         .kpi-card::before {
             content: '';
             position: absolute;
@@ -589,27 +540,23 @@
             background: var(--accent);
             opacity: 0.6;
         }
-
         .kpi-card:hover {
             transform: translateY(calc(-4px * var(--scale-factor)));
             box-shadow: var(--shadow);
             border-color: var(--line-strong);
         }
-
         .kpi-card .icon {
             font-size: calc(1.3rem * var(--scale-factor));
             color: var(--accent);
             display: block;
             margin-bottom: 4px;
         }
-
         .kpi-card .number {
             font-size: calc(1.4rem * var(--scale-factor));
             font-weight: 900;
             color: var(--ink);
             font-family: var(--font-mono);
         }
-
         .kpi-card .label {
             font-size: calc(0.6rem * var(--scale-factor));
             color: var(--ink-mute);
@@ -618,14 +565,12 @@
             text-transform: uppercase;
             letter-spacing: 0.3px;
         }
-
         .kpi-card.status-paid::before {
             background: var(--teal);
         }
         .kpi-card.status-paid .number {
             color: var(--teal);
         }
-
         .kpi-card.status-due::before {
             background: var(--rust);
         }
@@ -643,7 +588,6 @@
             border: 1px solid var(--line);
             overflow: hidden;
         }
-
         .card-header {
             padding: calc(16px * var(--scale-factor)) calc(20px * var(--scale-factor));
             border-bottom: 1px solid var(--line);
@@ -653,7 +597,6 @@
             flex-wrap: wrap;
             gap: 10px;
         }
-
         .card-header h2 {
             font-size: calc(0.9rem * var(--scale-factor));
             font-weight: 800;
@@ -661,7 +604,6 @@
             align-items: center;
             gap: 8px;
         }
-
         .card-header .badge {
             background: var(--surface-muted);
             padding: calc(2px * var(--scale-factor)) calc(12px * var(--scale-factor));
@@ -670,22 +612,17 @@
             font-weight: 700;
             color: var(--ink-mute);
         }
-
         .card-body {
             padding: calc(18px * var(--scale-factor)) calc(20px * var(--scale-factor));
             overflow-x: auto;
         }
 
-        /* ============================================================
-           TABLE
-           ============================================================ */
         table {
             width: 100%;
             border-collapse: collapse;
             font-size: calc(0.8rem * var(--scale-factor));
             min-width: 800px;
         }
-
         table thead th {
             background: var(--surface-muted);
             padding: calc(10px * var(--scale-factor)) calc(12px * var(--scale-factor));
@@ -698,18 +635,15 @@
             border-bottom: 2px solid var(--line);
             white-space: nowrap;
         }
-
         table tbody td {
             padding: calc(10px * var(--scale-factor)) calc(12px * var(--scale-factor));
             text-align: center;
             border-bottom: 1px solid var(--line);
             color: var(--ink-soft);
         }
-
         table tbody tr:hover {
             background: var(--surface-muted);
         }
-
         table tbody tr:last-child td {
             border-bottom: none;
         }
@@ -722,17 +656,14 @@
             font-weight: 700;
             white-space: nowrap;
         }
-
         .badge-paid {
             background: var(--teal-soft);
             color: var(--teal);
         }
-
         .badge-due {
             background: var(--rust-soft);
             color: var(--rust);
         }
-
         .badge-pending {
             background: var(--accent-soft);
             color: var(--accent-ink);
@@ -744,7 +675,6 @@
             justify-content: center;
             flex-wrap: wrap;
         }
-
         .btn-edit {
             background: rgba(14, 165, 233, 0.12);
             color: #0EA5E9;
@@ -759,7 +689,6 @@
             background: rgba(14, 165, 233, 0.25);
             transform: scale(1.05);
         }
-
         .btn-delete {
             background: rgba(239, 68, 68, 0.12);
             color: #EF4444;
@@ -775,31 +704,12 @@
             transform: scale(1.05);
         }
 
-        .btn-print {
-            background: rgba(252, 211, 77, 0.15);
-            color: var(--accent-ink);
-            border: none;
-            padding: calc(5px * var(--scale-factor)) calc(10px * var(--scale-factor));
-            border-radius: calc(6px * var(--scale-factor));
-            cursor: pointer;
-            transition: 0.2s;
-            font-size: calc(0.7rem * var(--scale-factor));
-        }
-        .btn-print:hover {
-            background: rgba(252, 211, 77, 0.3);
-            transform: scale(1.05);
-        }
-
-        /* ============================================================
-           FILTERS
-           ============================================================ */
         .filters-grid {
             display: grid;
             grid-template-columns: repeat(4, minmax(160px, 1fr));
             gap: 12px;
             margin-bottom: 18px;
         }
-
         .filter-item {
             background: var(--surface);
             border: 1px solid var(--line);
@@ -807,7 +717,6 @@
             padding: 12px;
             box-shadow: var(--shadow-sm);
         }
-
         .filter-item label {
             display: block;
             color: var(--ink-mute);
@@ -815,7 +724,6 @@
             font-weight: 700;
             margin-bottom: 4px;
         }
-
         .filter-item select,
         .filter-item input {
             width: 100%;
@@ -828,7 +736,6 @@
             font-family: var(--font-display);
             color: var(--ink);
         }
-
         .filter-item select:focus,
         .filter-item input:focus {
             border-color: var(--accent);
@@ -849,11 +756,9 @@
             align-items: center;
             padding: 20px;
         }
-
         .modal-overlay.show {
             display: flex;
         }
-
         .modal {
             background: var(--surface);
             border-radius: calc(16px * var(--scale-factor));
@@ -865,7 +770,6 @@
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
             animation: modalIn 0.25s ease;
         }
-
         @keyframes modalIn {
             from {
                 opacity: 0;
@@ -876,19 +780,16 @@
                 transform: translateY(0) scale(1);
             }
         }
-
         .modal-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 24px;
         }
-
         .modal-header h2 {
             font-size: calc(1.1rem * var(--scale-factor));
             font-weight: 800;
         }
-
         .modal-close {
             width: calc(36px * var(--scale-factor));
             height: calc(36px * var(--scale-factor));
@@ -903,18 +804,13 @@
             align-items: center;
             justify-content: center;
         }
-
         .modal-close:hover {
             background: var(--line);
         }
 
-        /* ============================================================
-           FORM
-           ============================================================ */
         .form-group {
             margin-bottom: calc(16px * var(--scale-factor));
         }
-
         .form-group label {
             display: block;
             font-size: calc(0.7rem * var(--scale-factor));
@@ -922,11 +818,9 @@
             color: var(--ink-soft);
             margin-bottom: 4px;
         }
-
         .form-group label .required {
             color: var(--rust);
         }
-
         .form-control {
             width: 100%;
             padding: calc(8px * var(--scale-factor)) calc(12px * var(--scale-factor));
@@ -939,22 +833,18 @@
             transition: border-color 0.2s, box-shadow 0.2s;
             outline: none;
         }
-
         .form-control:focus {
             border-color: var(--accent);
             box-shadow: 0 0 0 4px rgba(221, 159, 46, 0.12);
         }
-
         .form-control::placeholder {
             color: var(--ink-mute);
         }
-
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: calc(12px * var(--scale-factor));
         }
-
         .form-actions {
             display: flex;
             gap: 10px;
@@ -962,12 +852,10 @@
             padding-top: 20px;
             border-top: 1px solid var(--line);
         }
-
         .form-actions .btn {
             flex: 1;
             justify-content: center;
         }
-
         .message {
             text-align: center;
             padding: 10px;
@@ -990,9 +878,6 @@
             border: 1px solid var(--rust);
         }
 
-        /* ============================================================
-           TOAST
-           ============================================================ */
         .toast-container {
             position: fixed;
             top: calc(80px * var(--scale-factor));
@@ -1005,7 +890,6 @@
             flex-direction: column;
             gap: calc(8px * var(--scale-factor));
         }
-
         .toast {
             background: var(--surface);
             border: 1px solid var(--line);
@@ -1021,12 +905,10 @@
             box-shadow: var(--shadow);
             border-right: calc(4px * var(--scale-factor)) solid var(--ink);
         }
-
         .toast.show {
             transform: translateX(0);
             opacity: 1;
         }
-
         .toast .toast-icon {
             font-size: calc(1rem * var(--scale-factor));
             width: calc(30px * var(--scale-factor));
@@ -1037,7 +919,6 @@
             align-items: center;
             justify-content: center;
         }
-
         .toast .toast-icon.success {
             color: var(--teal);
             background: var(--teal-soft);
@@ -1050,7 +931,6 @@
             color: var(--accent-ink);
             background: var(--accent-soft);
         }
-
         .toast .toast-title {
             font-size: calc(0.82rem * var(--scale-factor));
             font-weight: 800;
@@ -1061,7 +941,6 @@
             color: var(--ink-mute);
             margin-top: calc(1px * var(--scale-factor));
         }
-
         .toast .toast-close {
             background: none;
             border: none;
@@ -1072,27 +951,21 @@
             margin-right: auto;
         }
 
-        /* ============================================================
-           EMPTY STATE
-           ============================================================ */
         .empty-state {
             text-align: center;
             padding: calc(50px * var(--scale-factor)) calc(20px * var(--scale-factor));
             color: var(--ink-mute);
         }
-
         .empty-state i {
             font-size: calc(3rem * var(--scale-factor));
             opacity: 0.3;
             margin-bottom: 16px;
             display: block;
         }
-
         .empty-state p {
             font-size: calc(0.85rem * var(--scale-factor));
             color: var(--ink-soft);
         }
-
         .empty-state span {
             font-size: calc(0.7rem * var(--scale-factor));
             color: var(--ink-mute);
@@ -1107,11 +980,8 @@
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
-
         @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+            to { transform: rotate(360deg); }
         }
 
         .table-note {
@@ -1122,140 +992,43 @@
             opacity: 0.6;
         }
 
-        /* ============================================================
-           RESPONSIVE
-           ============================================================ */
         @media (max-width: 992px) {
-            .kpi-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .filters-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+            .filters-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
         @media (max-width: 768px) {
-            :root {
-                --scale-factor: 1;
-            }
-
-            .sidebar {
-                right: calc(-1 * var(--sidebar-w));
-            }
-            .sidebar.open {
-                right: 0;
-            }
-            .sidebar-overlay {
-                display: block;
-            }
-
-            .main-content {
-                padding: 12px;
-                padding-bottom: calc(80px + env(safe-area-inset-bottom));
-            }
-
-            .page-header {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 12px;
-            }
-
-            .page-header .actions {
-                justify-content: stretch;
-            }
-
-            .page-header .actions .btn {
-                flex: 1;
-                justify-content: center;
-            }
-
-            .card-body {
-                padding: 12px 14px;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .modal {
-                padding: 24px 18px;
-            }
-
-            table {
-                font-size: 0.7rem;
-                min-width: 650px;
-            }
-
-            table thead th,
-            table tbody td {
-                padding: 6px 8px;
-            }
-
-            .actions-cell {
-                flex-direction: row;
-                gap: 3px;
-            }
-
-            .mobile-nav-bottom {
-                display: flex !important;
-            }
-            .hamburger {
-                display: flex !important;
-            }
-            nav {
-                display: none !important;
-            }
-
-            .kpi-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 8px;
-            }
-            .kpi-card {
-                padding: 12px 10px;
-            }
-            .kpi-card .number {
-                font-size: 1rem;
-            }
-
-            .filters-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 8px;
-            }
-            .filter-item {
-                padding: 8px 10px;
-            }
+            :root { --scale-factor: 1; }
+            .sidebar { right: calc(-1 * var(--sidebar-w)); }
+            .sidebar.open { right: 0; }
+            .sidebar-overlay { display: block; }
+            .main-content { padding: 12px; padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
+            .page-header { flex-direction: column; align-items: stretch; gap: 12px; }
+            .page-header .actions { justify-content: stretch; }
+            .page-header .actions .btn { flex: 1; justify-content: center; }
+            .card-body { padding: 12px 14px; }
+            .form-row { grid-template-columns: 1fr; }
+            .modal { padding: 24px 18px; }
+            table { font-size: 0.7rem; min-width: 650px; }
+            table thead th, table tbody td { padding: 6px 8px; }
+            .actions-cell { flex-direction: row; gap: 3px; }
+            .mobile-nav-bottom { display: flex !important; }
+            .hamburger { display: flex !important; }
+            nav { display: none !important; }
+            .kpi-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .kpi-card { padding: 12px 10px; }
+            .kpi-card .number { font-size: 1rem; }
+            .filters-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .filter-item { padding: 8px 10px; }
         }
 
         @media (max-width: 480px) {
-            .page-header h1 {
-                font-size: 1.1rem;
-            }
-
-            .card-header {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 8px;
-            }
-
-            .kpi-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .filters-grid {
-                grid-template-columns: 1fr;
-            }
-
-            table {
-                font-size: 0.6rem;
-                min-width: 500px;
-            }
-
-            .btn-edit,
-            .btn-delete,
-            .btn-print {
-                padding: 3px 6px;
-                font-size: 0.55rem;
-            }
+            .page-header h1 { font-size: 1.1rem; }
+            .card-header { flex-direction: column; align-items: stretch; gap: 8px; }
+            .kpi-grid { grid-template-columns: 1fr; }
+            .filters-grid { grid-template-columns: 1fr; }
+            table { font-size: 0.6rem; min-width: 500px; }
+            .btn-edit, .btn-delete, .btn-print { padding: 3px 6px; font-size: 0.55rem; }
         }
     </style>
 </head>
@@ -1376,17 +1149,14 @@
                     <label for="month">الشهر</label>
                     <select id="month" onchange="loadDashboard()"></select>
                 </div>
-
                 <div class="filter-item">
                     <label for="year">السنة</label>
                     <input id="year" type="number" min="2020" max="2100" value="2026" onchange="loadDashboard()" />
                 </div>
-
                 <div class="filter-item">
                     <label for="commissionRate">نسبة العمولة (%)</label>
                     <input id="commissionRate" type="number" min="0" max="100" step="0.1" value="20" onchange="loadDashboard()" />
                 </div>
-
                 <div class="filter-item">
                     <label>بداية الشهر</label>
                     <input id="monthStart" type="text" readonly style="background:var(--surface-muted);" />
@@ -1512,11 +1282,10 @@
          */
         var SUPABASE_URL = 'https://zwuvcblrrrriuylajvba.supabase.co';
         var SUPABASE_ANON_KEY = 'sb_publishable_YFqwTEs-W_kprUgt4bgpCQ_tf5vVeFa';
-        var PAYMENTS_TABLE = 'abuzaid_payments';
 
         /**
          * ============================================================
-         * SIDEBAR TOGGLE — نفس آلية جميع الصفحات السابقة
+         * SIDEBAR TOGGLE
          * ============================================================
          */
         var navToggle = document.getElementById('navToggle');
@@ -1689,13 +1458,9 @@
                 .replaceAll("'", "&#039;");
         }
 
-        function generateId() {
-            return 'id-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6);
-        }
-
         /**
          * ============================================================
-         * جلب البيانات من Supabase
+         * جلب البيانات من Supabase مع معالجة الأخطاء
          * ============================================================
          */
         async function loadDashboard() {
@@ -1724,51 +1489,72 @@
 
             try {
                 // 1. جلب الحجوزات (الفواتير)
-                var bookingsResponse = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=invoice_date,total,discount', {
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                try {
+                    var bookingsResponse = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=invoice_date,total,discount', {
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                        }
+                    });
+                    if (!bookingsResponse.ok) {
+                        console.warn('⚠️ فشل في جلب الفواتير، سيتم استخدام بيانات فارغة');
+                        allBookings = [];
+                    } else {
+                        allBookings = await bookingsResponse.json();
+                        console.log('✅ تم جلب الفواتير:', allBookings.length);
                     }
-                });
-
-                if (!bookingsResponse.ok) {
-                    throw new Error('فشل في جلب الفواتير');
+                } catch (e) {
+                    console.warn('⚠️ خطأ في جلب الفواتير:', e.message);
+                    allBookings = [];
                 }
-                allBookings = await bookingsResponse.json();
 
-                // 2. جلب المصروفات التشغيلية
-                var expensesResponse = await fetch(SUPABASE_URL + '/rest/v1/expenses?select=date,amount,category', {
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                // 2. جلب المصروفات - مع مرونة في الأعمدة
+                try {
+                    // نحاول جلب كل البيانات من جدول expenses
+                    var expensesResponse = await fetch(SUPABASE_URL + '/rest/v1/expenses?select=*', {
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                        }
+                    });
+                    if (!expensesResponse.ok) {
+                        console.warn('⚠️ فشل في جلب المصروفات، سيتم استخدام بيانات فارغة');
+                        allExpenses = [];
+                    } else {
+                        allExpenses = await expensesResponse.json();
+                        console.log('✅ تم جلب المصروفات:', allExpenses.length);
+                        console.log('📋 مثال على المصروف:', allExpenses[0]);
                     }
-                });
-
-                if (!expensesResponse.ok) {
-                    throw new Error('فشل في جلب المصروفات');
+                } catch (e) {
+                    console.warn('⚠️ خطأ في جلب المصروفات:', e.message);
+                    allExpenses = [];
                 }
-                allExpenses = await expensesResponse.json();
 
                 // 3. جلب دفعات أبو زيد
-                var paymentsResponse = await fetch(SUPABASE_URL + '/rest/v1/' + PAYMENTS_TABLE + '?select=*&order=payment_date.desc', {
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                try {
+                    var paymentsResponse = await fetch(SUPABASE_URL + '/rest/v1/abuzaid_payments?select=*&order=payment_date.desc', {
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                        }
+                    });
+                    if (!paymentsResponse.ok) {
+                        console.warn('⚠️ فشل في جلب دفعات أبو زيد، سيتم استخدام بيانات فارغة');
+                        allPayments = [];
+                    } else {
+                        allPayments = await paymentsResponse.json();
+                        console.log('✅ تم جلب دفعات أبو زيد:', allPayments.length);
                     }
-                });
-
-                if (!paymentsResponse.ok) {
-                    // إذا كان الجدول غير موجود، ننشئ مصفوفة فارغة
+                } catch (e) {
+                    console.warn('⚠️ خطأ في جلب دفعات أبو زيد:', e.message);
                     allPayments = [];
-                } else {
-                    allPayments = await paymentsResponse.json();
                 }
 
                 // 4. عرض البيانات
                 renderDashboard();
 
             } catch (error) {
-                console.error('❌ خطأ:', error);
+                console.error('❌ خطأ عام:', error);
                 kpiContainer.innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-exclamation-triangle" style="color:var(--rust);"></i>
@@ -1780,7 +1566,7 @@
                         </button>
                     </div>
                 `;
-                showToast('خطأ', 'فشل في تحميل البيانات', 'error');
+                showToast('خطأ', 'فشل في تحميل البيانات: ' + error.message, 'error');
             }
         }
 
@@ -1799,10 +1585,10 @@
                 return isWithinSelectedMonth(item.invoice_date, period);
             });
 
-            // فلترة المصروفات التشغيلية حسب الشهر المحدد
+            // فلترة المصروفات حسب الشهر المحدد
+            // نأخذ جميع المصروفات (جميع الفئات) كتشغيلية
             var monthlyExpenses = allExpenses.filter(function(item) {
-                return isWithinSelectedMonth(item.date, period) && 
-                       (item.category && item.category.includes('تشغيل'));
+                return isWithinSelectedMonth(item.date, period);
             });
 
             // فلترة دفعات أبو زيد حسب الشهر المحدد
@@ -1814,7 +1600,7 @@
             var totalInvoices = sum(monthlyBookings.map(function(item) { 
                 return parseFloat(item.total || 0) - parseFloat(item.discount || 0); 
             }));
-            var operatingExpenses = sum(monthlyExpenses.map(function(item) { return parseFloat(item.amount || 0); }));
+            var operatingExpenses = sum(monthlyExpenses.map(function(item) { return parseFloat(item.total || item.amount || 0); }));
             var commissionBase = Math.max(0, totalInvoices - operatingExpenses);
             var commissionDue = commissionBase * rate;
             var receivedAmount = sum(monthlyPayments.map(function(item) { return parseFloat(item.amount || 0); }));
@@ -1970,12 +1756,13 @@
             });
 
             expenses.forEach(function(item) {
+                var amount = parseFloat(item.total || item.amount || 0);
                 rows.push({
                     type: 'مصروف',
                     date: item.date,
-                    description: item.description || 'مصروف تشغيلي',
-                    category: item.category || 'تشغيل',
-                    amount: parseFloat(item.amount || 0)
+                    description: item.description || item.category || 'مصروف تشغيلي',
+                    category: item.category || 'مصروف',
+                    amount: amount
                 });
             });
 
@@ -1989,7 +1776,7 @@
                 container.innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-file-invoice"></i>
-                        <p>لا توجد فواتير أو مصروفات تشغيلية لهذا الشهر</p>
+                        <p>لا توجد فواتير أو مصروفات لهذا الشهر</p>
                     </div>
                 `;
                 return;
@@ -2136,7 +1923,7 @@
             };
 
             try {
-                var url = SUPABASE_URL + '/rest/v1/' + PAYMENTS_TABLE;
+                var url = SUPABASE_URL + '/rest/v1/abuzaid_payments';
                 var methodType = 'POST';
                 var body = paymentData;
 
@@ -2202,7 +1989,7 @@
             }
 
             try {
-                var response = await fetch(SUPABASE_URL + '/rest/v1/' + PAYMENTS_TABLE + '?id=eq.' + id, {
+                var response = await fetch(SUPABASE_URL + '/rest/v1/abuzaid_payments?id=eq.' + id, {
                     method: 'DELETE',
                     headers: {
                         'apikey': SUPABASE_ANON_KEY,
