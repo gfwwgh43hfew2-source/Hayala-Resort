@@ -500,9 +500,9 @@
         }
 
         /* ==========================================================
-           STAT CARDS
+           STAT CARDS - 6 بطاقات الآن
            ========================================================== */
-        .stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 24px; }
+        .stats { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; margin-bottom: 24px; }
         .stat-card {
             background: var(--surface);
             border: 1px solid rgba(0,0,0,0.04);
@@ -1141,7 +1141,20 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="stat-card fade-up loading" style="animation-delay:0.18s;--swatch:var(--gold)">
+                        <!-- ===== بطاقة المصروفات الجديدة ===== -->
+                        <div class="stat-card fade-up loading" style="animation-delay:0.17s;--swatch:var(--ochre)">
+                            <div class="bar" style="background:var(--ochre);"></div>
+                            <div class="body">
+                                <div class="label"><i class="fas fa-money-bill-wave" style="color:var(--ochre);"></i> إجمالي المصروفات</div>
+                                <div class="number" id="totalExpenses"><span class="loading-text">جاري التحميل...</span></div>
+                                <div class="foot">
+                                    <span class="change up"><i class="fas fa-arrow-up"></i> <span id="expensesChange">0%</span></span>
+                                    <span class="spark"><canvas id="spark6"></canvas></span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ===== بطاقة عمولة أبو زيد ===== -->
+                        <div class="stat-card fade-up loading" style="animation-delay:0.20s;--swatch:var(--gold)">
                             <div class="bar" style="background:var(--gold-gradient)"></div>
                             <div class="body">
                                 <div class="label"><i class="fas fa-hand-holding-heart" style="color:var(--gold);"></i> عمولة أبو زيد</div>
@@ -1683,7 +1696,7 @@
 
                 var clients = clientsResponse.ok ? await clientsResponse.json() : [];
 
-                // 3. جلب بيانات المصروفات - مهم لحساب عمولة أبو زيد بشكل صحيح
+                // 3. جلب بيانات المصروفات - مهم لحساب عمولة أبو زيد وعرض إجمالي المصروفات
                 var expensesResponse = await fetch(SUPABASE_URL + '/rest/v1/expenses?select=total,amount', {
                     headers: {
                         'apikey': SUPABASE_ANON_KEY,
@@ -1785,6 +1798,13 @@
                 var upcomingBookingsEl = document.getElementById('upcomingBookings');
                 if (upcomingBookingsEl) {
                     upcomingBookingsEl.textContent = futureBookings.toLocaleString();
+                }
+
+                // عرض إجمالي المصروفات
+                var totalExpensesEl = document.getElementById('totalExpenses');
+                if (totalExpensesEl) {
+                    totalExpensesEl.textContent = totalExpenses.toLocaleString() + ' ر.س';
+                    console.log('📊 إجمالي المصروفات:', totalExpenses);
                 }
 
                 // عرض عمولة أبو زيد (20% من صافي الأرباح)
@@ -1926,6 +1946,7 @@
                 renderSpark('spark3', sparkData, '#2e7a5c');
                 renderSpark('spark4', sparkData, '#a63a31');
                 renderSpark('spark5', sparkData, '#b98a1e');
+                renderSpark('spark6', sparkData, '#b98a1e');
 
                 // ===== إزالة حالة التحميل =====
                 document.querySelectorAll('.stat-card.loading').forEach(function(el) {
