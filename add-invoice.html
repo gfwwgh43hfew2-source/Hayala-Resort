@@ -2322,65 +2322,60 @@
          * INVOICE NUMBER GENERATOR - Supabase (المعدل)
          * ============================================================
          */
-        /**
- * ============================================================
- * INVOICE NUMBER GENERATOR - Supabase (المعدل)
- * ============================================================
- */
-async function generateInvoiceNumber() {
-    var today = new Date();
-    var year = today.getFullYear();
-    var month = String(today.getMonth() + 1).padStart(2, '0');
-    var day = String(today.getDate()).padStart(2, '0');
-    var dateStr = year + month + day;
+        async function generateInvoiceNumber() {
+            var today = new Date();
+            var year = today.getFullYear();
+            var month = String(today.getMonth() + 1).padStart(2, '0');
+            var day = String(today.getDate()).padStart(2, '0');
+            var dateStr = year + month + day;
 
-    try {
-        // جلب جميع أرقام الفواتير من Supabase
-        var response = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=booking_number', {
-            headers: {
-                'apikey': SUPABASE_ANON_KEY,
-                'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error('فشل في جلب الأرقام');
-        }
-
-        var data = await response.json();
-        var maxNumber = 0;
-
-        // البحث عن أكبر رقم فاتورة
-        if (data && data.length > 0) {
-            data.forEach(function(item) {
-                if (item.booking_number) {
-                    var parts = item.booking_number.split('-');
-                    if (parts.length === 3) {
-                        var num = parseInt(parts[2]) || 0;
-                        if (num > maxNumber) {
-                            maxNumber = num;
-                        }
+            try {
+                // جلب جميع أرقام الفواتير من Supabase
+                var response = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=invoice_number', {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
                     }
+                });
+
+                if (!response.ok) {
+                    throw new Error('فشل في جلب الأرقام');
                 }
-            });
+
+                var data = await response.json();
+                var maxNumber = 0;
+
+                // البحث عن أكبر رقم فاتورة
+                if (data && data.length > 0) {
+                    data.forEach(function(item) {
+                        if (item.invoice_number) {
+                            var parts = item.invoice_number.split('-');
+                            if (parts.length === 3) {
+                                var num = parseInt(parts[2]) || 0;
+                                if (num > maxNumber) {
+                                    maxNumber = num;
+                                }
+                            }
+                        }
+                    });
+                }
+
+                var newNumber = maxNumber + 1;
+                var num = String(newNumber).padStart(4, '0');
+                invoiceNumber.value = 'INV-' + dateStr + '-' + num;
+
+                console.log('📌 آخر رقم:', maxNumber, '→ رقم جديد:', newNumber);
+
+            } catch (error) {
+                console.error('❌ خطأ في توليد رقم الفاتورة:', error);
+                // Fallback: استخدام localStorage
+                var lastNumber = parseInt(localStorage.getItem('hayala_last_invoice_number')) || 0;
+                var newNumber = lastNumber + 1;
+                var num = String(newNumber).padStart(4, '0');
+                invoiceNumber.value = 'INV-' + dateStr + '-' + num;
+                localStorage.setItem('hayala_last_invoice_number', newNumber);
+            }
         }
-
-        var newNumber = maxNumber + 1;
-        var num = String(newNumber).padStart(4, '0');
-        invoiceNumber.value = 'INV-' + dateStr + '-' + num;
-
-        console.log('📌 آخر رقم:', maxNumber, '→ رقم جديد:', newNumber);
-
-    } catch (error) {
-        console.error('❌ خطأ في توليد رقم الفاتورة:', error);
-        // Fallback: استخدام localStorage
-        var lastNumber = parseInt(localStorage.getItem('hayala_last_invoice_number')) || 0;
-        var newNumber = lastNumber + 1;
-        var num = String(newNumber).padStart(4, '0');
-        invoiceNumber.value = 'INV-' + dateStr + '-' + num;
-        localStorage.setItem('hayala_last_invoice_number', newNumber);
-    }
-}
 
         /**
          * ============================================================
@@ -3163,7 +3158,7 @@ async function generateInvoiceNumber() {
             showToast('🔍 بحث', 'جاري البحث عن الفاتورة...', 'warning');
 
             try {
-                var response = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=*&booking_number=eq.' + encodeURIComponent(searchTerm), {
+                var response = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=*&invoice_number=eq.' + encodeURIComponent(searchTerm), {
                     headers: {
                         'apikey': SUPABASE_ANON_KEY,
                         'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
@@ -3204,7 +3199,7 @@ async function generateInvoiceNumber() {
             var firstItem = invoiceData[0];
 
             bookNumber.value = firstItem.booking_number || '';
-            invoiceNumber.value = firstItem.booking_number || '';
+            invoiceNumber.value = firstItem.invoice_number || '';
 
             if (firstItem.invoice_date) {
                 invoiceDate.value = firstItem.invoice_date;
@@ -3234,7 +3229,7 @@ async function generateInvoiceNumber() {
             calculateTotals();
             calculateRemaining();
             isEditingInvoice = true;
-            editingInvoiceNumber = firstItem.booking_number || '';
+            editingInvoiceNumber = firstItem.invoice_number || '';
         }
 
         /**
@@ -3381,7 +3376,8 @@ async function generateInvoiceNumber() {
                     }
 
                     return {
-                        booking_number: item.number || invoiceData.number || '',
+                        invoice_number: invoiceData.number || '',
+                        booking_number: item.number || '',
                         invoice_date: invoiceData.date || new Date().toISOString().split('T')[0],
                         check_in: item.checkIn || null,
                         check_out: item.checkOut || null,
