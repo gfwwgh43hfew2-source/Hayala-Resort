@@ -52,6 +52,7 @@
             --header-height: 60px;
             --stripe-height: 4px;
             --mobile-nav-height: 56px;
+            --sidebar-w: 270px;
 
             --scale-factor: 0.9;
         }
@@ -302,7 +303,7 @@
         }
 
         /* ============================================================
-           SIDEBAR
+           SIDEBAR — مغلقة افتراضياً على الموبايل
            ============================================================ */
         .sidebar-overlay {
             display: none;
@@ -323,14 +324,14 @@
         .sidebar {
             position: fixed;
             top: 0;
-            right: calc(-270px * var(--scale-factor));
-            width: calc(260px * var(--scale-factor));
+            right: calc(-1 * var(--sidebar-w));
+            width: calc(var(--sidebar-w) * 1px);
             height: 100vh;
             background: #ffffff;
             border-left: 1px solid var(--line);
             z-index: 1000;
             padding: calc(60px * var(--scale-factor)) calc(18px * var(--scale-factor)) calc(30px * var(--scale-factor));
-            transition: right 0.3s ease;
+            transition: right 0.35s ease;
             overflow-y: auto;
             box-shadow: var(--shadow);
         }
@@ -1097,7 +1098,7 @@
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <!-- ============================================================
-    SIDEBAR
+    SIDEBAR — مغلقة افتراضياً على الموبايل
     ============================================================ -->
     <div class="sidebar" id="sidebar">
         <div class="close-btn" id="closeSidebar"><i class="fas fa-times"></i></div>
@@ -1263,27 +1264,65 @@
 
         /**
          * ============================================================
-         * SIDEBAR TOGGLE
+         * SIDEBAR TOGGLE — نفس آلية جميع الصفحات السابقة
          * ============================================================
          */
         var navToggle = document.getElementById('navToggle');
         var sidebar = document.getElementById('sidebar');
         var overlay = document.getElementById('sidebarOverlay');
         var closeSidebar = document.getElementById('closeSidebar');
+        var mobileOpen = false;
 
         function toggleSidebar() {
-            sidebar.classList.toggle('open');
-            overlay.classList.toggle('active');
-            document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+            if (window.innerWidth <= 768) {
+                mobileOpen = !mobileOpen;
+                if (mobileOpen) {
+                    sidebar.classList.add('open');
+                    overlay.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                    navToggle.innerHTML = '<i class="fas fa-times"></i>';
+                } else {
+                    sidebar.classList.remove('open');
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                    navToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            } else {
+                sidebar.classList.toggle('open');
+                overlay.classList.toggle('active');
+                document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+            }
         }
 
         navToggle.addEventListener('click', toggleSidebar);
         closeSidebar.addEventListener('click', toggleSidebar);
-        overlay.addEventListener('click', toggleSidebar);
+        overlay.addEventListener('click', function() {
+            if (window.innerWidth <= 768 && mobileOpen) {
+                toggleSidebar();
+            } else {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+                navToggle.innerHTML = '<i class="fas fa-bars"></i>';
+            }
+        });
 
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && sidebar.classList.contains('open')) {
-                toggleSidebar();
+            if (e.key === 'Escape') {
+                if (sidebar.classList.contains('open') || mobileOpen) {
+                    toggleSidebar();
+                }
+                closeModal();
+            }
+        });
+
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+                mobileOpen = false;
+                navToggle.innerHTML = '<i class="fas fa-bars"></i>';
             }
         });
 
