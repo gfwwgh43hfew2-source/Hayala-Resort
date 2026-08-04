@@ -94,7 +94,7 @@
         ::-webkit-scrollbar-thumb { background: var(--ink-4); border-radius: 50px; }
 
         /* ==========================================================
-           SIDEBAR — نفس نظام الكود الذي يعمل
+           SIDEBAR — نفس نظام باقي الصفحات (مغلقة افتراضياً على الموبايل)
            ========================================================== */
         .sidebar-overlay {
             display: none;
@@ -114,7 +114,7 @@
         .sidebar {
             position: fixed;
             top: 0;
-            right: 0;
+            right: -280px;
             width: var(--sidebar-w);
             height: 100vh;
             background: var(--surface-2);
@@ -1171,14 +1171,16 @@
             tableNote.textContent = '📌 إجمالي الحجوزات المعروضة: ' + data.length;
         }
 
-        function calculateStats(data) {
+        async function calculateStats(data) {
             var totalRevenue = 0;
             var totalBookings = data.length;
             var totalClients = new Set();
             var futureBookings = 0;
             var today = new Date();
             var todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            var totalExpenses = 0;
 
+            // حساب إجمالي الإيرادات
             data.forEach(function(item) {
                 totalRevenue += parseFloat(item.total) || 0;
                 if (item.client_name) totalClients.add(item.client_name);
@@ -1189,7 +1191,32 @@
                 }
             });
 
-            var commission = totalRevenue * 0.2;
+            // جلب المصروفات من Supabase
+            try {
+                var expensesResponse = await fetch(SUPABASE_URL + '/rest/v1/expenses?select=total,amount', {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                    }
+                });
+
+                if (expensesResponse.ok) {
+                    var expenses = await expensesResponse.json();
+                    expenses.forEach(function(expense) {
+                        var amount = parseFloat(expense.total || expense.amount || 0);
+                        totalExpenses += amount;
+                    });
+                    console.log('✅ تم جلب المصروفات:', expenses.length);
+                } else {
+                    console.warn('⚠️ فشل في جلب المصروفات، سيتم استخدام 0');
+                }
+            } catch (e) {
+                console.warn('⚠️ خطأ في جلب المصروفات:', e.message);
+            }
+
+            // حساب صافي الأرباح وعمولة أبو زيد (20%)
+            var netProfit = Math.max(0, totalRevenue - totalExpenses);
+            var commission = netProfit * 0.20;
 
             document.getElementById('totalRevenue').textContent = totalRevenue.toLocaleString() + ' ر.س';
             document.getElementById('totalBookings').textContent = totalBookings.toLocaleString();
@@ -1227,7 +1254,7 @@
                 allBookings = await response.json();
                 filteredBookings = allBookings.slice();
 
-                calculateStats(allBookings);
+                await calculateStats(allBookings);
                 renderTable(filteredBookings);
 
             } catch (error) {
