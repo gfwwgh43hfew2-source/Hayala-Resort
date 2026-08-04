@@ -2123,6 +2123,35 @@
                 font-weight: 800;
             }
         }
+
+        /* ===== زر العودة للوحة الرئيسية - تحسين ===== */
+        .btn-back-dashboard {
+            display: inline-flex;
+            align-items: center;
+            gap: calc(8px * var(--scale-factor));
+            padding: calc(8px * var(--scale-factor)) calc(20px * var(--scale-factor));
+            border-radius: calc(10px * var(--scale-factor));
+            background: var(--blue);
+            color: #ffffff;
+            font-weight: 700;
+            font-size: calc(0.8rem * var(--scale-factor));
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            font-family: var(--font-display);
+            text-decoration: none;
+            box-shadow: 0 2px 8px rgba(47, 91, 138, 0.2);
+        }
+
+        .btn-back-dashboard:hover {
+            background: #1a4a6b;
+            transform: translateY(calc(-2px * var(--scale-factor)));
+            box-shadow: 0 6px 20px rgba(47, 91, 138, 0.3);
+        }
+
+        .btn-back-dashboard i {
+            font-size: calc(0.7rem * var(--scale-factor));
+        }
     </style>
 </head>
 <body>
@@ -2163,6 +2192,7 @@
                     <a href="properties.html"><i class="fas fa-building nav-icon"></i> العقارات</a>
                     <a href="expenses.html"><i class="fas fa-money-bill-wave nav-icon"></i> المصاريف</a>
                     <a href="abuzeid.html"><i class="fas fa-hand-holding-heart nav-icon"></i> عمولة أبو زيد</a>
+                    <a href="client-accounts.html"><i class="fas fa-user-clock nav-icon"></i> حسابات العملاء</a>
                     <a href="#"><i class="fas fa-chart-pie nav-icon"></i> التقارير</a>
                 </nav>
                 <div class="header-actions">
@@ -2187,6 +2217,7 @@
                 <a href="properties.html"><i class="fas fa-building"></i> العقارات</a>
                 <a href="expenses.html"><i class="fas fa-money-bill-wave"></i> المصاريف</a>
                 <a href="abuzeid.html"><i class="fas fa-hand-holding-heart"></i> عمولة أبو زيد</a>
+                <a href="client-accounts.html"><i class="fas fa-user-clock"></i> حسابات العملاء</a>
                 <a href="#"><i class="fas fa-chart-pie"></i> التقارير</a>
             </div>
         </div>
@@ -2638,7 +2669,7 @@
             companyPhone: '+966509982400',
             companyEmail: 'info@hayala-resort.com',
             companyWebsite: 'www.hayala-resort.com',
-            companyLogo: 'https://raw.githubusercontent.com/gfwwgh43hfew2-source/excel-for-all/main/%D9%85%D9%86%D8%AA%D8%AC%D8%B9.png',
+            companyLogo: 'https://raw.githubusercontent.com/gfwwgh43hfew2-source/Hayala-Resort/main/ChatGPT%20Image%2030%20%D9%8A%D9%88%D9%84%D9%8A%D9%88%202026%D8%8C%2012_39_00%20%D9%85.png',
             invoiceFooter: 'شكراً لثقتكم بنا - منتجع حياله'
         };
 
