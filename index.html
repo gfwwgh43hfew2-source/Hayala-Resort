@@ -1555,7 +1555,7 @@
         }
 
         /* ============================================================
-           جلب البيانات من Supabase مع إصلاح جلب المصروفات
+           جلب البيانات من Supabase مع خصم الخصم وإزالة الكسور
            ============================================================ */
         async function fetchDashboardData() {
             try {
@@ -1585,7 +1585,7 @@
                 });
                 var clients = clientsResponse.ok ? await clientsResponse.json() : [];
 
-                // 3. جلب بيانات المصروفات - جلب جميع الأعمدة للتحقق
+                // 3. جلب بيانات المصروفات
                 console.log('🔄 جلب المصروفات...');
                 var expensesResponse = await fetch(SUPABASE_URL + '/rest/v1/expenses?select=*', {
                     headers: {
@@ -1602,35 +1602,16 @@
                     console.log('📋 تم جلب المصروفات، عدد السجلات:', expenses.length);
 
                     if (expenses.length > 0) {
-                        console.log('📋 أول سجل مصروف:', expenses[0]);
-                        console.log('📋 مفاتيح السجل:', Object.keys(expenses[0]));
-
-                        // محاولة قراءة المبلغ من أي عمود موجود
-                        var amountFound = false;
-                        expenses.forEach(function(expense, index) {
-                            // تجربة عدة أسماء محتملة للأعمدة
-                            var amount = parseFloat(expense.total || expense.amount || expense.المبلغ || expense.price || expense.value || expense.money || 0);
+                        expenses.forEach(function(expense) {
+                            var amount = parseFloat(expense.total || expense.amount || 0);
                             if (!isNaN(amount) && amount > 0) {
                                 totalExpenses += amount;
-                                amountFound = true;
                             }
                         });
-
-                        if (!amountFound) {
-                            console.warn('⚠️ لم يتم العثور على عمود المبلغ في جدول المصروفات');
-                            console.log('📋 أسماء الأعمدة المتاحة:', Object.keys(expenses[0]));
-                        }
                     }
-
-                    console.log('💰 إجمالي المصروفات المحسوب:', totalExpenses);
+                    console.log('💰 إجمالي المصروفات:', totalExpenses);
                 } else {
-                    console.warn('⚠️ فشل في جلب المصروفات، الكود:', expensesResponse.status);
-                    try {
-                        var errorText = await expensesResponse.text();
-                        console.warn('⚠️ نص الخطأ:', errorText);
-                    } catch (e) {
-                        console.warn('⚠️ لا يمكن قراءة نص الخطأ');
-                    }
+                    console.warn('⚠️ فشل في جلب المصروفات');
                 }
 
                 // ===== معالجة البيانات =====
@@ -1648,8 +1629,11 @@
                 var clientBookings = {};
 
                 bookings.forEach(function(booking) {
+                    // ===== خصم الخصم من الإيرادات (مثل صفحة عمولة أبو زيد) =====
                     var total = parseFloat(booking.total) || 0;
-                    totalRevenue += total;
+                    var discount = parseFloat(booking.discount) || 0;
+                    var netRevenue = total - discount; // صافي الإيرادات بعد الخصم
+                    totalRevenue += netRevenue;
 
                     var propType = booking.property_type || 'غير محدد';
                     if (!propertyTypes[propType]) propertyTypes[propType] = 0;
@@ -1669,7 +1653,7 @@
                             var monthKey = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0');
                             if (!monthlyRevenue[monthKey]) monthlyRevenue[monthKey] = 0;
                             if (!monthlyCount[monthKey]) monthlyCount[monthKey] = 0;
-                            monthlyRevenue[monthKey] += total;
+                            monthlyRevenue[monthKey] += netRevenue;
                             monthlyCount[monthKey] += 1;
                         }
                     }
@@ -1693,15 +1677,20 @@
                 var commissionRate = 0.20;
                 var totalCommission = netProfit * commissionRate;
 
-                console.log('📊 الإيرادات:', totalRevenue, 'المصروفات:', totalExpenses, 'صافي:', netProfit, 'العمولة:', totalCommission);
+                // ===== تقريب الأرقام لإزالة الكسور العشرية =====
+                var roundedRevenue = Math.round(totalRevenue);
+                var roundedExpenses = Math.round(totalExpenses);
+                var roundedCommission = Math.round(totalCommission);
+
+                console.log('📊 الإيرادات (بعد الخصم):', roundedRevenue, 'المصروفات:', roundedExpenses, 'العمولة:', roundedCommission);
 
                 // ===== تحديث الإحصائيات =====
-                document.getElementById('totalRevenue').textContent = totalRevenue.toLocaleString() + ' ر.س';
+                document.getElementById('totalRevenue').textContent = roundedRevenue.toLocaleString() + ' ر.س';
                 document.getElementById('totalBookings').textContent = totalBookings.toLocaleString();
                 document.getElementById('totalClients').textContent = (totalClients || 0).toLocaleString();
                 document.getElementById('upcomingBookings').textContent = futureBookings.toLocaleString();
-                document.getElementById('totalExpenses').textContent = totalExpenses.toLocaleString() + ' ر.س';
-                document.getElementById('totalCommission').textContent = totalCommission.toLocaleString() + ' ر.س';
+                document.getElementById('totalExpenses').textContent = roundedExpenses.toLocaleString() + ' ر.س';
+                document.getElementById('totalCommission').textContent = roundedCommission.toLocaleString() + ' ر.س';
 
                 // ===== تحديث الـ Charts =====
                 var sortedMonths = Object.keys(monthlyRevenue).sort();
@@ -1717,7 +1706,7 @@
                         var year = parts[0];
                         var monthNum = parseInt(parts[1], 10) - 1;
                         labels.push(monthNames[monthNum] + ' ' + year);
-                        sales.push(monthlyRevenue[monthKey] || 0);
+                        sales.push(Math.round(monthlyRevenue[monthKey] || 0));
                         var occ = monthlyCount[monthKey] || 0;
                         occupancy.push(Math.round((occ / 30) * 100));
                     });
