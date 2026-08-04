@@ -443,10 +443,10 @@
 
         <div class="footer">
             <div class="user">
-                <div class="avatar">أ</div>
+                <div class="avatar" id="sidebarAvatar">أ</div>
                 <div class="info">
-                    <div class="name">Admin</div>
-                    <div class="role">مدير النظام</div>
+                    <div class="name" id="sidebarName">Admin</div>
+                    <div class="role" id="sidebarRole">مدير النظام</div>
                 </div>
                 <a href="#" class="logout" title="تسجيل الخروج" onclick="logoutUser()"><i class="fas fa-arrow-right-from-bracket"></i></a>
             </div>
@@ -554,12 +554,20 @@
             window.location.href = 'login.html';
         }
 
-        // عرض اسم المستخدم في الـ Header
+        // عرض اسم المستخدم في الـ Header والـ Sidebar
         var profileName = document.getElementById('profileName');
         var profileAvatar = document.getElementById('profileAvatar');
+        var sidebarName = document.getElementById('sidebarName');
+        var sidebarAvatar = document.getElementById('sidebarAvatar');
+        var sidebarRole = document.getElementById('sidebarRole');
+
         if (user && user.name) {
-            profileName.innerHTML = user.name + '<small>' + (user.role === 'admin' ? 'مدير النظام' : 'مستخدم') + '</small>';
+            var roleText = user.role === 'admin' ? 'مدير النظام' : 'مستخدم';
+            profileName.innerHTML = user.name + '<small>' + roleText + '</small>';
             profileAvatar.textContent = user.name.charAt(0) || 'أ';
+            sidebarName.textContent = user.name;
+            sidebarAvatar.textContent = user.name.charAt(0) || 'أ';
+            sidebarRole.textContent = roleText;
         }
 
         /**
@@ -821,8 +829,6 @@
         function updateKpis(bookings) {
             var totalRevenue = 0;
             var totalClients = new Set();
-            var today = new Date();
-            var todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
             bookings.forEach(function(item) {
                 totalRevenue += parseFloat(item.total) || 0;
