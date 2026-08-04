@@ -1789,33 +1789,116 @@
         }
 
         /* ============================================================
-           DATE INPUT - تنسيق DD/MM/YYYY
+           DATE INPUT - تنسيق DD/MM/YYYY باستخدام JS
            ============================================================ */
-        input[type="date"] {
-            direction: ltr;
-            text-align: center;
+        .date-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .date-wrapper input[type="date"] {
+            width: 100%;
+            padding: 7px 12px;
+            border-radius: var(--radius-sm);
+            border: 1.5px solid var(--line);
+            background: var(--surface-muted);
+            color: var(--ink);
+            font-size: 0.8rem;
             font-family: var(--font-display);
+            transition: all 0.2s ease;
+            outline: none;
+            height: 38px;
+            direction: ltr;
         }
 
-        input[type="date"]::-webkit-datetime-edit {
-            direction: rtl;
-            text-align: center;
+        .date-wrapper input[type="date"]:focus {
+            border-color: var(--accent);
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(221, 159, 46, 0.15);
         }
 
-        input[type="date"]::-webkit-datetime-edit-fields-wrapper {
-            direction: rtl;
+        .date-wrapper input[type="date"]::-webkit-calendar-picker-indicator {
+            position: absolute;
+            left: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
         }
 
-        input[type="date"]::-webkit-datetime-edit-day-field {
-            order: 1;
+        /* تنسيق عرض التاريخ بالشكل المطلوب DD/MM/YYYY */
+        .date-display {
+            direction: ltr !important;
+            text-align: center !important;
+            font-family: var(--font-mono);
+            letter-spacing: 1px;
         }
 
-        input[type="date"]::-webkit-datetime-edit-month-field {
-            order: 2;
+        .date-display::-webkit-datetime-edit {
+            direction: ltr !important;
+            text-align: center !important;
         }
 
-        input[type="date"]::-webkit-datetime-edit-year-field {
-            order: 3;
+        .date-display::-webkit-datetime-edit-fields-wrapper {
+            direction: ltr !important;
+        }
+
+        .date-display::-webkit-datetime-edit-day-field {
+            order: 1 !important;
+        }
+
+        .date-display::-webkit-datetime-edit-month-field {
+            order: 2 !important;
+        }
+
+        .date-display::-webkit-datetime-edit-year-field {
+            order: 3 !important;
+        }
+
+        /* ============================================================
+           FIX: ADD BOOKING BUTTON VISIBILITY
+           ============================================================ */
+        .btn-add {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            padding: 6px 18px !important;
+            border-radius: 8px !important;
+            background: var(--ink) !important;
+            border: none !important;
+            color: #fff !important;
+            font-weight: 700 !important;
+            font-size: 0.75rem !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            height: 34px !important;
+            font-family: var(--font-display) !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        .btn-add:hover {
+            background: var(--ink-soft) !important;
+            transform: translateY(-1px) !important;
+        }
+
+        .btn-add i {
+            color: var(--accent) !important;
+        }
+
+        /* التأكد من ظهور الأزرار في الـ actions row */
+        .btn-actions-row {
+            display: flex !important;
+            gap: 6px !important;
+            flex-wrap: wrap !important;
+            flex-shrink: 0 !important;
+            margin-top: 6px !important;
+        }
+
+        .btn-actions-row .btn-add,
+        .btn-actions-row .btn-reset-form {
+            display: inline-flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
         }
     </style>
 </head>
@@ -1982,7 +2065,9 @@
                         </div>
                         <div class="form-group">
                             <label>التاريخ <span class="required">*</span></label>
-                            <input type="date" id="invoiceDate" />
+                            <div class="date-wrapper">
+                                <input type="date" id="invoiceDate" class="date-display" />
+                            </div>
                         </div>
                     </div>
 
@@ -2004,7 +2089,7 @@
                         <span class="dot"></span> تفاصيل الحجز
                     </div>
 
-                    <!-- Booking Row (بدون رقم الحجز) -->
+                    <!-- Booking Row -->
                     <div class="form-row booking-row">
                         <div class="form-group">
                             <label>نوع العقار <span class="required">*</span></label>
@@ -2022,11 +2107,15 @@
                     <div class="form-row small-fields">
                         <div class="form-group">
                             <label>تاريخ الدخول <span class="required">*</span></label>
-                            <input type="date" id="checkIn" />
+                            <div class="date-wrapper">
+                                <input type="date" id="checkIn" class="date-display" />
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>تاريخ الخروج <span class="required">*</span></label>
-                            <input type="date" id="checkOut" />
+                            <div class="date-wrapper">
+                                <input type="date" id="checkOut" class="date-display" />
+                            </div>
                         </div>
                     </div>
 
@@ -2317,27 +2406,9 @@
 
         /**
          * ============================================================
-         * DATE FORMATTING FUNCTIONS
+         * SET DEFAULT DATE (YYYY-MM-DD للقيمة الفعلية)
          * ============================================================
          */
-        function formatDateForDisplay(dateString) {
-            if (!dateString) return '-';
-            var parts = dateString.split('-');
-            if (parts.length === 3) {
-                return parts[2] + '/' + parts[1] + '/' + parts[0];
-            }
-            return dateString;
-        }
-
-        function formatDateForInput(dateString) {
-            if (!dateString) return '';
-            var parts = dateString.split('/');
-            if (parts.length === 3) {
-                return parts[2] + '-' + parts[1] + '-' + parts[0];
-            }
-            return dateString;
-        }
-
         function getTodayFormatted() {
             var today = new Date();
             var day = String(today.getDate()).padStart(2, '0');
@@ -2346,11 +2417,6 @@
             return year + '-' + month + '-' + day;
         }
 
-        /**
-         * ============================================================
-         * SET DEFAULT DATE
-         * ============================================================
-         */
         (function() {
             var today = getTodayFormatted();
             invoiceDate.value = today;
@@ -2592,7 +2658,7 @@
 
         /**
          * ============================================================
-         * ADD BOOKING - زر الإضافة
+         * ADD BOOKING - زر الإضافة (تم إصلاحه)
          * ============================================================
          */
         btnAddBooking.addEventListener('click', function() {
@@ -2670,7 +2736,7 @@
 
         /**
          * ============================================================
-         * RENDER BOOKINGS - مع تنسيق التواريخ DD/MM/YYYY
+         * RENDER BOOKINGS
          * ============================================================
          */
         function renderBookings() {
