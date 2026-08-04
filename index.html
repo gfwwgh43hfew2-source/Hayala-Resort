@@ -973,6 +973,19 @@
             .dash { padding: 18px 12px 106px; }
             .mobile-bottom-nav .bn-item span { font-size: 0.56rem; }
         }
+
+        /* ==========================================================
+           SCALE DOWN THE MAIN CONTENT TO 90%
+           ========================================================== */
+        .main-content {
+            transform: scale(0.9);
+            transform-origin: top center;
+        }
+
+        /* Adjust padding and margins to compensate for the scaling if needed */
+        .main {
+            /* No change needed, the scale will handle the visual size */
+        }
     </style>
 </head>
 <body>
@@ -1074,159 +1087,161 @@
             </div>
         </div>
 
-        <!-- ===== DASHBOARD ===== -->
-        <div class="dash">
+        <!-- ===== DASHBOARD — wrapped with main-content class for scaling ===== -->
+        <div class="main-content">
+            <div class="dash">
 
-            <!-- ===== HERO ===== -->
-            <div class="hero fade-up" style="animation-delay:0.02s">
-                <div class="copy">
-                    <div class="eyebrow">لوحة التحكم — يوليو 2026</div>
-                    <h1>
-                        أهلاً وسهلاً بك في<br>
-                        <span class="highlight">منتجع حياله</span>
-                    </h1>
-                    <p>ملخص أداء الحجوزات والإيرادات اليوم، وتوزيع الإشغال حسب نوع العقار.</p>
-                    <div class="goal-row">
-                        <a href="add-invoice.html" class="cta"><i class="fas fa-plus"></i> حجز جديد</a>
-                        <div class="goal">
-                            <div class="g-top">هدف الشهر <b id="goalPct">0%</b></div>
-                            <div class="g-bar"><span class="fill" id="goalFill"></span><span class="drip" id="goalDrip"></span></div>
+                <!-- ===== HERO ===== -->
+                <div class="hero fade-up" style="animation-delay:0.02s">
+                    <div class="copy">
+                        <div class="eyebrow">لوحة التحكم — يوليو 2026</div>
+                        <h1>
+                            أهلاً وسهلاً بك في<br>
+                            <span class="highlight">منتجع حياله</span>
+                        </h1>
+                        <p>ملخص أداء الحجوزات والإيرادات اليوم، وتوزيع الإشغال حسب نوع العقار.</p>
+                        <div class="goal-row">
+                            <a href="add-invoice.html" class="cta"><i class="fas fa-plus"></i> حجز جديد</a>
+                            <div class="goal">
+                                <div class="g-top">هدف الشهر <b id="goalPct">0%</b></div>
+                                <div class="g-bar"><span class="fill" id="goalFill"></span><span class="drip" id="goalDrip"></span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ===== HERO IMAGE ===== -->
+                    <div class="hero-image fade-up" style="animation-delay:0.1s">
+                        <img src="https://raw.githubusercontent.com/gfwwgh43hfew2-source/Hayala-Resort/main/ChatGPT%20Image%2030%20%D9%8A%D9%88%D9%84%D9%8A%D9%88%202026%D8%8C%2012_39_00%20%D9%85.png"
+                             alt="منتجع حياله - القصيم"
+                             loading="lazy" />
+                    </div>
+                </div>
+
+                <!-- ===== STATS ===== -->
+                <div class="stats-wrap">
+                    <div class="stats">
+                        <div class="stat-card fade-up loading" style="animation-delay:0.06s;--swatch:var(--prussian)">
+                            <div class="bar"></div>
+                            <div class="body">
+                                <div class="label"><i class="fas fa-wallet"></i> إجمالي الإيرادات</div>
+                                <div class="number" id="totalRevenue"><span class="loading-text">جاري التحميل...</span></div>
+                                <div class="foot">
+                                    <span class="change up"><i class="fas fa-arrow-up"></i> 0%</span>
+                                    <span class="spark"><canvas id="spark1"></canvas></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="stat-card fade-up loading" style="animation-delay:0.09s;--swatch:var(--ink-3)">
+                            <div class="bar"></div>
+                            <div class="body">
+                                <div class="label"><i class="fas fa-file-invoice"></i> إجمالي الحجوزات</div>
+                                <div class="number" id="totalBookings"><span class="loading-text">جاري التحميل...</span></div>
+                                <div class="foot">
+                                    <span class="change up"><i class="fas fa-arrow-up"></i> 0%</span>
+                                    <span class="spark"><canvas id="spark2"></canvas></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="stat-card fade-up loading" style="animation-delay:0.12s;--swatch:var(--viridian)">
+                            <div class="bar"></div>
+                            <div class="body">
+                                <div class="label"><i class="fas fa-users"></i> إجمالي العملاء</div>
+                                <div class="number" id="totalClients"><span class="loading-text">جاري التحميل...</span></div>
+                                <div class="foot">
+                                    <span class="change up"><i class="fas fa-arrow-up"></i> 0%</span>
+                                    <span class="spark"><canvas id="spark3"></canvas></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="stat-card fade-up loading" style="animation-delay:0.15s;--swatch:var(--oxide)">
+                            <div class="bar"></div>
+                            <div class="body">
+                                <div class="label"><i class="fas fa-clock"></i> حجوزات قادمة</div>
+                                <div class="number" id="upcomingBookings"><span class="loading-text">جاري التحميل...</span></div>
+                                <div class="foot">
+                                    <span class="change up"><i class="fas fa-arrow-up"></i> 0%</span>
+                                    <span class="spark"><canvas id="spark4"></canvas></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="stat-card fade-up loading" style="animation-delay:0.18s;--swatch:var(--gold)">
+                            <div class="bar" style="background:var(--gold-gradient)"></div>
+                            <div class="body">
+                                <div class="label"><i class="fas fa-hand-holding-heart" style="color:var(--gold);"></i> عمولة أبو زيد</div>
+                                <div class="number" id="totalCommission"><span class="loading-text">جاري التحميل...</span></div>
+                                <div class="foot">
+                                    <span class="change up"><i class="fas fa-arrow-up"></i> 0%</span>
+                                    <span class="spark"><canvas id="spark5"></canvas></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- ===== HERO IMAGE ===== -->
-                <div class="hero-image fade-up" style="animation-delay:0.1s">
-                    <img src="https://raw.githubusercontent.com/gfwwgh43hfew2-source/Hayala-Resort/main/ChatGPT%20Image%2030%20%D9%8A%D9%88%D9%84%D9%8A%D9%88%202026%D8%8C%2012_39_00%20%D9%85.png"
-                         alt="منتجع حياله - القصيم"
-                         loading="lazy" />
+                <!-- ===== CHARTS GRID (Bar + Pie side by side) ===== -->
+                <div class="charts-grid">
+
+                    <!-- ===== BAR CHART ===== -->
+                    <div class="panel fade-up" style="animation-delay:0.12s">
+                        <div class="p-head">
+                            <div>
+                                <div class="p-title">أداء الحجوزات الشهري</div>
+                                <div class="p-sub">مقارنة الإيرادات والإشغال خلال السنة</div>
+                            </div>
+                            <div class="tabs">
+                                <button class="active" data-range="6">٦ أشهر</button>
+                                <button data-range="12">١٢ شهر</button>
+                            </div>
+                        </div>
+                        <div class="chart-canvas-wrap"><canvas id="salesChart"></canvas></div>
+                        <div class="legend-row">
+                            <span class="li"><span class="sw" style="background:var(--prussian)"></span> الإيرادات</span>
+                            <span class="li"><span class="sw" style="background:var(--oxide)"></span> الإشغال</span>
+                        </div>
+                    </div>
+
+                    <!-- ===== PIE CHART ===== -->
+                    <div class="panel fade-up" style="animation-delay:0.15s">
+                        <div class="p-head">
+                            <div>
+                                <div class="p-title">توزيع الإشغال</div>
+                                <div class="p-sub">حسب نوع العقار</div>
+                            </div>
+                        </div>
+                        <div class="chart-canvas-wrap pie-wrap"><canvas id="pieChart"></canvas></div>
+                        <div class="legend-row" id="pieLegend">
+                            <span class="li"><span class="sw" style="background:#1a4a6b"></span> فيلا</span>
+                            <span class="li"><span class="sw" style="background:#b98a1e"></span> شقة</span>
+                            <span class="li"><span class="sw" style="background:#2e7a5c"></span> استوديو</span>
+                            <span class="li"><span class="sw" style="background:#b14b2b"></span> جناح</span>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- ===== ACTIVITY + TOP CLIENTS ===== -->
+                <div class="lower-grid">
+                    <div class="panel activity fade-up" style="animation-delay:0.16s">
+                        <div class="head">
+                            <h3>النشاط الأخير</h3>
+                            <a href="#">عرض الكل</a>
+                        </div>
+                        <div class="list" id="activityList">
+                            <div class="empty-state"><i class="fas fa-clock"></i><p>جاري تحميل النشاطات...</p></div>
+                        </div>
+                    </div>
+
+                    <div class="panel toplist fade-up" style="animation-delay:0.2s">
+                        <div class="head">
+                            <h3>أفضل العملاء</h3>
+                            <a href="#">الكل</a>
+                        </div>
+                        <div id="topClientsList">
+                            <div class="empty-state"><i class="fas fa-users"></i><p>جاري تحميل العملاء...</p></div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-
-            <!-- ===== STATS ===== -->
-            <div class="stats-wrap">
-                <div class="stats">
-                    <div class="stat-card fade-up loading" style="animation-delay:0.06s;--swatch:var(--prussian)">
-                        <div class="bar"></div>
-                        <div class="body">
-                            <div class="label"><i class="fas fa-wallet"></i> إجمالي الإيرادات</div>
-                            <div class="number" id="totalRevenue"><span class="loading-text">جاري التحميل...</span></div>
-                            <div class="foot">
-                                <span class="change up"><i class="fas fa-arrow-up"></i> 0%</span>
-                                <span class="spark"><canvas id="spark1"></canvas></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="stat-card fade-up loading" style="animation-delay:0.09s;--swatch:var(--ink-3)">
-                        <div class="bar"></div>
-                        <div class="body">
-                            <div class="label"><i class="fas fa-file-invoice"></i> إجمالي الحجوزات</div>
-                            <div class="number" id="totalBookings"><span class="loading-text">جاري التحميل...</span></div>
-                            <div class="foot">
-                                <span class="change up"><i class="fas fa-arrow-up"></i> 0%</span>
-                                <span class="spark"><canvas id="spark2"></canvas></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="stat-card fade-up loading" style="animation-delay:0.12s;--swatch:var(--viridian)">
-                        <div class="bar"></div>
-                        <div class="body">
-                            <div class="label"><i class="fas fa-users"></i> إجمالي العملاء</div>
-                            <div class="number" id="totalClients"><span class="loading-text">جاري التحميل...</span></div>
-                            <div class="foot">
-                                <span class="change up"><i class="fas fa-arrow-up"></i> 0%</span>
-                                <span class="spark"><canvas id="spark3"></canvas></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="stat-card fade-up loading" style="animation-delay:0.15s;--swatch:var(--oxide)">
-                        <div class="bar"></div>
-                        <div class="body">
-                            <div class="label"><i class="fas fa-clock"></i> حجوزات قادمة</div>
-                            <div class="number" id="upcomingBookings"><span class="loading-text">جاري التحميل...</span></div>
-                            <div class="foot">
-                                <span class="change up"><i class="fas fa-arrow-up"></i> 0%</span>
-                                <span class="spark"><canvas id="spark4"></canvas></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="stat-card fade-up loading" style="animation-delay:0.18s;--swatch:var(--gold)">
-                        <div class="bar" style="background:var(--gold-gradient)"></div>
-                        <div class="body">
-                            <div class="label"><i class="fas fa-hand-holding-heart" style="color:var(--gold);"></i> عمولة أبو زيد</div>
-                            <div class="number" id="totalCommission"><span class="loading-text">جاري التحميل...</span></div>
-                            <div class="foot">
-                                <span class="change up"><i class="fas fa-arrow-up"></i> 0%</span>
-                                <span class="spark"><canvas id="spark5"></canvas></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ===== CHARTS GRID (Bar + Pie side by side) ===== -->
-            <div class="charts-grid">
-
-                <!-- ===== BAR CHART ===== -->
-                <div class="panel fade-up" style="animation-delay:0.12s">
-                    <div class="p-head">
-                        <div>
-                            <div class="p-title">أداء الحجوزات الشهري</div>
-                            <div class="p-sub">مقارنة الإيرادات والإشغال خلال السنة</div>
-                        </div>
-                        <div class="tabs">
-                            <button class="active" data-range="6">٦ أشهر</button>
-                            <button data-range="12">١٢ شهر</button>
-                        </div>
-                    </div>
-                    <div class="chart-canvas-wrap"><canvas id="salesChart"></canvas></div>
-                    <div class="legend-row">
-                        <span class="li"><span class="sw" style="background:var(--prussian)"></span> الإيرادات</span>
-                        <span class="li"><span class="sw" style="background:var(--oxide)"></span> الإشغال</span>
-                    </div>
-                </div>
-
-                <!-- ===== PIE CHART ===== -->
-                <div class="panel fade-up" style="animation-delay:0.15s">
-                    <div class="p-head">
-                        <div>
-                            <div class="p-title">توزيع الإشغال</div>
-                            <div class="p-sub">حسب نوع العقار</div>
-                        </div>
-                    </div>
-                    <div class="chart-canvas-wrap pie-wrap"><canvas id="pieChart"></canvas></div>
-                    <div class="legend-row" id="pieLegend">
-                        <span class="li"><span class="sw" style="background:#1a4a6b"></span> فيلا</span>
-                        <span class="li"><span class="sw" style="background:#b98a1e"></span> شقة</span>
-                        <span class="li"><span class="sw" style="background:#2e7a5c"></span> استوديو</span>
-                        <span class="li"><span class="sw" style="background:#b14b2b"></span> جناح</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ===== ACTIVITY + TOP CLIENTS ===== -->
-            <div class="lower-grid">
-                <div class="panel activity fade-up" style="animation-delay:0.16s">
-                    <div class="head">
-                        <h3>النشاط الأخير</h3>
-                        <a href="#">عرض الكل</a>
-                    </div>
-                    <div class="list" id="activityList">
-                        <div class="empty-state"><i class="fas fa-clock"></i><p>جاري تحميل النشاطات...</p></div>
-                    </div>
-                </div>
-
-                <div class="panel toplist fade-up" style="animation-delay:0.2s">
-                    <div class="head">
-                        <h3>أفضل العملاء</h3>
-                        <a href="#">الكل</a>
-                    </div>
-                    <div id="topClientsList">
-                        <div class="empty-state"><i class="fas fa-users"></i><p>جاري تحميل العملاء...</p></div>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </div>
 
