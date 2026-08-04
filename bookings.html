@@ -59,6 +59,7 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        /* خلفية محايدة */
         body::before {
             content: '';
             position: fixed; inset: 0; pointer-events: none; z-index: 2000;
@@ -447,7 +448,7 @@
                     <div class="name">Admin</div>
                     <div class="role">مدير النظام</div>
                 </div>
-                <a href="#" class="logout" title="تسجيل الخروج"><i class="fas fa-arrow-right-from-bracket"></i></a>
+                <a href="#" class="logout" title="تسجيل الخروج" onclick="logoutUser()"><i class="fas fa-arrow-right-from-bracket"></i></a>
             </div>
         </div>
     </nav>
@@ -470,8 +471,8 @@
                 <button class="refresh-btn" id="refreshBtn"><i class="fas fa-rotate"></i><span>تحديث</span></button>
                 <button class="notif" id="notifBtn"><i class="fas fa-bell"></i></button>
                 <div class="profile">
-                    <div class="avatar">أ</div>
-                    <div class="name">Admin<small>مدير النظام</small></div>
+                    <div class="avatar" id="profileAvatar">أ</div>
+                    <div class="name" id="profileName">Admin<small>مدير النظام</small></div>
                     <i class="fas fa-chevron-down"></i>
                 </div>
             </div>
@@ -545,6 +546,34 @@
     </a>
 
     <script>
+        /* ============================================================
+           التحقق من تسجيل الدخول
+           ============================================================ */
+        var user = JSON.parse(localStorage.getItem('user') || '{}');
+        if (!user || !user.email) {
+            window.location.href = 'login.html';
+        }
+
+        // عرض اسم المستخدم في الـ Header
+        var profileName = document.getElementById('profileName');
+        var profileAvatar = document.getElementById('profileAvatar');
+        if (user && user.name) {
+            profileName.innerHTML = user.name + '<small>' + (user.role === 'admin' ? 'مدير النظام' : 'مستخدم') + '</small>';
+            profileAvatar.textContent = user.name.charAt(0) || 'أ';
+        }
+
+        /**
+         * ============================================================
+         * تسجيل الخروج
+         * ============================================================
+         */
+        function logoutUser() {
+            if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
+                localStorage.removeItem('user');
+                window.location.href = 'login.html';
+            }
+        }
+
         /* ============================================================
            SIDEBAR TOGGLE
            ============================================================ */
