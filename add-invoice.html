@@ -1754,6 +1754,37 @@
             color: var(--ink-mute);
             font-size: 0.75rem;
         }
+
+        /* ============================================================
+           PROPERTIES SELECT
+           ============================================================ */
+        .property-select {
+            width: 100%;
+            padding: 7px 12px;
+            border-radius: var(--radius-sm);
+            border: 1.5px solid var(--line);
+            background: var(--surface-muted);
+            color: var(--ink);
+            font-size: 0.8rem;
+            font-family: var(--font-display);
+            transition: all 0.2s ease;
+            outline: none;
+            height: 38px;
+        }
+        .property-select:focus {
+            border-color: var(--accent);
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(221, 159, 46, 0.15);
+        }
+        .property-select option {
+            background: #ffffff;
+            color: var(--ink);
+        }
+        .property-select:disabled {
+            background: repeating-linear-gradient(135deg, #eef0ee, #eef0ee 6px, #e6e9e6 6px, #e6e9e6 12px);
+            color: var(--ink-soft);
+            border-style: dashed;
+        }
     </style>
 </head>
 <body>
@@ -1881,7 +1912,7 @@
                             <i class="fas fa-search"></i> البحث عن فاتورة
                         </div>
                         <div class="search-row">
-                            <input type="text" id="searchInvoiceInput" placeholder="رقم الفاتورة أو رقم الحجز..." />
+                            <input type="text" id="searchInvoiceInput" placeholder="رقم الفاتورة..." />
                             <button class="btn-search-invoice" id="btnSearchInvoice">
                                 <i class="fas fa-search"></i> <span>بحث</span>
                             </button>
@@ -1927,23 +1958,17 @@
                         <span class="dot"></span> تفاصيل الحجز
                     </div>
 
-                    <!-- Booking Row -->
+                    <!-- Booking Row (بدون رقم الحجز) -->
                     <div class="form-row booking-row">
                         <div class="form-group">
-                            <label>رقم الحجز <span class="required">*</span></label>
-                            <input type="number" id="bookingNumber" placeholder="رقم الحجز" />
+                            <label>نوع العقار <span class="required">*</span></label>
+                            <select id="propertyType" class="property-select">
+                                <option value="">جاري تحميل العقارات...</option>
+                            </select>
                         </div>
                         <div class="form-group">
-                            <label>نوع العقار <span class="required">*</span></label>
-                            <select id="propertyType">
-                                <option value="">اختر العقار</option>
-                                <option value="شاليه رقم 1">شاليه رقم 1</option>
-                                <option value="شاليه رقم 2">شاليه رقم 2</option>
-                                <option value="شاليه رقم 3">شاليه رقم 3</option>
-                                <option value="شاليه رقم 4">شاليه رقم 4</option>
-                                <option value="المزرعة">المزرعة</option>
-                                <option value="عام لكافة العقارات">عام لكافة العقارات</option>
-                            </select>
+                            <label>السعر اليومي <span class="required">*</span></label>
+                            <input type="number" id="dailyPrice" placeholder="0.00" />
                         </div>
                     </div>
 
@@ -1959,15 +1984,17 @@
                         </div>
                     </div>
 
-                    <!-- Nights and Daily Price -->
                     <div class="form-row small-fields">
                         <div class="form-group">
                             <label>عدد الأيام <span class="auto-badge">تلقائي</span></label>
                             <input type="text" id="nights" readonly />
                         </div>
                         <div class="form-group">
-                            <label>السعر اليومي <span class="required">*</span></label>
-                            <input type="number" id="dailyPrice" placeholder="0.00" />
+                            <label>نوع الإقامة</label>
+                            <select id="stayType" class="property-select">
+                                <option value="مبيت">مبيت</option>
+                                <option value="بدون مبيت">بدون مبيت</option>
+                            </select>
                         </div>
                     </div>
 
@@ -2001,6 +2028,21 @@
                         <div class="form-group">
                             <label>المتبقي <span class="auto-badge">تلقائي</span></label>
                             <input type="text" id="remainingAmount" readonly />
+                        </div>
+                    </div>
+
+                    <div class="form-row financial-row" style="margin-top:4px;">
+                        <div class="form-group">
+                            <label>الإجمالي <span class="auto-badge">تلقائي</span></label>
+                            <input type="text" id="totalAmountDisplay" readonly style="font-weight:700;color:var(--teal);" />
+                        </div>
+                        <div class="form-group">
+                            <label>الصافي <span class="auto-badge">تلقائي</span></label>
+                            <input type="text" id="netAmountDisplay" readonly style="font-weight:700;color:var(--accent-ink);" />
+                        </div>
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <div style="height:38px;"></div>
                         </div>
                     </div>
 
@@ -2038,7 +2080,6 @@
                                 <thead>
                                     <tr>
                                         <th style="width:25px;">#</th>
-                                        <th style="width:40px;">رقم الحجز</th>
                                         <th style="text-align:right;">نوع العقار</th>
                                         <th style="width:40px;">عدد الأيام</th>
                                         <th style="width:50px;">السعر اليومي</th>
@@ -2048,7 +2089,7 @@
                                 </thead>
                                 <tbody id="itemsBody">
                                     <tr>
-                                        <td colspan="7">
+                                        <td colspan="6">
                                             <div class="empty-items">
                                                 <i class="fas fa-box-open"></i>
                                                 <p>لا توجد حجوزات مضافة</p>
@@ -2178,7 +2219,6 @@
         var invoiceDate = document.getElementById('invoiceDate');
         var clientName = document.getElementById('clientName');
         var clientPhone = document.getElementById('clientPhone');
-        var bookingNumber = document.getElementById('bookingNumber');
         var propertyType = document.getElementById('propertyType');
         var checkIn = document.getElementById('checkIn');
         var checkOut = document.getElementById('checkOut');
@@ -2201,6 +2241,9 @@
         var itemsCount = document.getElementById('itemsCount');
         var searchInvoiceInput = document.getElementById('searchInvoiceInput');
         var btnSearchInvoice = document.getElementById('btnSearchInvoice');
+        var totalAmountDisplay = document.getElementById('totalAmountDisplay');
+        var netAmountDisplay = document.getElementById('netAmountDisplay');
+        var stayType = document.getElementById('stayType');
 
         /**
          * ============================================================
@@ -2214,6 +2257,7 @@
         var clientsList = [];
         var selectedClientId = null;
         var selectedSuggestionIndex = -1;
+        var propertiesList = [];
 
         var settings = {
             companyName: 'منتجع حياله',
@@ -2319,7 +2363,7 @@
 
         /**
          * ============================================================
-         * INVOICE NUMBER GENERATOR - Supabase (المعدل)
+         * INVOICE NUMBER GENERATOR - Supabase
          * ============================================================
          */
         async function generateInvoiceNumber() {
@@ -2330,8 +2374,7 @@
             var dateStr = year + month + day;
 
             try {
-                // جلب جميع أرقام الفواتير من Supabase
-                var response = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=invoice_number', {
+                var response = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=invoice_number&order=invoice_number.desc&limit=1', {
                     headers: {
                         'apikey': SUPABASE_ANON_KEY,
                         'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
@@ -2345,7 +2388,6 @@
                 var data = await response.json();
                 var maxNumber = 0;
 
-                // البحث عن أكبر رقم فاتورة
                 if (data && data.length > 0) {
                     data.forEach(function(item) {
                         if (item.invoice_number) {
@@ -2368,12 +2410,49 @@
 
             } catch (error) {
                 console.error('❌ خطأ في توليد رقم الفاتورة:', error);
-                // Fallback: استخدام localStorage
                 var lastNumber = parseInt(localStorage.getItem('hayala_last_invoice_number')) || 0;
                 var newNumber = lastNumber + 1;
                 var num = String(newNumber).padStart(4, '0');
                 invoiceNumber.value = 'INV-' + dateStr + '-' + num;
                 localStorage.setItem('hayala_last_invoice_number', newNumber);
+            }
+        }
+
+        /**
+         * ============================================================
+         * LOAD PROPERTIES FROM SUPABASE
+         * ============================================================
+         */
+        async function loadProperties() {
+            try {
+                var response = await fetch(SUPABASE_URL + '/rest/v1/properties?select=name&order=name', {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('فشل في جلب العقارات');
+                }
+
+                propertiesList = await response.json();
+                console.log('🏠 تم جلب العقارات:', propertiesList.length);
+
+                // تحديث الـ select
+                var select = document.getElementById('propertyType');
+                select.innerHTML = '<option value="">اختر العقار</option>';
+                propertiesList.forEach(function(prop) {
+                    var option = document.createElement('option');
+                    option.value = prop.name;
+                    option.textContent = prop.name;
+                    select.appendChild(option);
+                });
+
+            } catch (error) {
+                console.error('❌ خطأ في جلب العقارات:', error);
+                var select = document.getElementById('propertyType');
+                select.innerHTML = '<option value="">خطأ في تحميل العقارات</option>';
             }
         }
 
@@ -2392,30 +2471,50 @@
             } else {
                 nights.value = 0;
             }
+            calculateFinancials();
         }
 
         checkIn.addEventListener('change', calculateNights);
         checkOut.addEventListener('change', calculateNights);
+        dailyPrice.addEventListener('input', calculateFinancials);
+        discountAmount.addEventListener('input', calculateFinancials);
+        paidAmount.addEventListener('input', calculateFinancials);
 
         /**
          * ============================================================
-         * CALCULATE REMAINING
+         * CALCULATE FINANCIALS (المحسوبات المالية)
          * ============================================================
          */
-        function calculateRemaining() {
-            var total = parseFloat(totalAmount.textContent) || 0;
+        function calculateFinancials() {
+            var nightCount = parseInt(nights.value) || 0;
+            var price = parseFloat(dailyPrice.value) || 0;
             var discount = parseFloat(discountAmount.value) || 0;
             var paid = parseFloat(paidAmount.value) || 0;
-            var netTotal = total - discount;
-            var remaining = netTotal - paid;
-            remainingAmount.value = remaining.toFixed(2);
-            displayDiscount.textContent = discount.toFixed(2);
-            displayPaid.textContent = paid.toFixed(2);
-            displayRemaining.textContent = remaining.toFixed(2);
-        }
 
-        discountAmount.addEventListener('input', calculateRemaining);
-        paidAmount.addEventListener('input', calculateRemaining);
+            var total = nightCount * price;
+            var net = total - discount;
+            var remaining = net - paid;
+
+            // تحديث الحقول
+            totalAmountDisplay.value = total.toFixed(2) + ' ر.س';
+            netAmountDisplay.value = net.toFixed(2) + ' ر.س';
+            remainingAmount.value = remaining.toFixed(2);
+
+            // تحديث المجاميع في الأسفل
+            var totalAll = 0;
+            bookings.forEach(function(item) {
+                totalAll += item.total;
+            });
+
+            var totalDiscount = parseFloat(discountAmount.value) || 0;
+            var totalPaid = parseFloat(paidAmount.value) || 0;
+            var totalRemaining = (totalAll - totalDiscount) - totalPaid;
+
+            totalAmount.textContent = totalAll.toFixed(2);
+            displayDiscount.textContent = totalDiscount.toFixed(2);
+            displayPaid.textContent = totalPaid.toFixed(2);
+            displayRemaining.textContent = totalRemaining.toFixed(2);
+        }
 
         /**
          * ============================================================
@@ -2423,19 +2522,14 @@
          * ============================================================
          */
         btnAddBooking.addEventListener('click', function() {
-            var number = bookingNumber.value.trim();
             var property = propertyType.value;
             var checkInDate = checkIn.value;
             var checkOutDate = checkOut.value;
             var nightCount = parseInt(nights.value) || 0;
             var price = parseFloat(dailyPrice.value) || 0;
             var total = nightCount * price;
+            var stayTypeValue = stayType.value;
 
-            if (!number) {
-                showToast('⚠️ تنبيه', 'يرجى إدخال رقم الحجز', 'error');
-                bookingNumber.focus();
-                return;
-            }
             if (!property) {
                 showToast('⚠️ تنبيه', 'يرجى اختيار نوع العقار', 'error');
                 propertyType.focus();
@@ -2456,7 +2550,6 @@
             }
 
             var bookingData = {
-                number: number,
                 property: property,
                 checkIn: checkInDate,
                 checkOut: checkOutDate,
@@ -2464,7 +2557,8 @@
                 dailyPrice: price,
                 total: total,
                 checkInTime: checkInTime.value,
-                checkOutTime: checkOutTime.value
+                checkOutTime: checkOutTime.value,
+                stayType: stayTypeValue
             };
 
             if (editIndex >= 0) {
@@ -2479,12 +2573,11 @@
             renderBookings();
             clearBookingFields();
             calculateTotals();
-            calculateRemaining();
-            bookingNumber.focus();
+            calculateFinancials();
+            propertyType.focus();
         });
 
         function clearBookingFields() {
-            bookingNumber.value = '';
             propertyType.value = '';
             var today = new Date().toISOString().split('T')[0];
             checkIn.value = today;
@@ -2493,6 +2586,7 @@
             dailyPrice.value = '';
             checkInTime.value = '';
             checkOutTime.value = '';
+            stayType.value = 'مبيت';
         }
 
         /**
@@ -2504,7 +2598,7 @@
             if (bookings.length === 0) {
                 itemsBody.innerHTML = `
                     <tr>
-                        <td colspan="7">
+                        <td colspan="6">
                             <div class="empty-items">
                                 <i class="fas fa-box-open"></i>
                                 <p>لا توجد حجوزات مضافة</p>
@@ -2522,7 +2616,6 @@
                 html += `
                     <tr>
                         <td class="num">${index + 1}</td>
-                        <td class="num">${item.number}</td>
                         <td style="text-align:right;">${item.property}</td>
                         <td class="num">${item.nights}</td>
                         <td class="money">${item.dailyPrice.toFixed(2)}</td>
@@ -2548,7 +2641,7 @@
             bookings.splice(index, 1);
             renderBookings();
             calculateTotals();
-            calculateRemaining();
+            calculateFinancials();
             showToast('🗑️ حذف', 'تم حذف الحجز', 'warning');
         }
 
@@ -2559,7 +2652,6 @@
          */
         function editBooking(index) {
             var item = bookings[index];
-            bookingNumber.value = item.number;
             propertyType.value = item.property;
             checkIn.value = item.checkIn;
             checkOut.value = item.checkOut;
@@ -2567,9 +2659,10 @@
             dailyPrice.value = item.dailyPrice;
             checkInTime.value = item.checkInTime || '';
             checkOutTime.value = item.checkOutTime || '';
+            stayType.value = item.stayType || 'مبيت';
             editIndex = index;
             btnAddBooking.innerHTML = '<i class="fas fa-edit"></i> تحديث حجز';
-            bookingNumber.focus();
+            propertyType.focus();
             showToast('✏️ تعديل', 'قم بتعديل البيانات ثم اضغط تحديث', 'warning');
         }
 
@@ -2584,7 +2677,7 @@
                 total += item.total;
             });
             totalAmount.textContent = total.toFixed(2);
-            calculateRemaining();
+            calculateFinancials();
         }
 
         /**
@@ -2808,7 +2901,6 @@
                             margin-top: 3px;
                         }
 
-                        /* ===== NOTES SECTION FOR PRINT WINDOW ===== */
                         .notes-section {
                             margin-top: 16px;
                             padding-top: 12px;
@@ -2911,7 +3003,9 @@
             isEditingInvoice = false;
             editingInvoiceNumber = '';
             searchInvoiceInput.value = '';
-            calculateRemaining();
+            totalAmountDisplay.value = '';
+            netAmountDisplay.value = '';
+            calculateFinancials();
             showToast('🔄 جديد', 'تم تجهيز فاتورة جديدة', 'warning');
         }
 
@@ -2943,7 +3037,7 @@
 
         /**
          * ============================================================
-         * CLIENT SUGGESTIONS SYSTEM - مع التنقل بالأسهم
+         * CLIENT SUGGESTIONS SYSTEM
          * ============================================================
          */
         var clientSuggestions = document.getElementById('clientSuggestions');
@@ -3151,7 +3245,7 @@
         async function searchInvoice() {
             var searchTerm = searchInvoiceInput.value.trim();
             if (!searchTerm) {
-                showToast('⚠️ تنبيه', 'يرجى إدخال رقم الفاتورة أو رقم الحجز', 'error');
+                showToast('⚠️ تنبيه', 'يرجى إدخال رقم الفاتورة', 'error');
                 return;
             }
 
@@ -3213,7 +3307,6 @@
             bookings = [];
             invoiceData.forEach(function(item) {
                 bookings.push({
-                    number: item.booking_number || '',
                     property: item.property_type || '',
                     checkIn: item.check_in || '',
                     checkOut: item.check_out || '',
@@ -3221,13 +3314,14 @@
                     dailyPrice: parseFloat(item.price_per_night) || 0,
                     total: parseFloat(item.total) || 0,
                     checkInTime: item.check_in_time || '',
-                    checkOutTime: item.check_out_time || ''
+                    checkOutTime: item.check_out_time || '',
+                    stayType: item.stay_type || 'مبيت'
                 });
             });
 
             renderBookings();
             calculateTotals();
-            calculateRemaining();
+            calculateFinancials();
             isEditingInvoice = true;
             editingInvoiceNumber = firstItem.invoice_number || '';
         }
@@ -3262,7 +3356,9 @@
             isEditingInvoice = false;
             editingInvoiceNumber = '';
             searchInvoiceInput.value = '';
-            calculateRemaining();
+            totalAmountDisplay.value = '';
+            netAmountDisplay.value = '';
+            calculateFinancials();
             showToast('🔄 إلغاء', 'تم تفريغ النموذج بالكامل', 'warning');
         });
 
@@ -3312,7 +3408,7 @@
             }
             if (bookings.length === 0) {
                 showToast('⚠️ تنبيه', 'يرجى إضافة حجز واحد على الأقل', 'error');
-                bookingNumber.focus();
+                propertyType.focus();
                 return;
             }
 
@@ -3362,12 +3458,6 @@
             try {
                 var warnings = [];
                 var bookingsToSave = invoiceData.bookings.map(function(item, index) {
-                    if (!item.number) {
-                        warnings.push('الحجز ' + (index + 1) + ': رقم الحجز فارغ');
-                    }
-                    if (!invoiceData.client) {
-                        warnings.push('الحجز ' + (index + 1) + ': اسم العميل فارغ');
-                    }
                     if (!item.property) {
                         warnings.push('الحجز ' + (index + 1) + ': نوع العقار فارغ');
                     }
@@ -3377,7 +3467,7 @@
 
                     return {
                         invoice_number: invoiceData.number || '',
-                        booking_number: item.number || '',
+                        booking_number: '',
                         invoice_date: invoiceData.date || new Date().toISOString().split('T')[0],
                         check_in: item.checkIn || null,
                         check_out: item.checkOut || null,
@@ -3390,7 +3480,12 @@
                         paid: parseFloat(invoiceData.paid) || 0,
                         remaining: parseFloat(invoiceData.remaining) || 0,
                         total: parseFloat(item.total) || 0,
-                        payment_status: parseFloat(invoiceData.remaining) <= 0 ? 'Fully Paid' : 'Balance Due'
+                        payment_status: parseFloat(invoiceData.remaining) <= 0 ? 'Fully Paid' : 'Balance Due',
+                        stay_type: item.stayType || 'مبيت',
+                        check_in_time: item.checkInTime || '',
+                        check_out_time: item.checkOutTime || '',
+                        time_note: '',
+                        notes: ''
                     };
                 });
 
@@ -3474,6 +3569,7 @@
          */
         document.addEventListener('DOMContentLoaded', function() {
             loadClientsForSuggestions();
+            loadProperties();
             console.log('🏕️ منتجع حياله - فاتورة المبيعات (Supabase)');
             console.log('📌 Ctrl+F للبحث عن فاتورة');
             console.log('📌 Ctrl+P لمعاينة الطباعة');
