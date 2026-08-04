@@ -179,15 +179,17 @@
         nav {
             display: flex;
             align-items: center;
-            gap: 22px;
+            gap: 8px;
+            flex-wrap: wrap;
         }
         nav a {
             color: var(--ink-mute);
             font-weight: 700;
-            font-size: 0.76rem;
+            font-size: 0.7rem;
             transition: 0.2s;
             position: relative;
             padding: 5px 0;
+            white-space: nowrap;
         }
         nav a::after {
             content: '';
@@ -1785,6 +1787,36 @@
             color: var(--ink-soft);
             border-style: dashed;
         }
+
+        /* ============================================================
+           DATE INPUT - تنسيق DD/MM/YYYY
+           ============================================================ */
+        input[type="date"] {
+            direction: ltr;
+            text-align: center;
+            font-family: var(--font-display);
+        }
+
+        input[type="date"]::-webkit-datetime-edit {
+            direction: rtl;
+            text-align: center;
+        }
+
+        input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+            direction: rtl;
+        }
+
+        input[type="date"]::-webkit-datetime-edit-day-field {
+            order: 1;
+        }
+
+        input[type="date"]::-webkit-datetime-edit-month-field {
+            order: 2;
+        }
+
+        input[type="date"]::-webkit-datetime-edit-year-field {
+            order: 3;
+        }
     </style>
 </head>
 <body>
@@ -1819,8 +1851,12 @@
                 </div>
                 <nav>
                     <a href="index.html">الرئيسية</a>
-                    <a href="#" class="active">فاتورة جديدة</a>
+                    <a href="add-invoice.html" class="active">فاتورة جديدة</a>
                     <a href="bookings.html">سجل الحجوزات</a>
+                    <a href="clients.html">العملاء</a>
+                    <a href="properties.html">العقارات</a>
+                    <a href="expenses.html">المصاريف</a>
+                    <a href="abuzeid.html">عمولة أبو زيد</a>
                     <a href="#">التقارير</a>
                 </nav>
                 <div class="header-actions">
@@ -1839,8 +1875,12 @@
             <div class="close-btn" id="closeMenu"><i class="fas fa-times"></i></div>
             <div class="menu-items">
                 <a href="index.html"><i class="fas fa-home"></i> الرئيسية</a>
-                <a href="#" class="active"><i class="fas fa-file-invoice"></i> فاتورة جديدة</a>
+                <a href="add-invoice.html" class="active"><i class="fas fa-file-invoice"></i> فاتورة جديدة</a>
                 <a href="bookings.html"><i class="fas fa-list"></i> سجل الحجوزات</a>
+                <a href="clients.html"><i class="fas fa-users"></i> العملاء</a>
+                <a href="properties.html"><i class="fas fa-building"></i> العقارات</a>
+                <a href="expenses.html"><i class="fas fa-money-bill-wave"></i> المصاريف</a>
+                <a href="abuzeid.html"><i class="fas fa-hand-holding-heart"></i> عمولة أبو زيد</a>
                 <a href="#"><i class="fas fa-chart-pie"></i> التقارير</a>
             </div>
         </div>
@@ -1855,7 +1895,7 @@
                     </a>
                 </li>
                 <li class="active">
-                    <a href="#">
+                    <a href="add-invoice.html">
                         <i class="fas fa-file-invoice"></i>
                         <span>فاتورة</span>
                     </a>
@@ -1867,9 +1907,15 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#">
-                        <i class="fas fa-chart-pie"></i>
-                        <span>التقارير</span>
+                    <a href="clients.html">
+                        <i class="fas fa-users"></i>
+                        <span>العملاء</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="properties.html">
+                        <i class="fas fa-building"></i>
+                        <span>العقارات</span>
                     </a>
                 </li>
             </ul>
@@ -2271,11 +2317,42 @@
 
         /**
          * ============================================================
+         * DATE FORMATTING FUNCTIONS
+         * ============================================================
+         */
+        function formatDateForDisplay(dateString) {
+            if (!dateString) return '-';
+            var parts = dateString.split('-');
+            if (parts.length === 3) {
+                return parts[2] + '/' + parts[1] + '/' + parts[0];
+            }
+            return dateString;
+        }
+
+        function formatDateForInput(dateString) {
+            if (!dateString) return '';
+            var parts = dateString.split('/');
+            if (parts.length === 3) {
+                return parts[2] + '-' + parts[1] + '-' + parts[0];
+            }
+            return dateString;
+        }
+
+        function getTodayFormatted() {
+            var today = new Date();
+            var day = String(today.getDate()).padStart(2, '0');
+            var month = String(today.getMonth() + 1).padStart(2, '0');
+            var year = today.getFullYear();
+            return year + '-' + month + '-' + day;
+        }
+
+        /**
+         * ============================================================
          * SET DEFAULT DATE
          * ============================================================
          */
         (function() {
-            var today = new Date().toISOString().split('T')[0];
+            var today = getTodayFormatted();
             invoiceDate.value = today;
             checkIn.value = today;
             checkOut.value = today;
@@ -2439,7 +2516,6 @@
                 propertiesList = await response.json();
                 console.log('🏠 تم جلب العقارات:', propertiesList.length);
 
-                // تحديث الـ select
                 var select = document.getElementById('propertyType');
                 select.innerHTML = '<option value="">اختر العقار</option>';
                 propertiesList.forEach(function(prop) {
@@ -2482,7 +2558,7 @@
 
         /**
          * ============================================================
-         * CALCULATE FINANCIALS (المحسوبات المالية)
+         * CALCULATE FINANCIALS
          * ============================================================
          */
         function calculateFinancials() {
@@ -2495,12 +2571,10 @@
             var net = total - discount;
             var remaining = net - paid;
 
-            // تحديث الحقول
             totalAmountDisplay.value = total.toFixed(2) + ' ر.س';
             netAmountDisplay.value = net.toFixed(2) + ' ر.س';
             remainingAmount.value = remaining.toFixed(2);
 
-            // تحديث المجاميع في الأسفل
             var totalAll = 0;
             bookings.forEach(function(item) {
                 totalAll += item.total;
@@ -2518,7 +2592,7 @@
 
         /**
          * ============================================================
-         * ADD BOOKING
+         * ADD BOOKING - زر الإضافة
          * ============================================================
          */
         btnAddBooking.addEventListener('click', function() {
@@ -2577,9 +2651,14 @@
             propertyType.focus();
         });
 
+        /**
+         * ============================================================
+         * CLEAR BOOKING FIELDS
+         * ============================================================
+         */
         function clearBookingFields() {
             propertyType.value = '';
-            var today = new Date().toISOString().split('T')[0];
+            var today = getTodayFormatted();
             checkIn.value = today;
             checkOut.value = today;
             nights.value = 0;
@@ -2591,7 +2670,7 @@
 
         /**
          * ============================================================
-         * RENDER BOOKINGS
+         * RENDER BOOKINGS - مع تنسيق التواريخ DD/MM/YYYY
          * ============================================================
          */
         function renderBookings() {
@@ -2779,7 +2858,6 @@
                     </div>
                 </div>
 
-                <!-- ===== NOTES SECTION ===== -->
                 <div class="notes-section">
                     <div class="notes-title">
                         <i class="fas fa-sticky-note"></i> ملاحظات
@@ -2997,7 +3075,7 @@
             bookNumber.value = '';
             discountAmount.value = '0';
             paidAmount.value = '';
-            var today = new Date().toISOString().split('T')[0];
+            var today = getTodayFormatted();
             invoiceDate.value = today;
             generateInvoiceNumber();
             isEditingInvoice = false;
@@ -3350,7 +3428,7 @@
             bookNumber.value = '';
             discountAmount.value = '0';
             paidAmount.value = '';
-            var today = new Date().toISOString().split('T')[0];
+            var today = getTodayFormatted();
             invoiceDate.value = today;
             generateInvoiceNumber();
             isEditingInvoice = false;
