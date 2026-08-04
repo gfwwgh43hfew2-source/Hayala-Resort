@@ -81,7 +81,7 @@
         ::-webkit-scrollbar-thumb { background: var(--ink-4); border-radius: 50px; }
 
         /* ==========================================================
-           SIDEBAR — نفس نظام الكود الذي يعمل
+           SIDEBAR — مغلقة افتراضياً على الموبايل
            ========================================================== */
         .sidebar-overlay {
             display: none;
@@ -101,7 +101,7 @@
         .sidebar {
             position: fixed;
             top: 0;
-            right: 0;
+            right: -280px;
             width: var(--sidebar-w);
             height: 100vh;
             background: var(--surface-2);
@@ -1717,6 +1717,22 @@
 
                 var users = usersResponse.ok ? await usersResponse.json() : [];
 
+                // 4. جلب بيانات دفعات أبو زيد من جدول abuzaid_payments
+                var abuZaidResponse = await fetch(SUPABASE_URL + '/rest/v1/abuzaid_payments?select=amount', {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                    }
+                });
+
+                var abuZaidPayments = [];
+                if (abuZaidResponse.ok) {
+                    abuZaidPayments = await abuZaidResponse.json();
+                    console.log('✅ تم جلب دفعات أبو زيد:', abuZaidPayments.length);
+                } else {
+                    console.warn('⚠️ فشل في جلب دفعات أبو زيد، سيتم استخدام بيانات فارغة');
+                }
+
                 // ===== معالجة البيانات =====
                 var totalRevenue = 0;
                 var totalBookings = bookings.length;
@@ -1779,6 +1795,13 @@
                     }
                 });
 
+                // حساب إجمالي عمولة أبو زيد من جدول abuzaid_payments
+                var totalAbuZaidCommission = 0;
+                abuZaidPayments.forEach(function(payment) {
+                    var amount = parseFloat(payment.amount) || 0;
+                    totalAbuZaidCommission += amount;
+                });
+
                 // ===== تحديث الإحصائيات =====
                 var totalRevenueEl = document.getElementById('totalRevenue');
                 if (totalRevenueEl) {
@@ -1800,11 +1823,10 @@
                     upcomingBookingsEl.textContent = futureBookings.toLocaleString();
                 }
 
-                // عمولة أبو زيد (20% من صافي الأرباح)
+                // عرض عمولة أبو زيد من جدول abuzaid_payments
                 var totalCommissionEl = document.getElementById('totalCommission');
                 if (totalCommissionEl) {
-                    var commission = totalRevenue * 0.2;
-                    totalCommissionEl.textContent = commission.toLocaleString() + ' ر.س';
+                    totalCommissionEl.textContent = totalAbuZaidCommission.toLocaleString() + ' ر.س';
                 }
 
                 // ===== تحديث الـ Charts =====
