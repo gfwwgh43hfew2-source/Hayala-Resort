@@ -5,6 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>سجل الحجوزات · منتجع حياله</title>
 
+    <!-- ============================================================
+    التحقق من تسجيل الدخول - قبل تحميل أي شيء
+    ============================================================ -->
+    <script>
+        /* ============================================================
+           منع الوصول من البداية - التحقق من تسجيل الدخول
+           ============================================================ */
+        (function checkAuth() {
+            var user = JSON.parse(localStorage.getItem('user') || '{}');
+            if (!user || !user.email) {
+                // التوجيه فوراً بدون تحميل الصفحة
+                window.location.replace('login.html');
+                return;
+            }
+            // تخزين المستخدم للاستخدام لاحقاً
+            window.currentUser = user;
+        })();
+    </script>
+
     <link rel="shortcut icon" href="#">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,7 +31,7 @@
 
     <style>
         /* ==========================================================
-           DESIGN SYSTEM — منتجع حياله (موحّد مع لوحة التحكم)
+           DESIGN SYSTEM — منتجع حياله
            ========================================================== */
         :root {
             --canvas:      #f6f3ec;
@@ -59,7 +78,6 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* خلفية محايدة */
         body::before {
             content: '';
             position: fixed; inset: 0; pointer-events: none; z-index: 2000;
@@ -547,12 +565,9 @@
 
     <script>
         /* ============================================================
-           التحقق من تسجيل الدخول
+           استخدام المستخدم المخزن من التحقق الأولي
            ============================================================ */
-        var user = JSON.parse(localStorage.getItem('user') || '{}');
-        if (!user || !user.email) {
-            window.location.href = 'login.html';
-        }
+        var user = window.currentUser || JSON.parse(localStorage.getItem('user') || '{}');
 
         // عرض اسم المستخدم في الـ Header والـ Sidebar
         var profileName = document.getElementById('profileName');
@@ -578,7 +593,7 @@
         function logoutUser() {
             if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
                 localStorage.removeItem('user');
-                window.location.href = 'login.html';
+                window.location.replace('login.html');
             }
         }
 
