@@ -1361,8 +1361,8 @@
                     <button class="btn btn-success" onclick="openAddPaymentModal()">
                         <i class="fas fa-plus"></i> إضافة دفعة
                     </button>
-                    <button class="btn btn-outline" onclick="resetDemoData()">
-                        <i class="fas fa-sync-alt"></i> استعادة تجريبي
+                    <button class="btn btn-outline" onclick="loadDashboard()">
+                        <i class="fas fa-sync-alt"></i> تحديث
                     </button>
                     <button class="btn btn-primary" onclick="window.print()">
                         <i class="fas fa-print"></i> طباعة
@@ -1374,17 +1374,17 @@
             <div class="filters-grid">
                 <div class="filter-item">
                     <label for="month">الشهر</label>
-                    <select id="month" onchange="renderDashboard()"></select>
+                    <select id="month" onchange="loadDashboard()"></select>
                 </div>
 
                 <div class="filter-item">
                     <label for="year">السنة</label>
-                    <input id="year" type="number" min="2020" max="2100" value="2026" onchange="renderDashboard()" />
+                    <input id="year" type="number" min="2020" max="2100" value="2026" onchange="loadDashboard()" />
                 </div>
 
                 <div class="filter-item">
                     <label for="commissionRate">نسبة العمولة (%)</label>
-                    <input id="commissionRate" type="number" min="0" max="100" step="0.1" value="20" onchange="renderDashboard()" />
+                    <input id="commissionRate" type="number" min="0" max="100" step="0.1" value="20" onchange="loadDashboard()" />
                 </div>
 
                 <div class="filter-item">
@@ -1437,7 +1437,7 @@
             </div>
 
             <div class="table-note">
-                هذا النموذج يحاكي منطق ملف Excel: الفواتير الشهرية - المصروفات التشغيلية = أساس العمولة، ثم يتم حساب عمولة أبو زيد والمتبقي.
+                يتم حساب العمولة: (إجمالي الفواتير - المصروفات التشغيلية) × نسبة العمولة
             </div>
 
         </div>
@@ -1507,7 +1507,16 @@
 
         /**
          * ============================================================
-         * SIDEBAR TOGGLE — نفس آلية index.html و bookings.html
+         * SUPABASE CONFIGURATION
+         * ============================================================
+         */
+        var SUPABASE_URL = 'https://zwuvcblrrrriuylajvba.supabase.co';
+        var SUPABASE_ANON_KEY = 'sb_publishable_YFqwTEs-W_kprUgt4bgpCQ_tf5vVeFa';
+        var PAYMENTS_TABLE = 'abuzaid_payments';
+
+        /**
+         * ============================================================
+         * SIDEBAR TOGGLE — نفس آلية جميع الصفحات السابقة
          * ============================================================
          */
         var navToggle = document.getElementById('navToggle');
@@ -1571,92 +1580,18 @@
 
         /**
          * ============================================================
-         * البيانات - محاكاة (تُستبدل بـ API لاحقاً)
+         * المتغيرات العامة
          * ============================================================
          */
+        var allPayments = [];
+        var allBookings = [];
+        var allExpenses = [];
+        var monthlyPayments = [];
+
         var months = [
             "يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو",
             "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
         ];
-
-        var storageKey = "abuZaidCommissionDashboard";
-
-        var demoData = {
-            bookings: [
-                { id: 'b1', date: "2026-07-04", description: "فواتير شهر يوليو", netRevenue: 13150 }
-            ],
-            expenses: [
-                { id: 'e1', date: "2026-07-10", description: "مصروفات تشغيلية لشهر يوليو", category: "مصروف تشغيلي", amount: 2342 }
-            ],
-            payments: []
-        };
-
-        var data = loadData();
-
-        function loadData() {
-            var saved = localStorage.getItem(storageKey);
-            return saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(demoData));
-        }
-
-        function saveData() {
-            localStorage.setItem(storageKey, JSON.stringify(data));
-        }
-
-        function resetDemoData() {
-            if (!confirm("هل تريد استعادة البيانات التجريبية؟ سيتم فقدان التعديلات الحالية.")) return;
-            data = JSON.parse(JSON.stringify(demoData));
-            saveData();
-            renderDashboard();
-            showToast('✅ تم الاستعادة', 'تم استعادة البيانات التجريبية بنجاح', 'success');
-        }
-
-        /**
-         * ============================================================
-         * دوال مساعدة
-         * ============================================================
-         */
-        function getSelectedPeriod() {
-            var month = Number(document.getElementById('month').value);
-            var year = Number(document.getElementById('year').value);
-            var start = new Date(year, month, 1);
-            var end = new Date(year, month + 1, 1);
-            return { month: month, year: year, start: start, end: end };
-        }
-
-        function isWithinSelectedMonth(dateText, period) {
-            var date = new Date(dateText);
-            return date >= period.start && date < period.end;
-        }
-
-        function sum(values) {
-            return values.reduce(function(total, value) { return total + Number(value || 0); }, 0);
-        }
-
-        function formatCurrency(value) {
-            return new Intl.NumberFormat("ar-SA", { maximumFractionDigits: 0 }).format(value) + " ر.س";
-        }
-
-        function formatDate(dateText) {
-            if (!dateText) return '-';
-            return new Intl.DateTimeFormat("ar-SA", {
-                year: "numeric",
-                month: "short",
-                day: "numeric"
-            }).format(new Date(dateText));
-        }
-
-        function escapeHtml(value) {
-            return String(value)
-                .replaceAll("&", "&amp;")
-                .replaceAll("<", "&lt;")
-                .replaceAll(">", "&gt;")
-                .replaceAll('"', "&quot;")
-                .replaceAll("'", "&#039;");
-        }
-
-        function generateId() {
-            return 'id-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6);
-        }
 
         /**
          * ============================================================
@@ -1705,7 +1640,148 @@
             select.innerHTML = months.map(function(name, index) {
                 return '<option value="' + index + '">' + name + '</option>';
             }).join('');
-            select.value = 6; // يوليو
+            var today = new Date();
+            select.value = today.getMonth();
+        }
+
+        /**
+         * ============================================================
+         * دوال مساعدة
+         * ============================================================
+         */
+        function getSelectedPeriod() {
+            var month = Number(document.getElementById('month').value);
+            var year = Number(document.getElementById('year').value);
+            var start = new Date(year, month, 1);
+            var end = new Date(year, month + 1, 1);
+            return { month: month, year: year, start: start, end: end };
+        }
+
+        function isWithinSelectedMonth(dateStr, period) {
+            if (!dateStr) return false;
+            var date = new Date(dateStr);
+            return date >= period.start && date < period.end;
+        }
+
+        function sum(values) {
+            return values.reduce(function(total, value) { return total + Number(value || 0); }, 0);
+        }
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat("ar-SA", { maximumFractionDigits: 0 }).format(value) + " ر.س";
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+            return new Intl.DateTimeFormat("ar-SA", {
+                year: "numeric",
+                month: "short",
+                day: "numeric"
+            }).format(new Date(dateStr));
+        }
+
+        function escapeHtml(value) {
+            return String(value)
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+        }
+
+        function generateId() {
+            return 'id-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6);
+        }
+
+        /**
+         * ============================================================
+         * جلب البيانات من Supabase
+         * ============================================================
+         */
+        async function loadDashboard() {
+            var kpiContainer = document.getElementById('kpiContainer');
+            var paymentsContainer = document.getElementById('paymentsContainer');
+            var detailsContainer = document.getElementById('detailsContainer');
+
+            kpiContainer.innerHTML = `
+                <div class="empty-state">
+                    <div class="spinner"></div>
+                    <p>جاري تحميل المؤشرات...</p>
+                </div>
+            `;
+            paymentsContainer.innerHTML = `
+                <div class="empty-state">
+                    <div class="spinner"></div>
+                    <p>جاري تحميل البيانات...</p>
+                </div>
+            `;
+            detailsContainer.innerHTML = `
+                <div class="empty-state">
+                    <div class="spinner"></div>
+                    <p>جاري تحميل البيانات...</p>
+                </div>
+            `;
+
+            try {
+                // 1. جلب الحجوزات (الفواتير)
+                var bookingsResponse = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=invoice_date,total,discount', {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                    }
+                });
+
+                if (!bookingsResponse.ok) {
+                    throw new Error('فشل في جلب الفواتير');
+                }
+                allBookings = await bookingsResponse.json();
+
+                // 2. جلب المصروفات التشغيلية
+                var expensesResponse = await fetch(SUPABASE_URL + '/rest/v1/expenses?select=date,amount,category', {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                    }
+                });
+
+                if (!expensesResponse.ok) {
+                    throw new Error('فشل في جلب المصروفات');
+                }
+                allExpenses = await expensesResponse.json();
+
+                // 3. جلب دفعات أبو زيد
+                var paymentsResponse = await fetch(SUPABASE_URL + '/rest/v1/' + PAYMENTS_TABLE + '?select=*&order=payment_date.desc', {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                    }
+                });
+
+                if (!paymentsResponse.ok) {
+                    // إذا كان الجدول غير موجود، ننشئ مصفوفة فارغة
+                    allPayments = [];
+                } else {
+                    allPayments = await paymentsResponse.json();
+                }
+
+                // 4. عرض البيانات
+                renderDashboard();
+
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+                kpiContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle" style="color:var(--rust);"></i>
+                        <p style="color:var(--rust);">حدث خطأ في تحميل المؤشرات</p>
+                        <span>${error.message}</span>
+                        <br><br>
+                        <button class="btn btn-primary" onclick="loadDashboard()">
+                            <i class="fas fa-sync-alt"></i> إعادة المحاولة
+                        </button>
+                    </div>
+                `;
+                showToast('خطأ', 'فشل في تحميل البيانات', 'error');
+            }
         }
 
         /**
@@ -1718,21 +1794,30 @@
             var ratePercent = Number(document.getElementById('commissionRate').value || 0);
             var rate = ratePercent / 100;
 
-            var monthlyBookings = data.bookings.filter(function(item) {
-                return isWithinSelectedMonth(item.date, period);
-            });
-            var monthlyExpenses = data.expenses.filter(function(item) {
-                return isWithinSelectedMonth(item.date, period) && item.category === "مصروف تشغيلي";
-            });
-            var monthlyPayments = data.payments.filter(function(item) {
-                return isWithinSelectedMonth(item.date, period);
+            // فلترة الفواتير حسب الشهر المحدد
+            var monthlyBookings = allBookings.filter(function(item) {
+                return isWithinSelectedMonth(item.invoice_date, period);
             });
 
-            var totalInvoices = sum(monthlyBookings.map(function(item) { return item.netRevenue; }));
-            var operatingExpenses = sum(monthlyExpenses.map(function(item) { return item.amount; }));
+            // فلترة المصروفات التشغيلية حسب الشهر المحدد
+            var monthlyExpenses = allExpenses.filter(function(item) {
+                return isWithinSelectedMonth(item.date, period) && 
+                       (item.category && item.category.includes('تشغيل'));
+            });
+
+            // فلترة دفعات أبو زيد حسب الشهر المحدد
+            monthlyPayments = allPayments.filter(function(item) {
+                return isWithinSelectedMonth(item.payment_date, period);
+            });
+
+            // حساب المؤشرات
+            var totalInvoices = sum(monthlyBookings.map(function(item) { 
+                return parseFloat(item.total || 0) - parseFloat(item.discount || 0); 
+            }));
+            var operatingExpenses = sum(monthlyExpenses.map(function(item) { return parseFloat(item.amount || 0); }));
             var commissionBase = Math.max(0, totalInvoices - operatingExpenses);
             var commissionDue = commissionBase * rate;
-            var receivedAmount = sum(monthlyPayments.map(function(item) { return item.amount; }));
+            var receivedAmount = sum(monthlyPayments.map(function(item) { return parseFloat(item.amount || 0); }));
             var remainingAmount = commissionDue - receivedAmount;
             var accountStatus = remainingAmount <= 0 ? "مسدد بالكامل" : "متبقي مستحق";
             var statusClass = remainingAmount <= 0 ? "status-paid" : "status-due";
@@ -1787,7 +1872,7 @@
             `;
 
             // عرض الدفعات
-            renderPayments(monthlyPayments, period);
+            renderPayments(monthlyPayments);
 
             // عرض التفاصيل
             renderDetails(monthlyBookings, monthlyExpenses);
@@ -1798,13 +1883,13 @@
          * عرض الدفعات
          * ============================================================
          */
-        function renderPayments(monthlyPayments, period) {
+        function renderPayments(payments) {
             var container = document.getElementById('paymentsContainer');
             var countBadge = document.getElementById('paymentsCount');
 
-            countBadge.textContent = monthlyPayments.length;
+            countBadge.textContent = payments.length;
 
-            if (!monthlyPayments || monthlyPayments.length === 0) {
+            if (!payments || payments.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-money-bill-wave"></i>
@@ -1831,14 +1916,14 @@
                     <tbody>
             `;
 
-            monthlyPayments.forEach(function(item, index) {
+            payments.forEach(function(item, index) {
                 html += `
                     <tr data-id="${item.id}">
                         <td>${index + 1}</td>
-                        <td>${formatDate(item.date)}</td>
-                        <td style="text-align:right;">${escapeHtml(item.description)}</td>
-                        <td style="font-weight:700;color:var(--teal);">${formatCurrency(item.amount)}</td>
-                        <td>${escapeHtml(item.method || '-')}</td>
+                        <td>${formatDate(item.payment_date)}</td>
+                        <td style="text-align:right;">${escapeHtml(item.description || item.notes || '-')}</td>
+                        <td style="font-weight:700;color:var(--teal);">${formatCurrency(parseFloat(item.amount) || 0)}</td>
+                        <td>${escapeHtml(item.payment_method || '-')}</td>
                         <td>${escapeHtml(item.notes || '-')}</td>
                         <td>
                             <div class="actions-cell">
@@ -1874,12 +1959,13 @@
             var rows = [];
 
             bookings.forEach(function(item) {
+                var net = parseFloat(item.total || 0) - parseFloat(item.discount || 0);
                 rows.push({
                     type: 'فاتورة',
-                    date: item.date,
-                    description: item.description,
+                    date: item.invoice_date,
+                    description: 'فاتورة حجز',
                     category: 'صافي الإيراد',
-                    amount: item.netRevenue
+                    amount: net
                 });
             });
 
@@ -1887,9 +1973,9 @@
                 rows.push({
                     type: 'مصروف',
                     date: item.date,
-                    description: item.description,
-                    category: item.category,
-                    amount: item.amount
+                    description: item.description || 'مصروف تشغيلي',
+                    category: item.category || 'تشغيل',
+                    amount: parseFloat(item.amount || 0)
                 });
             });
 
@@ -1953,24 +2039,19 @@
          */
         function filterPayments() {
             var searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
-            var period = getSelectedPeriod();
-
-            var monthlyPayments = data.payments.filter(function(item) {
-                return isWithinSelectedMonth(item.date, period);
-            });
-
+            
             if (!searchTerm) {
-                renderPayments(monthlyPayments, period);
+                renderPayments(monthlyPayments);
                 return;
             }
 
             var filtered = monthlyPayments.filter(function(item) {
                 return (item.description && item.description.toLowerCase().includes(searchTerm)) ||
-                    (item.method && item.method.toLowerCase().includes(searchTerm)) ||
+                    (item.payment_method && item.payment_method.toLowerCase().includes(searchTerm)) ||
                     (item.notes && item.notes.toLowerCase().includes(searchTerm));
             });
 
-            renderPayments(filtered, period);
+            renderPayments(filtered);
         }
 
         /**
@@ -1992,7 +2073,7 @@
         }
 
         function editPayment(id) {
-            var item = data.payments.find(function(p) { return p.id === id; });
+            var item = allPayments.find(function(p) { return p.id === id; });
             if (!item) {
                 showToast('خطأ', 'الدفعة غير موجودة', 'error');
                 return;
@@ -2001,10 +2082,10 @@
             document.getElementById('editPaymentId').value = id;
             document.getElementById('modalTitle').textContent = 'تعديل الدفعة';
             document.getElementById('saveBtn').innerHTML = '<i class="fas fa-edit"></i> تحديث';
-            document.getElementById('payDate').value = item.date || '';
+            document.getElementById('payDate').value = item.payment_date || '';
             document.getElementById('payDesc').value = item.description || '';
             document.getElementById('payAmount').value = item.amount || '';
-            document.getElementById('payMethod').value = item.method || '';
+            document.getElementById('payMethod').value = item.payment_method || '';
             document.getElementById('payNotes').value = item.notes || '';
             document.getElementById('formMessage').className = 'message';
 
@@ -2024,7 +2105,7 @@
          * إضافة / تعديل دفعة
          * ============================================================
          */
-        function addPayment(event) {
+        async function addPayment(event) {
             event.preventDefault();
 
             var editId = document.getElementById('editPaymentId').value;
@@ -2041,40 +2122,59 @@
                 return;
             }
 
-            if (isEdit) {
-                // تعديل
-                var index = data.payments.findIndex(function(p) { return p.id === editId; });
-                if (index === -1) {
-                    showFormMessage('❌ الدفعة غير موجودة', 'error');
-                    return;
+            var saveBtn = document.getElementById('saveBtn');
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
+
+            var paymentData = {
+                payment_date: date,
+                description: description,
+                amount: amount,
+                payment_method: method || 'نقدي',
+                notes: notes,
+                updated_at: new Date().toISOString()
+            };
+
+            try {
+                var url = SUPABASE_URL + '/rest/v1/' + PAYMENTS_TABLE;
+                var methodType = 'POST';
+                var body = paymentData;
+
+                if (isEdit) {
+                    url += '?id=eq.' + editId;
+                    methodType = 'PATCH';
                 }
-                data.payments[index] = {
-                    id: editId,
-                    date: date,
-                    description: description,
-                    amount: amount,
-                    method: method,
-                    notes: notes
-                };
-            } else {
-                // إضافة                data.payments.push({
-                    id: generateId(),
-                    date: date,
-                    description: description,
-                    amount: amount,
-                    method: method,
-                    notes: notes
+
+                var response = await fetch(url, {
+                    method: methodType,
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify(body)
                 });
+
+                if (!response.ok) {
+                    throw new Error('فشل في حفظ البيانات');
+                }
+
+                closeModal();
+                showToast(
+                    isEdit ? '✅ تم التعديل' : '✅ تم الإضافة',
+                    isEdit ? 'تم تحديث الدفعة بنجاح' : 'تم إضافة الدفعة بنجاح',
+                    'success'
+                );
+                loadDashboard();
+
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+                showFormMessage('❌ حدث خطأ: ' + error.message, 'error');
             }
 
-            saveData();
-            closeModal();
-            showToast(
-                isEdit ? '✅ تم التعديل' : '✅ تم الإضافة',
-                isEdit ? 'تم تحديث الدفعة بنجاح' : 'تم إضافة الدفعة بنجاح',
-                'success'
-            );
-            renderDashboard();
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = isEdit ? '<i class="fas fa-edit"></i> تحديث' : '<i class="fas fa-save"></i> حفظ';
         }
 
         function showFormMessage(text, type) {
@@ -2089,22 +2189,38 @@
          * حذف دفعة
          * ============================================================
          */
-        function deletePayment(id) {
-            var item = data.payments.find(function(p) { return p.id === id; });
+        async function deletePayment(id) {
+            var item = allPayments.find(function(p) { return p.id === id; });
             if (!item) {
                 showToast('خطأ', 'الدفعة غير موجودة', 'error');
                 return;
             }
 
-            if (!confirm('هل أنت متأكد من حذف هذه الدفعة؟\n\nالبيان: ' + item.description + '\nالمبلغ: ' + formatCurrency(item
-                    .amount))) {
+            if (!confirm('هل أنت متأكد من حذف هذه الدفعة؟\n\nالبيان: ' + (item.description || item.notes || '') + 
+                        '\nالمبلغ: ' + formatCurrency(parseFloat(item.amount) || 0))) {
                 return;
             }
 
-            data.payments = data.payments.filter(function(p) { return p.id !== id; });
-            saveData();
-            showToast('✅ تم الحذف', 'تم حذف الدفعة بنجاح', 'success');
-            renderDashboard();
+            try {
+                var response = await fetch(SUPABASE_URL + '/rest/v1/' + PAYMENTS_TABLE + '?id=eq.' + id, {
+                    method: 'DELETE',
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('فشل في حذف الدفعة');
+                }
+
+                showToast('✅ تم الحذف', 'تم حذف الدفعة بنجاح', 'success');
+                loadDashboard();
+
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+                showToast('خطأ', 'فشل في حذف الدفعة', 'error');
+            }
         }
 
         /**
@@ -2112,10 +2228,16 @@
          * تحميل الصفحة
          * ============================================================
          */
-        initMonths();
-        renderDashboard();
+        document.addEventListener('DOMContentLoaded', function() {
+            initMonths();
+            loadDashboard();
+        });
 
-        console.log('🤝 صفحة عمولة أبو زيد - منتجع حياله');
+        // تحديث كل 5 دقائق
+        setInterval(loadDashboard, 300000);
+
+        console.log('🤝 صفحة عمولة أبو زيد - منتجع حياله (مع Supabase)');
+        console.log('📊 Supabase URL:', SUPABASE_URL);
         console.log('👤 المستخدم:', user.name || 'غير معروف');
         console.log('✅ جاهزة للعمل');
     </script>
