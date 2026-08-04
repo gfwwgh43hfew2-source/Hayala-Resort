@@ -118,7 +118,7 @@
         }
 
         /* ============================================================
-           HEADER
+           HEADER - تصميم محسّن
            ============================================================ */
         header {
             position: sticky;
@@ -143,6 +143,7 @@
             display: flex;
             align-items: center;
             gap: calc(11px * var(--scale-factor));
+            flex-shrink: 0;
         }
         .logo-mark {
             width: calc(36px * var(--scale-factor));
@@ -185,49 +186,79 @@
             font-weight: 600;
         }
 
+        /* ===== القائمة العلوية - تصميم محسّن ===== */
         nav {
             display: flex;
             align-items: center;
-            gap: calc(8px * var(--scale-factor));
+            gap: calc(2px * var(--scale-factor));
             flex-wrap: wrap;
+            background: var(--surface);
+            padding: calc(3px * var(--scale-factor));
+            border-radius: calc(50px * var(--scale-factor));
+            border: 1px solid var(--line);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.02);
         }
         nav a {
             color: var(--ink-mute);
             font-weight: 700;
-            font-size: calc(0.7rem * var(--scale-factor));
-            transition: 0.2s;
+            font-size: calc(0.65rem * var(--scale-factor));
+            transition: 0.25s ease;
             position: relative;
-            padding: calc(5px * var(--scale-factor)) 0;
+            padding: calc(6px * var(--scale-factor)) calc(14px * var(--scale-factor));
+            border-radius: calc(50px * var(--scale-factor));
             white-space: nowrap;
+            letter-spacing: 0.2px;
+            display: flex;
+            align-items: center;
+            gap: calc(4px * var(--scale-factor));
         }
         nav a::after {
             content: '';
             position: absolute;
-            bottom: calc(-2px * var(--scale-factor));
-            right: 0;
+            bottom: calc(3px * var(--scale-factor));
+            right: 50%;
             width: 0;
             height: calc(2px * var(--scale-factor));
             background: var(--accent);
-            transition: 0.25s;
+            transition: 0.3s ease;
             border-radius: 10px;
+            transform: translateX(50%);
         }
         nav a:hover {
             color: var(--ink);
+            background: var(--surface-muted);
         }
         nav a:hover::after {
-            width: 100%;
+            width: 40%;
         }
         nav a.active {
             color: var(--ink);
+            background: var(--accent-soft);
+            font-weight: 800;
         }
         nav a.active::after {
-            width: 100%;
+            width: 40%;
+            background: var(--accent);
+        }
+
+        /* ===== أيقونات القائمة ===== */
+        nav a .nav-icon {
+            font-size: calc(0.7rem * var(--scale-factor));
+            opacity: 0.7;
+        }
+        nav a.active .nav-icon {
+            opacity: 1;
+            color: var(--accent-ink);
+        }
+        nav a:hover .nav-icon {
+            opacity: 1;
         }
 
         .header-actions {
             display: flex;
             align-items: center;
             gap: calc(6px * var(--scale-factor));
+            flex-shrink: 0;
         }
         .header-actions button {
             width: calc(32px * var(--scale-factor));
@@ -1948,14 +1979,14 @@
                     </div>
                 </div>
                 <nav>
-                    <a href="index.html">الرئيسية</a>
-                    <a href="add-invoice.html" class="active">فاتورة جديدة</a>
-                    <a href="bookings.html">سجل الحجوزات</a>
-                    <a href="clients.html">العملاء</a>
-                    <a href="properties.html">العقارات</a>
-                    <a href="expenses.html">المصاريف</a>
-                    <a href="abuzeid.html">عمولة أبو زيد</a>
-                    <a href="#">التقارير</a>
+                    <a href="index.html"><i class="fas fa-home nav-icon"></i> الرئيسية</a>
+                    <a href="add-invoice.html" class="active"><i class="fas fa-file-invoice nav-icon"></i> فاتورة جديدة</a>
+                    <a href="bookings.html"><i class="fas fa-list nav-icon"></i> سجل الحجوزات</a>
+                    <a href="clients.html"><i class="fas fa-users nav-icon"></i> العملاء</a>
+                    <a href="properties.html"><i class="fas fa-building nav-icon"></i> العقارات</a>
+                    <a href="expenses.html"><i class="fas fa-money-bill-wave nav-icon"></i> المصاريف</a>
+                    <a href="abuzeid.html"><i class="fas fa-hand-holding-heart nav-icon"></i> عمولة أبو زيد</a>
+                    <a href="#"><i class="fas fa-chart-pie nav-icon"></i> التقارير</a>
                 </nav>
                 <div class="header-actions">
                     <button aria-label="بحث"><i class="fas fa-search"></i></button>
