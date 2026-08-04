@@ -200,7 +200,6 @@
             font-weight: 600;
         }
 
-        /* ===== القائمة العلوية ===== */
         nav {
             display: flex;
             align-items: center;
@@ -603,7 +602,7 @@
             width: 100%;
             border-collapse: collapse;
             font-size: calc(0.8rem * var(--scale-factor));
-            min-width: 800px;
+            min-width: 900px;
         }
 
         table thead th {
@@ -662,6 +661,122 @@
             gap: 6px;
             justify-content: center;
             flex-wrap: wrap;
+        }
+
+        /* ============================================================
+           PAYMENT FORM - INLINE
+           ============================================================ */
+        .payment-form-inline {
+            background: var(--accent-soft);
+            border: 1px solid var(--accent);
+            border-radius: calc(12px * var(--scale-factor));
+            padding: calc(14px * var(--scale-factor)) calc(18px * var(--scale-factor));
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .payment-form-inline.show {
+            display: block;
+        }
+
+        .payment-form-inline .form-title {
+            font-size: calc(0.85rem * var(--scale-factor));
+            font-weight: 800;
+            color: var(--accent-ink);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .payment-form-inline .form-title i {
+            color: var(--accent);
+        }
+
+        .payment-form-inline .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr auto;
+            gap: 10px;
+            align-items: end;
+        }
+
+        .payment-form-inline .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .payment-form-inline .form-group label {
+            font-size: calc(0.55rem * var(--scale-factor));
+            font-weight: 700;
+            color: var(--ink-mute);
+        }
+
+        .payment-form-inline .form-group input,
+        .payment-form-inline .form-group select {
+            padding: calc(6px * var(--scale-factor)) calc(10px * var(--scale-factor));
+            border-radius: calc(8px * var(--scale-factor));
+            border: 1.5px solid var(--line);
+            background: var(--surface);
+            color: var(--ink);
+            font-size: calc(0.7rem * var(--scale-factor));
+            font-family: var(--font-display);
+            transition: all 0.2s ease;
+            width: 100%;
+            height: calc(36px * var(--scale-factor));
+            outline: none;
+        }
+
+        .payment-form-inline .form-group input:focus,
+        .payment-form-inline .form-group select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(221, 159, 46, 0.12);
+        }
+
+        .payment-form-inline .btn-submit-payment {
+            padding: calc(6px * var(--scale-factor)) calc(18px * var(--scale-factor));
+            border-radius: calc(8px * var(--scale-factor));
+            border: none;
+            background: var(--teal);
+            color: #ffffff;
+            font-weight: 700;
+            font-size: calc(0.7rem * var(--scale-factor));
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: var(--font-display);
+            height: calc(36px * var(--scale-factor));
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .payment-form-inline .btn-submit-payment:hover {
+            background: #156b5d;
+            transform: translateY(calc(-1px * var(--scale-factor)));
+        }
+
+        .payment-form-inline .btn-close-payment {
+            padding: calc(6px * var(--scale-factor)) calc(14px * var(--scale-factor));
+            border-radius: calc(8px * var(--scale-factor));
+            border: 1.5px solid var(--line);
+            background: transparent;
+            color: var(--ink-soft);
+            font-weight: 700;
+            font-size: calc(0.65rem * var(--scale-factor));
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: var(--font-display);
+            height: calc(36px * var(--scale-factor));
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .payment-form-inline .btn-close-payment:hover {
+            background: var(--surface-muted);
+            border-color: var(--line-strong);
         }
 
         /* ============================================================
@@ -791,6 +906,17 @@
         /* ============================================================
            RESPONSIVE
            ============================================================ */
+        @media (max-width: 992px) {
+            .payment-form-inline .form-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .payment-form-inline .form-actions {
+                grid-column: 1 / -1;
+                display: flex;
+                gap: 8px;
+            }
+        }
+
         @media (max-width: 768px) {
             :root {
                 --scale-factor: 1;
@@ -832,7 +958,7 @@
 
             table {
                 font-size: 0.7rem;
-                min-width: 600px;
+                min-width: 700px;
             }
 
             table thead th,
@@ -859,6 +985,19 @@
             nav {
                 display: none !important;
             }
+
+            .payment-form-inline .form-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            .payment-form-inline .form-actions {
+                flex-direction: column;
+            }
+            .payment-form-inline .form-actions .btn-submit-payment,
+            .payment-form-inline .form-actions .btn-close-payment {
+                width: 100%;
+                justify-content: center;
+            }
         }
 
         @media (max-width: 480px) {
@@ -874,12 +1013,7 @@
 
             table {
                 font-size: 0.6rem;
-                min-width: 400px;
-            }
-
-            table thead th:nth-child(3),
-            table tbody td:nth-child(3) {
-                display: none;
+                min-width: 500px;
             }
         }
     </style>
@@ -920,6 +1054,7 @@
                 <a href="abuzeid.html"><i class="fas fa-hand-holding-heart nav-icon"></i> عمولة أبو زيد</a>
                 <a href="future.html"><i class="fas fa-calendar-check nav-icon"></i> الحجوزات المستقبلية</a>
                 <a href="client-accounts.html" class="active"><i class="fas fa-user-clock nav-icon"></i> حسابات العملاء</a>
+                <a href="client-payments.html"><i class="fas fa-hand-holding-usd nav-icon"></i> دفعات العملاء</a>
                 <a href="users.html"><i class="fas fa-users-cog nav-icon"></i> المستخدمين</a>
             </nav>
             <div class="header-actions">
@@ -950,6 +1085,7 @@
             <a href="abuzeid.html"><i class="fas fa-hand-holding-heart"></i> عمولة أبو زيد</a>
             <a href="future.html"><i class="fas fa-calendar-check"></i> الحجوزات المستقبلية</a>
             <a href="client-accounts.html" class="active"><i class="fas fa-user-clock"></i> حسابات العملاء</a>
+            <a href="client-payments.html"><i class="fas fa-hand-holding-usd"></i> دفعات العملاء</a>
             <a href="users.html"><i class="fas fa-users-cog"></i> المستخدمين</a>
             <a href="#"><i class="fas fa-chart-pie"></i> التقارير</a>
         </div>
@@ -1077,6 +1213,8 @@
          */
         var allClientAccounts = [];
         var filteredAccounts = [];
+        var payments = [];
+        var activeClientName = null;
 
         /**
          * ============================================================
@@ -1152,11 +1290,22 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error('فشل في جلب البيانات');
+                    throw new Error('فشل في جلب الحجوزات');
                 }
 
                 var bookings = await response.json();
                 console.log('📊 تم جلب الحجوزات:', bookings.length);
+
+                // جلب دفعات العملاء
+                var paymentsResponse = await fetch(SUPABASE_URL + '/rest/v1/client_payments?select=*', {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                    }
+                });
+
+                payments = paymentsResponse.ok ? await paymentsResponse.json() : [];
+                console.log('💳 تم جلب الدفعات:', payments.length);
 
                 // تجميع حسابات العملاء
                 var clientMap = {};
@@ -1190,6 +1339,16 @@
                     clientMap[clientName].totalDiscount += discount;
                     clientMap[clientName].totalRemaining += remaining;
                     clientMap[clientName].bookingsCount += 1;
+                });
+
+                // تطبيق الدفعات على حسابات العملاء
+                payments.forEach(function(payment) {
+                    var clientName = payment.client_name;
+                    if (!clientName || !clientMap[clientName]) return;
+
+                    var amount = parseFloat(payment.amount) || 0;
+                    clientMap[clientName].totalPaid += amount;
+                    clientMap[clientName].totalRemaining = Math.max(0, clientMap[clientName].totalRemaining - amount);
                 });
 
                 // تحويل إلى مصفوفة وفلترة العملاء الذين عليهم متبقي
@@ -1304,6 +1463,7 @@
                             <th>المدفوع</th>
                             <th>المتبقي</th>
                             <th>الحالة</th>
+                            <th>إجراء</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -1313,11 +1473,6 @@
                 var statusClass = 'status-due';
                 var statusText = 'متبقي';
                 var remaining = client.totalRemaining;
-
-                if (remaining > 0) {
-                    statusClass = 'status-due';
-                    statusText = 'متبقي';
-                }
 
                 // تحديد حالة الدفع
                 var paidPercent = client.totalInvoices > 0 ? (client.totalPaid / client.totalInvoices) * 100 : 0;
@@ -1340,6 +1495,11 @@
                         <td style="color:var(--teal);font-weight:600;">${client.totalPaid.toFixed(2)}</td>
                         <td style="font-weight:700;color:var(--rust);font-size:0.9rem;">${client.totalRemaining.toFixed(2)}</td>
                         <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td>
+                            <button class="btn btn-success btn-sm" onclick="openPaymentForm('${client.name}', ${client.totalRemaining})">
+                                <i class="fas fa-hand-holding-usd"></i> تسجيل دفعة
+                            </button>
+                        </td>
                     </tr>
                 `;
             });
@@ -1375,6 +1535,177 @@
         }
 
         document.getElementById('searchInput').addEventListener('input', filterTable);
+
+        /**
+         * ============================================================
+         * فتح نموذج تسجيل الدفعة المضمن
+         * ============================================================
+         */
+        function openPaymentForm(clientName, remainingAmount) {
+            // إغلاق أي نموذج مفتوح سابقاً
+            closePaymentForm();
+
+            // تخزين اسم العميل النشط
+            activeClientName = clientName;
+
+            // إنشاء نموذج الدفعة
+            var formContainer = document.createElement('div');
+            formContainer.id = 'paymentFormContainer';
+            formContainer.className = 'payment-form-inline show';
+            formContainer.style.marginBottom = '16px';
+
+            var today = new Date().toISOString().split('T')[0];
+
+            formContainer.innerHTML = `
+                <div class="form-title">
+                    <i class="fas fa-hand-holding-usd"></i>
+                    تسجيل دفعة للعميل: <strong>${clientName}</strong>
+                    <span style="font-size:0.65rem;color:var(--rust);font-weight:700;margin-right:auto;">
+                        المتبقي: ${remainingAmount.toFixed(2)} ر.س
+                    </span>
+                </div>
+                <form id="inlinePaymentForm" onsubmit="saveInlinePayment(event)">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>المبلغ (ر.س) <span class="required" style="color:var(--rust);">*</span></label>
+                            <input type="number" id="inlinePaymentAmount" placeholder="0.00" min="0.01" step="0.01" required />
+                        </div>
+                        <div class="form-group">
+                            <label>تاريخ الدفع <span class="required" style="color:var(--rust);">*</span></label>
+                            <input type="date" id="inlinePaymentDate" value="${today}" required />
+                        </div>
+                        <div class="form-group">
+                            <label>طريقة الدفع</label>
+                            <select id="inlinePaymentMethod">
+                                <option value="نقدي">نقدي</option>
+                                <option value="تحويل بنكي">تحويل بنكي</option>
+                                <option value="بطاقة ائتمان">بطاقة ائتمان</option>
+                                <option value="شيك">شيك</option>
+                                <option value="أخرى">أخرى</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>ملاحظات</label>
+                            <input type="text" id="inlinePaymentNotes" placeholder="ملاحظات..." />
+                        </div>
+                        <div class="form-actions" style="display:flex;gap:8px;align-items:center;">
+                            <button type="submit" class="btn-submit-payment">
+                                <i class="fas fa-save"></i> حفظ
+                            </button>
+                            <button type="button" class="btn-close-payment" onclick="closePaymentForm()">
+                                <i class="fas fa-times"></i> إلغاء
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            `;
+
+            // إدراج النموذج بعد رأس البطاقة
+            var cardBody = document.querySelector('.card .card-body');
+            var tableContainer = document.getElementById('tableContainer');
+            cardBody.insertBefore(formContainer, tableContainer);
+
+            // التركيز على حقل المبلغ
+            document.getElementById('inlinePaymentAmount').focus();
+        }
+
+        /**
+         * ============================================================
+         * إغلاق نموذج تسجيل الدفعة
+         * ============================================================
+         */
+        function closePaymentForm() {
+            var existing = document.getElementById('paymentFormContainer');
+            if (existing) {
+                existing.remove();
+            }
+            activeClientName = null;
+        }
+
+        /**
+         * ============================================================
+         * حفظ الدفعة من النموذج المضمن
+         * ============================================================
+         */
+        async function saveInlinePayment(event) {
+            event.preventDefault();
+
+            if (!activeClientName) {
+                showToast('خطأ', 'لم يتم تحديد العميل', 'error');
+                return;
+            }
+
+            var amount = parseFloat(document.getElementById('inlinePaymentAmount').value);
+            var paymentDate = document.getElementById('inlinePaymentDate').value;
+            var paymentMethod = document.getElementById('inlinePaymentMethod').value;
+            var notes = document.getElementById('inlinePaymentNotes').value.trim();
+
+            if (!amount || amount <= 0) {
+                showToast('تنبيه', 'يرجى إدخال مبلغ صحيح', 'warning');
+                return;
+            }
+
+            if (!paymentDate) {
+                showToast('تنبيه', 'يرجى إدخال تاريخ الدفع', 'warning');
+                return;
+            }
+
+            var submitBtn = document.querySelector('#inlinePaymentForm .btn-submit-payment');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
+
+            // البحث عن العميل للحصول على ID
+            var clientResponse = await fetch(SUPABASE_URL + '/rest/v1/clients?select=id&name=eq.' + encodeURIComponent(activeClientName), {
+                headers: {
+                    'apikey': SUPABASE_ANON_KEY,
+                    'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                }
+            });
+
+            var clients = clientResponse.ok ? await clientResponse.json() : [];
+            var clientId = clients.length > 0 ? clients[0].id : null;
+
+            var paymentData = {
+                client_id: clientId,
+                client_name: activeClientName,
+                amount: amount,
+                payment_date: paymentDate,
+                payment_method: paymentMethod,
+                notes: notes,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+            };
+
+            try {
+                var response = await fetch(SUPABASE_URL + '/rest/v1/client_payments', {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify(paymentData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('فشل في حفظ الدفعة');
+                }
+
+                showToast('✅ تم التسجيل', 'تم تسجيل دفعة بقيمة ' + amount.toFixed(2) + ' ر.س للعميل ' + activeClientName, 'success');
+
+                // إغلاق النموذج وإعادة تحميل البيانات
+                closePaymentForm();
+                await loadData();
+
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+                showToast('خطأ', 'فشل في حفظ الدفعة: ' + error.message, 'error');
+            }
+
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-save"></i> حفظ';
+        }
 
         /**
          * ============================================================
