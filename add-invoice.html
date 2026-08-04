@@ -37,15 +37,23 @@
             --header-height: 60px;
             --stripe-height: 4px;
             --mobile-nav-height: 56px;
+
+            /* ===== SCALE DOWN 10% ===== */
+            --scale-factor: 0.9;
         }
 
         /* ============================================================
-           GLOBAL RESET
+           GLOBAL RESET & SCALING
            ============================================================ */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        /* تصغير جميع العناصر بنسبة 10% */
+        html {
+            font-size: calc(16px * var(--scale-factor));
         }
 
         body {
@@ -57,6 +65,7 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
+            font-size: calc(1rem * var(--scale-factor));
         }
 
         a {
@@ -68,8 +77,8 @@
            SCROLLBAR STYLING
            ============================================================ */
         ::-webkit-scrollbar {
-            width: 5px;
-            height: 5px;
+            width: calc(5px * var(--scale-factor));
+            height: calc(5px * var(--scale-factor));
         }
         ::-webkit-scrollbar-track {
             background: transparent;
@@ -86,10 +95,10 @@
            SWATCH STRIPE
            ============================================================ */
         .swatch-stripe {
-            height: var(--stripe-height);
+            height: calc(var(--stripe-height) * var(--scale-factor));
             flex-shrink: 0;
             display: flex;
-            border-radius: 4px 4px 0 0;
+            border-radius: calc(4px * var(--scale-factor)) calc(4px * var(--scale-factor)) 0 0;
             overflow: hidden;
         }
         .swatch-stripe span {
@@ -115,11 +124,11 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            padding: 0 20px;
+            padding: 0 calc(20px * var(--scale-factor));
             background: rgba(255, 255, 255, 0.97);
             backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--line);
-            height: var(--header-height);
+            height: calc(var(--header-height) * var(--scale-factor));
             display: flex;
             align-items: center;
             flex-shrink: 0;
@@ -133,22 +142,22 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 11px;
+            gap: calc(11px * var(--scale-factor));
         }
         .logo-mark {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
+            width: calc(36px * var(--scale-factor));
+            height: calc(36px * var(--scale-factor));
+            border-radius: calc(10px * var(--scale-factor));
             background: var(--ink);
             display: grid;
             grid-template-columns: 1fr 1fr;
             grid-template-rows: 1fr 1fr;
-            gap: 3px;
-            padding: 6px;
+            gap: calc(3px * var(--scale-factor));
+            padding: calc(6px * var(--scale-factor));
             flex-shrink: 0;
         }
         .logo-mark span {
-            border-radius: 2px;
+            border-radius: calc(2px * var(--scale-factor));
         }
         .logo-mark span:nth-child(1) {
             background: var(--accent);
@@ -163,14 +172,14 @@
             background: var(--blue);
         }
         .logo-text h1 {
-            font-size: 0.95rem;
+            font-size: calc(0.95rem * var(--scale-factor));
             font-weight: 800;
             color: var(--ink);
             line-height: 1.25;
             letter-spacing: -0.2px;
         }
         .logo-text span {
-            font-size: 0.62rem;
+            font-size: calc(0.62rem * var(--scale-factor));
             color: var(--ink-mute);
             display: block;
             font-weight: 600;
@@ -179,25 +188,25 @@
         nav {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: calc(8px * var(--scale-factor));
             flex-wrap: wrap;
         }
         nav a {
             color: var(--ink-mute);
             font-weight: 700;
-            font-size: 0.7rem;
+            font-size: calc(0.7rem * var(--scale-factor));
             transition: 0.2s;
             position: relative;
-            padding: 5px 0;
+            padding: calc(5px * var(--scale-factor)) 0;
             white-space: nowrap;
         }
         nav a::after {
             content: '';
             position: absolute;
-            bottom: -2px;
+            bottom: calc(-2px * var(--scale-factor));
             right: 0;
             width: 0;
-            height: 2px;
+            height: calc(2px * var(--scale-factor));
             background: var(--accent);
             transition: 0.25s;
             border-radius: 10px;
@@ -218,12 +227,12 @@
         .header-actions {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: calc(6px * var(--scale-factor));
         }
         .header-actions button {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
+            width: calc(32px * var(--scale-factor));
+            height: calc(32px * var(--scale-factor));
+            border-radius: calc(8px * var(--scale-factor));
             border: 1px solid var(--line);
             background: var(--surface);
             color: var(--ink-mute);
@@ -232,7 +241,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.8rem;
+            font-size: calc(0.8rem * var(--scale-factor));
         }
         .header-actions button:hover {
             background: var(--ink);
@@ -241,11 +250,11 @@
         }
         .hamburger {
             display: none;
-            font-size: 1.05rem;
+            font-size: calc(1.05rem * var(--scale-factor));
             color: var(--ink);
             cursor: pointer;
-            padding: 6px 10px;
-            border-radius: 8px;
+            padding: calc(6px * var(--scale-factor)) calc(10px * var(--scale-factor));
+            border-radius: calc(8px * var(--scale-factor));
             border: 1px solid var(--line);
             background: var(--surface);
         }
@@ -272,13 +281,13 @@
             display: none;
             position: fixed;
             top: 0;
-            right: -270px;
-            width: 260px;
+            right: calc(-270px * var(--scale-factor));
+            width: calc(260px * var(--scale-factor));
             height: 100vh;
             background: #ffffff;
             border-left: 1px solid var(--line);
             z-index: 1000;
-            padding: 60px 18px 30px;
+            padding: calc(60px * var(--scale-factor)) calc(18px * var(--scale-factor)) calc(30px * var(--scale-factor));
             transition: right 0.3s ease;
             overflow-y: auto;
             box-shadow: var(--shadow);
@@ -288,13 +297,13 @@
         }
         .mobile-nav-menu .close-btn {
             position: absolute;
-            top: 12px;
-            left: 12px;
-            font-size: 1.2rem;
+            top: calc(12px * var(--scale-factor));
+            left: calc(12px * var(--scale-factor));
+            font-size: calc(1.2rem * var(--scale-factor));
             color: var(--ink-mute);
             cursor: pointer;
-            padding: 4px 8px;
-            border-radius: 8px;
+            padding: calc(4px * var(--scale-factor)) calc(8px * var(--scale-factor));
+            border-radius: calc(8px * var(--scale-factor));
             border: 1px solid var(--line);
         }
         .mobile-nav-menu .close-btn:hover {
@@ -304,16 +313,16 @@
         .mobile-nav-menu .menu-items a {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 9px 12px;
-            border-radius: 8px;
+            gap: calc(10px * var(--scale-factor));
+            padding: calc(9px * var(--scale-factor)) calc(12px * var(--scale-factor));
+            border-radius: calc(8px * var(--scale-factor));
             color: var(--ink-soft);
             font-weight: 700;
-            font-size: 0.85rem;
+            font-size: calc(0.85rem * var(--scale-factor));
             transition: 0.2s;
         }
         .mobile-nav-menu .menu-items a i {
-            width: 18px;
+            width: calc(18px * var(--scale-factor));
             color: var(--ink-mute);
         }
         .mobile-nav-menu .menu-items a:hover {
@@ -337,9 +346,9 @@
             z-index: 998;
             background: #ffffff;
             border-top: 1px solid var(--line);
-            padding: 4px 0 calc(4px + env(safe-area-inset-bottom));
-            height: var(--mobile-nav-height);
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.04);
+            padding: calc(4px * var(--scale-factor)) 0 calc(4px * var(--scale-factor) + env(safe-area-inset-bottom));
+            height: calc(var(--mobile-nav-height) * var(--scale-factor));
+            box-shadow: 0 calc(-4px * var(--scale-factor)) calc(20px * var(--scale-factor)) rgba(0,0,0,0.04);
         }
         .mobile-nav-bottom ul {
             display: flex;
@@ -354,17 +363,17 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 1px;
-            font-size: 0.4rem;
+            gap: calc(1px * var(--scale-factor));
+            font-size: calc(0.4rem * var(--scale-factor));
             color: var(--ink-mute);
             transition: 0.2s;
-            padding: 2px 8px;
-            border-radius: 6px;
+            padding: calc(2px * var(--scale-factor)) calc(8px * var(--scale-factor));
+            border-radius: calc(6px * var(--scale-factor));
             cursor: pointer;
             flex: 1;
         }
         .mobile-nav-bottom ul li i {
-            font-size: 0.85rem;
+            font-size: calc(0.85rem * var(--scale-factor));
         }
         .mobile-nav-bottom ul li:hover,
         .mobile-nav-bottom ul li.active {
@@ -374,7 +383,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 1px;
+            gap: calc(1px * var(--scale-factor));
             color: inherit;
             text-decoration: none;
             width: 100%;
@@ -387,23 +396,23 @@
             display: flex;
             flex: 1;
             overflow: hidden;
-            padding: 14px 18px 16px 18px;
-            gap: 16px;
+            padding: calc(14px * var(--scale-factor)) calc(18px * var(--scale-factor)) calc(16px * var(--scale-factor)) calc(18px * var(--scale-factor));
+            gap: calc(16px * var(--scale-factor));
         }
 
         .right-panel {
             flex: 0 0 44%;
-            min-width: 340px;
-            max-width: 500px;
+            min-width: calc(340px * var(--scale-factor));
+            max-width: calc(500px * var(--scale-factor));
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: calc(8px * var(--scale-factor));
             overflow: hidden;
         }
         .right-panel .form-card {
             background: var(--surface);
-            border-radius: var(--radius);
-            padding: 18px 20px 20px 20px;
+            border-radius: calc(var(--radius) * var(--scale-factor));
+            padding: calc(18px * var(--scale-factor)) calc(20px * var(--scale-factor)) calc(20px * var(--scale-factor)) calc(20px * var(--scale-factor));
             box-shadow: var(--shadow-sm);
             border: 1px solid var(--line);
             display: flex;
@@ -421,14 +430,14 @@
         }
         .left-panel .table-card {
             background: var(--surface);
-            border-radius: var(--radius);
+            border-radius: calc(var(--radius) * var(--scale-factor));
             box-shadow: var(--shadow-sm);
             border: 1px solid var(--line);
             display: flex;
             flex-direction: column;
             flex: 1;
             overflow: hidden;
-            padding: 16px 18px 18px 18px;
+            padding: calc(16px * var(--scale-factor)) calc(18px * var(--scale-factor)) calc(18px * var(--scale-factor)) calc(18px * var(--scale-factor));
         }
 
         /* ============================================================
@@ -439,23 +448,23 @@
             align-items: stretch;
             justify-content: space-between;
             flex-shrink: 0;
-            padding-top: 10px;
-            gap: 12px;
+            padding-top: calc(10px * var(--scale-factor));
+            gap: calc(12px * var(--scale-factor));
             flex-wrap: wrap;
         }
 
         .totals-section {
             display: flex;
             border: 1px solid var(--line);
-            border-radius: var(--radius-sm);
+            border-radius: calc(var(--radius-sm) * var(--scale-factor));
             overflow: hidden;
             flex-wrap: wrap;
         }
         .totals-section .total-item {
             text-align: center;
-            padding: 7px 14px;
+            padding: calc(7px * var(--scale-factor)) calc(14px * var(--scale-factor));
             background: var(--surface-muted);
-            min-width: 70px;
+            min-width: calc(70px * var(--scale-factor));
             border-left: 1px solid var(--line);
             flex: 1;
         }
@@ -463,17 +472,17 @@
             border-left: none;
         }
         .totals-section .total-item .label {
-            font-size: 0.45rem;
+            font-size: calc(0.45rem * var(--scale-factor));
             color: var(--ink-mute);
             font-weight: 700;
-            letter-spacing: 0.3px;
+            letter-spacing: calc(0.3px * var(--scale-factor));
         }
         .totals-section .total-item .value {
-            font-size: 0.9rem;
+            font-size: calc(0.9rem * var(--scale-factor));
             font-weight: 700;
             color: var(--ink);
             font-family: var(--font-mono);
-            margin-top: 2px;
+            margin-top: calc(2px * var(--scale-factor));
         }
         .totals-section .total-item.net {
             background: var(--teal);
@@ -490,24 +499,24 @@
 
         .form-actions {
             display: flex;
-            gap: 6px;
+            gap: calc(6px * var(--scale-factor));
             align-items: center;
             flex-wrap: wrap;
         }
         .btn-save {
-            padding: 6px 16px;
-            border-radius: 8px;
+            padding: calc(6px * var(--scale-factor)) calc(16px * var(--scale-factor));
+            border-radius: calc(8px * var(--scale-factor));
             background: var(--ink);
             border: none;
             color: #ffffff;
             font-weight: 700;
-            font-size: 0.7rem;
+            font-size: calc(0.7rem * var(--scale-factor));
             cursor: pointer;
             transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            height: 32px;
+            gap: calc(5px * var(--scale-factor));
+            height: calc(32px * var(--scale-factor));
             justify-content: center;
             font-family: var(--font-display);
         }
@@ -516,7 +525,7 @@
         }
         .btn-save:hover {
             background: var(--ink-soft);
-            transform: translateY(-1px);
+            transform: translateY(calc(-1px * var(--scale-factor)));
         }
         .btn-save:disabled {
             opacity: 0.55;
@@ -525,19 +534,19 @@
         }
 
         .btn-tool {
-            padding: 4px 12px;
-            border-radius: 8px;
+            padding: calc(4px * var(--scale-factor)) calc(12px * var(--scale-factor));
+            border-radius: calc(8px * var(--scale-factor));
             border: 1px solid var(--line);
             background: var(--surface);
             color: var(--ink-soft);
             font-weight: 700;
-            font-size: 0.65rem;
+            font-size: calc(0.65rem * var(--scale-factor));
             cursor: pointer;
             transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
-            gap: 4px;
-            height: 32px;
+            gap: calc(4px * var(--scale-factor));
+            height: calc(32px * var(--scale-factor));
             white-space: nowrap;
             font-family: var(--font-display);
         }
@@ -571,10 +580,10 @@
             background: #c9ebe3;
         }
         .btn-divider {
-            width: 1px;
-            height: 24px;
+            width: calc(1px * var(--scale-factor));
+            height: calc(24px * var(--scale-factor));
             background: var(--line);
-            margin: 0 3px;
+            margin: 0 calc(3px * var(--scale-factor));
         }
 
         /* ============================================================
@@ -595,17 +604,21 @@
         @media (max-width: 1024px) {
             .right-panel {
                 flex: 0 0 46%;
-                min-width: 300px;
+                min-width: calc(300px * var(--scale-factor));
             }
         }
 
         @media (max-width: 768px) {
+            :root {
+                --scale-factor: 1;
+            }
+
             .main-content {
                 flex-direction: column;
-                padding: 10px 10px calc(20px + var(--mobile-nav-height) + 20px);
-                gap: 10px;
+                padding: calc(10px * var(--scale-factor)) calc(10px * var(--scale-factor)) calc(20px * var(--scale-factor) + var(--mobile-nav-height) + 20px * var(--scale-factor));
+                gap: calc(10px * var(--scale-factor));
                 overflow-y: auto;
-                padding-bottom: calc(20px + var(--mobile-nav-height) + 20px) !important;
+                padding-bottom: calc(20px * var(--scale-factor) + var(--mobile-nav-height) + 20px * var(--scale-factor)) !important;
             }
             
             .right-panel {
@@ -615,25 +628,25 @@
                 max-height: none;
             }
             .right-panel .form-card {
-                padding: 12px 14px 16px;
+                padding: calc(12px * var(--scale-factor)) calc(14px * var(--scale-factor)) calc(16px * var(--scale-factor));
             }
             .left-panel {
                 flex: 0 0 auto;
-                min-height: 300px;
-                max-height: 420px;
+                min-height: calc(300px * var(--scale-factor));
+                max-height: calc(420px * var(--scale-factor));
             }
             .left-panel .table-card {
-                padding: 12px;
+                padding: calc(12px * var(--scale-factor));
             }
             
             .right-panel .form-group input,
             .right-panel .form-group select {
-                font-size: 0.85rem;
-                padding: 8px 12px;
-                height: 42px;
+                font-size: calc(0.85rem * var(--scale-factor));
+                padding: calc(8px * var(--scale-factor)) calc(12px * var(--scale-factor));
+                height: calc(42px * var(--scale-factor));
             }
             .right-panel .form-group label {
-                font-size: 0.7rem;
+                font-size: calc(0.7rem * var(--scale-factor));
             }
             
             .right-panel .form-row.invoice-numbers {
@@ -641,7 +654,7 @@
             }
             .right-panel .form-row {
                 grid-template-columns: 1fr 1fr;
-                gap: 6px;
+                gap: calc(6px * var(--scale-factor));
             }
             .right-panel .form-row.client-row {
                 grid-template-columns: 1fr;
@@ -675,9 +688,9 @@
             .bottom-bar {
                 flex-direction: column;
                 align-items: stretch;
-                gap: 8px;
-                padding-top: 8px;
-                padding-bottom: 4px;
+                gap: calc(8px * var(--scale-factor));
+                padding-top: calc(8px * var(--scale-factor));
+                padding-bottom: calc(4px * var(--scale-factor));
             }
             .totals-section {
                 justify-content: center;
@@ -685,47 +698,47 @@
             }
             .totals-section .total-item {
                 flex: 1;
-                min-width: 60px;
-                padding: 5px 10px;
+                min-width: calc(60px * var(--scale-factor));
+                padding: calc(5px * var(--scale-factor)) calc(10px * var(--scale-factor));
             }
             .totals-section .total-item .value {
-                font-size: 0.8rem;
+                font-size: calc(0.8rem * var(--scale-factor));
             }
             
             .form-actions {
                 justify-content: center;
                 flex-wrap: wrap;
-                gap: 4px;
+                gap: calc(4px * var(--scale-factor));
             }
             .btn-save {
                 width: 100%;
                 justify-content: center;
-                height: 40px;
-                font-size: 0.8rem;
-                padding: 6px 12px;
+                height: calc(40px * var(--scale-factor));
+                font-size: calc(0.8rem * var(--scale-factor));
+                padding: calc(6px * var(--scale-factor)) calc(12px * var(--scale-factor));
             }
             .btn-tool {
                 flex: 1;
                 justify-content: center;
-                min-width: 55px;
-                height: 36px;
-                font-size: 0.65rem;
-                padding: 4px 8px;
+                min-width: calc(55px * var(--scale-factor));
+                height: calc(36px * var(--scale-factor));
+                font-size: calc(0.65rem * var(--scale-factor));
+                padding: calc(4px * var(--scale-factor)) calc(8px * var(--scale-factor));
             }
             .btn-tool span {
                 display: inline;
-                font-size: 0.6rem;
+                font-size: calc(0.6rem * var(--scale-factor));
             }
             .btn-tool i {
-                font-size: 0.8rem;
+                font-size: calc(0.8rem * var(--scale-factor));
             }
             
             .items-table-wrapper table {
-                font-size: 0.6rem;
+                font-size: calc(0.6rem * var(--scale-factor));
             }
             .items-table-wrapper table thead th,
             .items-table-wrapper table tbody td {
-                padding: 4px 5px;
+                padding: calc(4px * var(--scale-factor)) calc(5px * var(--scale-factor));
             }
             .items-table-wrapper table thead th:nth-child(3),
             .items-table-wrapper table tbody td:nth-child(3) {
@@ -733,23 +746,23 @@
             }
             
             .toast-container {
-                top: 70px;
-                right: 10px;
-                max-width: 300px;
+                top: calc(70px * var(--scale-factor));
+                right: calc(10px * var(--scale-factor));
+                max-width: calc(300px * var(--scale-factor));
             }
             
             .search-section {
-                padding: 8px 10px;
+                padding: calc(8px * var(--scale-factor)) calc(10px * var(--scale-factor));
             }
             .search-row input {
-                font-size: 0.7rem;
-                height: 32px;
-                padding: 4px 8px;
+                font-size: calc(0.7rem * var(--scale-factor));
+                height: calc(32px * var(--scale-factor));
+                padding: calc(4px * var(--scale-factor)) calc(8px * var(--scale-factor));
             }
             .btn-search-invoice {
-                font-size: 0.65rem;
-                height: 32px;
-                padding: 4px 10px;
+                font-size: calc(0.65rem * var(--scale-factor));
+                height: calc(32px * var(--scale-factor));
+                padding: calc(4px * var(--scale-factor)) calc(10px * var(--scale-factor));
             }
             .btn-search-invoice span {
                 display: none;
@@ -757,6 +770,10 @@
         }
 
         @media (max-width: 480px) {
+            :root {
+                --scale-factor: 1;
+            }
+
             .right-panel .form-row.invoice-numbers,
             .right-panel .form-row,
             .right-panel .form-row.small-fields,
@@ -765,56 +782,56 @@
             }
             .right-panel .form-group input,
             .right-panel .form-group select {
-                font-size: 0.8rem;
-                padding: 6px 10px;
-                height: 38px;
+                font-size: calc(0.8rem * var(--scale-factor));
+                padding: calc(6px * var(--scale-factor)) calc(10px * var(--scale-factor));
+                height: calc(38px * var(--scale-factor));
             }
             .items-table-wrapper table {
-                font-size: 0.55rem;
+                font-size: calc(0.55rem * var(--scale-factor));
             }
             .items-table-wrapper table thead th,
             .items-table-wrapper table tbody td {
-                padding: 3px 4px;
+                padding: calc(3px * var(--scale-factor)) calc(4px * var(--scale-factor));
             }
             .totals-section .total-item .value {
-                font-size: 0.75rem;
+                font-size: calc(0.75rem * var(--scale-factor));
             }
             .btn-save {
-                font-size: 0.75rem;
-                height: 38px;
-                padding: 4px 12px;
+                font-size: calc(0.75rem * var(--scale-factor));
+                height: calc(38px * var(--scale-factor));
+                padding: calc(4px * var(--scale-factor)) calc(12px * var(--scale-factor));
             }
             .btn-add {
-                font-size: 0.7rem;
-                height: 32px;
-                padding: 4px 12px;
+                font-size: calc(0.7rem * var(--scale-factor));
+                height: calc(32px * var(--scale-factor));
+                padding: calc(4px * var(--scale-factor)) calc(12px * var(--scale-factor));
             }
             .btn-tool {
-                font-size: 0.6rem;
-                height: 32px;
-                padding: 3px 6px;
-                min-width: 45px;
+                font-size: calc(0.6rem * var(--scale-factor));
+                height: calc(32px * var(--scale-factor));
+                padding: calc(3px * var(--scale-factor)) calc(6px * var(--scale-factor));
+                min-width: calc(45px * var(--scale-factor));
             }
             .btn-tool span {
-                font-size: 0.55rem;
+                font-size: calc(0.55rem * var(--scale-factor));
             }
             .toast-container {
-                top: 60px;
-                right: 8px;
-                max-width: 260px;
+                top: calc(60px * var(--scale-factor));
+                right: calc(8px * var(--scale-factor));
+                max-width: calc(260px * var(--scale-factor));
             }
             .toast {
-                padding: 10px 12px;
+                padding: calc(10px * var(--scale-factor)) calc(12px * var(--scale-factor));
             }
             .toast .toast-title {
-                font-size: 0.75rem;
+                font-size: calc(0.75rem * var(--scale-factor));
             }
             .toast .toast-message {
-                font-size: 0.65rem;
+                font-size: calc(0.65rem * var(--scale-factor));
             }
             
             .main-content {
-                padding-bottom: calc(30px + var(--mobile-nav-height) + 30px) !important;
+                padding-bottom: calc(30px * var(--scale-factor) + var(--mobile-nav-height) + 30px * var(--scale-factor)) !important;
             }
         }
 
@@ -822,22 +839,22 @@
            SECTION TITLE
            ============================================================ */
         .section-title {
-            font-size: 0.68rem;
+            font-size: calc(0.68rem * var(--scale-factor));
             color: var(--ink);
             font-weight: 800;
-            letter-spacing: 0.2px;
-            margin-bottom: 12px;
+            letter-spacing: calc(0.2px * var(--scale-factor));
+            margin-bottom: calc(12px * var(--scale-factor));
             display: flex;
             align-items: center;
-            gap: 9px;
-            padding-bottom: 9px;
+            gap: calc(9px * var(--scale-factor));
+            padding-bottom: calc(9px * var(--scale-factor));
             border-bottom: 1px solid var(--line);
             flex-shrink: 0;
         }
         .section-title .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 2px;
+            width: calc(8px * var(--scale-factor));
+            height: calc(8px * var(--scale-factor));
+            border-radius: calc(2px * var(--scale-factor));
             flex-shrink: 0;
             background: var(--accent);
         }
@@ -846,10 +863,10 @@
         }
         .section-title .count-badge {
             margin-right: auto;
-            font-size: 0.6rem;
+            font-size: calc(0.6rem * var(--scale-factor));
             background: var(--surface-muted);
             color: var(--ink-mute);
-            padding: 3px 11px;
+            padding: calc(3px * var(--scale-factor)) calc(11px * var(--scale-factor));
             border-radius: 50px;
             font-weight: 700;
             font-family: var(--font-mono);
@@ -859,59 +876,59 @@
         .search-section {
             background: var(--accent-soft);
             border: 1px solid var(--accent);
-            border-radius: var(--radius-sm);
-            padding: 10px 14px;
-            margin-bottom: 12px;
+            border-radius: calc(var(--radius-sm) * var(--scale-factor));
+            padding: calc(10px * var(--scale-factor)) calc(14px * var(--scale-factor));
+            margin-bottom: calc(12px * var(--scale-factor));
             flex-shrink: 0;
         }
         .search-section .search-title {
-            font-size: 0.6rem;
+            font-size: calc(0.6rem * var(--scale-factor));
             font-weight: 700;
             color: var(--accent-ink);
-            margin-bottom: 6px;
+            margin-bottom: calc(6px * var(--scale-factor));
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: calc(6px * var(--scale-factor));
         }
         .search-section .search-title i {
-            font-size: 0.7rem;
+            font-size: calc(0.7rem * var(--scale-factor));
         }
         .search-row {
             display: flex;
-            gap: 6px;
+            gap: calc(6px * var(--scale-factor));
             align-items: center;
         }
         .search-row input {
             flex: 1;
-            padding: 6px 12px;
-            border-radius: var(--radius-sm);
+            padding: calc(6px * var(--scale-factor)) calc(12px * var(--scale-factor));
+            border-radius: calc(var(--radius-sm) * var(--scale-factor));
             border: 1.5px solid var(--line);
             background: var(--surface);
             color: var(--ink);
-            font-size: 0.8rem;
+            font-size: calc(0.8rem * var(--scale-factor));
             font-family: var(--font-display);
             outline: none;
-            height: 36px;
+            height: calc(36px * var(--scale-factor));
         }
         .search-row input:focus {
             border-color: var(--accent);
             background: #ffffff;
-            box-shadow: 0 0 0 3px rgba(221, 159, 46, 0.15);
+            box-shadow: 0 0 0 calc(3px * var(--scale-factor)) rgba(221, 159, 46, 0.15);
         }
         .btn-search-invoice {
-            padding: 6px 16px;
-            border-radius: 8px;
+            padding: calc(6px * var(--scale-factor)) calc(16px * var(--scale-factor));
+            border-radius: calc(8px * var(--scale-factor));
             border: none;
             background: var(--accent);
             color: #fff;
             font-weight: 700;
-            font-size: 0.75rem;
+            font-size: calc(0.75rem * var(--scale-factor));
             cursor: pointer;
             transition: 0.2s;
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            height: 36px;
+            gap: calc(5px * var(--scale-factor));
+            height: calc(36px * var(--scale-factor));
             font-family: var(--font-display);
             white-space: nowrap;
         }
@@ -919,13 +936,13 @@
             background: var(--accent-ink);
         }
         .btn-search-invoice i {
-            font-size: 0.8rem;
+            font-size: calc(0.8rem * var(--scale-factor));
         }
 
         .right-panel .form-row {
             display: grid;
-            gap: 8px;
-            margin-bottom: 9px;
+            gap: calc(8px * var(--scale-factor));
+            margin-bottom: calc(9px * var(--scale-factor));
             flex-shrink: 0;
         }
         .right-panel .form-row.invoice-numbers {
@@ -947,33 +964,33 @@
         .right-panel .form-group {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: calc(4px * var(--scale-factor));
         }
         .right-panel .form-group label {
-            font-size: 0.62rem;
+            font-size: calc(0.62rem * var(--scale-factor));
             color: var(--ink-soft);
             font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: calc(5px * var(--scale-factor));
         }
         .right-panel .form-group label .required {
             color: var(--rust);
-            font-size: 0.62rem;
+            font-size: calc(0.62rem * var(--scale-factor));
         }
         .right-panel .form-group label .auto-badge {
-            font-size: 0.48rem;
+            font-size: calc(0.48rem * var(--scale-factor));
             background: var(--teal-soft);
             color: var(--teal);
-            padding: 2px 9px;
+            padding: calc(2px * var(--scale-factor)) calc(9px * var(--scale-factor));
             border-radius: 50px;
             font-weight: 700;
         }
         .right-panel .form-group label .optional-badge {
-            font-size: 0.44rem;
+            font-size: calc(0.44rem * var(--scale-factor));
             color: var(--ink-mute);
             background: var(--surface-muted);
-            padding: 2px 8px;
+            padding: calc(2px * var(--scale-factor)) calc(8px * var(--scale-factor));
             border-radius: 50px;
             font-weight: 600;
             border: 1px solid var(--line);
@@ -981,35 +998,35 @@
 
         .right-panel .form-group input,
         .right-panel .form-group select {
-            padding: 7px 12px;
-            border-radius: var(--radius-sm);
+            padding: calc(7px * var(--scale-factor)) calc(12px * var(--scale-factor));
+            border-radius: calc(var(--radius-sm) * var(--scale-factor));
             border: 1.5px solid var(--line);
             background: var(--surface-muted);
             color: var(--ink);
-            font-size: 0.8rem;
+            font-size: calc(0.8rem * var(--scale-factor));
             font-family: var(--font-display);
             transition: all 0.2s ease;
             outline: none;
             width: 100%;
-            height: 38px;
+            height: calc(38px * var(--scale-factor));
         }
         .right-panel .form-group input:focus,
         .right-panel .form-group select:focus {
             border-color: var(--accent);
             background: #ffffff;
-            box-shadow: 0 0 0 3px rgba(221, 159, 46, 0.15);
+            box-shadow: 0 0 0 calc(3px * var(--scale-factor)) rgba(221, 159, 46, 0.15);
         }
         .right-panel .form-group input::placeholder {
             color: var(--ink-mute);
             opacity: 0.6;
-            font-size: 0.75rem;
+            font-size: calc(0.75rem * var(--scale-factor));
         }
         .right-panel .form-group input:disabled {
             background: repeating-linear-gradient(135deg, #eef0ee, #eef0ee 6px, #e6e9e6 6px, #e6e9e6 12px);
             color: var(--ink-soft);
             font-family: var(--font-mono);
             font-weight: 600;
-            letter-spacing: 0.3px;
+            letter-spacing: calc(0.3px * var(--scale-factor));
             border-style: dashed;
         }
         .right-panel .form-group select option {
@@ -1020,48 +1037,48 @@
         .right-panel .divider {
             border: none;
             border-top: 1px dashed var(--line-strong);
-            margin: 12px 0 12px 0;
+            margin: calc(12px * var(--scale-factor)) 0 calc(12px * var(--scale-factor)) 0;
             flex-shrink: 0;
         }
 
         .btn-add {
-            padding: 6px 18px;
-            border-radius: 8px;
+            padding: calc(6px * var(--scale-factor)) calc(18px * var(--scale-factor));
+            border-radius: calc(8px * var(--scale-factor));
             background: var(--ink);
             border: none;
             color: #fff;
             font-weight: 700;
-            font-size: 0.75rem;
+            font-size: calc(0.75rem * var(--scale-factor));
             cursor: pointer;
             transition: 0.2s;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            height: 34px;
+            gap: calc(6px * var(--scale-factor));
+            height: calc(34px * var(--scale-factor));
             font-family: var(--font-display);
         }
         .btn-add:hover {
             background: var(--ink-soft);
-            transform: translateY(-1px);
+            transform: translateY(calc(-1px * var(--scale-factor)));
         }
         .btn-add i {
             color: var(--accent);
         }
 
         .btn-reset-form {
-            padding: 6px 16px;
-            border-radius: 8px;
+            padding: calc(6px * var(--scale-factor)) calc(16px * var(--scale-factor));
+            border-radius: calc(8px * var(--scale-factor));
             border: 1px solid var(--line);
             background: var(--surface);
             color: var(--ink-soft);
             font-weight: 700;
-            font-size: 0.7rem;
+            font-size: calc(0.7rem * var(--scale-factor));
             cursor: pointer;
             transition: 0.2s;
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            height: 34px;
+            gap: calc(5px * var(--scale-factor));
+            height: calc(34px * var(--scale-factor));
         }
         .btn-reset-form:hover {
             background: var(--surface-muted);
@@ -1070,17 +1087,17 @@
 
         .btn-actions-row {
             display: flex;
-            gap: 6px;
+            gap: calc(6px * var(--scale-factor));
             flex-wrap: wrap;
             flex-shrink: 0;
-            margin-top: 6px;
+            margin-top: calc(6px * var(--scale-factor));
         }
 
         /* ===== ITEMS TABLE ===== */
         .items-table-wrapper {
             flex: 1;
             overflow: hidden;
-            border-radius: var(--radius-sm);
+            border-radius: calc(var(--radius-sm) * var(--scale-factor));
             border: 1px solid var(--line);
             background: var(--surface-muted);
             display: flex;
@@ -1095,28 +1112,28 @@
         .items-table-wrapper table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.7rem;
+            font-size: calc(0.7rem * var(--scale-factor));
         }
         .items-table-wrapper table thead th {
             background: var(--ink);
             color: #ffffff;
-            padding: 7px 8px;
+            padding: calc(7px * var(--scale-factor)) calc(8px * var(--scale-factor));
             text-align: center;
             font-weight: 700;
-            font-size: 0.55rem;
-            letter-spacing: 0.3px;
-            border-bottom: 2px solid var(--ink-soft);
+            font-size: calc(0.55rem * var(--scale-factor));
+            letter-spacing: calc(0.3px * var(--scale-factor));
+            border-bottom: calc(2px * var(--scale-factor)) solid var(--ink-soft);
             position: sticky;
             top: 0;
             z-index: 10;
             white-space: nowrap;
         }
         .items-table-wrapper table tbody td {
-            padding: 6px 8px;
+            padding: calc(6px * var(--scale-factor)) calc(8px * var(--scale-factor));
             border-bottom: 1px solid var(--line);
             color: var(--ink-soft);
             text-align: center;
-            font-size: 0.7rem;
+            font-size: calc(0.7rem * var(--scale-factor));
             white-space: nowrap;
         }
         .items-table-wrapper table tbody tr:nth-child(even) td {
@@ -1137,11 +1154,11 @@
             background: var(--rust-soft);
             border: none;
             color: var(--rust);
-            padding: 3px 8px;
-            border-radius: 5px;
+            padding: calc(3px * var(--scale-factor)) calc(8px * var(--scale-factor));
+            border-radius: calc(5px * var(--scale-factor));
             cursor: pointer;
             transition: 0.2s;
-            font-size: 0.6rem;
+            font-size: calc(0.6rem * var(--scale-factor));
         }
         .items-table-wrapper table tbody td .btn-remove:hover {
             background: #f5cfc0;
@@ -1150,12 +1167,12 @@
             background: var(--teal-soft);
             border: none;
             color: var(--teal);
-            padding: 3px 8px;
-            border-radius: 5px;
+            padding: calc(3px * var(--scale-factor)) calc(8px * var(--scale-factor));
+            border-radius: calc(5px * var(--scale-factor));
             cursor: pointer;
             transition: 0.2s;
-            font-size: 0.6rem;
-            margin-left: 3px;
+            font-size: calc(0.6rem * var(--scale-factor));
+            margin-left: calc(3px * var(--scale-factor));
         }
         .items-table-wrapper table tbody td .btn-edit-item:hover {
             background: #c9ebe3;
@@ -1163,21 +1180,21 @@
 
         .items-table-wrapper .empty-items {
             text-align: center;
-            padding: 44px 20px;
+            padding: calc(44px * var(--scale-factor)) calc(20px * var(--scale-factor));
             color: var(--ink-mute);
         }
         .items-table-wrapper .empty-items i {
-            font-size: 2.3rem;
+            font-size: calc(2.3rem * var(--scale-factor));
             opacity: 0.18;
-            margin-bottom: 10px;
+            margin-bottom: calc(10px * var(--scale-factor));
             display: block;
         }
         .items-table-wrapper .empty-items p {
-            font-size: 0.85rem;
+            font-size: calc(0.85rem * var(--scale-factor));
             font-weight: 600;
         }
         .items-table-wrapper .empty-items span {
-            font-size: 0.7rem;
+            font-size: calc(0.7rem * var(--scale-factor));
             color: var(--ink-mute);
             opacity: 0.8;
         }
@@ -1187,40 +1204,40 @@
            ============================================================ */
         .toast-container {
             position: fixed;
-            top: 80px;
-            right: 20px;
+            top: calc(80px * var(--scale-factor));
+            right: calc(20px * var(--scale-factor));
             z-index: 99999;
-            max-width: 380px;
+            max-width: calc(380px * var(--scale-factor));
             width: 90%;
             pointer-events: none;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: calc(8px * var(--scale-factor));
         }
         .toast {
             background: #ffffff;
             border: 1px solid var(--line);
-            border-radius: 12px;
-            padding: 12px 16px;
+            border-radius: calc(12px * var(--scale-factor));
+            padding: calc(12px * var(--scale-factor)) calc(16px * var(--scale-factor));
             display: flex;
             align-items: center;
-            gap: 10px;
-            transform: translateX(20px);
+            gap: calc(10px * var(--scale-factor));
+            transform: translateX(calc(20px * var(--scale-factor)));
             transition: all 0.4s ease;
             opacity: 0;
             pointer-events: auto;
             box-shadow: var(--shadow);
-            border-right: 4px solid var(--ink);
+            border-right: calc(4px * var(--scale-factor)) solid var(--ink);
         }
         .toast.show {
             transform: translateX(0);
             opacity: 1;
         }
         .toast .toast-icon {
-            font-size: 1rem;
-            width: 30px;
-            height: 30px;
-            min-width: 30px;
+            font-size: calc(1rem * var(--scale-factor));
+            width: calc(30px * var(--scale-factor));
+            height: calc(30px * var(--scale-factor));
+            min-width: calc(30px * var(--scale-factor));
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -1239,36 +1256,36 @@
             background: var(--accent-soft);
         }
         .toast .toast-title {
-            font-size: 0.82rem;
+            font-size: calc(0.82rem * var(--scale-factor));
             font-weight: 800;
             color: var(--ink);
         }
         .toast .toast-message {
-            font-size: 0.72rem;
+            font-size: calc(0.72rem * var(--scale-factor));
             color: var(--ink-mute);
-            margin-top: 1px;
+            margin-top: calc(1px * var(--scale-factor));
         }
         .toast .toast-close {
             background: none;
             border: none;
             color: var(--ink-mute);
             cursor: pointer;
-            font-size: 0.85rem;
-            padding: 4px;
+            font-size: calc(0.85rem * var(--scale-factor));
+            padding: calc(4px * var(--scale-factor));
             margin-right: auto;
         }
 
         .toast-actions {
             display: flex;
-            gap: 6px;
-            margin-top: 6px;
+            gap: calc(6px * var(--scale-factor));
+            margin-top: calc(6px * var(--scale-factor));
         }
         .toast-actions button {
-            padding: 4px 12px;
-            border-radius: 6px;
+            padding: calc(4px * var(--scale-factor)) calc(12px * var(--scale-factor));
+            border-radius: calc(6px * var(--scale-factor));
             border: none;
             font-weight: 700;
-            font-size: 0.65rem;
+            font-size: calc(0.65rem * var(--scale-factor));
             cursor: pointer;
             transition: 0.2s;
             font-family: var(--font-display);
@@ -1301,31 +1318,31 @@
             z-index: 99999;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: calc(20px * var(--scale-factor));
             flex-direction: column;
-            gap: 16px;
+            gap: calc(16px * var(--scale-factor));
         }
         .print-preview-overlay.show {
             display: flex;
         }
         .print-preview-overlay .print-actions {
             display: flex;
-            gap: 12px;
+            gap: calc(12px * var(--scale-factor));
             flex-wrap: wrap;
             justify-content: center;
         }
         .print-preview-overlay .print-actions button {
-            padding: 10px 28px;
-            border-radius: 50px;
+            padding: calc(10px * var(--scale-factor)) calc(28px * var(--scale-factor));
+            border-radius: calc(50px * var(--scale-factor));
             border: none;
             font-weight: 800;
-            font-size: 0.9rem;
+            font-size: calc(0.9rem * var(--scale-factor));
             cursor: pointer;
             transition: 0.25s;
             font-family: var(--font-display);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: calc(8px * var(--scale-factor));
         }
         .print-preview-overlay .print-actions .btn-print {
             background: var(--accent);
@@ -1334,7 +1351,7 @@
         .print-preview-overlay .print-actions .btn-print:hover {
             background: var(--accent-ink);
             color: #fff;
-            transform: translateY(-2px);
+            transform: translateY(calc(-2px * var(--scale-factor)));
         }
         .print-preview-overlay .print-actions .btn-close-preview {
             background: var(--rust-soft);
@@ -1343,17 +1360,17 @@
         .print-preview-overlay .print-actions .btn-close-preview:hover {
             background: var(--rust);
             color: #fff;
-            transform: translateY(-2px);
+            transform: translateY(calc(-2px * var(--scale-factor)));
         }
         .print-preview-overlay .print-wrapper {
             background: #ffffff;
-            border-radius: var(--radius);
-            max-width: 820px;
+            border-radius: calc(var(--radius) * var(--scale-factor));
+            max-width: calc(820px * var(--scale-factor));
             width: 100%;
             max-height: 80vh;
             overflow-y: auto;
-            padding: 30px 35px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            padding: calc(30px * var(--scale-factor)) calc(35px * var(--scale-factor));
+            box-shadow: 0 calc(20px * var(--scale-factor)) calc(60px * var(--scale-factor)) rgba(0,0,0,0.4);
         }
 
         /* ============================================================
@@ -1363,22 +1380,22 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding-bottom: 16px;
-            border-bottom: 3px solid var(--ink);
-            margin-bottom: 16px;
-            gap: 16px;
+            padding-bottom: calc(16px * var(--scale-factor));
+            border-bottom: calc(3px * var(--scale-factor)) solid var(--ink);
+            margin-bottom: calc(16px * var(--scale-factor));
+            gap: calc(16px * var(--scale-factor));
         }
         .print-preview-overlay .print-wrapper .invoice-header .logo-section {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: calc(12px * var(--scale-factor));
         }
         .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box {
-            width: 70px;
-            height: 70px;
-            border-radius: 10px;
+            width: calc(70px * var(--scale-factor));
+            height: calc(70px * var(--scale-factor));
+            border-radius: calc(10px * var(--scale-factor));
             overflow: hidden;
-            border: 2px solid var(--accent);
+            border: calc(2px * var(--scale-factor)) solid var(--accent);
             background: #ffffff;
             display: flex;
             align-items: center;
@@ -1393,28 +1410,28 @@
             object-fit: contain;
         }
         .print-preview-overlay .print-wrapper .invoice-header .company-details h2 {
-            font-size: 1.3rem;
+            font-size: calc(1.3rem * var(--scale-factor));
             font-weight: 900;
             color: var(--ink);
         }
         .print-preview-overlay .print-wrapper .invoice-header .company-details p {
-            font-size: 0.6rem;
+            font-size: calc(0.6rem * var(--scale-factor));
             color: var(--ink-mute);
         }
         .print-preview-overlay .print-wrapper .invoice-header .invoice-title {
             text-align: left;
             background: var(--surface-muted);
-            padding: 6px 16px;
-            border-radius: 8px;
-            border-right: 3px solid var(--accent);
+            padding: calc(6px * var(--scale-factor)) calc(16px * var(--scale-factor));
+            border-radius: calc(8px * var(--scale-factor));
+            border-right: calc(3px * var(--scale-factor)) solid var(--accent);
         }
         .print-preview-overlay .print-wrapper .invoice-header .invoice-title .num {
-            font-size: 0.9rem;
+            font-size: calc(0.9rem * var(--scale-factor));
             font-weight: 900;
             color: var(--ink);
         }
         .print-preview-overlay .print-wrapper .invoice-header .invoice-title .sub {
-            font-size: 0.55rem;
+            font-size: calc(0.55rem * var(--scale-factor));
             color: var(--ink-mute);
             font-weight: 600;
         }
@@ -1422,20 +1439,20 @@
         .print-preview-overlay .print-wrapper .info-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 14px;
+            gap: calc(10px * var(--scale-factor));
+            margin-bottom: calc(14px * var(--scale-factor));
             background: var(--surface-muted);
-            padding: 10px 14px;
-            border-radius: var(--radius-sm);
+            padding: calc(10px * var(--scale-factor)) calc(14px * var(--scale-factor));
+            border-radius: calc(var(--radius-sm) * var(--scale-factor));
             border: 1px solid var(--line);
         }
         .print-preview-overlay .print-wrapper .info-grid .item .label {
-            font-size: 0.5rem;
+            font-size: calc(0.5rem * var(--scale-factor));
             color: var(--ink-mute);
             font-weight: 700;
         }
         .print-preview-overlay .print-wrapper .info-grid .item .value {
-            font-size: 0.78rem;
+            font-size: calc(0.78rem * var(--scale-factor));
             font-weight: 700;
             color: var(--ink);
         }
@@ -1443,18 +1460,18 @@
         .print-preview-overlay .print-wrapper table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.7rem;
+            font-size: calc(0.7rem * var(--scale-factor));
         }
         .print-preview-overlay .print-wrapper table th {
             background: var(--ink);
             color: #ffffff;
-            padding: 6px 10px;
+            padding: calc(6px * var(--scale-factor)) calc(10px * var(--scale-factor));
             text-align: center;
-            font-size: 0.55rem;
+            font-size: calc(0.55rem * var(--scale-factor));
             font-weight: 700;
         }
         .print-preview-overlay .print-wrapper table td {
-            padding: 6px 10px;
+            padding: calc(6px * var(--scale-factor)) calc(10px * var(--scale-factor));
             border-bottom: 1px solid var(--line);
             color: var(--ink-soft);
             text-align: center;
@@ -1462,53 +1479,53 @@
 
         .print-preview-overlay .print-wrapper .footer {
             border-top: 1px solid var(--line);
-            padding-top: 12px;
-            margin-top: 12px;
+            padding-top: calc(12px * var(--scale-factor));
+            margin-top: calc(12px * var(--scale-factor));
             display: flex;
             justify-content: space-between;
-            font-size: 0.6rem;
+            font-size: calc(0.6rem * var(--scale-factor));
             color: var(--ink-mute);
         }
         .print-preview-overlay .print-wrapper .footer .signature .line {
-            width: 100px;
-            border-bottom: 2px solid var(--ink);
-            margin-top: 3px;
+            width: calc(100px * var(--scale-factor));
+            border-bottom: calc(2px * var(--scale-factor)) solid var(--ink);
+            margin-top: calc(3px * var(--scale-factor));
         }
 
         /* ============================================================
            NOTES SECTION - PRINT PREVIEW
            ============================================================ */
         .print-preview-overlay .print-wrapper .notes-section {
-            margin-top: 16px;
-            padding-top: 12px;
-            border-top: 2px dashed var(--line-strong);
+            margin-top: calc(16px * var(--scale-factor));
+            padding-top: calc(12px * var(--scale-factor));
+            border-top: calc(2px * var(--scale-factor)) dashed var(--line-strong);
             background: var(--surface-muted);
-            border-radius: var(--radius-sm);
-            padding: 12px 14px;
+            border-radius: calc(var(--radius-sm) * var(--scale-factor));
+            padding: calc(12px * var(--scale-factor)) calc(14px * var(--scale-factor));
         }
         .print-preview-overlay .print-wrapper .notes-section .notes-title {
-            font-size: 0.65rem;
+            font-size: calc(0.65rem * var(--scale-factor));
             font-weight: 800;
             color: var(--accent-ink);
             display: flex;
             align-items: center;
-            gap: 6px;
-            margin-bottom: 6px;
+            gap: calc(6px * var(--scale-factor));
+            margin-bottom: calc(6px * var(--scale-factor));
         }
         .print-preview-overlay .print-wrapper .notes-section .notes-title i {
             color: var(--accent);
-            font-size: 0.7rem;
+            font-size: calc(0.7rem * var(--scale-factor));
         }
         .print-preview-overlay .print-wrapper .notes-section .notes-content {
-            font-size: 0.55rem;
+            font-size: calc(0.55rem * var(--scale-factor));
             color: var(--ink-soft);
             line-height: 1.8;
-            padding-right: 4px;
+            padding-right: calc(4px * var(--scale-factor));
         }
         .print-preview-overlay .print-wrapper .notes-section .notes-content p {
-            margin-bottom: 3px;
+            margin-bottom: calc(3px * var(--scale-factor));
             position: relative;
-            padding-right: 16px;
+            padding-right: calc(16px * var(--scale-factor));
         }
         .print-preview-overlay .print-wrapper .notes-section .notes-content p::before {
             content: '•';
@@ -1523,129 +1540,129 @@
            ============================================================ */
         @media (max-width: 768px) {
             .print-preview-overlay .print-wrapper {
-                padding: 20px 16px;
+                padding: calc(20px * var(--scale-factor)) calc(16px * var(--scale-factor));
                 max-height: 70vh;
                 max-width: 95%;
             }
             .print-preview-overlay .print-wrapper .invoice-header {
                 flex-direction: column;
                 text-align: center;
-                gap: 8px;
+                gap: calc(8px * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .invoice-header .invoice-title {
                 text-align: center;
                 border-right: none;
-                border-top: 2px solid var(--accent);
-                padding: 4px 12px;
+                border-top: calc(2px * var(--scale-factor)) solid var(--accent);
+                padding: calc(4px * var(--scale-factor)) calc(12px * var(--scale-factor));
                 width: 100%;
             }
             .print-preview-overlay .print-wrapper .info-grid {
                 grid-template-columns: 1fr 1fr;
-                gap: 6px;
-                padding: 8px 10px;
+                gap: calc(6px * var(--scale-factor));
+                padding: calc(8px * var(--scale-factor)) calc(10px * var(--scale-factor));
             }
             .print-preview-overlay .print-actions button {
-                padding: 8px 16px;
-                font-size: 0.75rem;
+                padding: calc(8px * var(--scale-factor)) calc(16px * var(--scale-factor));
+                font-size: calc(0.75rem * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper table {
-                font-size: 0.6rem;
+                font-size: calc(0.6rem * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper table th,
             .print-preview-overlay .print-wrapper table td {
-                padding: 4px 6px;
+                padding: calc(4px * var(--scale-factor)) calc(6px * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .footer {
                 flex-direction: column;
-                gap: 8px;
+                gap: calc(8px * var(--scale-factor));
                 text-align: center;
             }
             .print-preview-overlay .print-wrapper .footer .signature .line {
-                width: 80px;
-                margin: 3px auto 0;
+                width: calc(80px * var(--scale-factor));
+                margin: calc(3px * var(--scale-factor)) auto 0;
             }
             .print-preview-overlay .print-wrapper .notes-section {
-                padding: 10px 12px;
-                margin-top: 12px;
+                padding: calc(10px * var(--scale-factor)) calc(12px * var(--scale-factor));
+                margin-top: calc(12px * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .notes-section .notes-title {
-                font-size: 0.6rem;
+                font-size: calc(0.6rem * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .notes-section .notes-content {
-                font-size: 0.5rem;
+                font-size: calc(0.5rem * var(--scale-factor));
                 line-height: 1.7;
             }
             .print-preview-overlay .print-wrapper .notes-section .notes-content p {
-                padding-right: 14px;
+                padding-right: calc(14px * var(--scale-factor));
             }
         }
 
         @media (max-width: 480px) {
             .print-preview-overlay .print-wrapper {
-                padding: 12px 10px;
+                padding: calc(12px * var(--scale-factor)) calc(10px * var(--scale-factor));
                 max-height: 60vh;
                 max-width: 98%;
-                border-radius: 8px;
+                border-radius: calc(8px * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box {
-                width: 50px;
-                height: 50px;
+                width: calc(50px * var(--scale-factor));
+                height: calc(50px * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .invoice-header .company-details h2 {
-                font-size: 1rem;
+                font-size: calc(1rem * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .invoice-header .company-details p {
-                font-size: 0.5rem;
+                font-size: calc(0.5rem * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .info-grid {
                 grid-template-columns: 1fr 1fr;
-                gap: 4px;
-                padding: 6px 8px;
+                gap: calc(4px * var(--scale-factor));
+                padding: calc(6px * var(--scale-factor)) calc(8px * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .info-grid .item .value {
-                font-size: 0.65rem;
+                font-size: calc(0.65rem * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .info-grid .item .label {
-                font-size: 0.45rem;
+                font-size: calc(0.45rem * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper table {
-                font-size: 0.5rem;
+                font-size: calc(0.5rem * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper table th,
             .print-preview-overlay .print-wrapper table td {
-                padding: 3px 4px;
+                padding: calc(3px * var(--scale-factor)) calc(4px * var(--scale-factor));
             }
             .print-preview-overlay .print-actions button {
-                padding: 6px 12px;
-                font-size: 0.65rem;
+                padding: calc(6px * var(--scale-factor)) calc(12px * var(--scale-factor));
+                font-size: calc(0.65rem * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .footer {
                 flex-direction: column;
-                gap: 6px;
+                gap: calc(6px * var(--scale-factor));
                 text-align: center;
-                font-size: 0.5rem;
+                font-size: calc(0.5rem * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .footer .signature .line {
-                width: 60px;
-                margin: 3px auto 0;
+                width: calc(60px * var(--scale-factor));
+                margin: calc(3px * var(--scale-factor)) auto 0;
             }
             .print-preview-overlay .print-wrapper .footer .signature p {
-                font-size: 0.5rem;
+                font-size: calc(0.5rem * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .notes-section {
-                padding: 8px 10px;
-                margin-top: 10px;
+                padding: calc(8px * var(--scale-factor)) calc(10px * var(--scale-factor));
+                margin-top: calc(10px * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .notes-section .notes-title {
-                font-size: 0.55rem;
+                font-size: calc(0.55rem * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .notes-section .notes-content {
-                font-size: 0.5rem;
+                font-size: calc(0.5rem * var(--scale-factor));
                 line-height: 1.6;
             }
             .print-preview-overlay .print-wrapper .notes-section .notes-content p {
-                padding-right: 12px;
-                margin-bottom: 2px;
+                padding-right: calc(12px * var(--scale-factor));
+                margin-bottom: calc(2px * var(--scale-factor));
             }
         }
 
@@ -1656,7 +1673,7 @@
             .print-preview-overlay .print-wrapper {
                 max-height: none !important;
                 box-shadow: none !important;
-                padding: 10px !important;
+                padding: calc(10px * var(--scale-factor)) !important;
             }
             .print-preview-overlay .print-actions {
                 display: none !important;
@@ -1670,7 +1687,7 @@
                 border-color: var(--ink) !important;
             }
             .print-preview-overlay .print-wrapper .notes-section {
-                border-top: 2px dashed var(--line-strong) !important;
+                border-top: calc(2px * var(--scale-factor)) dashed var(--line-strong) !important;
                 background: var(--surface-muted) !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
@@ -1692,13 +1709,13 @@
             left: 0;
             background: #ffffff;
             border: 1px solid var(--line);
-            border-radius: var(--radius-sm);
-            max-height: 200px;
+            border-radius: calc(var(--radius-sm) * var(--scale-factor));
+            max-height: calc(200px * var(--scale-factor));
             overflow-y: auto;
             z-index: 999;
             display: none;
             box-shadow: var(--shadow);
-            margin-top: 2px;
+            margin-top: calc(2px * var(--scale-factor));
         }
 
         .client-suggestions .suggestions-list.show {
@@ -1706,14 +1723,14 @@
         }
 
         .client-suggestions .suggestions-list .suggestion-item {
-            padding: 8px 14px;
+            padding: calc(8px * var(--scale-factor)) calc(14px * var(--scale-factor));
             cursor: pointer;
             transition: 0.2s;
             display: flex;
             align-items: center;
             justify-content: space-between;
             border-bottom: 1px solid var(--line);
-            font-size: 0.8rem;
+            font-size: calc(0.8rem * var(--scale-factor));
         }
 
         .client-suggestions .suggestions-list .suggestion-item:last-child {
@@ -1725,7 +1742,7 @@
         }
 
         .client-suggestions .suggestions-list .suggestion-item .client-phone {
-            font-size: 0.65rem;
+            font-size: calc(0.65rem * var(--scale-factor));
             color: var(--ink-mute);
         }
 
@@ -1735,26 +1752,26 @@
         }
 
         .client-suggestions .suggestions-list .suggestion-item.add-new i {
-            margin-left: 6px;
+            margin-left: calc(6px * var(--scale-factor));
         }
 
         .client-suggestions .suggestions-list .suggestion-item.selected {
             background: var(--accent-soft);
-            border-right: 3px solid var(--accent);
+            border-right: calc(3px * var(--scale-factor)) solid var(--accent);
         }
 
         .client-suggestions .suggestions-list .loading-suggestions {
-            padding: 12px 14px;
+            padding: calc(12px * var(--scale-factor)) calc(14px * var(--scale-factor));
             text-align: center;
             color: var(--ink-mute);
-            font-size: 0.75rem;
+            font-size: calc(0.75rem * var(--scale-factor));
         }
 
         .no-results {
-            padding: 12px 14px;
+            padding: calc(12px * var(--scale-factor)) calc(14px * var(--scale-factor));
             text-align: center;
             color: var(--ink-mute);
-            font-size: 0.75rem;
+            font-size: calc(0.75rem * var(--scale-factor));
         }
 
         /* ============================================================
@@ -1762,21 +1779,21 @@
            ============================================================ */
         .property-select {
             width: 100%;
-            padding: 7px 12px;
-            border-radius: var(--radius-sm);
+            padding: calc(7px * var(--scale-factor)) calc(12px * var(--scale-factor));
+            border-radius: calc(var(--radius-sm) * var(--scale-factor));
             border: 1.5px solid var(--line);
             background: var(--surface-muted);
             color: var(--ink);
-            font-size: 0.8rem;
+            font-size: calc(0.8rem * var(--scale-factor));
             font-family: var(--font-display);
             transition: all 0.2s ease;
             outline: none;
-            height: 38px;
+            height: calc(38px * var(--scale-factor));
         }
         .property-select:focus {
             border-color: var(--accent);
             background: #ffffff;
-            box-shadow: 0 0 0 3px rgba(221, 159, 46, 0.15);
+            box-shadow: 0 0 0 calc(3px * var(--scale-factor)) rgba(221, 159, 46, 0.15);
         }
         .property-select option {
             background: #ffffff;
@@ -1789,7 +1806,7 @@
         }
 
         /* ============================================================
-           DATE INPUT - تنسيق DD/MM/YYYY باستخدام JS
+           DATE INPUT - تنسيق DD/MM/YYYY
            ============================================================ */
         .date-wrapper {
             position: relative;
@@ -1798,39 +1815,38 @@
 
         .date-wrapper input[type="date"] {
             width: 100%;
-            padding: 7px 12px;
-            border-radius: var(--radius-sm);
+            padding: calc(7px * var(--scale-factor)) calc(12px * var(--scale-factor));
+            border-radius: calc(var(--radius-sm) * var(--scale-factor));
             border: 1.5px solid var(--line);
             background: var(--surface-muted);
             color: var(--ink);
-            font-size: 0.8rem;
+            font-size: calc(0.8rem * var(--scale-factor));
             font-family: var(--font-display);
             transition: all 0.2s ease;
             outline: none;
-            height: 38px;
+            height: calc(38px * var(--scale-factor));
             direction: ltr;
         }
 
         .date-wrapper input[type="date"]:focus {
             border-color: var(--accent);
             background: #ffffff;
-            box-shadow: 0 0 0 3px rgba(221, 159, 46, 0.15);
+            box-shadow: 0 0 0 calc(3px * var(--scale-factor)) rgba(221, 159, 46, 0.15);
         }
 
         .date-wrapper input[type="date"]::-webkit-calendar-picker-indicator {
             position: absolute;
-            left: 8px;
+            left: calc(8px * var(--scale-factor));
             top: 50%;
             transform: translateY(-50%);
             cursor: pointer;
         }
 
-        /* تنسيق عرض التاريخ بالشكل المطلوب DD/MM/YYYY */
         .date-display {
             direction: ltr !important;
             text-align: center !important;
             font-family: var(--font-mono);
-            letter-spacing: 1px;
+            letter-spacing: calc(1px * var(--scale-factor));
         }
 
         .date-display::-webkit-datetime-edit {
@@ -1860,17 +1876,17 @@
         .btn-add {
             display: inline-flex !important;
             align-items: center !important;
-            gap: 6px !important;
-            padding: 6px 18px !important;
-            border-radius: 8px !important;
+            gap: calc(6px * var(--scale-factor)) !important;
+            padding: calc(6px * var(--scale-factor)) calc(18px * var(--scale-factor)) !important;
+            border-radius: calc(8px * var(--scale-factor)) !important;
             background: var(--ink) !important;
             border: none !important;
             color: #fff !important;
             font-weight: 700 !important;
-            font-size: 0.75rem !important;
+            font-size: calc(0.75rem * var(--scale-factor)) !important;
             cursor: pointer !important;
             transition: all 0.2s ease !important;
-            height: 34px !important;
+            height: calc(34px * var(--scale-factor)) !important;
             font-family: var(--font-display) !important;
             visibility: visible !important;
             opacity: 1 !important;
@@ -1878,20 +1894,19 @@
 
         .btn-add:hover {
             background: var(--ink-soft) !important;
-            transform: translateY(-1px) !important;
+            transform: translateY(calc(-1px * var(--scale-factor))) !important;
         }
 
         .btn-add i {
             color: var(--accent) !important;
         }
 
-        /* التأكد من ظهور الأزرار في الـ actions row */
         .btn-actions-row {
             display: flex !important;
-            gap: 6px !important;
+            gap: calc(6px * var(--scale-factor)) !important;
             flex-wrap: wrap !important;
             flex-shrink: 0 !important;
-            margin-top: 6px !important;
+            margin-top: calc(6px * var(--scale-factor)) !important;
         }
 
         .btn-actions-row .btn-add,
@@ -2166,7 +2181,7 @@
                         </div>
                     </div>
 
-                    <div class="form-row financial-row" style="margin-top:4px;">
+                    <div class="form-row financial-row" style="margin-top:calc(4px * var(--scale-factor));">
                         <div class="form-group">
                             <label>الإجمالي <span class="auto-badge">تلقائي</span></label>
                             <input type="text" id="totalAmountDisplay" readonly style="font-weight:700;color:var(--teal);" />
@@ -2177,7 +2192,7 @@
                         </div>
                         <div class="form-group">
                             <label>&nbsp;</label>
-                            <div style="height:38px;"></div>
+                            <div style="height:calc(38px * var(--scale-factor));"></div>
                         </div>
                     </div>
 
@@ -2214,12 +2229,12 @@
                             <table>
                                 <thead>
                                     <tr>
-                                        <th style="width:25px;">#</th>
+                                        <th style="width:calc(25px * var(--scale-factor));">#</th>
                                         <th style="text-align:right;">نوع العقار</th>
-                                        <th style="width:40px;">عدد الأيام</th>
-                                        <th style="width:50px;">السعر اليومي</th>
-                                        <th style="width:60px;">الإجمالي</th>
-                                        <th style="width:65px;">إجراء</th>
+                                        <th style="width:calc(40px * var(--scale-factor));">عدد الأيام</th>
+                                        <th style="width:calc(50px * var(--scale-factor));">السعر اليومي</th>
+                                        <th style="width:calc(60px * var(--scale-factor));">الإجمالي</th>
+                                        <th style="width:calc(65px * var(--scale-factor));">إجراء</th>
                                     </tr>
                                 </thead>
                                 <tbody id="itemsBody">
@@ -2658,7 +2673,7 @@
 
         /**
          * ============================================================
-         * ADD BOOKING - زر الإضافة (تم إصلاحه)
+         * ADD BOOKING - زر الإضافة
          * ============================================================
          */
         btnAddBooking.addEventListener('click', function() {
