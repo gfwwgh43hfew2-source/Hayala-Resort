@@ -981,11 +981,6 @@
             transform: scale(0.9);
             transform-origin: top center;
         }
-
-        /* Adjust padding and margins to compensate for the scaling if needed */
-        .main {
-            /* No change needed, the scale will handle the visual size */
-        }
     </style>
 </head>
 <body>
@@ -1094,7 +1089,7 @@
                 <!-- ===== HERO ===== -->
                 <div class="hero fade-up" style="animation-delay:0.02s">
                     <div class="copy">
-                        <div class="eyebrow">لوحة التحكم — يوليو 2026</div>
+                        <div class="eyebrow" id="dashboardDate">لوحة التحكم — جاري التحميل...</div>
                         <h1>
                             أهلاً وسهلاً بك في<br>
                             <span class="highlight">منتجع حياله</span>
@@ -1126,7 +1121,7 @@
                                 <div class="label"><i class="fas fa-wallet"></i> إجمالي الإيرادات</div>
                                 <div class="number" id="totalRevenue"><span class="loading-text">جاري التحميل...</span></div>
                                 <div class="foot">
-                                    <span class="change up"><i class="fas fa-arrow-up"></i> 0%</span>
+                                    <span class="change up"><i class="fas fa-arrow-up"></i> <span id="revenueChange">0%</span></span>
                                     <span class="spark"><canvas id="spark1"></canvas></span>
                                 </div>
                             </div>
@@ -1137,7 +1132,7 @@
                                 <div class="label"><i class="fas fa-file-invoice"></i> إجمالي الحجوزات</div>
                                 <div class="number" id="totalBookings"><span class="loading-text">جاري التحميل...</span></div>
                                 <div class="foot">
-                                    <span class="change up"><i class="fas fa-arrow-up"></i> 0%</span>
+                                    <span class="change up"><i class="fas fa-arrow-up"></i> <span id="bookingsChange">0%</span></span>
                                     <span class="spark"><canvas id="spark2"></canvas></span>
                                 </div>
                             </div>
@@ -1148,7 +1143,7 @@
                                 <div class="label"><i class="fas fa-users"></i> إجمالي العملاء</div>
                                 <div class="number" id="totalClients"><span class="loading-text">جاري التحميل...</span></div>
                                 <div class="foot">
-                                    <span class="change up"><i class="fas fa-arrow-up"></i> 0%</span>
+                                    <span class="change up"><i class="fas fa-arrow-up"></i> <span id="clientsChange">0%</span></span>
                                     <span class="spark"><canvas id="spark3"></canvas></span>
                                 </div>
                             </div>
@@ -1159,7 +1154,7 @@
                                 <div class="label"><i class="fas fa-clock"></i> حجوزات قادمة</div>
                                 <div class="number" id="upcomingBookings"><span class="loading-text">جاري التحميل...</span></div>
                                 <div class="foot">
-                                    <span class="change up"><i class="fas fa-arrow-up"></i> 0%</span>
+                                    <span class="change up"><i class="fas fa-arrow-up"></i> <span id="upcomingChange">0%</span></span>
                                     <span class="spark"><canvas id="spark4"></canvas></span>
                                 </div>
                             </div>
@@ -1170,7 +1165,7 @@
                                 <div class="label"><i class="fas fa-hand-holding-heart" style="color:var(--gold);"></i> عمولة أبو زيد</div>
                                 <div class="number" id="totalCommission"><span class="loading-text">جاري التحميل...</span></div>
                                 <div class="foot">
-                                    <span class="change up"><i class="fas fa-arrow-up"></i> 0%</span>
+                                    <span class="change up"><i class="fas fa-arrow-up"></i> <span id="commissionChange">0%</span></span>
                                     <span class="spark"><canvas id="spark5"></canvas></span>
                                 </div>
                             </div>
@@ -1223,7 +1218,7 @@
                     <div class="panel activity fade-up" style="animation-delay:0.16s">
                         <div class="head">
                             <h3>النشاط الأخير</h3>
-                            <a href="#">عرض الكل</a>
+                            <a href="bookings.html">عرض الكل</a>
                         </div>
                         <div class="list" id="activityList">
                             <div class="empty-state"><i class="fas fa-clock"></i><p>جاري تحميل النشاطات...</p></div>
@@ -1233,7 +1228,7 @@
                     <div class="panel toplist fade-up" style="animation-delay:0.2s">
                         <div class="head">
                             <h3>أفضل العملاء</h3>
-                            <a href="#">الكل</a>
+                            <a href="clients.html">الكل</a>
                         </div>
                         <div id="topClientsList">
                             <div class="empty-state"><i class="fas fa-users"></i><p>جاري تحميل العملاء...</p></div>
@@ -1271,9 +1266,17 @@
     </nav>
 
     <!-- ==========================================================
-    JAVASCRIPT - نفس نظام الكود الذي يعمل مع إضافة التحقق من تسجيل الدخول
+    JAVASCRIPT - بيانات فعلية من Supabase
     ========================================================== -->
     <script>
+        /**
+         * ============================================================
+         * SUPABASE CONFIGURATION
+         * ============================================================
+         */
+        var SUPABASE_URL = 'https://zwuvcblrrrriuylajvba.supabase.co';
+        var SUPABASE_ANON_KEY = 'sb_publishable_YFqwTEs-W_kprUgt4bgpCQ_tf5vVeFa';
+
         /**
          * ============================================================
          * التحقق من تسجيل الدخول
@@ -1305,7 +1308,7 @@
         }
 
         /* ============================================================
-           SIDEBAR TOGGLE — نفس الكود من صفحة رولكس التي تعمل
+           SIDEBAR TOGGLE
            ============================================================ */
         var sidebar = document.getElementById('sidebar');
         var overlay = document.getElementById('sidebarOverlay');
@@ -1338,17 +1341,14 @@
             }
         }
 
-        // ربط زر الهامبورجر
         if (hamburger) {
             hamburger.addEventListener('click', toggleSidebar);
         }
 
-        // ربط زر القائمة السفلي
         if (bottomMenuBtn) {
             bottomMenuBtn.addEventListener('click', toggleSidebar);
         }
 
-        // ربط الخلفية للإغلاق
         if (overlay) {
             overlay.addEventListener('click', function() {
                 if (window.innerWidth <= 768 && mobileOpen) {
@@ -1357,14 +1357,12 @@
             });
         }
 
-        // إغلاق بالضغط على Escape
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && window.innerWidth <= 768 && mobileOpen) {
                 toggleSidebar();
             }
         });
 
-        // إغلاق تلقائي عند تغيير حجم الشاشة
         window.addEventListener('resize', function() {
             if (window.innerWidth > 768) {
                 sidebar.classList.remove('open');
@@ -1458,30 +1456,36 @@
         var salesChart;
         var pieChart;
         var chartData = {
-            labels: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
-            sales: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            occupancy: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            labels: [],
+            sales: [],
+            occupancy: []
         };
 
         var pieData = {
-            labels: ['فيلا', 'شقة', 'استوديو', 'جناح'],
-            values: [40, 30, 20, 10]
+            labels: [],
+            values: []
         };
 
-        function renderSalesChart(range) {
-            var n = range || 6;
+        function renderSalesChart() {
             var ctx = document.getElementById('salesChart').getContext('2d');
             if (salesChart) {
                 salesChart.destroy();
             }
+            
+            if (chartData.labels.length === 0) {
+                chartData.labels = ['لا توجد بيانات'];
+                chartData.sales = [0];
+                chartData.occupancy = [0];
+            }
+
             salesChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: chartData.labels.slice(0, n),
+                    labels: chartData.labels,
                     datasets: [
                         {
                             label: 'الإيرادات',
-                            data: chartData.sales.slice(0, n),
+                            data: chartData.sales,
                             backgroundColor: '#1a4a6b',
                             borderRadius: 6,
                             barPercentage: 0.5,
@@ -1490,7 +1494,7 @@
                         },
                         {
                             label: 'الإشغال (%)',
-                            data: chartData.occupancy.slice(0, n),
+                            data: chartData.occupancy,
                             type: 'line',
                             borderColor: '#a63a31',
                             backgroundColor: '#a63a31',
@@ -1566,7 +1570,8 @@
                                     size: 10
                                 },
                                 callback: function(v) {
-                                    return (v / 1000) + 'k';
+                                    if (v >= 1000) return (v / 1000) + 'k';
+                                    return v;
                                 }
                             }
                         }
@@ -1580,14 +1585,21 @@
             if (pieChart) {
                 pieChart.destroy();
             }
-            var colors = ['#1a4a6b', '#b98a1e', '#2e7a5c', '#b14b2b'];
+            
+            if (pieData.labels.length === 0) {
+                pieData.labels = ['لا توجد بيانات'];
+                pieData.values = [100];
+            }
+
+            var colors = ['#1a4a6b', '#b98a1e', '#2e7a5c', '#b14b2b', '#1a6a4a', '#a63a31', '#2a5a7a', '#c98a2e'];
+            
             pieChart = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
                     labels: pieData.labels,
                     datasets: [{
                         data: pieData.values,
-                        backgroundColor: colors,
+                        backgroundColor: colors.slice(0, pieData.labels.length),
                         borderColor: '#ffffff',
                         borderWidth: 2,
                         hoverOffset: 8
@@ -1634,33 +1646,14 @@
             });
         }
 
-        renderSalesChart(6);
-        renderPieChart();
-
-        var tabsButtons = document.querySelectorAll('.tabs button');
-        for (var i = 0; i < tabsButtons.length; i++) {
-            tabsButtons[i].addEventListener('click', function() {
-                var allTabs = document.querySelectorAll('.tabs button');
-                for (var j = 0; j < allTabs.length; j++) {
-                    allTabs[j].classList.remove('active');
-                }
-                this.classList.add('active');
-                var range = parseInt(this.dataset.range, 10);
-                renderSalesChart(range);
-            });
-        }
-
         function renderSpark(id, data, color) {
             var canvas = document.getElementById(id);
-            if (!canvas) {
-                return;
-            }
+            if (!canvas) return;
+            
             new Chart(canvas.getContext('2d'), {
                 type: 'line',
                 data: {
-                    labels: data.map(function(_, i) {
-                        return i;
-                    }),
+                    labels: data.map(function(_, i) { return i; }),
                     datasets: [{
                         data: data,
                         borderColor: color,
@@ -1673,405 +1666,115 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            enabled: false
-                        }
-                    },
-                    scales: {
-                        x: {
-                            display: false
-                        },
-                        y: {
-                            display: false
-                        }
-                    },
-                    elements: {
-                        line: {
-                            borderJoinStyle: 'round'
-                        }
-                    }
+                    plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                    scales: { x: { display: false }, y: { display: false } },
+                    elements: { line: { borderJoinStyle: 'round' } }
                 }
             });
         }
 
-        renderSpark('spark1', [0, 0, 0, 0, 0, 0, 0, 0, 0], '#1a4a6b');
-        renderSpark('spark2', [0, 0, 0, 0, 0, 0, 0, 0, 0], '#9a8f83');
-        renderSpark('spark3', [0, 0, 0, 0, 0, 0, 0, 0, 0], '#2e7a5c');
-        renderSpark('spark4', [0, 0, 0, 0, 0, 0, 0, 0, 0], '#a63a31');
-        renderSpark('spark5', [0, 0, 0, 0, 0, 0, 0, 0, 0], '#b98a1e');
-
         /* ============================================================
-           DATA FETCH — Google Sheets
+           جلب البيانات الفعلية من Supabase
            ============================================================ */
-        var SHEET_ID = '1u6SM7bWGk2fdiBJLS-N9BO7XXb45QnAp2OqYIw0STpg';
-        var BOOKINGS_SHEET = 'سجل الحجوزات';
-        var CLIENTS_SHEET = 'العملاء';
-        var COMMISSION_SHEET = 'عمولة أبوزيد';
-        var EXPENSES_SHEET = 'المصاريف والتشغيل';
-
-        async function fetchTotalExpenses() {
+        async function fetchDashboardData() {
             try {
-                var expensesData = localStorage.getItem('expenses');
-                if (expensesData) {
-                    var expenses = JSON.parse(expensesData);
-                    if (Array.isArray(expenses) && expenses.length > 0) {
-                        var total = 0;
-                        for (var i = 0; i < expenses.length; i++) {
-                            total += parseFloat(expenses[i].amount) || 0;
-                        }
-                        return total;
+                // 1. جلب بيانات الحجوزات
+                var bookingsResponse = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=*', {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
                     }
-                }
-                var url = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?tqx=out:csv&sheet=' + encodeURIComponent(EXPENSES_SHEET);
-                var response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error('HTTP error! status: ' + response.status);
-                }
-                var csvText = await response.text();
-                var lines = csvText.split('\n').filter(function(l) {
-                    return l.trim();
                 });
-                var data = [];
-                for (var j = 0; j < lines.length; j++) {
-                    var line = lines[j];
-                    var row = [];
-                    var current = '';
-                    var insideQuotes = false;
-                    for (var k = 0; k < line.length; k++) {
-                        var char = line[k];
-                        if (char === '"') {
-                            insideQuotes = !insideQuotes;
-                        } else if (char === ',' && !insideQuotes) {
-                            row.push(current.trim());
-                            current = '';
-                        } else {
-                            current += char;
-                        }
+
+                if (!bookingsResponse.ok) {
+                    throw new Error('فشل في جلب بيانات الحجوزات');
+                }
+
+                var bookings = await bookingsResponse.json();
+
+                // 2. جلب بيانات العملاء
+                var clientsResponse = await fetch(SUPABASE_URL + '/rest/v1/clients?select=id', {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
                     }
-                    row.push(current.trim());
-                    data.push(row);
-                }
-                if (!data || data.length < 2) {
-                    return 0;
-                }
-                var headers = data[0].map(function(h) {
-                    return String(h).trim();
                 });
-                var rows = data.slice(1);
-                var clean = function(s) {
-                    return String(s).trim().replace(/\s+/g, ' ');
-                };
-                var idxTotal = -1;
-                for (var m = 0; m < headers.length; m++) {
-                    var headerClean = clean(headers[m]);
-                    if (headerClean.includes('الإجمالي') || headerClean.includes('المبلغ')) {
-                        idxTotal = m;
-                        break;
-                    }
-                }
-                if (idxTotal === -1) {
-                    return 0;
-                }
-                var totalExp = 0;
-                for (var n = 0; n < rows.length; n++) {
-                    var rowData = rows[n];
-                    if (!rowData || rowData.length === 0) {
-                        continue;
-                    }
-                    var value = 0;
-                    if (rowData[idxTotal]) {
-                        value = parseFloat(String(rowData[idxTotal]).replace(/[^0-9.]/g, '')) || 0;
-                    }
-                    totalExp += value || 0;
-                }
-                localStorage.setItem('expensesTotal', JSON.stringify(totalExp));
-                return totalExp;
-            } catch (error) {
-                console.error('Error fetching expenses:', error);
-                return 0;
-            }
-        }
 
-        async function fetchData(sheetName) {
-            try {
-                var url = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?tqx=out:csv&sheet=' + encodeURIComponent(sheetName);
-                var response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error('HTTP error! status: ' + response.status);
-                }
-                var csvText = await response.text();
-                var lines = csvText.split('\n').filter(function(l) {
-                    return l.trim();
+                var clients = clientsResponse.ok ? await clientsResponse.json() : [];
+
+                // 3. جلب بيانات المستخدمين
+                var usersResponse = await fetch(SUPABASE_URL + '/rest/v1/users?select=id', {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                    }
                 });
-                var data = [];
-                for (var i = 0; i < lines.length; i++) {
-                    var line = lines[i];
-                    var row = [];
-                    var current = '';
-                    var insideQuotes = false;
-                    for (var j = 0; j < line.length; j++) {
-                        var char = line[j];
-                        if (char === '"') {
-                            insideQuotes = !insideQuotes;
-                        } else if (char === ',' && !insideQuotes) {
-                            row.push(current.trim());
-                            current = '';
-                        } else {
-                            current += char;
-                        }
-                    }
-                    row.push(current.trim());
-                    data.push(row);
-                }
-                return data;
-            } catch (error) {
-                console.error('Error fetching ' + sheetName + ':', error);
-                return null;
-            }
-        }
 
-        function cleanNumber(v) {
-            if (!v) {
-                return 0;
-            }
-            return parseFloat(String(v).replace(/[^0-9.]/g, '')) || 0;
-        }
+                var users = usersResponse.ok ? await usersResponse.json() : [];
 
-        function parseDate(str) {
-            if (!str) {
-                return null;
-            }
-            try {
-                var s = String(str).trim().replace(/\s+/g, ' ').split(' ')[0];
-                var p = s.split('/');
-                if (p.length === 3) {
-                    var d = parseInt(p[0], 10);
-                    var m = parseInt(p[1], 10) - 1;
-                    var y = parseInt(p[2], 10);
-                    if (!isNaN(d) && !isNaN(m) && !isNaN(y) && y > 2000) {
-                        return new Date(y, m, d);
-                    }
-                }
-                p = s.split('-');
-                if (p.length === 3) {
-                    var d2 = parseInt(p[0], 10);
-                    var m2 = parseInt(p[1], 10) - 1;
-                    var y2 = parseInt(p[2], 10);
-                    if (!isNaN(d2) && !isNaN(m2) && !isNaN(y2) && y2 > 2000) {
-                        return new Date(y2, m2, d2);
-                    }
-                }
-                return null;
-            } catch (e) {
-                return null;
-            }
-        }
-
-        function getMonthKey(str) {
-            var d = parseDate(str);
-            if (!d) {
-                return null;
-            }
-            var year = d.getFullYear();
-            var month = String(d.getMonth() + 1).padStart(2, '0');
-            return year + '-' + month;
-        }
-
-        async function updateStats() {
-            try {
-                var bookingsData = await fetchData(BOOKINGS_SHEET);
-                var clientsData = await fetchData(CLIENTS_SHEET);
-                var commissionData = await fetchData(COMMISSION_SHEET);
-                var totalExpenses = await fetchTotalExpenses();
-
+                // ===== معالجة البيانات =====
                 var totalRevenue = 0;
-                var totalBookings = 0;
+                var totalBookings = bookings.length;
+                var totalClients = clients.length;
+                var totalUsers = users.length;
                 var futureBookings = 0;
-                var totalCommission = 0;
-                var totalClients = 0;
-                var activities = [];
-                var monthlyRevenue = {};
-                var monthlyOccupancy = {};
-                var propertyTypes = {};
                 var today = new Date();
                 var todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
-                if (bookingsData && bookingsData.length > 0) {
-                    var headers = bookingsData[0].map(function(h) {
-                        return String(h).trim();
-                    });
-                    var rows = bookingsData.slice(1);
-                    var idxTotal = -1;
-                    var idxCheckIn = -1;
-                    var idxName = -1;
-                    var idxProperty = -1;
-                    for (var i = 0; i < headers.length; i++) {
-                        var h = headers[i];
-                        if (h.includes('الإجمالي') || h.includes('صافي')) {
-                            idxTotal = i;
-                        }
-                        if (h.includes('تاريخ الدخول')) {
-                            idxCheckIn = i;
-                        }
-                        if (h.includes('اسم')) {
-                            idxName = i;
-                        }
-                        if (h.includes('نوع الحجز') || h.includes('العقار')) {
-                            idxProperty = i;
+                var monthlyRevenue = {};
+                var monthlyCount = {};
+                var propertyTypes = {};
+                var activities = [];
+                var clientBookings = {};
+
+                bookings.forEach(function(booking) {
+                    // الإيرادات
+                    var total = parseFloat(booking.total) || 0;
+                    totalRevenue += total;
+
+                    // توزيع حسب نوع العقار
+                    var propType = booking.property_type || 'غير محدد';
+                    if (!propertyTypes[propType]) propertyTypes[propType] = 0;
+                    propertyTypes[propType] += 1;
+
+                    // الحجوزات القادمة
+                    var checkIn = booking.check_in;
+                    if (checkIn) {
+                        var d = new Date(checkIn);
+                        if (!isNaN(d.getTime()) && d >= todayDate) {
+                            futureBookings++;
                         }
                     }
 
-                    for (var j = 0; j < rows.length; j++) {
-                        var row = rows[j];
-                        if (!row || row.length === 0) {
-                            continue;
-                        }
-                        var total = 0;
-                        if (idxTotal !== -1) {
-                            total = cleanNumber(row[idxTotal]);
-                        }
-                        if (total === 0) {
-                            continue;
-                        }
-                        totalRevenue += total;
-                        totalBookings++;
-
-                        if (idxProperty !== -1 && row[idxProperty]) {
-                            var propType = String(row[idxProperty]).trim();
-                            if (propType) {
-                                if (!propertyTypes[propType]) {
-                                    propertyTypes[propType] = 0;
-                                }
-                                propertyTypes[propType] += 1;
-                            }
-                        }
-
-                        var checkInDate = '';
-                        if (idxCheckIn !== -1 && row[idxCheckIn]) {
-                            checkInDate = row[idxCheckIn];
-                        }
-                        if (checkInDate) {
-                            var d = parseDate(checkInDate);
-                            if (d && d >= todayDate) {
-                                futureBookings++;
-                            }
-                            var month = getMonthKey(checkInDate);
-                            if (month) {
-                                if (!monthlyRevenue[month]) {
-                                    monthlyRevenue[month] = 0;
-                                }
-                                monthlyRevenue[month] += total;
-                                if (!monthlyOccupancy[month]) {
-                                    monthlyOccupancy[month] = 0;
-                                }
-                                monthlyOccupancy[month] += 1;
-                            }
-                        }
-                        if (idxName !== -1 && row[idxName]) {
-                            var activityName = row[idxName] || 'عميل';
-                            var activityProperty = '';
-                            if (idxProperty !== -1 && row[idxProperty]) {
-                                activityProperty = row[idxProperty];
-                            } else {
-                                activityProperty = 'عقار';
-                            }
-                            activities.push({
-                                name: activityName,
-                                property: activityProperty,
-                                date: checkInDate || ''
-                            });
+                    // البيانات الشهرية
+                    if (booking.invoice_date) {
+                        var date = new Date(booking.invoice_date);
+                        if (!isNaN(date.getTime())) {
+                            var monthKey = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0');
+                            if (!monthlyRevenue[monthKey]) monthlyRevenue[monthKey] = 0;
+                            if (!monthlyCount[monthKey]) monthlyCount[monthKey] = 0;
+                            monthlyRevenue[monthKey] += total;
+                            monthlyCount[monthKey] += 1;
                         }
                     }
 
-                    var sortedMonths = Object.keys(monthlyRevenue).sort();
-                    if (sortedMonths.length > 6) {
-                        sortedMonths = sortedMonths.slice(sortedMonths.length - 6);
-                    }
-                    var monthNames = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
-                    if (sortedMonths.length > 0) {
-                        var newLabels = [];
-                        for (var k = 0; k < sortedMonths.length; k++) {
-                            var parts = sortedMonths[k].split('-');
-                            var year = parts[0];
-                            var monthNum = parseInt(parts[1], 10) - 1;
-                            newLabels.push(monthNames[monthNum] + ' ' + year);
-                        }
-                        chartData.labels = newLabels;
-                        var newSales = [];
-                        var newOccupancy = [];
-                        for (var l = 0; l < sortedMonths.length; l++) {
-                            newSales.push(monthlyRevenue[sortedMonths[l]] || 0);
-                            var occ = monthlyOccupancy[sortedMonths[l]] || 0;
-                            newOccupancy.push(Math.round((occ / 30) * 100));
-                        }
-                        chartData.sales = newSales;
-                        chartData.occupancy = newOccupancy;
-                        renderSalesChart(chartData.labels.length);
-                    }
-
-                    var propertyLabels = Object.keys(propertyTypes);
-                    if (propertyLabels.length > 0) {
-                        var propertyValues = propertyLabels.map(function(key) {
-                            return propertyTypes[key];
+                    // النشاطات
+                    if (booking.client_name) {
+                        activities.push({
+                            name: booking.client_name,
+                            property: booking.property_type || 'عقار',
+                            date: booking.check_in || booking.invoice_date || ''
                         });
-                        var totalProps = propertyValues.reduce(function(a, b) { return a + b; }, 0);
-                        var piePercentages = propertyValues.map(function(v) {
-                            return Math.round((v / totalProps) * 100);
-                        });
-
-                        var sum = piePercentages.reduce(function(a, b) { return a + b; }, 0);
-                        if (sum !== 100 && piePercentages.length > 0) {
-                            piePercentages[piePercentages.length - 1] += (100 - sum);
-                        }
-
-                        pieData.labels = propertyLabels;
-                        pieData.values = piePercentages;
-                        renderPieChart();
-
-                        var colors = ['#1a4a6b', '#b98a1e', '#2e7a5c', '#b14b2b', '#1a6a4a', '#a63a31'];
-                        var legendHtml = '';
-                        for (var p = 0; p < propertyLabels.length && p < colors.length; p++) {
-                            legendHtml += '<span class="li"><span class="sw" style="background:' + colors[p] + '"></span> ' +
-                                propertyLabels[p] + '</span>';
-                        }
-                        document.getElementById('pieLegend').innerHTML = legendHtml;
                     }
-                }
 
-                if (clientsData && clientsData.length > 0) {
-                    totalClients = clientsData.length - 1;
-                }
-
-                if (commissionData && commissionData.length > 0) {
-                    var commissionHeaders = commissionData[0].map(function(h) {
-                        return String(h).trim();
-                    });
-                    var commissionRows = commissionData.slice(1);
-                    var idxAmount = -1;
-                    for (var c = 0; c < commissionHeaders.length; c++) {
-                        if (commissionHeaders[c].includes('مبلغ')) {
-                            idxAmount = c;
-                            break;
-                        }
+                    // إحصائيات العملاء
+                    if (booking.client_name) {
+                        if (!clientBookings[booking.client_name]) clientBookings[booking.client_name] = 0;
+                        clientBookings[booking.client_name] += 1;
                     }
-                    for (var r = 0; r < commissionRows.length; r++) {
-                        var rowData = commissionRows[r];
-                        if (!rowData || rowData.length === 0) {
-                            continue;
-                        }
-                        if (idxAmount !== -1) {
-                            totalCommission += cleanNumber(rowData[idxAmount]);
-                        }
-                    }
-                }
+                });
 
-                var netProfit = totalRevenue - totalExpenses;
-                var abuzeidCommission = netProfit * 0.2;
-
+                // ===== تحديث الإحصائيات =====
                 var totalRevenueEl = document.getElementById('totalRevenue');
                 if (totalRevenueEl) {
                     totalRevenueEl.textContent = totalRevenue.toLocaleString() + ' ر.س';
@@ -2092,91 +1795,172 @@
                     upcomingBookingsEl.textContent = futureBookings.toLocaleString();
                 }
 
+                // عمولة أبو زيد (20% من صافي الأرباح)
                 var totalCommissionEl = document.getElementById('totalCommission');
                 if (totalCommissionEl) {
-                    totalCommissionEl.textContent = abuzeidCommission.toLocaleString() + ' ر.س';
+                    var commission = totalRevenue * 0.2;
+                    totalCommissionEl.textContent = commission.toLocaleString() + ' ر.س';
                 }
 
+                // ===== تحديث الـ Charts =====
+                var sortedMonths = Object.keys(monthlyRevenue).sort();
+                if (sortedMonths.length > 0) {
+                    var monthNames = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 
+                                     'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+                    
+                    var labels = [];
+                    var sales = [];
+                    var occupancy = [];
+                    
+                    sortedMonths.forEach(function(monthKey) {
+                        var parts = monthKey.split('-');
+                        var year = parts[0];
+                        var monthNum = parseInt(parts[1], 10) - 1;
+                        labels.push(monthNames[monthNum] + ' ' + year);
+                        sales.push(monthlyRevenue[monthKey] || 0);
+                        var occ = monthlyCount[monthKey] || 0;
+                        occupancy.push(Math.round((occ / 30) * 100));
+                    });
+                    
+                    chartData.labels = labels;
+                    chartData.sales = sales;
+                    chartData.occupancy = occupancy;
+                } else {
+                    chartData.labels = ['لا توجد بيانات'];
+                    chartData.sales = [0];
+                    chartData.occupancy = [0];
+                }
+                renderSalesChart();
+
+                // ===== تحديث الـ Pie Chart =====
+                var propLabels = Object.keys(propertyTypes);
+                if (propLabels.length > 0) {
+                    var propValues = propLabels.map(function(key) { return propertyTypes[key]; });
+                    var totalProps = propValues.reduce(function(a, b) { return a + b; }, 0);
+                    var piePercentages = propValues.map(function(v) {
+                        return Math.round((v / totalProps) * 100);
+                    });
+                    
+                    // ضبط النسبة المئوية لتكون 100%
+                    var sum = piePercentages.reduce(function(a, b) { return a + b; }, 0);
+                    if (sum !== 100 && piePercentages.length > 0) {
+                        piePercentages[piePercentages.length - 1] += (100 - sum);
+                    }
+                    
+                    pieData.labels = propLabels;
+                    pieData.values = piePercentages;
+                } else {
+                    pieData.labels = ['لا توجد حجوزات'];
+                    pieData.values = [100];
+                }
+                renderPieChart();
+
+                // ===== تحديث Legends =====
+                var colors = ['#1a4a6b', '#b98a1e', '#2e7a5c', '#b14b2b', '#1a6a4a', '#a63a31', '#2a5a7a', '#c98a2e'];
+                var legendHtml = '';
+                pieData.labels.forEach(function(label, index) {
+                    if (index < colors.length) {
+                        legendHtml += '<span class="li"><span class="sw" style="background:' + colors[index] + '"></span> ' + label + '</span>';
+                    }
+                });
+                document.getElementById('pieLegend').innerHTML = legendHtml || '<span class="li">لا توجد بيانات</span>';
+
+                // ===== تحديث النشاطات =====
                 var activityContainer = document.getElementById('activityList');
                 if (activities.length === 0) {
-                    if (activityContainer) {
-                        activityContainer.innerHTML = '<div class="empty-state"><i class="fas fa-clock"></i><p>لا توجد حجوزات مسجلة</p></div>';
-                    }
+                    activityContainer.innerHTML = '<div class="empty-state"><i class="fas fa-clock"></i><p>لا توجد حجوزات مسجلة</p></div>';
                 } else {
-                    var colors = ['var(--viridian)', 'var(--ochre)', 'var(--prussian)', 'var(--oxide)'];
+                    var colors2 = ['var(--viridian)', 'var(--ochre)', 'var(--prussian)', 'var(--oxide)'];
                     var activityHtml = '';
                     var activitiesToShow = activities.slice(0, 5);
-                    for (var a = 0; a < activitiesToShow.length; a++) {
-                        var item = activitiesToShow[a];
-                        var colorIndex = a % colors.length;
+                    activitiesToShow.forEach(function(item, index) {
+                        var colorIndex = index % colors2.length;
                         activityHtml += '<div class="item">';
-                        activityHtml += '<div class="dot-ind" style="background:' + colors[colorIndex] + '"></div>';
+                        activityHtml += '<div class="dot-ind" style="background:' + colors2[colorIndex] + '"></div>';
                         activityHtml += '<div class="content">';
                         activityHtml += '<div class="text">حجز للعميل <strong>' + item.name + '</strong> في ' + item.property + '</div>';
                         activityHtml += '<div class="time">' + (item.date || 'تاريخ غير محدد') + '</div>';
                         activityHtml += '</div>';
                         activityHtml += '</div>';
-                    }
-                    if (activityContainer) {
-                        activityContainer.innerHTML = activityHtml;
-                    }
+                    });
+                    activityContainer.innerHTML = activityHtml;
                 }
 
+                // ===== تحديث أفضل العملاء =====
                 var topContainer = document.getElementById('topClientsList');
-                if (!clientsData || clientsData.length < 2) {
-                    if (topContainer) {
-                        topContainer.innerHTML = '<div class="empty-state"><i class="fas fa-users"></i><p>لا توجد بيانات عملاء</p></div>';
-                    }
+                var clientNames = Object.keys(clientBookings);
+                if (clientNames.length === 0) {
+                    topContainer.innerHTML = '<div class="empty-state"><i class="fas fa-users"></i><p>لا توجد بيانات عملاء</p></div>';
                 } else {
-                    var clients = [];
-                    var maxClients = Math.min(5, clientsData.length - 1);
-                    for (var cl = 1; cl <= maxClients; cl++) {
-                        var clientRow = clientsData[cl];
-                        if (clientRow && clientRow[0]) {
-                            clients.push({
-                                name: clientRow[0] || 'عميل'
-                            });
-                        }
-                    }
+                    var sortedClients = clientNames.sort(function(a, b) {
+                        return clientBookings[b] - clientBookings[a];
+                    }).slice(0, 5);
+                    
                     var ranks = ['🥇', '🥈', '🥉', '4', '5'];
                     var widths = [92, 74, 58, 40, 26];
                     var topHtml = '';
-                    for (var cl2 = 0; cl2 < clients.length; cl2++) {
-                        var c = clients[cl2];
-                        var rankClass = (cl2 === 0) ? ' gold' : '';
-                        var rankText = ranks[cl2] || (cl2 + 1);
-                        var widthPercent = widths[cl2] || 50;
+                    sortedClients.forEach(function(name, index) {
+                        var rankClass = (index === 0) ? ' gold' : '';
+                        var rankText = ranks[index] || (index + 1);
+                        var widthPercent = widths[index] || 50;
                         topHtml += '<div class="row">';
                         topHtml += '<div class="rank' + rankClass + '">' + rankText + '</div>';
                         topHtml += '<div class="info">';
-                        topHtml += '<div class="n">' + c.name + '</div>';
+                        topHtml += '<div class="n">' + name + '</div>';
                         topHtml += '<div class="bar-track"><span style="width:' + widthPercent + '%"></span></div>';
                         topHtml += '</div>';
-                        topHtml += '<div class="amt">-</div>';
+                        topHtml += '<div class="amt">' + clientBookings[name] + ' حجز</div>';
                         topHtml += '</div>';
-                    }
-                    if (topContainer) {
-                        topContainer.innerHTML = topHtml;
-                    }
+                    });
+                    topContainer.innerHTML = topHtml;
                 }
 
-                var loadingCards = document.querySelectorAll('.stat-card.loading');
-                for (var lc = 0; lc < loadingCards.length; lc++) {
-                    loadingCards[lc].classList.remove('loading');
+                // ===== تحديث التاريخ =====
+                var dateEl = document.getElementById('dashboardDate');
+                if (dateEl) {
+                    var now = new Date();
+                    var months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 
+                                  'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+                    dateEl.textContent = 'لوحة التحكم — ' + months[now.getMonth()] + ' ' + now.getFullYear();
                 }
-                setGoal(75);
+
+                // ===== تحديث Sparklines (بيانات عشوائية للتصميم) =====
+                var sparkData = [];
+                for (var i = 0; i < 8; i++) {
+                    sparkData.push(Math.round(Math.random() * 100));
+                }
+                
+                renderSpark('spark1', sparkData, '#1a4a6b');
+                renderSpark('spark2', sparkData, '#9a8f83');
+                renderSpark('spark3', sparkData, '#2e7a5c');
+                renderSpark('spark4', sparkData, '#a63a31');
+                renderSpark('spark5', sparkData, '#b98a1e');
+
+                // ===== إزالة حالة التحميل =====
+                document.querySelectorAll('.stat-card.loading').forEach(function(el) {
+                    el.classList.remove('loading');
+                });
+
+                // ===== تعيين الهدف =====
+                var totalDays = 30;
+                var bookedDays = Math.min(futureBookings, totalDays);
+                var goalPct = Math.round((bookedDays / totalDays) * 100);
+                setGoal(Math.min(goalPct, 100));
 
             } catch (error) {
-                console.error('❌ خطأ في تحديث البيانات:', error);
-                var loadingCards2 = document.querySelectorAll('.stat-card.loading');
-                for (var lc2 = 0; lc2 < loadingCards2.length; lc2++) {
-                    loadingCards2[lc2].classList.remove('loading');
-                }
+                console.error('❌ خطأ في جلب البيانات:', error);
+                document.querySelectorAll('.stat-card.loading').forEach(function(el) {
+                    el.classList.remove('loading');
+                });
+                document.querySelectorAll('.number .loading-text').forEach(function(el) {
+                    el.textContent = '⚠️ خطأ في التحميل';
+                });
             }
         }
 
-        updateStats();
-        setInterval(updateStats, 300000);
+        // ===== تشغيل التحديث =====
+        fetchDashboardData();
+        setInterval(fetchDashboardData, 300000); // تحديث كل 5 دقائق
     </script>
 
 </body>
