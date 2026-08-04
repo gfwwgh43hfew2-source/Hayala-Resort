@@ -1147,7 +1147,9 @@
             <div class="filters-grid">
                 <div class="filter-item">
                     <label for="month">الشهر</label>
-                    <select id="month" onchange="loadDashboard()"></select>
+                    <select id="month" onchange="loadDashboard()">
+                        <!-- سيتم تعبئتها بواسطة JavaScript مع خيار "كل الشهور" -->
+                    </select>
                 </div>
                 <div class="filter-item">
                     <label for="year">السنة</label>
@@ -1158,7 +1160,7 @@
                     <input id="commissionRate" type="number" min="0" max="100" step="0.1" value="20" onchange="loadDashboard()" />
                 </div>
                 <div class="filter-item">
-                    <label>بداية الشهر</label>
+                    <label>الفترة</label>
                     <input id="monthStart" type="text" readonly style="background:var(--surface-muted);" />
                 </div>
             </div>
@@ -1270,18 +1272,21 @@
     <script>
         /**
          * ============================================================
-         * التحقق من تسجيل الدخول
-         * ============================================================
-         */
-        var user = window.currentUser || JSON.parse(localStorage.getItem('user') || '{}');
-
-        /**
-         * ============================================================
          * SUPABASE CONFIGURATION
          * ============================================================
          */
         var SUPABASE_URL = 'https://zwuvcblrrrriuylajvba.supabase.co';
         var SUPABASE_ANON_KEY = 'sb_publishable_YFqwTEs-W_kprUgt4bgpCQ_tf5vVeFa';
+
+        /**
+         * ============================================================
+         * التحقق من تسجيل الدخول
+         * ============================================================
+         */
+        var user = window.currentUser || JSON.parse(localStorage.getItem('user') || '{}');
+        if (!user || !user.email) {
+            window.location.href = 'login.html';
+        }
 
         /**
          * ============================================================
@@ -1358,9 +1363,13 @@
         var monthlyPayments = [];
 
         var months = [
+            "كل الشهور",
             "يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو",
             "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
         ];
+
+        // قيمة "كل الشهور" = -1
+        var ALL_MONTHS_VALUE = -1;
 
         /**
          * ============================================================
@@ -1401,16 +1410,16 @@
 
         /**
          * ============================================================
-         * تهيئة الشهور
+         * تهيئة الشهور مع خيار "كل الشهور"
          * ============================================================
          */
         function initMonths() {
             var select = document.getElementById('month');
             select.innerHTML = months.map(function(name, index) {
-                return '<option value="' + index + '">' + name + '</option>';
+                var value = index === 0 ? ALL_MONTHS_VALUE : (index - 1);
+                var selected = (value === ALL_MONTHS_VALUE) ? ' selected' : '';
+                return '<option value="' + value + '"' + selected + '">' + name + '</option>';
             }).join('');
-            var today = new Date();
-            select.value = today.getMonth();
         }
 
         /**
@@ -1421,9 +1430,17 @@
         function getSelectedPeriod() {
             var month = Number(document.getElementById('month').value);
             var year = Number(document.getElementById('year').value);
+
+            // إذا كان الشهر = -1 (كل الشهور)، نرجع فترة كبيرة تغطي كل البيانات
+            if (month === ALL_MONTHS_VALUE) {
+                var start = new Date(2020, 0, 1); // بداية 2020
+                var end = new Date(2030, 11, 31); // نهاية 2030
+                return { month: month, year: year, start: start, end: end, isAllMonths: true };
+            }
+
             var start = new Date(year, month, 1);
             var end = new Date(year, month + 1, 1);
-            return { month: month, year: year, start: start, end: end };
+            return { month: month, year: year, start: start, end: end, isAllMonths: false };
         }
 
         function isWithinSelectedMonth(dateStr, period) {
@@ -1508,9 +1525,8 @@
                     allBookings = [];
                 }
 
-                // 2. جلب المصروفات - مع مرونة في الأعمدة
+                // 2. جلب المصروفات
                 try {
-                    // نحاول جلب كل البيانات من جدول expenses
                     var expensesResponse = await fetch(SUPABASE_URL + '/rest/v1/expenses?select=*', {
                         headers: {
                             'apikey': SUPABASE_ANON_KEY,
@@ -1523,7 +1539,6 @@
                     } else {
                         allExpenses = await expensesResponse.json();
                         console.log('✅ تم جلب المصروفات:', allExpenses.length);
-                        console.log('📋 مثال على المصروف:', allExpenses[0]);
                     }
                 } catch (e) {
                     console.warn('⚠️ خطأ في جلب المصروفات:', e.message);
@@ -1580,18 +1595,17 @@
             var ratePercent = Number(document.getElementById('commissionRate').value || 0);
             var rate = ratePercent / 100;
 
-            // فلترة الفواتير حسب الشهر المحدد
+            // فلترة الفواتير حسب الفترة المحددة (كل الشهور أو شهر محدد)
             var monthlyBookings = allBookings.filter(function(item) {
                 return isWithinSelectedMonth(item.invoice_date, period);
             });
 
-            // فلترة المصروفات حسب الشهر المحدد
-            // نأخذ جميع المصروفات (جميع الفئات) كتشغيلية
+            // فلترة المصروفات حسب الفترة المحددة
             var monthlyExpenses = allExpenses.filter(function(item) {
                 return isWithinSelectedMonth(item.date, period);
             });
 
-            // فلترة دفعات أبو زيد حسب الشهر المحدد
+            // فلترة دفعات أبو زيد حسب الفترة المحددة
             monthlyPayments = allPayments.filter(function(item) {
                 return isWithinSelectedMonth(item.payment_date, period);
             });
@@ -1608,7 +1622,9 @@
             var accountStatus = remainingAmount <= 0 ? "مسدد بالكامل" : "متبقي مستحق";
             var statusClass = remainingAmount <= 0 ? "status-paid" : "status-due";
 
-            document.getElementById('monthStart').value = months[period.month] + ' ' + period.year;
+            // عرض الفترة في الحقل الرابع
+            var periodText = period.isAllMonths ? "كل الفترات" : months[period.month + 1] + ' ' + period.year;
+            document.getElementById('monthStart').value = periodText;
 
             // KPI Cards
             var kpiContainer = document.getElementById('kpiContainer');
@@ -1679,7 +1695,7 @@
                 container.innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-money-bill-wave"></i>
-                        <p>لا توجد مبالغ واصلة مسجلة لهذا الشهر</p>
+                        <p>لا توجد مبالغ واصلة مسجلة لهذه الفترة</p>
                         <span>اضغط على "إضافة دفعة" لتسجيل دفعة جديدة</span>
                     </div>
                 `;
@@ -1776,7 +1792,7 @@
                 container.innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-file-invoice"></i>
-                        <p>لا توجد فواتير أو مصروفات لهذا الشهر</p>
+                        <p>لا توجد فواتير أو مصروفات لهذه الفترة</p>
                     </div>
                 `;
                 return;
