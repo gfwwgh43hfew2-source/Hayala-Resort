@@ -604,6 +604,7 @@
             width: 100%;
             border-collapse: collapse;
             font-size: calc(0.8rem * var(--scale-factor));
+            min-width: 700px;
         }
 
         table thead th {
@@ -754,6 +755,16 @@
 
         .form-group label .required {
             color: var(--rust);
+        }
+
+        .form-group label .optional-badge {
+            font-size: calc(0.5rem * var(--scale-factor));
+            color: var(--ink-mute);
+            background: var(--surface-muted);
+            padding: calc(2px * var(--scale-factor)) calc(8px * var(--scale-factor));
+            border-radius: 50px;
+            font-weight: 600;
+            border: 1px solid var(--line);
         }
 
         .form-control {
@@ -977,11 +988,17 @@
 
             table {
                 font-size: 0.7rem;
+                min-width: 500px;
             }
 
             table thead th,
             table tbody td {
                 padding: 6px 8px;
+            }
+
+            table thead th:nth-child(2),
+            table tbody td:nth-child(2) {
+                display: none;
             }
 
             .actions-cell {
@@ -1014,6 +1031,16 @@
                 flex-direction: column;
                 align-items: stretch;
                 gap: 8px;
+            }
+
+            table {
+                font-size: 0.6rem;
+                min-width: 400px;
+            }
+
+            table thead th:nth-child(3),
+            table tbody td:nth-child(3) {
+                display: none;
             }
         }
     </style>
@@ -1180,16 +1207,12 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>السعر لكل ليلة (ر.س) <span class="required">*</span></label>
-                        <input type="number" class="form-control" id="propertyPrice" placeholder="0" min="0" step="0.01" required />
+                        <label>السعر لكل ليلة (ر.س) <span class="optional-badge">اختياري</span></label>
+                        <input type="number" class="form-control" id="propertyPrice" placeholder="0" min="0" step="0.01" />
                     </div>
                 </div>
 
                 <div class="form-row">
-                    <div class="form-group">
-                        <label>السعة (عدد الأشخاص)</label>
-                        <input type="number" class="form-control" id="propertyCapacity" placeholder="4" min="1" value="4" />
-                    </div>
                     <div class="form-group">
                         <label>الحالة</label>
                         <select class="form-control" id="propertyStatus">
@@ -1197,6 +1220,10 @@
                             <option value="occupied">محجوز</option>
                             <option value="maintenance">تحت الصيانة</option>
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <div style="height:calc(38px * var(--scale-factor));"></div>
                     </div>
                 </div>
 
@@ -1385,7 +1412,6 @@
                             <th>اسم العقار</th>
                             <th>النوع</th>
                             <th>السعر/ليلة</th>
-                            <th>السعة</th>
                             <th>الحالة</th>
                             <th>الإجراءات</th>
                         </tr>
@@ -1404,13 +1430,14 @@
                     statusText = 'تحت الصيانة';
                 }
 
+                var priceDisplay = item.price_per_night ? item.price_per_night.toLocaleString() + ' ر.س' : '—';
+
                 html += `
                     <tr data-id="${item.id}">
                         <td>${index + 1}</td>
                         <td><strong>${item.name}</strong></td>
                         <td>${item.type || '-'}</td>
-                        <td>${item.price_per_night ? item.price_per_night.toLocaleString() + ' ر.س' : '0'}</td>
-                        <td>${item.capacity || '-'}</td>
+                        <td>${priceDisplay}</td>
                         <td><span class="status-badge ${statusClass}">${statusText}</span></td>
                         <td>
                             <div class="actions-cell">
@@ -1467,7 +1494,6 @@
             document.getElementById('submitBtn').innerHTML = '<i class="fas fa-save"></i> حفظ';
             document.getElementById('propertyForm').reset();
             document.getElementById('propertyStatus').value = 'available';
-            document.getElementById('propertyCapacity').value = '4';
             document.getElementById('propertyModal').classList.add('show');
         }
 
@@ -1490,7 +1516,6 @@
             document.getElementById('propertyName').value = item.name || '';
             document.getElementById('propertyType').value = item.type || '';
             document.getElementById('propertyPrice').value = item.price_per_night || '';
-            document.getElementById('propertyCapacity').value = item.capacity || 4;
             document.getElementById('propertyStatus').value = item.status || 'available';
             document.getElementById('propertyDescription').value = item.description || '';
 
@@ -1517,7 +1542,6 @@
             var name = document.getElementById('propertyName').value.trim();
             var type = document.getElementById('propertyType').value;
             var price = parseFloat(document.getElementById('propertyPrice').value) || 0;
-            var capacity = parseInt(document.getElementById('propertyCapacity').value) || 4;
             var status = document.getElementById('propertyStatus').value;
             var description = document.getElementById('propertyDescription').value.trim();
             var editId = document.getElementById('editId').value;
@@ -1534,17 +1558,10 @@
                 return;
             }
 
-            if (price <= 0) {
-                showToast('تنبيه', 'يرجى إدخال سعر صحيح', 'warning');
-                document.getElementById('propertyPrice').focus();
-                return;
-            }
-
             var data = {
                 name: name,
                 type: type,
                 price_per_night: price,
-                capacity: capacity,
                 status: status,
                 description: description,
                 updated_at: new Date().toISOString()
