@@ -107,7 +107,6 @@
             right: 0;
         }
 
-        /* على الموبايل تكون القائمة مغلقة افتراضياً */
         @media (max-width: 768px) {
             .sidebar {
                 right: calc(-1 * var(--sidebar-w));
@@ -226,9 +225,6 @@
         }
         .sidebar .footer .logout:hover { color: var(--oxide); border-color: var(--oxide); }
 
-        /* ==========================================================
-           MAIN
-           ========================================================== */
         .main {
             margin-right: var(--sidebar-w);
             min-height: 100vh;
@@ -244,9 +240,6 @@
             }
         }
 
-        /* ==========================================================
-           HEADER
-           ========================================================== */
         .header {
             position: sticky;
             top: 0;
@@ -359,9 +352,6 @@
 
         .dash { padding: 32px 36px 48px; max-width: 1500px; }
 
-        /* ==========================================================
-           HERO
-           ========================================================== */
         .hero {
             display: flex;
             align-items: center;
@@ -473,9 +463,6 @@
             box-shadow: 0 0 20px rgba(252,211,77,0.3);
         }
 
-        /* ==========================================================
-           HERO IMAGE
-           ========================================================== */
         .hero-image {
             flex-shrink: 0;
             display: flex;
@@ -499,9 +486,6 @@
             transform: translateY(-8px) scale(1.01);
         }
 
-        /* ==========================================================
-           STAT CARDS - 6 بطاقات الآن
-           ========================================================== */
         .stats { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; margin-bottom: 24px; }
         .stat-card {
             background: var(--surface);
@@ -544,9 +528,6 @@
         .stat-card .change.down { color: var(--oxide); }
         .stat-card .spark { width: 50px; height: 20px; }
 
-        /* ==========================================================
-           CHARTS GRID
-           ========================================================== */
         .charts-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -613,9 +594,6 @@
         }
         .legend-row .li .sw { width: 10px; height: 10px; border-radius: 3px; }
 
-        /* ==========================================================
-           LOWER GRID
-           ========================================================== */
         .lower-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; }
 
         .activity .head, .toplist .head {
@@ -724,9 +702,6 @@
         }
         @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
-        /* ==========================================================
-           MOBILE SEARCH TOGGLE
-           ========================================================== */
         .header .mobile-search-toggle {
             display: none;
             width: 38px;
@@ -793,9 +768,6 @@
 
         .stats-wrap { position: relative; }
 
-        /* ==========================================================
-           MOBILE BOTTOM NAVIGATION
-           ========================================================== */
         .mobile-bottom-nav {
             display: none;
             position: fixed;
@@ -850,9 +822,6 @@
         }
         .mobile-bottom-nav .bn-fab:active { transform: translateY(-16px) scale(0.92); }
 
-        /* ==========================================================
-           RESPONSIVE
-           ========================================================== */
         @media (max-width: 1180px) {
             .stats { grid-template-columns: repeat(3, 1fr); }
             .header .search { display: none; }
@@ -871,11 +840,7 @@
                 --sidebar-w: min(85vw, 300px);
                 --header-h: 62px;
             }
-
-            .main {
-                margin-right: 0 !important;
-            }
-
+            .main { margin-right: 0 !important; }
             .header { padding: 0 14px; gap: 8px; }
             .header .left { gap: 10px; }
             .header .breadcrumb { font-size: 0.72rem; }
@@ -885,10 +850,8 @@
             .header .hamburger,
             .header .right .notif,
             .header .mobile-search-toggle { width: 40px; height: 40px; }
-
             .dash { padding: 20px 16px 110px; }
             .panel { padding: 18px 16px; border-radius: 18px; }
-
             .hero { text-align: center; gap: 22px; padding: 6px 0 28px; }
             .hero .copy { display: flex; flex-direction: column; align-items: center; min-width: 0; }
             .hero .eyebrow { font-size: 0.62rem; }
@@ -901,7 +864,6 @@
             .hero .goal { width: 100%; }
             .hero .goal .g-bar { width: 100%; }
             .hero .goal .g-top { justify-content: center; gap: 6px; }
-
             .stats {
                 display: flex;
                 overflow-x: auto;
@@ -931,18 +893,15 @@
                 background: linear-gradient(to right, var(--canvas), rgba(240,237,232,0));
                 pointer-events: none;
             }
-
             .panel .p-head { flex-direction: column; align-items: stretch; gap: 14px; }
             .panel .tabs { width: 100%; }
             .panel .tabs button { flex: 1; padding: 9px 10px; font-size: 0.7rem; }
             .chart-canvas-wrap { height: 200px; }
             .chart-canvas-wrap.pie-wrap { height: 200px; }
             .legend-row { gap: 10px 22px; padding-top: 14px; }
-
             .activity .list .item { padding: 13px 4px; gap: 12px; }
             .activity .list .item .content .text { font-size: 0.8rem; }
             .toplist .row { padding: 11px 4px; gap: 12px; }
-
             .mobile-bottom-nav { display: flex; }
             .charts-grid { grid-template-columns: 1fr; gap: 16px; }
         }
@@ -963,14 +922,8 @@
 </head>
 <body>
 
-    <!-- ==========================================================
-    SIDEBAR OVERLAY
-    ========================================================== -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- ==========================================================
-    SIDEBAR
-    ========================================================== -->
     <nav class="sidebar" id="sidebar">
         <div class="brand">
             <div class="mark">
@@ -1029,12 +982,8 @@
         </div>
     </nav>
 
-    <!-- ==========================================================
-    MAIN
-    ========================================================== -->
     <div class="main" id="main">
 
-        <!-- ===== HEADER ===== -->
         <header class="header">
             <div class="left">
                 <button class="hamburger" id="hamburger" aria-label="فتح القائمة"><i class="fas fa-bars"></i></button>
@@ -1055,7 +1004,6 @@
             </div>
         </header>
 
-        <!-- ===== MOBILE SEARCH BAR ===== -->
         <div class="mobile-search-bar" id="mobileSearchBar">
             <div class="inner">
                 <i class="fas fa-search"></i>
@@ -1064,11 +1012,9 @@
             </div>
         </div>
 
-        <!-- ===== DASHBOARD ===== -->
         <div class="main-content">
             <div class="dash">
 
-                <!-- ===== HERO ===== -->
                 <div class="hero fade-up" style="animation-delay:0.02s">
                     <div class="copy">
                         <div class="eyebrow" id="dashboardDate">لوحة التحكم — جاري التحميل...</div>
@@ -1085,8 +1031,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- ===== HERO IMAGE ===== -->
                     <div class="hero-image fade-up" style="animation-delay:0.1s">
                         <img src="https://raw.githubusercontent.com/gfwwgh43hfew2-source/Hayala-Resort/main/ChatGPT%20Image%2030%20%D9%8A%D9%88%D9%84%D9%8A%D9%88%202026%D8%8C%2012_39_00%20%D9%85.png"
                              alt="منتجع حياله - القصيم"
@@ -1094,7 +1038,6 @@
                     </div>
                 </div>
 
-                <!-- ===== STATS ===== -->
                 <div class="stats-wrap">
                     <div class="stats">
                         <div class="stat-card fade-up loading" style="animation-delay:0.06s;--swatch:var(--prussian)">
@@ -1141,8 +1084,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- ===== بطاقة المصروفات الجديدة ===== -->
-                        <div class="stat-card fade-up loading" style="animation-delay:0.17s;--swatch:var(--ochre)">
+                        <div class="stat-card fade-up loading" style="animation-delay:0.18s;--swatch:var(--ochre)">
                             <div class="bar" style="background:var(--ochre);"></div>
                             <div class="body">
                                 <div class="label"><i class="fas fa-money-bill-wave" style="color:var(--ochre);"></i> إجمالي المصروفات</div>
@@ -1153,8 +1095,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- ===== بطاقة عمولة أبو زيد ===== -->
-                        <div class="stat-card fade-up loading" style="animation-delay:0.20s;--swatch:var(--gold)">
+                        <div class="stat-card fade-up loading" style="animation-delay:0.21s;--swatch:var(--gold)">
                             <div class="bar" style="background:var(--gold-gradient)"></div>
                             <div class="body">
                                 <div class="label"><i class="fas fa-hand-holding-heart" style="color:var(--gold);"></i> عمولة أبو زيد</div>
@@ -1168,10 +1109,8 @@
                     </div>
                 </div>
 
-                <!-- ===== CHARTS GRID ===== -->
                 <div class="charts-grid">
 
-                    <!-- ===== BAR CHART ===== -->
                     <div class="panel fade-up" style="animation-delay:0.12s">
                         <div class="p-head">
                             <div>
@@ -1190,7 +1129,6 @@
                         </div>
                     </div>
 
-                    <!-- ===== PIE CHART ===== -->
                     <div class="panel fade-up" style="animation-delay:0.15s">
                         <div class="p-head">
                             <div>
@@ -1208,7 +1146,6 @@
                     </div>
                 </div>
 
-                <!-- ===== ACTIVITY + TOP CLIENTS ===== -->
                 <div class="lower-grid">
                     <div class="panel activity fade-up" style="animation-delay:0.16s">
                         <div class="head">
@@ -1235,9 +1172,6 @@
         </div>
     </div>
 
-    <!-- ==========================================================
-    MOBILE BOTTOM NAVIGATION
-    ========================================================== -->
     <nav class="mobile-bottom-nav" id="mobileBottomNav">
         <a href="index.html" class="bn-item active">
             <i class="fas fa-home"></i>
@@ -1260,9 +1194,6 @@
         </button>
     </nav>
 
-    <!-- ==========================================================
-    JAVASCRIPT
-    ========================================================== -->
     <script>
         /**
          * ============================================================
@@ -1289,11 +1220,6 @@
             profileAvatar.textContent = user.name.charAt(0) || 'أ';
         }
 
-        /**
-         * ============================================================
-         * تسجيل الخروج
-         * ============================================================
-         */
         function logoutUser() {
             if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
                 localStorage.removeItem('user');
@@ -1338,11 +1264,9 @@
         if (hamburger) {
             hamburger.addEventListener('click', toggleSidebar);
         }
-
         if (bottomMenuBtn) {
             bottomMenuBtn.addEventListener('click', toggleSidebar);
         }
-
         if (overlay) {
             overlay.addEventListener('click', function() {
                 if (window.innerWidth <= 768 && mobileOpen) {
@@ -1350,13 +1274,11 @@
                 }
             });
         }
-
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && window.innerWidth <= 768 && mobileOpen) {
                 toggleSidebar();
             }
         });
-
         window.addEventListener('resize', function() {
             if (window.innerWidth > 768) {
                 sidebar.classList.remove('open');
@@ -1367,9 +1289,6 @@
             }
         });
 
-        /* ============================================================
-           NOTIFICATION BUTTON
-           ============================================================ */
         document.getElementById('notifBtn').addEventListener('click', function() {
             alert('📬 لديك 3 إشعارات جديدة');
         });
@@ -1409,15 +1328,11 @@
                     }
                 });
             }
-
             if (closeSearchBtn) {
                 closeSearchBtn.addEventListener('click', closeMobileSearch);
             }
         })();
 
-        /* ============================================================
-           SET GOAL
-           ============================================================ */
         function setGoal(pct) {
             var fill = document.getElementById('goalFill');
             var drip = document.getElementById('goalDrip');
@@ -1454,7 +1369,6 @@
             sales: [],
             occupancy: []
         };
-
         var pieData = {
             labels: [],
             values: []
@@ -1465,42 +1379,37 @@
             if (salesChart) {
                 salesChart.destroy();
             }
-            
             if (chartData.labels.length === 0) {
                 chartData.labels = ['لا توجد بيانات'];
                 chartData.sales = [0];
                 chartData.occupancy = [0];
             }
-
             salesChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: chartData.labels,
-                    datasets: [
-                        {
-                            label: 'الإيرادات',
-                            data: chartData.sales,
-                            backgroundColor: '#1a4a6b',
-                            borderRadius: 6,
-                            barPercentage: 0.5,
-                            categoryPercentage: 0.65,
-                            order: 2
-                        },
-                        {
-                            label: 'الإشغال (%)',
-                            data: chartData.occupancy,
-                            type: 'line',
-                            borderColor: '#a63a31',
-                            backgroundColor: '#a63a31',
-                            borderWidth: 2,
-                            pointRadius: 3,
-                            pointBackgroundColor: '#fff',
-                            pointBorderColor: '#a63a31',
-                            pointBorderWidth: 2,
-                            tension: 0.35,
-                            order: 1
-                        }
-                    ]
+                    datasets: [{
+                        label: 'الإيرادات',
+                        data: chartData.sales,
+                        backgroundColor: '#1a4a6b',
+                        borderRadius: 6,
+                        barPercentage: 0.5,
+                        categoryPercentage: 0.65,
+                        order: 2
+                    }, {
+                        label: 'الإشغال (%)',
+                        data: chartData.occupancy,
+                        type: 'line',
+                        borderColor: '#a63a31',
+                        backgroundColor: '#a63a31',
+                        borderWidth: 2,
+                        pointRadius: 3,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#a63a31',
+                        pointBorderWidth: 2,
+                        tension: 0.35,
+                        order: 1
+                    }]
                 },
                 options: {
                     responsive: true,
@@ -1510,9 +1419,7 @@
                         intersect: false
                     },
                     plugins: {
-                        legend: {
-                            display: false
-                        },
+                        legend: { display: false },
                         tooltip: {
                             backgroundColor: '#1a1714',
                             titleColor: '#fff',
@@ -1540,29 +1447,15 @@
                     },
                     scales: {
                         x: {
-                            grid: {
-                                display: false
-                            },
-                            border: {
-                                display: false
-                            },
-                            ticks: {
-                                font: {
-                                    size: 10
-                                }
-                            }
+                            grid: { display: false },
+                            border: { display: false },
+                            ticks: { font: { size: 10 } }
                         },
                         y: {
-                            grid: {
-                                color: 'rgba(0,0,0,0.04)'
-                            },
-                            border: {
-                                display: false
-                            },
+                            grid: { color: 'rgba(0,0,0,0.04)' },
+                            border: { display: false },
                             ticks: {
-                                font: {
-                                    size: 10
-                                },
+                                font: { size: 10 },
                                 callback: function(v) {
                                     if (v >= 1000) return (v / 1000) + 'k';
                                     return v;
@@ -1579,14 +1472,11 @@
             if (pieChart) {
                 pieChart.destroy();
             }
-            
             if (pieData.labels.length === 0) {
                 pieData.labels = ['لا توجد بيانات'];
                 pieData.values = [100];
             }
-
             var colors = ['#1a4a6b', '#b98a1e', '#2e7a5c', '#b14b2b', '#1a6a4a', '#a63a31', '#2a5a7a', '#c98a2e'];
-            
             pieChart = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
@@ -1604,9 +1494,7 @@
                     maintainAspectRatio: false,
                     cutout: '65%',
                     plugins: {
-                        legend: {
-                            display: false
-                        },
+                        legend: { display: false },
                         tooltip: {
                             backgroundColor: '#1a1714',
                             titleColor: '#fff',
@@ -1643,7 +1531,6 @@
         function renderSpark(id, data, color) {
             var canvas = document.getElementById(id);
             if (!canvas) return;
-            
             new Chart(canvas.getContext('2d'), {
                 type: 'line',
                 data: {
@@ -1668,10 +1555,12 @@
         }
 
         /* ============================================================
-           جلب البيانات من Supabase
+           جلب البيانات من Supabase مع إصلاح جلب المصروفات
            ============================================================ */
         async function fetchDashboardData() {
             try {
+                console.log('🔄 بدء جلب البيانات...');
+
                 // 1. جلب بيانات الحجوزات
                 var bookingsResponse = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=*', {
                     headers: {
@@ -1685,6 +1574,7 @@
                 }
 
                 var bookings = await bookingsResponse.json();
+                console.log('📊 تم جلب الحجوزات:', bookings.length);
 
                 // 2. جلب بيانات العملاء
                 var clientsResponse = await fetch(SUPABASE_URL + '/rest/v1/clients?select=id', {
@@ -1693,11 +1583,11 @@
                         'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
                     }
                 });
-
                 var clients = clientsResponse.ok ? await clientsResponse.json() : [];
 
-                // 3. جلب بيانات المصروفات - مهم لحساب عمولة أبو زيد وعرض إجمالي المصروفات
-                var expensesResponse = await fetch(SUPABASE_URL + '/rest/v1/expenses?select=total,amount', {
+                // 3. جلب بيانات المصروفات - جلب جميع الأعمدة للتحقق
+                console.log('🔄 جلب المصروفات...');
+                var expensesResponse = await fetch(SUPABASE_URL + '/rest/v1/expenses?select=*', {
                     headers: {
                         'apikey': SUPABASE_ANON_KEY,
                         'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
@@ -1706,15 +1596,41 @@
 
                 var expenses = [];
                 var totalExpenses = 0;
+
                 if (expensesResponse.ok) {
                     expenses = await expensesResponse.json();
-                    expenses.forEach(function(expense) {
-                        var amount = parseFloat(expense.total || expense.amount || 0);
-                        totalExpenses += amount;
-                    });
-                    console.log('✅ تم جلب المصروفات:', expenses.length, 'المجموع:', totalExpenses);
+                    console.log('📋 تم جلب المصروفات، عدد السجلات:', expenses.length);
+
+                    if (expenses.length > 0) {
+                        console.log('📋 أول سجل مصروف:', expenses[0]);
+                        console.log('📋 مفاتيح السجل:', Object.keys(expenses[0]));
+
+                        // محاولة قراءة المبلغ من أي عمود موجود
+                        var amountFound = false;
+                        expenses.forEach(function(expense, index) {
+                            // تجربة عدة أسماء محتملة للأعمدة
+                            var amount = parseFloat(expense.total || expense.amount || expense.المبلغ || expense.price || expense.value || expense.money || 0);
+                            if (!isNaN(amount) && amount > 0) {
+                                totalExpenses += amount;
+                                amountFound = true;
+                            }
+                        });
+
+                        if (!amountFound) {
+                            console.warn('⚠️ لم يتم العثور على عمود المبلغ في جدول المصروفات');
+                            console.log('📋 أسماء الأعمدة المتاحة:', Object.keys(expenses[0]));
+                        }
+                    }
+
+                    console.log('💰 إجمالي المصروفات المحسوب:', totalExpenses);
                 } else {
-                    console.warn('⚠️ فشل في جلب المصروفات، سيتم استخدام 0');
+                    console.warn('⚠️ فشل في جلب المصروفات، الكود:', expensesResponse.status);
+                    try {
+                        var errorText = await expensesResponse.text();
+                        console.warn('⚠️ نص الخطأ:', errorText);
+                    } catch (e) {
+                        console.warn('⚠️ لا يمكن قراءة نص الخطأ');
+                    }
                 }
 
                 // ===== معالجة البيانات =====
@@ -1774,56 +1690,28 @@
 
                 // حساب صافي الأرباح = الإيرادات - المصروفات
                 var netProfit = Math.max(0, totalRevenue - totalExpenses);
-
-                // حساب عمولة أبو زيد (20% من صافي الأرباح)
                 var commissionRate = 0.20;
                 var totalCommission = netProfit * commissionRate;
 
+                console.log('📊 الإيرادات:', totalRevenue, 'المصروفات:', totalExpenses, 'صافي:', netProfit, 'العمولة:', totalCommission);
+
                 // ===== تحديث الإحصائيات =====
-                var totalRevenueEl = document.getElementById('totalRevenue');
-                if (totalRevenueEl) {
-                    totalRevenueEl.textContent = totalRevenue.toLocaleString() + ' ر.س';
-                }
-
-                var totalBookingsEl = document.getElementById('totalBookings');
-                if (totalBookingsEl) {
-                    totalBookingsEl.textContent = totalBookings.toLocaleString();
-                }
-
-                var totalClientsEl = document.getElementById('totalClients');
-                if (totalClientsEl) {
-                    totalClientsEl.textContent = (totalClients || 0).toLocaleString();
-                }
-
-                var upcomingBookingsEl = document.getElementById('upcomingBookings');
-                if (upcomingBookingsEl) {
-                    upcomingBookingsEl.textContent = futureBookings.toLocaleString();
-                }
-
-                // عرض إجمالي المصروفات
-                var totalExpensesEl = document.getElementById('totalExpenses');
-                if (totalExpensesEl) {
-                    totalExpensesEl.textContent = totalExpenses.toLocaleString() + ' ر.س';
-                    console.log('📊 إجمالي المصروفات:', totalExpenses);
-                }
-
-                // عرض عمولة أبو زيد (20% من صافي الأرباح)
-                var totalCommissionEl = document.getElementById('totalCommission');
-                if (totalCommissionEl) {
-                    totalCommissionEl.textContent = totalCommission.toLocaleString() + ' ر.س';
-                    console.log('💰 عمولة أبو زيد المحسوبة:', totalCommission, '(الإيرادات:', totalRevenue, '- المصروفات:', totalExpenses, ') × 20%');
-                }
+                document.getElementById('totalRevenue').textContent = totalRevenue.toLocaleString() + ' ر.س';
+                document.getElementById('totalBookings').textContent = totalBookings.toLocaleString();
+                document.getElementById('totalClients').textContent = (totalClients || 0).toLocaleString();
+                document.getElementById('upcomingBookings').textContent = futureBookings.toLocaleString();
+                document.getElementById('totalExpenses').textContent = totalExpenses.toLocaleString() + ' ر.س';
+                document.getElementById('totalCommission').textContent = totalCommission.toLocaleString() + ' ر.س';
 
                 // ===== تحديث الـ Charts =====
                 var sortedMonths = Object.keys(monthlyRevenue).sort();
                 if (sortedMonths.length > 0) {
-                    var monthNames = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 
-                                     'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
-                    
+                    var monthNames = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
+                        'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
+                    ];
                     var labels = [];
                     var sales = [];
                     var occupancy = [];
-                    
                     sortedMonths.forEach(function(monthKey) {
                         var parts = monthKey.split('-');
                         var year = parts[0];
@@ -1833,7 +1721,6 @@
                         var occ = monthlyCount[monthKey] || 0;
                         occupancy.push(Math.round((occ / 30) * 100));
                     });
-                    
                     chartData.labels = labels;
                     chartData.sales = sales;
                     chartData.occupancy = occupancy;
@@ -1852,12 +1739,10 @@
                     var piePercentages = propValues.map(function(v) {
                         return Math.round((v / totalProps) * 100);
                     });
-                    
                     var sum = piePercentages.reduce(function(a, b) { return a + b; }, 0);
                     if (sum !== 100 && piePercentages.length > 0) {
                         piePercentages[piePercentages.length - 1] += (100 - sum);
                     }
-                    
                     pieData.labels = propLabels;
                     pieData.values = piePercentages;
                 } else {
@@ -1889,7 +1774,8 @@
                         activityHtml += '<div class="item">';
                         activityHtml += '<div class="dot-ind" style="background:' + colors2[colorIndex] + '"></div>';
                         activityHtml += '<div class="content">';
-                        activityHtml += '<div class="text">حجز للعميل <strong>' + item.name + '</strong> في ' + item.property + '</div>';
+                        activityHtml += '<div class="text">حجز للعميل <strong>' + item.name + '</strong> في ' + item.property +
+                            '</div>';
                         activityHtml += '<div class="time">' + (item.date || 'تاريخ غير محدد') + '</div>';
                         activityHtml += '</div>';
                         activityHtml += '</div>';
@@ -1906,7 +1792,6 @@
                     var sortedClients = clientNames.sort(function(a, b) {
                         return clientBookings[b] - clientBookings[a];
                     }).slice(0, 5);
-                    
                     var ranks = ['🥇', '🥈', '🥉', '4', '5'];
                     var widths = [92, 74, 58, 40, 26];
                     var topHtml = '';
@@ -1930,8 +1815,9 @@
                 var dateEl = document.getElementById('dashboardDate');
                 if (dateEl) {
                     var now = new Date();
-                    var months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 
-                                  'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+                    var months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
+                        'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
+                    ];
                     dateEl.textContent = 'لوحة التحكم — ' + months[now.getMonth()] + ' ' + now.getFullYear();
                 }
 
@@ -1940,7 +1826,6 @@
                 for (var i = 0; i < 8; i++) {
                     sparkData.push(Math.round(Math.random() * 100));
                 }
-                
                 renderSpark('spark1', sparkData, '#1a4a6b');
                 renderSpark('spark2', sparkData, '#9a8f83');
                 renderSpark('spark3', sparkData, '#2e7a5c');
