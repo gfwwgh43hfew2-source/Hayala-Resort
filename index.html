@@ -1003,6 +1003,9 @@
             <div class="label">القائمة الرئيسية</div>
             <a href="index.html" class="item active"><i class="fas fa-home"></i> الرئيسية</a>
             <a href="add-invoice.html" class="item"><i class="fas fa-plus-circle"></i> فاتورة جديدة <span class="badge">جديد</span></a>
+            <a href="bookings.html" class="item"><i class="fas fa-calendar-check"></i> سجل الحجوزات</a>
+            <a href="clients.html" class="item"><i class="fas fa-users"></i> العملاء</a>
+            <a href="properties.html" class="item"><i class="fas fa-building"></i> العقارات</a>
             <a href="expenses.html" class="item"><i class="fas fa-money-bill-wave"></i> المصاريف</a>
             <a href="abuzeid.html" class="item"><i class="fas fa-hand-holding-heart"></i> عمولة أبو زيد</a>
             <a href="filter.html" class="item"><i class="fas fa-filter"></i> فلترة الحجوزات</a>
@@ -1025,7 +1028,7 @@
                     <div class="name">مدير النظام</div>
                     <div class="role">منتجع حياله</div>
                 </div>
-                <a href="#" class="logout" title="تسجيل الخروج"><i class="fas fa-sign-out-alt"></i></a>
+                <a href="#" class="logout" title="تسجيل الخروج" onclick="logoutUser()"><i class="fas fa-sign-out-alt"></i></a>
             </div>
         </div>
     </nav>
@@ -1049,8 +1052,8 @@
                 <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="فتح البحث"><i class="fas fa-search"></i></button>
                 <button class="notif" id="notifBtn"><i class="fas fa-bell"></i><span class="dot"></span></button>
                 <div class="profile">
-                    <div class="avatar">أ</div>
-                    <div class="name">مدير النظام<small>منتجع حياله</small></div>
+                    <div class="avatar" id="profileAvatar">أ</div>
+                    <div class="name" id="profileName">مدير النظام<small>منتجع حياله</small></div>
                     <i class="fas fa-chevron-down"></i>
                 </div>
             </div>
@@ -1247,9 +1250,39 @@
     </nav>
 
     <!-- ==========================================================
-    JAVASCRIPT - نفس نظام الكود الذي يعمل
+    JAVASCRIPT - نفس نظام الكود الذي يعمل مع إضافة التحقق من تسجيل الدخول
     ========================================================== -->
     <script>
+        /**
+         * ============================================================
+         * التحقق من تسجيل الدخول
+         * ============================================================
+         */
+        var user = JSON.parse(localStorage.getItem('user') || '{}');
+        if (!user || !user.email) {
+            window.location.href = 'login.html';
+        }
+
+        // عرض اسم المستخدم في الـ Header
+        var profileName = document.getElementById('profileName');
+        var profileAvatar = document.getElementById('profileAvatar');
+        if (user && user.name) {
+            profileName.innerHTML = user.name + '<small>' + (user.role === 'admin' ? 'مدير النظام' : 'مستخدم') + '</small>';
+            profileAvatar.textContent = user.name.charAt(0) || 'أ';
+        }
+
+        /**
+         * ============================================================
+         * تسجيل الخروج
+         * ============================================================
+         */
+        function logoutUser() {
+            if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
+                localStorage.removeItem('user');
+                window.location.href = 'login.html';
+            }
+        }
+
         /* ============================================================
            SIDEBAR TOGGLE — نفس الكود من صفحة رولكس التي تعمل
            ============================================================ */
