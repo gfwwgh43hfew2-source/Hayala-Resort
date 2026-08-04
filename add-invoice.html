@@ -1895,14 +1895,14 @@
         }
 
         /* ============================================================
-           DATE INPUT - تنسيق DD/MM/YYYY
+           DATE INPUT - تنسيق DD/MM/YYYY (flatpickr)
            ============================================================ */
         .date-wrapper {
             position: relative;
             width: 100%;
         }
 
-        .date-wrapper input[type="date"] {
+        .date-wrapper input.date-display {
             width: 100%;
             padding: calc(7px * var(--scale-factor)) calc(12px * var(--scale-factor));
             border-radius: calc(var(--radius-sm) * var(--scale-factor));
@@ -1910,53 +1910,49 @@
             background: var(--surface-muted);
             color: var(--ink);
             font-size: calc(0.8rem * var(--scale-factor));
-            font-family: var(--font-display);
+            font-family: var(--font-mono);
             transition: all 0.2s ease;
             outline: none;
             height: calc(38px * var(--scale-factor));
             direction: ltr;
+            text-align: center;
+            letter-spacing: calc(1px * var(--scale-factor));
+            cursor: pointer;
         }
 
-        .date-wrapper input[type="date"]:focus {
+        .date-wrapper input.date-display:focus {
             border-color: var(--accent);
             background: #ffffff;
             box-shadow: 0 0 0 calc(3px * var(--scale-factor)) rgba(221, 159, 46, 0.15);
         }
 
-        .date-wrapper input[type="date"]::-webkit-calendar-picker-indicator {
+        .date-wrapper i.date-icon {
             position: absolute;
-            left: calc(8px * var(--scale-factor));
+            left: calc(10px * var(--scale-factor));
             top: 50%;
             transform: translateY(-50%);
-            cursor: pointer;
+            color: var(--ink-mute);
+            pointer-events: none;
+            font-size: calc(0.75rem * var(--scale-factor));
         }
 
-        .date-display {
-            direction: ltr !important;
-            text-align: center !important;
-            font-family: var(--font-mono);
-            letter-spacing: calc(1px * var(--scale-factor));
+        /* flatpickr calendar - match app style */
+        .flatpickr-calendar {
+            font-family: var(--font-display);
+            box-shadow: var(--shadow);
+            border-radius: calc(var(--radius-sm) * var(--scale-factor));
         }
-
-        .date-display::-webkit-datetime-edit {
-            direction: ltr !important;
-            text-align: center !important;
+        .flatpickr-day.selected,
+        .flatpickr-day.selected:hover {
+            background: var(--accent);
+            border-color: var(--accent);
         }
-
-        .date-display::-webkit-datetime-edit-fields-wrapper {
-            direction: ltr !important;
+        .flatpickr-day.today {
+            border-color: var(--teal);
         }
-
-        .date-display::-webkit-datetime-edit-day-field {
-            order: 1 !important;
-        }
-
-        .date-display::-webkit-datetime-edit-month-field {
-            order: 2 !important;
-        }
-
-        .date-display::-webkit-datetime-edit-year-field {
-            order: 3 !important;
+        .flatpickr-months .flatpickr-month,
+        .flatpickr-current-month .flatpickr-monthDropdown-months {
+            color: var(--ink);
         }
 
         /* ============================================================
@@ -2209,7 +2205,8 @@
                         <div class="form-group">
                             <label>التاريخ <span class="required">*</span></label>
                             <div class="date-wrapper">
-                                <input type="date" id="invoiceDate" class="date-display" />
+                                <input type="text" id="invoiceDate" class="date-display" placeholder="يوم/شهر/سنة" readonly />
+                                <i class="fas fa-calendar-alt date-icon"></i>
                             </div>
                         </div>
                     </div>
@@ -2251,13 +2248,15 @@
                         <div class="form-group">
                             <label>تاريخ الدخول <span class="required">*</span></label>
                             <div class="date-wrapper">
-                                <input type="date" id="checkIn" class="date-display" />
+                                <input type="text" id="checkIn" class="date-display" placeholder="يوم/شهر/سنة" readonly />
+                                <i class="fas fa-calendar-alt date-icon"></i>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>تاريخ الخروج <span class="required">*</span></label>
                             <div class="date-wrapper">
-                                <input type="date" id="checkOut" class="date-display" />
+                                <input type="text" id="checkOut" class="date-display" placeholder="يوم/شهر/سنة" readonly />
+                                <i class="fas fa-calendar-alt date-icon"></i>
                             </div>
                         </div>
                     </div>
@@ -2429,6 +2428,11 @@
 
     </div>
 
+    <!-- flatpickr: تنسيق موحد للتاريخ يوم/شهر/سنة على كل الأجهزة -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/l10n/ar.js"></script>
+
     <script>
         /**
          * ============================================================
@@ -2549,6 +2553,32 @@
 
         /**
          * ============================================================
+         * FLATPICKR - تنسيق التاريخ الموحد يوم/شهر/سنة
+         * القيمة الداخلية تبقى YYYY-MM-DD (متوافقة مع باقي الكود)
+         * والعرض للمستخدم دائماً DD/MM/YYYY على كل الأجهزة والمتصفحات
+         * ============================================================
+         */
+        var flatpickrOptions = {
+            dateFormat: 'Y-m-d',   // القيمة الفعلية المخزّنة (متوافقة مع Supabase وباقي الكود)
+            altInput: true,
+            altFormat: 'd/m/Y',    // ما يظهر للمستخدم: يوم/شهر/سنة
+            allowInput: false,
+            disableMobile: true,   // إجبار نفس التقويم الموحد حتى على الجوال بدل منتقي النظام
+            locale: { firstDayOfWeek: 6 }
+        };
+
+        var fpInvoiceDate = flatpickr('#invoiceDate', Object.assign({}, flatpickrOptions, {
+            onChange: function() { /* لا حاجة لأي حساب هنا */ }
+        }));
+        var fpCheckIn = flatpickr('#checkIn', Object.assign({}, flatpickrOptions, {
+            onChange: function() { calculateNights(); }
+        }));
+        var fpCheckOut = flatpickr('#checkOut', Object.assign({}, flatpickrOptions, {
+            onChange: function() { calculateNights(); }
+        }));
+
+        /**
+         * ============================================================
          * SET DEFAULT DATE (YYYY-MM-DD للقيمة الفعلية)
          * ============================================================
          */
@@ -2562,9 +2592,9 @@
 
         (function() {
             var today = getTodayFormatted();
-            invoiceDate.value = today;
-            checkIn.value = today;
-            checkOut.value = today;
+            fpInvoiceDate.setDate(today, true);
+            fpCheckIn.setDate(today, true);
+            fpCheckOut.setDate(today, true);
             generateInvoiceNumber();
         })();
 
@@ -2759,8 +2789,6 @@
             calculateFinancials();
         }
 
-        checkIn.addEventListener('change', calculateNights);
-        checkOut.addEventListener('change', calculateNights);
         dailyPrice.addEventListener('input', calculateFinancials);
         discountAmount.addEventListener('input', calculateFinancials);
         paidAmount.addEventListener('input', calculateFinancials);
@@ -2868,8 +2896,8 @@
         function clearBookingFields() {
             propertyType.value = '';
             var today = getTodayFormatted();
-            checkIn.value = today;
-            checkOut.value = today;
+            fpCheckIn.setDate(today, true);
+            fpCheckOut.setDate(today, true);
             nights.value = 0;
             dailyPrice.value = '';
             checkInTime.value = '';
@@ -2941,8 +2969,8 @@
         function editBooking(index) {
             var item = bookings[index];
             propertyType.value = item.property;
-            checkIn.value = item.checkIn;
-            checkOut.value = item.checkOut;
+            fpCheckIn.setDate(item.checkIn, true);
+            fpCheckOut.setDate(item.checkOut, true);
             nights.value = item.nights;
             dailyPrice.value = item.dailyPrice;
             checkInTime.value = item.checkInTime || '';
@@ -3285,7 +3313,7 @@
             discountAmount.value = '0';
             paidAmount.value = '';
             var today = getTodayFormatted();
-            invoiceDate.value = today;
+            fpInvoiceDate.setDate(today, true);
             generateInvoiceNumber();
             isEditingInvoice = false;
             editingInvoiceNumber = '';
@@ -3583,7 +3611,7 @@
             invoiceNumber.value = firstItem.invoice_number || '';
 
             if (firstItem.invoice_date) {
-                invoiceDate.value = firstItem.invoice_date;
+                fpInvoiceDate.setDate(firstItem.invoice_date, true);
             }
 
             clientName.value = firstItem.client_name || '';
@@ -3638,7 +3666,7 @@
             discountAmount.value = '0';
             paidAmount.value = '';
             var today = getTodayFormatted();
-            invoiceDate.value = today;
+            fpInvoiceDate.setDate(today, true);
             generateInvoiceNumber();
             isEditingInvoice = false;
             editingInvoiceNumber = '';
@@ -3685,7 +3713,6 @@
             }
             if (!date) {
                 showToast('⚠️ تنبيه', 'يرجى إدخال التاريخ', 'error');
-                invoiceDate.focus();
                 return;
             }
             if (!clientNameValue) {
