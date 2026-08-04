@@ -337,9 +337,19 @@
             overflow-y: auto;
             box-shadow: var(--shadow);
         }
-        .sidebar.open {
-            right: 0;
+
+        @media (max-width: 768px) {
+            .sidebar {
+                right: calc(-1 * var(--sidebar-w));
+            }
+            .sidebar.open {
+                right: 0;
+            }
+            .sidebar-overlay {
+                display: block;
+            }
         }
+
         .sidebar .close-btn {
             position: absolute;
             top: calc(12px * var(--scale-factor));
@@ -555,79 +565,6 @@
             padding: calc(4px * var(--scale-factor)) calc(10px * var(--scale-factor));
             font-size: calc(0.65rem * var(--scale-factor));
             border-radius: calc(8px * var(--scale-factor));
-        }
-
-        /* ============================================================
-           STAT CARDS - 4 بطاقات فقط (بدون عمولة أبو زيد)
-           ============================================================ */
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-        .stat-card {
-            background: var(--surface);
-            border: 1px solid rgba(0,0,0,0.04);
-            border-radius: var(--radius-md);
-            padding: 0;
-            overflow: hidden;
-            transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
-            box-shadow: var(--shadow-sm);
-        }
-        .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-md);
-        }
-        .stat-card .bar {
-            height: 3px;
-            background: var(--swatch, var(--ink-4));
-        }
-        .stat-card .body {
-            padding: 18px 20px;
-        }
-        .stat-card .label {
-            font-size: 0.7rem;
-            color: var(--ink-3);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .stat-card .label i {
-            font-size: 0.7rem;
-            color: var(--swatch, var(--ink-3));
-        }
-        .stat-card .number {
-            font-family: var(--display);
-            font-size: 1.6rem;
-            font-weight: 700;
-            margin-top: 8px;
-            letter-spacing: -0.2px;
-            color: var(--ink);
-        }
-        .stat-card .foot {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: 10px;
-        }
-        .stat-card .change {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 0.65rem;
-            font-weight: 700;
-        }
-        .stat-card .change.up {
-            color: var(--viridian);
-        }
-        .stat-card .change.down {
-            color: var(--oxide);
-        }
-        .stat-card .spark {
-            width: 50px;
-            height: 20px;
         }
 
         /* ============================================================
@@ -878,62 +815,8 @@
         }
 
         /* ============================================================
-           FLOATING BUTTON
-           ============================================================ */
-        .floating-btn {
-            position: fixed;
-            bottom: 26px;
-            left: 26px;
-            z-index: 500;
-            background: var(--ink);
-            color: #fff;
-            padding: 15px 26px;
-            border-radius: 50px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-family: inherit;
-            font-size: 0.85rem;
-            font-weight: 800;
-            box-shadow: 0 12px 28px -8px rgba(33,29,26,0.4);
-            border: none;
-            cursor: pointer;
-            transition: transform .25s var(--ease), background .2s ease;
-        }
-        .floating-btn:hover {
-            transform: translateY(-4px) scale(1.03);
-            background: #000;
-        }
-        .floating-btn i {
-            transition: .3s;
-        }
-        .floating-btn:hover i {
-            transform: rotate(90deg);
-        }
-
-        /* ============================================================
            RESPONSIVE
            ============================================================ */
-        @media (max-width: 1180px) {
-            .stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .header .search {
-                display: none;
-            }
-        }
-
-        @media (max-width: 992px) {
-            .page-header {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .page-header .actions .btn {
-                flex: 1;
-                justify-content: center;
-            }
-        }
-
         @media (max-width: 768px) {
             :root {
                 --scale-factor: 1;
@@ -969,10 +852,6 @@
                 justify-content: center;
             }
 
-            .stats {
-                grid-template-columns: 1fr 1fr;
-            }
-
             .card-body {
                 padding: 12px 14px;
             }
@@ -1006,15 +885,6 @@
             nav {
                 display: none !important;
             }
-
-            .floating-btn span {
-                display: none;
-            }
-            .floating-btn {
-                padding: 15px;
-                bottom: 20px;
-                left: 20px;
-            }
         }
 
         @media (max-width: 480px) {
@@ -1028,13 +898,14 @@
                 gap: 8px;
             }
 
-            .stats {
-                grid-template-columns: 1fr;
-            }
-
             table {
                 font-size: 0.6rem;
                 min-width: 500px;
+            }
+
+            table thead th:nth-child(3),
+            table tbody td:nth-child(3) {
+                display: none;
             }
 
             .header .breadcrumb {
@@ -1074,60 +945,18 @@
     SIDEBAR — مغلقة افتراضياً على الموبايل، تظهر على سطح المكتب
     ============================================================ -->
     <nav class="sidebar" id="sidebar">
-        <div class="brand">
-            <div class="mark">
-                <svg viewBox="0 0 24 24" fill="none">
-                    <path d="M4 19V9l8-5 8 5v10" stroke="#fff" stroke-width="2" stroke-linejoin="round"/>
-                    <path d="M9 19v-6h6v6" stroke="#fff" stroke-width="2" stroke-linejoin="round"/>
-                </svg>
-            </div>
-            <div class="text">
-                منتجع حياله
-                <span>النظام المالي والإداري الشامل</span>
-            </div>
-        </div>
-
-        <div class="menu">
-            <div class="label">القائمة الرئيسية</div>
-            <a href="index.html" class="item"><i class="fas fa-home"></i> الرئيسية</a>
-            <a href="add-invoice.html" class="item"><i class="fas fa-plus-circle"></i> فاتورة جديدة <span class="badge">جديد</span></a>
-            <a href="bookings.html" class="item active"><i class="fas fa-calendar-check"></i> سجل الحجوزات</a>
-            <a href="clients.html" class="item"><i class="fas fa-users"></i> العملاء</a>
-            <a href="properties.html" class="item"><i class="fas fa-building"></i> العقارات</a>
-            <a href="expenses.html" class="item"><i class="fas fa-money-bill-wave"></i> المصاريف</a>
-            <a href="abuzeid.html" class="item"><i class="fas fa-hand-holding-heart"></i> عمولة أبو زيد</a>
-            <a href="client-accounts.html" class="item" style="border-color: rgba(14,165,233,0.1);">
-                <i class="fas fa-user-clock" style="color: var(--primary);"></i>
-                حسابات العملاء
-                <span class="badge" style="background: var(--primary); color: #fff;">متبقي</span>
-            </a>
-            <a href="users.html" class="item" style="border-color: rgba(14,165,233,0.1);">
-                <i class="fas fa-users-cog" style="color: var(--primary);"></i>
-                إدارة المستخدمين
-                <span class="badge" style="background: var(--primary); color: #fff;">Admin</span>
-            </a>
-            <a href="filter.html" class="item"><i class="fas fa-filter"></i> فلترة الحجوزات</a>
-            <a href="future.html" class="item"><i class="fas fa-calendar-alt"></i> حجوزات مستقبلية</a>
-
-            <div class="label">التقارير</div>
-            <a href="#" class="item"><i class="fas fa-file-alt"></i> تقارير الحجوزات</a>
-            <a href="#" class="item"><i class="fas fa-file-invoice-dollar"></i> التقارير المالية</a>
-            <a href="#" class="item"><i class="fas fa-chart-pie"></i> تحليلات</a>
-
-            <div class="label">الإعدادات</div>
-            <a href="#" class="item"><i class="fas fa-cog"></i> الإعدادات</a>
-            <a href="#" class="item"><i class="fas fa-question-circle"></i> المساعدة</a>
-        </div>
-
-        <div class="footer">
-            <div class="user">
-                <div class="avatar">أ</div>
-                <div class="info">
-                    <div class="name" id="sidebarUserName">مدير النظام</div>
-                    <div class="role" id="sidebarUserRole">منتجع حياله</div>
-                </div>
-                <a href="#" class="logout" title="تسجيل الخروج" onclick="logoutUser()"><i class="fas fa-sign-out-alt"></i></a>
-            </div>
+        <div class="close-btn" id="closeSidebar"><i class="fas fa-times"></i></div>
+        <div class="menu-items">
+            <a href="index.html"><i class="fas fa-home"></i> الرئيسية</a>
+            <a href="add-invoice.html"><i class="fas fa-file-invoice"></i> فاتورة جديدة</a>
+            <a href="bookings.html" class="active"><i class="fas fa-list"></i> سجل الحجوزات</a>
+            <a href="clients.html"><i class="fas fa-users"></i> العملاء</a>
+            <a href="properties.html"><i class="fas fa-building"></i> العقارات</a>
+            <a href="expenses.html"><i class="fas fa-money-bill-wave"></i> المصاريف</a>
+            <a href="abuzeid.html"><i class="fas fa-hand-holding-heart"></i> عمولة أبو زيد</a>
+            <a href="future.html"><i class="fas fa-calendar-check"></i> الحجوزات المستقبلية</a>
+            <a href="users.html"><i class="fas fa-users-cog"></i> المستخدمين</a>
+            <a href="#"><i class="fas fa-chart-pie"></i> التقارير</a>
         </div>
     </nav>
 
@@ -1157,168 +986,67 @@
         </header>
 
         <!-- ==========================================================
-        DASHBOARD — wrapped with main-content class for scaling
+        DASHBOARD
         ========================================================== -->
         <div class="main-content">
             <div class="dash">
+                <div class="page-wrapper">
 
-                <!-- ===== HERO ===== -->
-                <div class="hero fade-up" style="animation-delay:0.02s">
-                    <div class="copy">
-                        <div class="eyebrow" id="dashboardDate">سجل الحجوزات — جاري التحميل...</div>
+                    <!-- ===== PAGE HEADER ===== -->
+                    <div class="page-header">
                         <h1>
-                            <span class="highlight">سجل الحجوزات</span>
+                            <i class="fas fa-calendar-check"></i>
+                            سجل الحجوزات
                         </h1>
-                        <p>عرض جميع الحجوزات المسجلة في النظام، مع إمكانية البحث والفلترة.</p>
-                        <div class="goal-row">
-                            <a href="add-invoice.html" class="cta"><i class="fas fa-plus"></i> حجز جديد</a>
-                            <button class="cta" style="background:var(--surface);color:var(--ink);box-shadow:none;border:1px solid rgba(0,0,0,0.08);" onclick="loadBookings()">
+                        <div class="actions">
+                            <a href="add-invoice.html" class="btn btn-success">
+                                <i class="fas fa-plus"></i> حجز جديد
+                            </a>
+                            <button class="btn btn-outline" onclick="loadBookings()">
                                 <i class="fas fa-sync-alt"></i> تحديث
                             </button>
                         </div>
                     </div>
 
-                    <!-- ===== HERO IMAGE ===== -->
-                    <div class="hero-image fade-up" style="animation-delay:0.1s">
-                        <img src="https://raw.githubusercontent.com/gfwwgh43hfew2-source/Hayala-Resort/main/ChatGPT%20Image%2030%20%D9%8A%D9%88%D9%84%D9%8A%D9%88%202026%D8%8C%2012_39_00%20%D9%85.png"
-                             alt="منتجع حياله - القصيم"
-                             loading="lazy" />
+                    <!-- ===== CARD ===== -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>
+                                <i class="fas fa-list"></i>
+                                قائمة الحجوزات
+                                <span class="badge" id="countBadge">0</span>
+                            </h2>
+                            <div>
+                                <input type="text" id="searchInput2" placeholder="🔍 بحث عن حجز..." class="form-control" style="width:220px;padding:6px 12px;font-size:0.7rem;" oninput="filterTable()">
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="tableContainer">
+                                <!-- سيتم تعبئتها بواسطة JavaScript -->
+                            </div>
+                        </div>
                     </div>
+
                 </div>
-
-                <!-- ===== STATS - 4 بطاقات فقط ===== -->
-                <div class="stats-wrap">
-                    <div class="stats">
-                        <div class="stat-card fade-up loading" style="animation-delay:0.06s;--swatch:var(--prussian)">
-                            <div class="bar"></div>
-                            <div class="body">
-                                <div class="label"><i class="fas fa-wallet"></i> إجمالي الإيرادات</div>
-                                <div class="number" id="totalRevenue"><span class="loading-text">جاري التحميل...</span></div>
-                                <div class="foot">
-                                    <span class="change up"><i class="fas fa-arrow-up"></i> <span id="revenueChange">0%</span></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="stat-card fade-up loading" style="animation-delay:0.09s;--swatch:var(--ink-3)">
-                            <div class="bar"></div>
-                            <div class="body">
-                                <div class="label"><i class="fas fa-file-invoice"></i> إجمالي الحجوزات</div>
-                                <div class="number" id="totalBookings"><span class="loading-text">جاري التحميل...</span></div>
-                                <div class="foot">
-                                    <span class="change up"><i class="fas fa-arrow-up"></i> <span id="bookingsChange">0%</span></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="stat-card fade-up loading" style="animation-delay:0.12s;--swatch:var(--viridian)">
-                            <div class="bar"></div>
-                            <div class="body">
-                                <div class="label"><i class="fas fa-users"></i> إجمالي العملاء</div>
-                                <div class="number" id="totalClients"><span class="loading-text">جاري التحميل...</span></div>
-                                <div class="foot">
-                                    <span class="change up"><i class="fas fa-arrow-up"></i> <span id="clientsChange">0%</span></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="stat-card fade-up loading" style="animation-delay:0.15s;--swatch:var(--oxide)">
-                            <div class="bar"></div>
-                            <div class="body">
-                                <div class="label"><i class="fas fa-clock"></i> حجوزات قادمة</div>
-                                <div class="number" id="upcomingBookings"><span class="loading-text">جاري التحميل...</span></div>
-                                <div class="foot">
-                                    <span class="change up"><i class="fas fa-arrow-up"></i> <span id="upcomingChange">0%</span></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ===== TABLE PANEL ===== -->
-                <div class="panel fade-up" style="animation-delay:0.12s">
-                    <div class="p-head">
-                        <div>
-                            <div class="p-title"><span class="dot"></span> قائمة الحجوزات <span id="countBadge" style="font-size:0.7rem;color:var(--ink-3);font-weight:600;"></span></div>
-                            <div class="p-sub">عرض جميع الحجوزات المسجلة في النظام</div>
-                        </div>
-                        <div class="p-source">
-                            <i class="fas fa-database"></i> <span id="sourceCount">0</span> حجز
-                        </div>
-                    </div>
-
-                    <!-- ===== TABLE ===== -->
-                    <div class="table-wrapper">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>رقم الحجز</th>
-                                    <th>تاريخ الفاتورة</th>
-                                    <th>تاريخ الدخول</th>
-                                    <th>تاريخ الخروج</th>
-                                    <th>اسم العميل</th>
-                                    <th>نوع العقار</th>
-                                    <th>عدد الأيام</th>
-                                    <th>السعر اليومي</th>
-                                    <th>الخصم</th>
-                                    <th>المدفوع</th>
-                                    <th>المتبقي</th>
-                                    <th>الإجمالي</th>
-                                    <th>الحالة</th>
-                                    <th>نوع الإقامة</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tableBody">
-                                <tr><td colspan="14" class="loading"><i class="fas fa-spinner"></i> جاري تحميل البيانات...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- ===== MOBILE CARDS ===== -->
-                    <div class="cards-container" id="cardsContainer">
-                        <div class="loading"><i class="fas fa-spinner"></i> جاري التحميل...</div>
-                    </div>
-
-                    <div class="table-note" id="tableNote">📌 جاري تحميل البيانات...</div>
-                </div>
-
             </div>
         </div>
     </div>
 
     <!-- ==========================================================
-    FLOATING ACTION BUTTON
-    ========================================================== -->
-    <a href="add-invoice.html" class="floating-btn">
-        <i class="fas fa-plus"></i>
-        <span>حجز جديد</span>
-    </a>
-
-    <!-- ==========================================================
     MOBILE BOTTOM NAVIGATION
     ========================================================== -->
-    <nav class="mobile-bottom-nav" id="mobileBottomNav">
-        <a href="index.html" class="bn-item">
-            <i class="fas fa-home"></i>
-            <span>الرئيسية</span>
-        </a>
-        <a href="add-invoice.html" class="bn-item">
-            <i class="fas fa-plus-circle"></i>
-            <span>فاتورة</span>
-        </a>
-        <a href="bookings.html" class="bn-item active">
-            <i class="fas fa-list"></i>
-            <span>الحجوزات</span>
-        </a>
-        <a href="clients.html" class="bn-item">
-            <i class="fas fa-users"></i>
-            <span>العملاء</span>
-        </a>
-        <a href="expenses.html" class="bn-item">
-            <i class="fas fa-money-bill-wave"></i>
-            <span>المصاريف</span>
-        </a>
+    <nav class="mobile-nav-bottom" id="mobileBottomNav">
+        <ul>
+            <li><a href="index.html"><i class="fas fa-home"></i><span>الرئيسية</span></a></li>
+            <li><a href="add-invoice.html"><i class="fas fa-file-invoice"></i><span>فاتورة</span></a></li>
+            <li class="active"><a href="bookings.html"><i class="fas fa-list"></i><span>الحجوزات</span></a></li>
+            <li><a href="clients.html"><i class="fas fa-users"></i><span>العملاء</span></a></li>
+            <li><a href="expenses.html"><i class="fas fa-money-bill-wave"></i><span>المصاريف</span></a></li>
+        </ul>
     </nav>
 
     <!-- ============================================================
-    JAVASCRIPT - بيانات فعلية من Supabase
+    JAVASCRIPT
     ============================================================ -->
     <script>
         /**
@@ -1339,17 +1067,12 @@
             window.location.href = 'login.html';
         }
 
-        // عرض اسم المستخدم في الـ Header و Sidebar
+        // عرض اسم المستخدم في الـ Header
         var profileName = document.getElementById('profileName');
         var profileAvatar = document.getElementById('profileAvatar');
-        var sidebarUserName = document.getElementById('sidebarUserName');
-        var sidebarUserRole = document.getElementById('sidebarUserRole');
-
         if (user && user.name) {
             profileName.innerHTML = user.name + '<small>' + (user.role === 'admin' ? 'مدير النظام' : 'مستخدم') + '</small>';
             profileAvatar.textContent = user.name.charAt(0) || 'أ';
-            sidebarUserName.textContent = user.name;
-            sidebarUserRole.textContent = user.role === 'admin' ? 'مدير النظام' : 'مستخدم';
         }
 
         /**
@@ -1365,12 +1088,11 @@
         }
 
         /* ============================================================
-           SIDEBAR TOGGLE — نفس آلية صفحة العملاء
+           SIDEBAR TOGGLE
            ============================================================ */
         var sidebar = document.getElementById('sidebar');
         var overlay = document.getElementById('sidebarOverlay');
         var hamburger = document.getElementById('hamburger');
-        var main = document.getElementById('main');
         var mobileOpen = false;
 
         function toggleSidebar() {
@@ -1435,18 +1157,6 @@
         });
 
         /* ============================================================
-           إعداد التاريخ
-           ============================================================ */
-        var dateEl = document.getElementById('dashboardDate');
-        if (dateEl) {
-            var now = new Date();
-            var months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
-                'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
-            ];
-            dateEl.textContent = 'سجل الحجوزات — ' + months[now.getMonth()] + ' ' + now.getFullYear();
-        }
-
-        /* ============================================================
            جلب البيانات من Supabase
            ============================================================ */
         var allBookings = [];
@@ -1468,23 +1178,44 @@
         }
 
         function renderTable(data) {
-            var tableBody = document.getElementById('tableBody');
-            var cardsContainer = document.getElementById('cardsContainer');
+            var container = document.getElementById('tableContainer');
             var countBadge = document.getElementById('countBadge');
-            var sourceCount = document.getElementById('sourceCount');
-            var tableNote = document.getElementById('tableNote');
 
             if (!data || data.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="14" class="empty"><i class="fas fa-box-open"></i> لا توجد حجوزات</td></tr>';
-                cardsContainer.innerHTML = '<div class="empty"><i class="fas fa-box-open"></i> لا توجد حجوزات</div>';
-                countBadge.textContent = '(0)';
-                sourceCount.textContent = '0';
-                tableNote.textContent = '📌 لا توجد حجوزات مسجلة';
+                container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-calendar-check"></i>
+                            <p>لا توجد حجوزات</p>
+                            <span>اضغط على "حجز جديد" لإضافة أول حجز</span>
+                        </div>
+                    `;
+                countBadge.textContent = '0';
                 return;
             }
 
-            var html = '';
-            var cardsHtml = '';
+            var html = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>رقم الحجز</th>
+                                <th>تاريخ الفاتورة</th>
+                                <th>تاريخ الدخول</th>
+                                <th>تاريخ الخروج</th>
+                                <th>اسم العميل</th>
+                                <th>نوع العقار</th>
+                                <th>عدد الأيام</th>
+                                <th>السعر اليومي</th>
+                                <th>الخصم</th>
+                                <th>المدفوع</th>
+                                <th>المتبقي</th>
+                                <th>الإجمالي</th>
+                                <th>الحالة</th>
+                                <th>نوع الإقامة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                    `;
 
             data.forEach(function(item, index) {
                 var total = parseFloat(item.total) || 0;
@@ -1506,9 +1237,9 @@
                 var checkIn = formatDate(item.check_in);
                 var checkOut = formatDate(item.check_out);
 
-                // الجدول
                 html += `
                         <tr class="${rowClass}">
+                            <td>${index + 1}</td>
                             <td>${bookingNumberDisplay} ${isFuture ? '<span class="badge badge-future">⭐</span>' : ''}</td>
                             <td>${invoiceDate}</td>
                             <td>${checkIn}</td>
@@ -1519,80 +1250,31 @@
                             <td>${pricePerNight.toFixed(2)}</td>
                             <td>${discount.toFixed(2)}</td>
                             <td>${paid.toFixed(2)}</td>
-                            <td style="font-weight:700;color:var(--oxide);">${remaining.toFixed(2)}</td>
+                            <td style="font-weight:700;color:var(--rust);">${remaining.toFixed(2)}</td>
                             <td style="font-weight:800;color:var(--ink);">${total.toFixed(2)}</td>
                             <td>${statusBadge}</td>
                             <td>${item.stay_type || '-'}</td>
                         </tr>
                     `;
-
-                // بطاقات الموبايل
-                cardsHtml += `
-                        <div class="booking-card ${isFuture ? 'is-future' : ''}">
-                            <div class="card-header">
-                                <span class="name">${item.client_name || 'غير محدد'}</span>
-                                <span class="number">${bookingNumberDisplay}</span>
-                            </div>
-                            <div class="card-row"><span class="card-label">نوع العقار</span><span class="card-value">${item.property_type || '-'}</span></div>
-                            <div class="card-row"><span class="card-label">تاريخ الدخول</span><span class="card-value">${checkIn}</span></div>
-                            <div class="card-row"><span class="card-label">تاريخ الخروج</span><span class="card-value">${checkOut}</span></div>
-                            <div class="card-row"><span class="card-label">عدد الأيام</span><span class="card-value">${nights}</span></div>
-                            <div class="card-row"><span class="card-label">الإجمالي</span><span class="card-value gold">${total.toFixed(2)} ر.س</span></div>
-                            <div class="card-row"><span class="card-label">المتبقي</span><span class="card-value" style="color:var(--oxide);">${remaining.toFixed(2)} ر.س</span></div>
-                            <div class="card-row"><span class="card-label">الحالة</span><span class="card-value">${statusBadge}</span></div>
-                        </div>
-                    `;
             });
 
-            tableBody.innerHTML = html;
-            cardsContainer.innerHTML = cardsHtml;
-            countBadge.textContent = '(' + data.length + ')';
-            sourceCount.textContent = data.length;
-            tableNote.textContent = '📌 إجمالي الحجوزات المعروضة: ' + data.length;
-        }
+            html += `
+                        </tbody>
+                    </table>
+                `;
 
-        function calculateStats(data) {
-            var totalRevenue = 0;
-            var totalBookings = data.length;
-            var totalClients = new Set();
-            var futureBookings = 0;
-            var today = new Date();
-            var todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-
-            data.forEach(function(item) {
-                var total = parseFloat(item.total) || 0;
-                var discount = parseFloat(item.discount) || 0;
-                var netRevenue = total - discount;
-                totalRevenue += netRevenue;
-                if (item.client_name) totalClients.add(item.client_name);
-                if (item.check_in) {
-                    var d = new Date(item.check_in);
-                    var dOnly = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-                    if (dOnly >= todayDate) futureBookings++;
-                }
-            });
-
-            var roundedRevenue = Math.round(totalRevenue);
-
-            document.getElementById('totalRevenue').textContent = roundedRevenue.toLocaleString() + ' ر.س';
-            document.getElementById('totalBookings').textContent = totalBookings.toLocaleString();
-            document.getElementById('totalClients').textContent = totalClients.size.toLocaleString();
-            document.getElementById('upcomingBookings').textContent = futureBookings.toLocaleString();
-
-            // إزالة حالة التحميل
-            document.querySelectorAll('.stat-card.loading').forEach(function(el) {
-                el.classList.remove('loading');
-            });
+            container.innerHTML = html;
+            countBadge.textContent = data.length;
         }
 
         async function loadBookings() {
-            var tableBody = document.getElementById('tableBody');
-            var cardsContainer = document.getElementById('cardsContainer');
-            var tableNote = document.getElementById('tableNote');
-
-            tableBody.innerHTML = '<tr><td colspan="14" class="loading"><i class="fas fa-spinner"></i> جاري تحميل البيانات...</td></tr>';
-            cardsContainer.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i> جاري التحميل...</div>';
-            tableNote.textContent = '📌 جاري تحميل البيانات...';
+            var container = document.getElementById('tableContainer');
+            container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="spinner"></div>
+                        <p>جاري تحميل البيانات...</p>
+                    </div>
+                `;
 
             try {
                 var response = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=*&order=check_in.desc', {
@@ -1608,22 +1290,28 @@
 
                 allBookings = await response.json();
                 filteredBookings = allBookings.slice();
-
-                calculateStats(allBookings);
                 renderTable(filteredBookings);
 
             } catch (error) {
                 console.error('❌ خطأ:', error);
-                tableBody.innerHTML = '<tr><td colspan="14" class="error"><i class="fas fa-exclamation-triangle"></i> حدث خطأ في تحميل البيانات<br><small>' + error.message + '</small><br><button class="retry-btn" onclick="loadBookings()"><i class="fas fa-sync-alt"></i> إعادة المحاولة</button></td></tr>';
-                cardsContainer.innerHTML = '<div class="error"><i class="fas fa-exclamation-triangle"></i> حدث خطأ<br><small>' + error.message + '</small><br><button class="retry-btn" onclick="loadBookings()"><i class="fas fa-sync-alt"></i> إعادة المحاولة</button></div>';
-                tableNote.textContent = '❌ فشل في تحميل البيانات';
+                container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-exclamation-triangle" style="color:var(--rust);"></i>
+                            <p style="color:var(--rust);">حدث خطأ في تحميل البيانات</p>
+                            <span>${error.message}</span>
+                            <br><br>
+                            <button class="btn btn-primary" onclick="loadBookings()">
+                                <i class="fas fa-sync-alt"></i> إعادة المحاولة
+                            </button>
+                        </div>
+                    `;
             }
         }
 
         /* ============================================================
-           البحث
+           البحث والفلترة
            ============================================================ */
-        var searchInput = document.getElementById('searchInput');
+        var searchInput = document.getElementById('searchInput2');
 
         function filterTable() {
             var term = searchInput.value.toLowerCase().trim();
