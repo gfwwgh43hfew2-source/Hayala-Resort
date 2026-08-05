@@ -710,14 +710,14 @@
         /* ============================================================
            TABLE
            ============================================================ */
-        table {
+        .desktop-table {
             width: 100%;
             border-collapse: collapse;
             font-size: calc(0.8rem * var(--scale-factor));
             min-width: 1300px;
         }
 
-        table thead th {
+        .desktop-table thead th {
             background: var(--surface-muted);
             padding: calc(10px * var(--scale-factor)) calc(12px * var(--scale-factor));
             text-align: center;
@@ -730,7 +730,7 @@
             white-space: nowrap;
         }
 
-        table tbody td {
+        .desktop-table tbody td {
             padding: calc(10px * var(--scale-factor)) calc(12px * var(--scale-factor));
             text-align: center;
             border-bottom: 1px solid var(--line);
@@ -739,20 +739,139 @@
             white-space: nowrap;
         }
 
-        table tbody tr:hover {
+        .desktop-table tbody tr:hover {
             background: var(--surface-muted);
         }
 
-        table tbody tr:last-child td {
+        .desktop-table tbody tr:last-child td {
             border-bottom: none;
         }
 
-        table tbody tr.is-future td:first-child,
-        table tbody tr.is-future td:nth-child(3) {
+        .desktop-table tbody tr.is-future td:first-child,
+        .desktop-table tbody tr.is-future td:nth-child(3) {
             color: var(--blue);
             font-weight: 700;
         }
 
+        /* ============================================================
+           MOBILE CARDS - تظهر فقط على الموبايل
+           ============================================================ */
+        .mobile-cards-container {
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            padding: 4px 0;
+        }
+
+        .booking-card {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 14px 16px;
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+        }
+
+        .booking-card:hover {
+            border-color: var(--line-strong);
+            box-shadow: var(--shadow);
+        }
+
+        .booking-card .card-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 7px 0;
+            border-bottom: 1px solid #f0f2f1;
+            font-size: 13px;
+            align-items: center;
+        }
+
+        .booking-card .card-row:last-child {
+            border-bottom: none;
+        }
+
+        .booking-card .label {
+            color: var(--ink-mute);
+            font-weight: 600;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .booking-card .label i {
+            font-size: 13px;
+            width: 18px;
+            color: var(--accent-ink);
+            opacity: 0.7;
+        }
+
+        .booking-card .value {
+            font-weight: 700;
+            color: var(--ink);
+            text-align: left;
+            font-size: 13px;
+        }
+
+        .booking-card .value.future {
+            color: var(--blue);
+        }
+
+        .booking-card .value .badge {
+            font-size: 11px;
+            padding: 2px 10px;
+        }
+
+        .booking-card .status-badge {
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        .booking-card .status-badge.paid {
+            background: var(--teal-soft);
+            color: var(--teal);
+        }
+
+        .booking-card .status-badge.balance {
+            background: var(--rust-soft);
+            color: var(--rust);
+        }
+
+        .booking-card .status-badge.future {
+            background: var(--accent-soft);
+            color: var(--accent-ink);
+        }
+
+        .booking-card .card-header-mobile {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--accent-soft);
+        }
+
+        .booking-card .card-header-mobile .booking-number {
+            font-weight: 800;
+            font-size: 15px;
+            color: var(--ink);
+        }
+
+        .booking-card .card-header-mobile .booking-number i {
+            color: var(--accent);
+            margin-left: 6px;
+        }
+
+        .booking-card .card-header-mobile .booking-status {
+            font-size: 12px;
+        }
+
+        /* ============================================================
+           BADGES
+           ============================================================ */
         .badge {
             display: inline-flex;
             align-items: center;
@@ -945,68 +1064,100 @@
             }
 
             .main-content {
-                padding: 12px;
+                padding: 10px;
                 padding-bottom: calc(80px + env(safe-area-inset-bottom));
             }
 
             .page-header {
                 flex-direction: column;
                 align-items: stretch;
-                gap: 12px;
+                gap: 10px;
+                padding: 10px 0 14px;
+            }
+
+            .page-header h1 {
+                font-size: 1.1rem;
             }
 
             .page-header .actions {
                 justify-content: stretch;
+                gap: 8px;
             }
 
             .page-header .actions .btn {
                 flex: 1;
                 justify-content: center;
+                font-size: 0.75rem;
+                padding: 8px 12px;
             }
 
             .filter-section {
-                padding: 14px 16px;
+                padding: 12px 14px;
                 border-radius: 14px;
+                margin-bottom: 14px;
+            }
+
+            .filter-header h2 {
+                font-size: 0.85rem;
             }
 
             .filter-grid {
                 grid-template-columns: 1fr;
-                gap: 10px;
+                gap: 8px;
             }
 
             .filter-group input,
             .filter-group select {
-                height: calc(36px * var(--scale-factor));
-                font-size: calc(0.7rem * var(--scale-factor));
-                padding: calc(6px * var(--scale-factor)) calc(12px * var(--scale-factor));
+                height: 38px;
+                font-size: 0.75rem;
+                padding: 6px 12px;
             }
 
             .filter-actions {
                 grid-column: 1;
                 flex-wrap: wrap;
+                height: auto;
+                gap: 6px;
             }
 
             .btn-filter,
             .btn-filter-reset {
-                height: calc(36px * var(--scale-factor));
-                font-size: calc(0.7rem * var(--scale-factor));
-                padding: calc(6px * var(--scale-factor)) calc(16px * var(--scale-factor));
+                height: 38px;
+                font-size: 0.7rem;
+                padding: 6px 16px;
                 flex: 1;
                 justify-content: center;
+                min-width: 80px;
             }
 
             .card-body {
+                padding: 10px 12px;
+            }
+
+            .card-header {
                 padding: 12px 14px;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
             }
 
-            table {
+            .card-header h2 {
+                font-size: 0.85rem;
+            }
+
+            .card-header #searchInput {
+                width: 100% !important;
+                height: 36px;
                 font-size: 0.7rem;
-                min-width: 1000px;
             }
 
-            table thead th,
-            table tbody td {
-                padding: 6px 8px;
+            /* ===== إخفاء الجدول وعرض البطاقات ===== */
+            .desktop-table {
+                display: none !important;
+            }
+
+            .mobile-cards-container {
+                display: flex !important;
             }
 
             .mobile-nav-bottom {
@@ -1015,34 +1166,95 @@
             .hamburger {
                 display: flex !important;
             }
-            nav {
+            nav:not(.mobile-nav-bottom) {
                 display: none !important;
             }
         }
 
         @media (max-width: 480px) {
+            .main-content {
+                padding: 6px;
+                padding-bottom: calc(80px + env(safe-area-inset-bottom));
+            }
+
             .page-header h1 {
-                font-size: 1.1rem;
+                font-size: 0.95rem;
             }
 
-            .card-header {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 8px;
+            .page-header .actions .btn {
+                font-size: 0.65rem;
+                padding: 6px 10px;
             }
 
-            table {
-                font-size: 0.6rem;
-                min-width: 800px;
+            .filter-section {
+                padding: 10px 12px;
             }
 
-            table thead th,
-            table tbody td {
-                padding: 4px 6px;
+            .filter-group input,
+            .filter-group select {
+                height: 34px;
+                font-size: 0.7rem;
+                padding: 4px 10px;
+            }
+
+            .btn-filter,
+            .btn-filter-reset {
+                height: 34px;
+                font-size: 0.65rem;
+                padding: 4px 12px;
+            }
+
+            .booking-card {
+                padding: 10px 12px;
+            }
+
+            .booking-card .card-row {
+                font-size: 12px;
+                padding: 5px 0;
+            }
+
+            .booking-card .label {
+                font-size: 11px;
+            }
+
+            .booking-card .value {
+                font-size: 12px;
+            }
+
+            .booking-card .card-header-mobile .booking-number {
+                font-size: 13px;
+            }
+
+            .card-header h2 {
+                font-size: 0.75rem;
+            }
+
+            .card-body {
+                padding: 6px 8px;
             }
 
             .filter-header h2 {
-                font-size: 0.8rem;
+                font-size: 0.75rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .booking-card .card-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 2px;
+                padding: 6px 0;
+            }
+
+            .booking-card .value {
+                text-align: right;
+                width: 100%;
+            }
+
+            .booking-card .card-header-mobile {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
             }
         }
     </style>
@@ -1181,7 +1393,6 @@
                         <label><i class="fas fa-building"></i> العقار</label>
                         <select id="filterProperty">
                             <option value="">جميع العقارات</option>
-                            <!-- سيتم تعبئة الخيارات من Supabase -->
                         </select>
                     </div>
                     <div class="filter-group">
@@ -1212,7 +1423,7 @@
                         <span class="badge" id="countBadge">0</span>
                     </h2>
                     <div>
-                        <input type="text" id="searchInput" placeholder="🔍 بحث..." class="form-control" style="width:200px;padding:6px 12px;font-size:0.7rem;" oninput="filterTable()">
+                        <input type="text" id="searchInput" placeholder="🔍 بحث..." class="form-control" style="width:200px;padding:6px 12px;font-size:0.7rem;border:1.5px solid var(--line);border-radius:8px;font-family:var(--font-display);outline:none;" oninput="filterTable()">
                     </div>
                 </div>
                 <div class="card-body">
@@ -1379,7 +1590,6 @@
                 propertiesList = await response.json();
                 console.log('🏠 تم جلب العقارات:', propertiesList.length);
 
-                // تعبئة قائمة العقارات في الفلتر
                 var select = document.getElementById('filterProperty');
                 select.innerHTML = '<option value="">جميع العقارات</option>';
                 propertiesList.forEach(function(prop) {
@@ -1460,7 +1670,7 @@
 
         /**
          * ============================================================
-         * عرض الجدول
+         * عرض البيانات - يدعم الجدول والبطاقات
          * ============================================================
          */
         function renderTable(data) {
@@ -1481,86 +1691,179 @@
                 return;
             }
 
-            var html = `
-                <table>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>رقم الحجز</th>
-                            <th>تاريخ الفاتورة</th>
-                            <th>تاريخ الدخول</th>
-                            <th>وقت الدخول</th>
-                            <th>تاريخ الخروج</th>
-                            <th>وقت الخروج</th>
-                            <th>اليوم</th>
-                            <th>اسم العميل</th>
-                            <th>رقم الجوال</th>
-                            <th>نوع العقار</th>
-                            <th>عدد الأيام</th>
-                            <th>السعر اليومي</th>
-                            <th>الخصم</th>
-                            <th>المدفوع</th>
-                            <th>المتبقي</th>
-                            <th>الإجمالي</th>
-                            <th>الحالة</th>
-                            <th>نوع الإقامة</th>
-                            <th>ملاحظات</th>
+            var isMobile = window.innerWidth <= 768;
+
+            if (isMobile) {
+                // ===== عرض البطاقات للموبايل =====
+                var cardsHtml = '<div class="mobile-cards-container">';
+                data.forEach(function(item, index) {
+                    var total = parseFloat(item.total) || 0;
+                    var paid = parseFloat(item.paid) || 0;
+                    var remaining = parseFloat(item.remaining) || 0;
+                    var nights = parseInt(item.nights) || 0;
+                    var pricePerNight = parseFloat(item.price_per_night) || 0;
+                    var discount = parseFloat(item.discount) || 0;
+
+                    var statusBadge = item.payment_status === 'Fully Paid' ?
+                        '<span class="status-badge paid"><i class="fas fa-check"></i> مدفوع</span>' :
+                        '<span class="status-badge balance"><i class="fas fa-clock"></i> متبقي</span>';
+
+                    var isFuture = isFutureDate(item.check_in, new Date());
+                    var bookingNumberDisplay = item.booking_number || '#' + (index + 1);
+                    var checkInDate = item.check_in ? new Date(item.check_in).toLocaleDateString('ar-EG') : '-';
+                    var checkOutDate = item.check_out ? new Date(item.check_out).toLocaleDateString('ar-EG') : '-';
+
+                    cardsHtml += `
+                        <div class="booking-card">
+                            <div class="card-header-mobile">
+                                <span class="booking-number">
+                                    <i class="fas fa-ticket-alt"></i> ${bookingNumberDisplay}
+                                    ${isFuture ? ' <span class="badge badge-future" style="font-size:10px;">⭐ مستقبلي</span>' : ''}
+                                </span>
+                                <span class="booking-status">${statusBadge}</span>
+                            </div>
+                            <div class="card-row">
+                                <span class="label"><i class="fas fa-user"></i> العميل</span>
+                                <span class="value">${item.client_name || '-'}</span>
+                            </div>
+                            <div class="card-row">
+                                <span class="label"><i class="fas fa-phone"></i> الجوال</span>
+                                <span class="value">${item.client_phone || '-'}</span>
+                            </div>
+                            <div class="card-row">
+                                <span class="label"><i class="fas fa-calendar-check"></i> تاريخ الدخول</span>
+                                <span class="value future">${checkInDate} ${item.check_in_time || ''}</span>
+                            </div>
+                            <div class="card-row">
+                                <span class="label"><i class="fas fa-calendar-times"></i> تاريخ الخروج</span>
+                                <span class="value">${checkOutDate} ${item.check_out_time || ''}</span>
+                            </div>
+                            <div class="card-row">
+                                <span class="label"><i class="fas fa-building"></i> العقار</span>
+                                <span class="value"><span class="badge badge-type">${item.property_type || '-'}</span></span>
+                            </div>
+                            <div class="card-row">
+                                <span class="label"><i class="fas fa-bed"></i> عدد الأيام</span>
+                                <span class="value">${nights} ليالي</span>
+                            </div>
+                            <div class="card-row">
+                                <span class="label"><i class="fas fa-tag"></i> السعر اليومي</span>
+                                <span class="value">${pricePerNight.toFixed(2)} ج.م</span>
+                            </div>
+                            <div class="card-row">
+                                <span class="label"><i class="fas fa-percent"></i> الخصم</span>
+                                <span class="value">${discount.toFixed(2)} ج.م</span>
+                            </div>
+                            <div class="card-row">
+                                <span class="label"><i class="fas fa-coins"></i> الإجمالي</span>
+                                <span class="value" style="color:var(--accent-ink);font-size:15px;">${total.toFixed(2)} ج.م</span>
+                            </div>
+                            <div class="card-row">
+                                <span class="label"><i class="fas fa-check-circle"></i> المدفوع</span>
+                                <span class="value" style="color:var(--teal);">${paid.toFixed(2)} ج.م</span>
+                            </div>
+                            <div class="card-row">
+                                <span class="label"><i class="fas fa-clock"></i> المتبقي</span>
+                                <span class="value" style="color:var(--rust);">${remaining.toFixed(2)} ج.م</span>
+                            </div>
+                            <div class="card-row">
+                                <span class="label"><i class="fas fa-info-circle"></i> نوع الإقامة</span>
+                                <span class="value">${item.stay_type || '-'}</span>
+                            </div>
+                            ${item.notes ? `
+                            <div class="card-row">
+                                <span class="label"><i class="fas fa-sticky-note"></i> ملاحظات</span>
+                                <span class="value" style="font-weight:400;font-size:12px;color:var(--ink-mute);">${item.notes}</span>
+                            </div>
+                            ` : ''}
+                        </div>
+                    `;
+                });
+                cardsHtml += '</div>';
+                container.innerHTML = cardsHtml;
+
+            } else {
+                // ===== عرض الجدول للشاشات الكبيرة =====
+                var html = `
+                    <table class="desktop-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>رقم الحجز</th>
+                                <th>تاريخ الفاتورة</th>
+                                <th>تاريخ الدخول</th>
+                                <th>وقت الدخول</th>
+                                <th>تاريخ الخروج</th>
+                                <th>وقت الخروج</th>
+                                <th>اليوم</th>
+                                <th>اسم العميل</th>
+                                <th>رقم الجوال</th>
+                                <th>نوع العقار</th>
+                                <th>عدد الأيام</th>
+                                <th>السعر اليومي</th>
+                                <th>الخصم</th>
+                                <th>المدفوع</th>
+                                <th>المتبقي</th>
+                                <th>الإجمالي</th>
+                                <th>الحالة</th>
+                                <th>نوع الإقامة</th>
+                                <th>ملاحظات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                data.forEach(function(item, index) {
+                    var total = parseFloat(item.total) || 0;
+                    var paid = parseFloat(item.paid) || 0;
+                    var remaining = parseFloat(item.remaining) || 0;
+                    var nights = parseInt(item.nights) || 0;
+                    var pricePerNight = parseFloat(item.price_per_night) || 0;
+                    var discount = parseFloat(item.discount) || 0;
+
+                    var statusBadge = item.payment_status === 'Fully Paid' ?
+                        '<span class="badge badge-paid"><i class="fas fa-check"></i> مدفوع</span>' :
+                        '<span class="badge badge-balance"><i class="fas fa-clock"></i> متبقي</span>';
+
+                    var isFuture = isFutureDate(item.check_in, new Date());
+                    var bookingNumberDisplay = item.booking_number || '#' + (index + 1);
+                    var invoiceDate = item.invoice_date ? new Date(item.invoice_date).toLocaleDateString('ar-EG') : '-';
+                    var checkInDate = item.check_in ? new Date(item.check_in).toLocaleDateString('ar-EG') : '-';
+                    var checkOutDate = item.check_out ? new Date(item.check_out).toLocaleDateString('ar-EG') : '-';
+
+                    html += `
+                        <tr class="${isFuture ? 'is-future' : ''}">
+                            <td>${index + 1}</td>
+                            <td>${bookingNumberDisplay} ${isFuture ? '<span class="badge badge-future">⭐</span>' : ''}</td>
+                            <td>${invoiceDate}</td>
+                            <td>${checkInDate}</td>
+                            <td>${item.check_in_time || '-'}</td>
+                            <td>${checkOutDate}</td>
+                            <td>${item.check_out_time || '-'}</td>
+                            <td>${item.day || '-'}</td>
+                            <td><strong>${item.client_name || '-'}</strong></td>
+                            <td>${item.client_phone || '-'}</td>
+                            <td><span class="badge badge-type">${item.property_type || '-'}</span></td>
+                            <td>${nights}</td>
+                            <td>${pricePerNight.toFixed(2)}</td>
+                            <td>${discount.toFixed(2)}</td>
+                            <td>${paid.toFixed(2)}</td>
+                            <td>${remaining.toFixed(2)}</td>
+                            <td style="font-weight:800;color:var(--accent-ink);">${total.toFixed(2)}</td>
+                            <td>${statusBadge}</td>
+                            <td>${item.stay_type || '-'}</td>
+                            <td style="max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${item.notes || '-'}</td>
                         </tr>
-                    </thead>
-                    <tbody>
-            `;
-
-            data.forEach(function(item, index) {
-                var total = parseFloat(item.total) || 0;
-                var paid = parseFloat(item.paid) || 0;
-                var remaining = parseFloat(item.remaining) || 0;
-                var nights = parseInt(item.nights) || 0;
-                var pricePerNight = parseFloat(item.price_per_night) || 0;
-                var discount = parseFloat(item.discount) || 0;
-
-                var statusBadge = item.payment_status === 'Fully Paid' ?
-                    '<span class="badge badge-paid"><i class="fas fa-check"></i> مدفوع</span>' :
-                    '<span class="badge badge-balance"><i class="fas fa-clock"></i> متبقي</span>';
-
-                var isFuture = isFutureDate(item.check_in, new Date());
-                var bookingNumberDisplay = item.booking_number || '#' + (index + 1);
-
-                var invoiceDate = item.invoice_date ? new Date(item.invoice_date).toLocaleDateString('ar-EG') : '-';
-                var checkIn = item.check_in ? new Date(item.check_in).toLocaleDateString('ar-EG') : '-';
-                var checkOut = item.check_out ? new Date(item.check_out).toLocaleDateString('ar-EG') : '-';
+                    `;
+                });
 
                 html += `
-                    <tr class="${isFuture ? 'is-future' : ''}">
-                        <td>${index + 1}</td>
-                        <td>${bookingNumberDisplay} ${isFuture ? '<span class="badge badge-future">⭐</span>' : ''}</td>
-                        <td>${invoiceDate}</td>
-                        <td>${checkIn}</td>
-                        <td>${item.check_in_time || '-'}</td>
-                        <td>${checkOut}</td>
-                        <td>${item.check_out_time || '-'}</td>
-                        <td>${item.day || '-'}</td>
-                        <td><strong>${item.client_name || '-'}</strong></td>
-                        <td>${item.client_phone || '-'}</td>
-                        <td><span class="badge badge-type">${item.property_type || '-'}</span></td>
-                        <td>${nights}</td>
-                        <td>${pricePerNight.toFixed(2)}</td>
-                        <td>${discount.toFixed(2)}</td>
-                        <td>${paid.toFixed(2)}</td>
-                        <td>${remaining.toFixed(2)}</td>
-                        <td style="font-weight:800;color:var(--accent-ink);">${total.toFixed(2)}</td>
-                        <td>${statusBadge}</td>
-                        <td>${item.stay_type || '-'}</td>
-                        <td style="max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${item.notes || '-'}</td>
-                    </tr>
+                        </tbody>
+                    </table>
                 `;
-            });
+                container.innerHTML = html;
+            }
 
-            html += `
-                    </tbody>
-                </table>
-            `;
-
-            container.innerHTML = html;
             countBadge.textContent = data.length;
             filterCount.textContent = data.length;
         }
@@ -1601,7 +1904,6 @@
             if (toDateObj) toDateObj.setHours(23, 59, 59, 999);
 
             filteredBookings = allFutureBookings.filter(function(item) {
-                // فلترة التاريخ
                 if (fromDateObj || toDateObj) {
                     var checkIn = item.check_in ? new Date(item.check_in) : null;
                     if (checkIn) {
@@ -1613,16 +1915,13 @@
                     }
                 }
 
-                // فلترة العقار
                 if (property && item.property_type !== property) return false;
 
-                // فلترة اسم العميل
                 if (client) {
                     var rowClient = (item.client_name || '').toLowerCase();
                     if (!rowClient.includes(client)) return false;
                 }
 
-                // فلترة رقم الحجز
                 if (bookingNumber) {
                     var rowNumber = String(item.booking_number || '');
                     if (!rowNumber.includes(bookingNumber)) return false;
@@ -1653,7 +1952,6 @@
             showToast('🔄 إعادة تعيين', 'تم إعادة تعيين جميع الفلاتر', 'warning');
         }
 
-        // دعم Enter في حقول الفلترة
         document.querySelectorAll('.filter-group input, .filter-group select').forEach(function(el) {
             el.addEventListener('keydown', function(e) {
                 if (e.key === 'Enter') {
@@ -1664,17 +1962,22 @@
 
         document.getElementById('searchInput').addEventListener('input', filterTable);
 
+        window.addEventListener('resize', function() {
+            if (allFutureBookings.length > 0) {
+                renderTable(filteredBookings.length > 0 ? filteredBookings : allFutureBookings);
+            }
+        });
+
         /**
          * ============================================================
          * تحميل الصفحة
          * ============================================================
          */
         document.addEventListener('DOMContentLoaded', function() {
-            loadProperties(); // جلب العقارات أولاً
+            loadProperties();
             loadBookings();
         });
 
-        // تحديث كل 5 دقائق
         setInterval(function() {
             loadProperties();
             loadBookings();
@@ -1688,7 +1991,7 @@
         console.log('📅 صفحة الحجوزات المستقبلية - منتجع حياله');
         console.log('📊 Supabase URL:', SUPABASE_URL);
         console.log('👤 المستخدم:', user.name || 'غير معروف');
-        console.log('✅ جاهزة للعمل');
+        console.log('✅ جاهزة للعمل مع دعم البطاقات على الموبايل');
     </script>
 
 </body>
