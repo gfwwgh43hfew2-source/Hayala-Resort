@@ -19,6 +19,10 @@
         })();
     </script>
 
+    <!-- QRCode.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
+    </script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -66,7 +70,6 @@
             box-sizing: border-box;
         }
 
-        /* تصغير جميع العناصر بنسبة 10% */
         html {
             font-size: calc(16px * var(--scale-factor));
         }
@@ -201,7 +204,7 @@
             font-weight: 600;
         }
 
-        /* ===== القائمة العلوية - تصميم محسّن ===== */
+        /* ===== القائمة العلوية ===== */
         nav {
             display: flex;
             align-items: center;
@@ -255,8 +258,6 @@
             width: 40%;
             background: var(--accent);
         }
-
-        /* ===== أيقونات القائمة ===== */
         nav a .nav-icon {
             font-size: calc(0.7rem * var(--scale-factor));
             opacity: 0.7;
@@ -382,7 +383,6 @@
             color: var(--accent-ink);
         }
 
-        /* ===== MOBILE NAV BOTTOM ===== */
         .mobile-nav-bottom {
             display: none;
             position: fixed;
@@ -625,6 +625,16 @@
         .btn-tool.info:hover {
             background: #c9ebe3;
         }
+        .btn-tool.pdf {
+            background: var(--blue);
+            border-color: var(--blue);
+            color: #ffffff;
+        }
+        .btn-tool.pdf:hover {
+            background: #1a4a6b;
+            border-color: #1a4a6b;
+            color: #ffffff;
+        }
         .btn-divider {
             width: calc(1px * var(--scale-factor));
             height: calc(24px * var(--scale-factor));
@@ -666,7 +676,7 @@
                 overflow-y: auto;
                 padding-bottom: calc(20px * var(--scale-factor) + var(--mobile-nav-height) + 20px * var(--scale-factor)) !important;
             }
-            
+
             .right-panel {
                 flex: 0 0 auto;
                 min-width: unset;
@@ -684,7 +694,7 @@
             .left-panel .table-card {
                 padding: calc(12px * var(--scale-factor));
             }
-            
+
             .right-panel .form-group input,
             .right-panel .form-group select {
                 font-size: calc(0.85rem * var(--scale-factor));
@@ -694,7 +704,7 @@
             .right-panel .form-group label {
                 font-size: calc(0.7rem * var(--scale-factor));
             }
-            
+
             .right-panel .form-row.invoice-numbers {
                 grid-template-columns: 1fr 1fr;
             }
@@ -714,7 +724,7 @@
             .right-panel .form-row.financial-row {
                 grid-template-columns: 1fr 1fr;
             }
-            
+
             nav {
                 display: none !important;
             }
@@ -730,7 +740,7 @@
             .mobile-nav-overlay {
                 display: block;
             }
-            
+
             .bottom-bar {
                 flex-direction: column;
                 align-items: stretch;
@@ -750,7 +760,7 @@
             .totals-section .total-item .value {
                 font-size: calc(0.8rem * var(--scale-factor));
             }
-            
+
             .form-actions {
                 justify-content: center;
                 flex-wrap: wrap;
@@ -778,7 +788,7 @@
             .btn-tool i {
                 font-size: calc(0.8rem * var(--scale-factor));
             }
-            
+
             .items-table-wrapper table {
                 font-size: calc(0.55rem * var(--scale-factor));
             }
@@ -789,8 +799,7 @@
                 overflow: hidden;
                 text-overflow: ellipsis;
             }
-            
-            /* إخفاء الأعمدة غير المهمة في الموبايل - تم التحسين */
+
             .items-table-wrapper table thead th:nth-child(3),
             .items-table-wrapper table tbody td:nth-child(3) {
                 display: none;
@@ -803,8 +812,7 @@
             .items-table-wrapper table tbody td:nth-child(5) {
                 display: none;
             }
-            
-            /* في الموبايل: نوع العقار يأخذ 70% والإجراء 30% */
+
             .items-table-wrapper table thead th:nth-child(2),
             .items-table-wrapper table tbody td:nth-child(2) {
                 width: 70% !important;
@@ -824,13 +832,13 @@
                 width: 12% !important;
                 min-width: unset !important;
             }
-            
+
             .toast-container {
                 top: calc(70px * var(--scale-factor));
                 right: calc(10px * var(--scale-factor));
                 max-width: calc(300px * var(--scale-factor));
             }
-            
+
             .search-section {
                 padding: calc(8px * var(--scale-factor)) calc(10px * var(--scale-factor));
             }
@@ -909,7 +917,7 @@
             .toast .toast-message {
                 font-size: calc(0.65rem * var(--scale-factor));
             }
-            
+
             .main-content {
                 padding-bottom: calc(30px * var(--scale-factor) + var(--mobile-nav-height) + 30px * var(--scale-factor)) !important;
             }
@@ -1173,7 +1181,7 @@
             margin-top: calc(6px * var(--scale-factor));
         }
 
-        /* ===== ITEMS TABLE - إصلاح توزيع الأعمدة ===== */
+        /* ===== ITEMS TABLE ===== */
         .items-table-wrapper {
             flex: 1;
             overflow: hidden;
@@ -1235,7 +1243,6 @@
             font-family: var(--font-mono);
         }
 
-        /* ===== تحديد عرض الأعمدة - توزيع متوازن ===== */
         .items-table-wrapper table thead th:nth-child(1),
         .items-table-wrapper table tbody td:nth-child(1) {
             width: 8%;
@@ -1283,7 +1290,6 @@
             max-width: calc(90px * var(--scale-factor));
         }
 
-        /* ===== تحسين أزرار الإجراءات داخل الجدول ===== */
         .items-table-wrapper table tbody td .btn-remove {
             background: var(--rust-soft);
             border: none;
@@ -1447,7 +1453,7 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(8px);
             z-index: 99999;
             justify-content: center;
@@ -1496,19 +1502,28 @@
             color: #fff;
             transform: translateY(calc(-2px * var(--scale-factor)));
         }
+        .print-preview-overlay .print-actions .btn-pdf {
+            background: var(--blue);
+            color: #ffffff;
+        }
+        .print-preview-overlay .print-actions .btn-pdf:hover {
+            background: #1a4a6b;
+            color: #ffffff;
+            transform: translateY(calc(-2px * var(--scale-factor)));
+        }
         .print-preview-overlay .print-wrapper {
             background: #ffffff;
             border-radius: calc(var(--radius) * var(--scale-factor));
-            max-width: calc(1100px * var(--scale-factor)); /* تم التكبير من 820px إلى 1100px */
+            max-width: calc(1100px * var(--scale-factor));
             width: 95%;
-            max-height: 90vh; /* تم التكبير من 80vh إلى 90vh */
+            max-height: 90vh;
             overflow-y: auto;
             padding: calc(40px * var(--scale-factor)) calc(45px * var(--scale-factor));
-            box-shadow: 0 calc(20px * var(--scale-factor)) calc(60px * var(--scale-factor)) rgba(0,0,0,0.4);
+            box-shadow: 0 calc(20px * var(--scale-factor)) calc(60px * var(--scale-factor)) rgba(0, 0, 0, 0.4);
         }
 
         /* ============================================================
-           PRINT PREVIEW STYLES - تم تكبير الخطوط
+           PRINT PREVIEW STYLES - مع QR Code
            ============================================================ */
         .print-preview-overlay .print-wrapper .invoice-header {
             display: flex;
@@ -1570,6 +1585,46 @@
             font-weight: 600;
         }
 
+        /* ===== QR CODE SECTION ===== */
+        .print-preview-overlay .print-wrapper .qr-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: calc(20px * var(--scale-factor));
+            padding: calc(12px * var(--scale-factor)) 0;
+            background: var(--surface-muted);
+            border-radius: calc(var(--radius-sm) * var(--scale-factor));
+            margin-bottom: calc(16px * var(--scale-factor));
+            border: 1px dashed var(--line-strong);
+        }
+        .print-preview-overlay .print-wrapper .qr-section .qr-code {
+            width: calc(100px * var(--scale-factor));
+            height: calc(100px * var(--scale-factor));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            border-radius: calc(8px * var(--scale-factor));
+            padding: calc(6px * var(--scale-factor));
+            border: 1px solid var(--line);
+        }
+        .print-preview-overlay .print-wrapper .qr-section .qr-code canvas,
+        .print-preview-overlay .print-wrapper .qr-section .qr-code img {
+            width: 100% !important;
+            height: 100% !important;
+        }
+        .print-preview-overlay .print-wrapper .qr-section .qr-info {
+            font-size: calc(0.6rem * var(--scale-factor));
+            color: var(--ink-mute);
+            text-align: center;
+        }
+        .print-preview-overlay .print-wrapper .qr-section .qr-info strong {
+            color: var(--ink);
+            display: block;
+            font-size: calc(0.7rem * var(--scale-factor));
+            margin-bottom: calc(4px * var(--scale-factor));
+        }
+
         .print-preview-overlay .print-wrapper .info-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -1627,9 +1682,6 @@
             margin-top: calc(4px * var(--scale-factor));
         }
 
-        /* ============================================================
-           NOTES SECTION - PRINT PREVIEW (محدث مع النصوص المطلوبة)
-           ============================================================ */
         .print-preview-overlay .print-wrapper .notes-section {
             margin-top: calc(20px * var(--scale-factor));
             padding-top: calc(16px * var(--scale-factor));
@@ -1670,7 +1722,6 @@
             font-weight: 700;
         }
 
-        /* ===== النصوص المضافة الجديدة في الطباعة ===== */
         .print-preview-overlay .print-wrapper .print-footer-notes {
             margin-top: calc(18px * var(--scale-factor));
             padding-top: calc(14px * var(--scale-factor));
@@ -1703,7 +1754,6 @@
                 padding: calc(20px * var(--scale-factor)) calc(16px * var(--scale-factor));
                 max-height: 70vh;
                 max-width: 95%;
-                max-width: 1100px;
             }
             .print-preview-overlay .print-wrapper .invoice-header {
                 flex-direction: column;
@@ -1758,6 +1808,15 @@
             }
             .print-preview-overlay .print-wrapper .print-footer-notes {
                 font-size: calc(0.5rem * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .qr-section {
+                flex-direction: column;
+                gap: calc(10px * var(--scale-factor));
+                padding: calc(10px * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .qr-section .qr-code {
+                width: calc(80px * var(--scale-factor));
+                height: calc(80px * var(--scale-factor));
             }
         }
 
@@ -1834,6 +1893,16 @@
             .print-preview-overlay .print-wrapper .print-footer-notes .note-item {
                 gap: calc(5px * var(--scale-factor));
             }
+            .print-preview-overlay .print-wrapper .qr-section .qr-code {
+                width: calc(65px * var(--scale-factor));
+                height: calc(65px * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .qr-section .qr-info {
+                font-size: calc(0.5rem * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .qr-section .qr-info strong {
+                font-size: calc(0.6rem * var(--scale-factor));
+            }
         }
 
         /* ============================================================
@@ -1866,6 +1935,12 @@
                 border-top: 2px solid var(--line-strong) !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
+            }
+            .print-preview-overlay .print-wrapper .qr-section {
+                background: var(--surface-muted) !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                border: 1px dashed var(--line-strong) !important;
             }
         }
 
@@ -2022,7 +2097,6 @@
             font-size: calc(0.75rem * var(--scale-factor));
         }
 
-        /* flatpickr calendar - match app style */
         .flatpickr-calendar {
             font-family: var(--font-display);
             box-shadow: var(--shadow);
@@ -2097,20 +2171,20 @@
                 align-items: center;
                 padding: calc(4px * var(--scale-factor)) 0;
                 font-size: calc(0.68rem * var(--scale-factor));
-                border-bottom: 1px solid rgba(0,0,0,0.03);
+                border-bottom: 1px solid rgba(0, 0, 0, 0.03);
             }
-            
+
             .booking-card .card-row:last-child {
                 border-bottom: none;
             }
-            
+
             .booking-card .card-label {
                 font-size: calc(0.58rem * var(--scale-factor));
                 color: var(--ink-3);
                 font-weight: 600;
                 flex-shrink: 0;
             }
-            
+
             .booking-card .card-value {
                 font-size: calc(0.68rem * var(--scale-factor));
                 color: var(--ink-2);
@@ -2119,14 +2193,13 @@
                 direction: ltr;
                 unicode-bidi: plaintext;
             }
-            
+
             .booking-card .card-value.gold {
                 color: var(--teal);
                 font-weight: 800;
             }
         }
 
-        /* ===== زر العودة للوحة الرئيسية - تحسين ===== */
         .btn-back-dashboard {
             display: inline-flex;
             align-items: center;
@@ -2153,6 +2226,34 @@
 
         .btn-back-dashboard i {
             font-size: calc(0.7rem * var(--scale-factor));
+        }
+
+        /* ============================================================
+           PRINT PDF BUTTON STYLES
+           ============================================================ */
+        .btn-pdf {
+            padding: calc(6px * var(--scale-factor)) calc(16px * var(--scale-factor));
+            border-radius: calc(8px * var(--scale-factor));
+            background: var(--blue);
+            border: none;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: calc(0.7rem * var(--scale-factor));
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: calc(5px * var(--scale-factor));
+            height: calc(32px * var(--scale-factor));
+            justify-content: center;
+            font-family: var(--font-display);
+        }
+        .btn-pdf i {
+            color: #ffffff;
+        }
+        .btn-pdf:hover {
+            background: #1a4a6b;
+            transform: translateY(calc(-1px * var(--scale-factor)));
         }
     </style>
 </head>
@@ -2264,7 +2365,7 @@
         <div class="toast-container" id="toastContainer"></div>
 
         <!-- ============================================================
-        SYSTEM PRINT PREVIEW OVERLAY - تم تكبير النافذة
+        SYSTEM PRINT PREVIEW OVERLAY
         ============================================================ -->
         <div class="print-preview-overlay" id="printPreviewOverlay">
             <div class="print-wrapper" id="printPreviewContent">
@@ -2273,6 +2374,9 @@
             <div class="print-actions">
                 <button class="btn-print" onclick="executePrint()">
                     <i class="fas fa-print"></i> طباعة
+                </button>
+                <button class="btn-pdf" onclick="downloadPDF()">
+                    <i class="fas fa-file-pdf"></i> PDF
                 </button>
                 <button class="btn-close-preview" onclick="closePrintPreview()">
                     <i class="fas fa-times"></i> إغلاق
@@ -2531,6 +2635,9 @@
                             <button class="btn-tool info" onclick="previewInvoice()">
                                 <i class="fas fa-eye"></i> <span>معاينة</span>
                             </button>
+                            <button class="btn-tool pdf" onclick="downloadPDF()">
+                                <i class="fas fa-file-pdf"></i> <span>PDF</span>
+                            </button>
                             <button class="btn-tool danger" id="btnResetAll">
                                 <i class="fas fa-times"></i> <span>إلغاء</span>
                             </button>
@@ -2545,10 +2652,16 @@
 
     </div>
 
-    <!-- flatpickr: تنسيق موحد للتاريخ يوم/شهر/سنة على كل الأجهزة -->
+    <!-- flatpickr -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/l10n/ar.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/l10n/ar.js">
+    </script>
+
+    <!-- html2pdf library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js">
+    </script>
 
     <script>
         /**
@@ -2664,6 +2777,7 @@
         var selectedClientId = null;
         var selectedSuggestionIndex = -1;
         var propertiesList = [];
+        var currentQRCode = null;
 
         var settings = {
             companyName: 'منتجع حياله',
@@ -2677,22 +2791,20 @@
 
         /**
          * ============================================================
-         * FLATPICKR - تنسيق التاريخ الموحد يوم/شهر/سنة
-         * القيمة الداخلية تبقى YYYY-MM-DD (متوافقة مع باقي الكود)
-         * والعرض للمستخدم دائماً DD/MM/YYYY على كل الأجهزة والمتصفحات
+         * FLATPICKR
          * ============================================================
          */
         var flatpickrOptions = {
-            dateFormat: 'Y-m-d',   // القيمة الفعلية المخزّنة (متوافقة مع Supabase وباقي الكود)
+            dateFormat: 'Y-m-d',
             altInput: true,
-            altFormat: 'd/m/Y',    // ما يظهر للمستخدم: يوم/شهر/سنة
+            altFormat: 'd/m/Y',
             allowInput: false,
-            disableMobile: true,   // إجبار نفس التقويم الموحد حتى على الجوال بدل منتقي النظام
+            disableMobile: true,
             locale: { firstDayOfWeek: 6 }
         };
 
         var fpInvoiceDate = flatpickr('#invoiceDate', Object.assign({}, flatpickrOptions, {
-            onChange: function() { /* لا حاجة لأي حساب هنا */ }
+            onChange: function() { /* لا حاجة */ }
         }));
         var fpCheckIn = flatpickr('#checkIn', Object.assign({}, flatpickrOptions, {
             onChange: function() { calculateNights(); }
@@ -2703,7 +2815,7 @@
 
         /**
          * ============================================================
-         * SET DEFAULT DATE (YYYY-MM-DD للقيمة الفعلية)
+         * SET DEFAULT DATE
          * ============================================================
          */
         function getTodayFormatted() {
@@ -2803,7 +2915,7 @@
 
         /**
          * ============================================================
-         * INVOICE NUMBER GENERATOR - Supabase (مُحسّن)
+         * INVOICE NUMBER GENERATOR
          * ============================================================
          */
         async function generateInvoiceNumber() {
@@ -2814,7 +2926,6 @@
             var dateStr = year + month + day;
 
             try {
-                // جلب جميع أرقام الفواتير للاستعلام عن الأرقام بشكل صحيح
                 var response = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=invoice_number&order=invoice_number.desc&limit=1000', {
                     headers: {
                         'apikey': SUPABASE_ANON_KEY,
@@ -2830,7 +2941,6 @@
                 var maxNumber = 0;
                 var todayNumbers = [];
 
-                // تحليل جميع أرقام الفواتير
                 if (data && data.length > 0) {
                     data.forEach(function(item) {
                         if (item.invoice_number) {
@@ -2838,7 +2948,6 @@
                             if (parts.length === 3) {
                                 var num = parseInt(parts[2]) || 0;
                                 var datePart = parts[1] || '';
-                                // تتبع الأرقام لنفس اليوم
                                 if (datePart === dateStr) {
                                     todayNumbers.push(num);
                                 }
@@ -2850,13 +2959,11 @@
                     });
                 }
 
-                // استخدام الرقم التالي بناءً على أعلى رقم في اليوم
                 var nextNumber = 1;
                 if (todayNumbers.length > 0) {
                     var maxToday = Math.max.apply(null, todayNumbers);
                     nextNumber = maxToday + 1;
                 } else {
-                    // إذا لم يكن هناك أرقام اليوم، استخدم الرقم التالي من التسلسل العام
                     nextNumber = maxNumber + 1;
                 }
 
@@ -2865,11 +2972,9 @@
                 invoiceNumber.value = newInvoiceNumber;
 
                 console.log('📌 رقم الفاتورة الجديد:', newInvoiceNumber);
-                console.log('📌 أعلى رقم عام:', maxNumber, 'أرقام اليوم:', todayNumbers);
 
             } catch (error) {
                 console.error('❌ خطأ في توليد رقم الفاتورة:', error);
-                // استخدام نظام بديل يعتمد على localStorage
                 var lastNumber = parseInt(localStorage.getItem('hayala_last_invoice_number')) || 0;
                 var newNumber = lastNumber + 1;
                 var num = String(newNumber).padStart(4, '0');
@@ -2880,7 +2985,7 @@
 
         /**
          * ============================================================
-         * LOAD PROPERTIES FROM SUPABASE
+         * LOAD PROPERTIES
          * ============================================================
          */
         async function loadProperties() {
@@ -2973,7 +3078,7 @@
 
         /**
          * ============================================================
-         * ADD BOOKING - زر الإضافة
+         * ADD BOOKING
          * ============================================================
          */
         btnAddBooking.addEventListener('click', function() {
@@ -3057,16 +3162,16 @@
         function renderBookings() {
             if (bookings.length === 0) {
                 itemsBody.innerHTML = `
-                    <tr>
-                        <td colspan="6">
-                            <div class="empty-items">
-                                <i class="fas fa-box-open"></i>
-                                <p>لا توجد حجوزات مضافة</p>
-                                <span>أضف حجزاً من النموذج على اليمين ليظهر هنا</span>
-                            </div>
-                        </td>
-                    </tr>
-                `;
+                        <tr>
+                            <td colspan="6">
+                                <div class="empty-items">
+                                    <i class="fas fa-box-open"></i>
+                                    <p>لا توجد حجوزات مضافة</p>
+                                    <span>أضف حجزاً من النموذج على اليمين ليظهر هنا</span>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
                 itemsCount.textContent = '0 حجز';
                 return;
             }
@@ -3074,18 +3179,18 @@
             var html = '';
             bookings.forEach(function(item, index) {
                 html += `
-                    <tr>
-                        <td class="num">${index + 1}</td>
-                        <td style="text-align:right;">${item.property}</td>
-                        <td class="num">${item.nights}</td>
-                        <td class="money">${item.dailyPrice.toFixed(2)}</td>
-                        <td class="money" style="color:var(--teal);font-weight:700;">${item.total.toFixed(2)}</td>
-                        <td>
-                            <button class="btn-edit-item" onclick="editBooking(${index})"><i class="fas fa-edit"></i></button>
-                            <button class="btn-remove" onclick="removeBooking(${index})"><i class="fas fa-trash"></i></button>
-                        </td>
-                    </tr>
-                `;
+                        <tr>
+                            <td class="num">${index + 1}</td>
+                            <td style="text-align:right;">${item.property}</td>
+                            <td class="num">${item.nights}</td>
+                            <td class="money">${item.dailyPrice.toFixed(2)}</td>
+                            <td class="money" style="color:var(--teal);font-weight:700;">${item.total.toFixed(2)}</td>
+                            <td>
+                                <button class="btn-edit-item" onclick="editBooking(${index})"><i class="fas fa-edit"></i></button>
+                                <button class="btn-remove" onclick="removeBooking(${index})"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    `;
             });
 
             itemsBody.innerHTML = html;
@@ -3142,7 +3247,48 @@
 
         /**
          * ============================================================
-         * SYSTEM PRINT PREVIEW - مع إضافة النصوص الجديدة في الأسفل
+         * GENERATE QR CODE
+         * ============================================================
+         */
+        function generateQRCode(invoiceNumber, client, total) {
+            var qrContainer = document.getElementById('qrCodeContainer');
+            if (!qrContainer) return;
+
+            // تنظيف الحاوية
+            qrContainer.innerHTML = '';
+
+            // إنشاء محتوى QR Code (معلومات مختصرة عن الفاتورة)
+            var qrData = {
+                invoice: invoiceNumber || '----',
+                client: client || 'غير محدد',
+                total: total || '0.00',
+                date: new Date().toLocaleDateString('ar-EG'),
+                company: settings.companyName || 'منتجع حياله'
+            };
+
+            var qrText = JSON.stringify(qrData);
+
+            // إنشاء QR Code
+            try {
+                var qr = new QRCode(qrContainer, {
+                    text: qrText,
+                    width: 200,
+                    height: 200,
+                    colorDark: '#121821',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                currentQRCode = qr;
+                console.log('✅ تم إنشاء QR Code بنجاح');
+            } catch (error) {
+                console.error('❌ خطأ في إنشاء QR Code:', error);
+                qrContainer.innerHTML = '<span style="color:var(--rust);font-size:0.6rem;">خطأ في إنشاء QR</span>';
+            }
+        }
+
+        /**
+         * ============================================================
+         * SYSTEM PRINT PREVIEW - مع QR Code
          * ============================================================
          */
         function previewInvoice() {
@@ -3167,115 +3313,135 @@
             var companyLogo = settings.companyLogo || '';
             var footer = settings.invoiceFooter || 'شكراً لثقتكم بنا';
 
+            // إنشاء QR Code (سنضعه في المكان المخصص)
+            var qrHtml = `
+                    <div class="qr-section">
+                        <div class="qr-code" id="qrCodeContainer">
+                            <!-- سيتم وضع QR Code هنا بواسطة JavaScript -->
+                        </div>
+                        <div class="qr-info">
+                            <strong>رمز التحقق</strong>
+                            <span>فاتورة رقم: ${invNum}</span>
+                            <span style="display:block;font-size:0.5rem;color:var(--ink-mute);">امسح الكود للتحقق من الفاتورة</span>
+                        </div>
+                    </div>
+                `;
+
             var printContent = document.getElementById('printPreviewContent');
             var html = `
-                <div class="invoice-header">
-                    <div class="logo-section">
-                        <div class="logo-box">
-                            ${companyLogo ? `<img src="${companyLogo}" alt="منتجع حياله" />` : `<span style="font-size:1.8rem;font-weight:900;color:#121821;">ح</span>`}
+                    <div class="invoice-header">
+                        <div class="logo-section">
+                            <div class="logo-box">
+                                ${companyLogo ? `<img src="${companyLogo}" alt="منتجع حياله" />` : `<span style="font-size:1.8rem;font-weight:900;color:#121821;">ح</span>`}
+                            </div>
+                            <div class="company-details">
+                                <h2>${companyName}</h2>
+                                <p>${companyAddress}</p>
+                                <p style="font-size:0.55rem;color:#6d7883;">📞 ${companyPhone}</p>
+                            </div>
                         </div>
-                        <div class="company-details">
-                            <h2>${companyName}</h2>
-                            <p>${companyAddress}</p>
-                            <p style="font-size:0.55rem;color:#6d7883;">📞 ${companyPhone}</p>
+                        <div class="invoice-title">
+                            <div class="num"># ${invNum}</div>
+                            <div class="sub">فاتورة مبيعات</div>
                         </div>
                     </div>
-                    <div class="invoice-title">
-                        <div class="num"># ${invNum}</div>
-                        <div class="sub">فاتورة مبيعات</div>
+
+                    ${qrHtml}
+
+                    <div class="info-grid">
+                        <div class="item"><span class="label">الرقم الدفتري</span><div class="value">${book}</div></div>
+                        <div class="item"><span class="label">التاريخ</span><div class="value">${date}</div></div>
+                        <div class="item"><span class="label">الجوال</span><div class="value">${phone}</div></div>
+                        <div class="item"><span class="label">العميل</span><div class="value">${client}</div></div>
                     </div>
-                </div>
 
-                <div class="info-grid">
-                    <div class="item"><span class="label">الرقم الدفتري</span><div class="value">${book}</div></div>
-                    <div class="item"><span class="label">التاريخ</span><div class="value">${date}</div></div>
-                    <div class="item"><span class="label">الجوال</span><div class="value">${phone}</div></div>
-                    <div class="item"><span class="label">العميل</span><div class="value">${client}</div></div>
-                </div>
-
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width:30px;">#</th>
-                            <th style="text-align:right;">نوع العقار</th>
-                            <th>عدد الأيام</th>
-                            <th>السعر اليومي</th>
-                            <th>الإجمالي</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:30px;">#</th>
+                                <th style="text-align:right;">نوع العقار</th>
+                                <th>عدد الأيام</th>
+                                <th>السعر اليومي</th>
+                                <th>الإجمالي</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                    `;
 
             bookings.forEach(function(item, index) {
                 html += `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td style="text-align:right;">${item.property}</td>
-                        <td>${item.nights}</td>
-                        <td>${item.dailyPrice.toFixed(2)}</td>
-                        <td style="font-weight:700;color:var(--teal);">${item.total.toFixed(2)}</td>
-                    </tr>
-                `;
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td style="text-align:right;">${item.property}</td>
+                            <td>${item.nights}</td>
+                            <td>${item.dailyPrice.toFixed(2)}</td>
+                            <td style="font-weight:700;color:var(--teal);">${item.total.toFixed(2)}</td>
+                        </tr>
+                    `;
             });
 
             html += `
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
 
-                <div class="footer">
-                    <div>
-                        <div style="display:flex;gap:20px;flex-wrap:wrap;margin-bottom:6px;">
-                            <span><strong>الإجمالي:</strong> ${total} ر.س</span>
-                            <span><strong>الخصم:</strong> ${discount} ر.س</span>
-                            <span><strong>المدفوع:</strong> ${paid} ر.س</span>
-                            <span style="color:var(--teal);"><strong>المتبقي:</strong> ${remaining} ر.س</span>
+                    <div class="footer">
+                        <div>
+                            <div style="display:flex;gap:20px;flex-wrap:wrap;margin-bottom:6px;">
+                                <span><strong>الإجمالي:</strong> ${total} ر.س</span>
+                                <span><strong>الخصم:</strong> ${discount} ر.س</span>
+                                <span><strong>المدفوع:</strong> ${paid} ر.س</span>
+                                <span style="color:var(--teal);"><strong>المتبقي:</strong> ${remaining} ر.س</span>
+                            </div>
+                            <p style="font-size:0.55rem;color:#8a9aaa;">${footer}</p>
                         </div>
-                        <p style="font-size:0.55rem;color:#8a9aaa;">${footer}</p>
+                        <div class="signature">
+                            <p>توقيع المستلم</p>
+                            <div class="line"></div>
+                            <p style="font-size:0.5rem;color:#8a9aaa;">شكراً لثقتكم بنا</p>
+                        </div>
                     </div>
-                    <div class="signature">
-                        <p>توقيع المستلم</p>
-                        <div class="line"></div>
-                        <p style="font-size:0.5rem;color:#8a9aaa;">شكراً لثقتكم بنا</p>
-                    </div>
-                </div>
 
-                <!-- ===== ملاحظات الفاتورة ===== -->
-                <div class="notes-section">
-                    <div class="notes-title">
-                        <i class="fas fa-sticky-note"></i> ملاحظات
+                    <div class="notes-section">
+                        <div class="notes-title">
+                            <i class="fas fa-sticky-note"></i> ملاحظات
+                        </div>
+                        <div class="notes-content">
+                            <p>إدارة المنتجع غير مسؤولة عن فقدان أو تلف المقنيات الشخصية، لذا توصي بالتأكد من عدم نسيان أي أغراض قبل المغادرة</p>
+                            <p>يمنع إحداث أي تلف أو تخريب في مرافق المنتجع أو محتوياته، ويحمل المستأجر قيمة أي أضرار تنتج عن الاستخدام غير المعتدل</p>
+                        </div>
                     </div>
-                    <div class="notes-content">
-                        <p>إدارة المنتجع غير مسؤولة عن فقدان أو تلف المقنيات الشخصية، لذا توصي بالتأكد من عدم نسيان أي أغراض قبل المغادرة</p>
-                        <p>يمنع إحداث أي تلف أو تخريب في مرافق المنتجع أو محتوياته، ويحمل المستأجر قيمة أي أضرار تنتج عن الاستخدام غير المعتدل</p>
-                    </div>
-                </div>
 
-                <!-- ===== النصوص المضافة الجديدة في الأسفل ===== -->
-                <div class="print-footer-notes">
-                    <div class="note-item">
-                        <i class="fas fa-circle"></i>
-                        <span><strong>آملين مراعاة التالي :</strong></span>
+                    <div class="print-footer-notes">
+                        <div class="note-item">
+                            <i class="fas fa-circle"></i>
+                            <span><strong>آملين مراعاة التالي :</strong></span>
+                        </div>
+                        <div class="note-item">
+                            <i class="fas fa-circle"></i>
+                            <span>لا نأخذ تأمين ولا نعمل تشييك بعد الخروج (أمانة المسلم تكفي).</span>
+                        </div>
+                        <div class="note-item">
+                            <i class="fas fa-circle"></i>
+                            <span>في حال بقاء أي أغراض (غير مثمنة) دون مراجعة مباشرة من المستأجر يحق لإدارة المنتجع التصرف بها وفق ما تراه.</span>
+                        </div>
+                        <div class="note-item">
+                            <i class="fas fa-circle"></i>
+                            <span>تفهم المرافقون طابع المكان كمزرعة شعبية ليست كالفنادق مثلاً.</span>
+                        </div>
+                        <div class="note-item">
+                            <i class="fas fa-circle"></i>
+                            <span>يرجى التأكد من قراءة التفاصيل بدقة (يمكنكم طلب فيديوهات إضافية للمكان).</span>
+                        </div>
                     </div>
-                    <div class="note-item">
-                        <i class="fas fa-circle"></i>
-                        <span>لا نأخذ تأمين ولا نعمل تشييك بعد الخروج (أمانة المسلم تكفي).</span>
-                    </div>
-                    <div class="note-item">
-                        <i class="fas fa-circle"></i>
-                        <span>في حال بقاء أي أغراض (غير مثمنة) دون مراجعة مباشرة من المستأجر يحق لإدارة المنتجع التصرف بها وفق ما تراه.</span>
-                    </div>
-                    <div class="note-item">
-                        <i class="fas fa-circle"></i>
-                        <span>تفهم المرافقون طابع المكان كمزرعة شعبية ليست كالفنادق مثلاً.</span>
-                    </div>
-                    <div class="note-item">
-                        <i class="fas fa-circle"></i>
-                        <span>يرجى التأكد من قراءة التفاصيل بدقة (يمكنكم طلب فيديوهات إضافية للمكان).</span>
-                    </div>
-                </div>
-            `;
+                `;
 
             printContent.innerHTML = html;
+
+            // إنشاء QR Code بعد عرض المحتوى
+            setTimeout(function() {
+                generateQRCode(invNum, client, total);
+            }, 100);
+
             document.getElementById('printPreviewOverlay').classList.add('show');
         }
 
@@ -3295,204 +3461,107 @@
          */
         function executePrint() {
             var content = document.getElementById('printPreviewContent').innerHTML;
-            var printWindow = window.open('', '_blank', 'width=800,height=600');
+            var printWindow = window.open('', '_blank', 'width=1100,height=800');
             if (!printWindow) {
                 showToast('❌ خطأ', 'تم حظر النوافذ المنبثقة، يرجى السماح بها', 'error');
                 return;
             }
 
             printWindow.document.write(`
-                <html dir="rtl">
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>فاتورة - منتجع حياله</title>
-                    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-                    <style>
-                        * { margin:0; padding:0; box-sizing:border-box; }
-                        body {
-                            font-family: 'Cairo', sans-serif;
-                            direction: rtl;
-                            padding: 20px;
-                            background: #fff;
-                        }
-                        .print-wrapper { max-width: 1100px; margin: 0 auto; }
-                        .invoice-header {
-                            display: flex; align-items: center; justify-content: space-between;
-                            padding-bottom: 16px; border-bottom: 3px solid #121821;
-                            margin-bottom: 16px; gap: 16px;
-                        }
-                        .invoice-header .logo-section {
-                            display: flex; align-items: center; gap: 12px;
-                        }
-                        .invoice-header .logo-section .logo-box {
-                            width: 85px; height: 85px; border-radius: 12px;
-                            overflow: hidden; border: 2.5px solid #dd9f2e;
-                            background: #fff; display: flex; align-items: center; justify-content: center;
-                            flex-shrink: 0;
-                        }
-                        .invoice-header .logo-section .logo-box img {
-                            max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain;
-                        }
-                        .invoice-header .company-details h2 {
-                            font-size: 1.6rem; font-weight: 900; color: #121821;
-                        }
-                        .invoice-header .company-details p {
-                            font-size: 0.7rem; color: #6d7883;
-                        }
-                        .invoice-header .invoice-title {
-                            text-align: left; background: #f4f6f5;
-                            padding: 8px 20px; border-radius: 10px;
-                            border-right: 4px solid #dd9f2e;
-                        }
-                        .invoice-header .invoice-title .num {
-                            font-size: 1.1rem; font-weight: 900; color: #121821;
-                        }
-                        .invoice-header .invoice-title .sub {
-                            font-size: 0.65rem; color: #6d7883; font-weight: 600;
-                        }
-                        .info-grid {
-                            display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;
-                            gap: 14px; margin-bottom: 18px;
-                            background: #f8f9fa; padding: 14px 18px;
-                            border-radius: 8px; border: 1px solid #eef1ef;
-                        }
-                        .info-grid .item .label {
-                            font-size: 0.6rem; color: #6d7883; font-weight: 700;
-                        }
-                        .info-grid .item .value {
-                            font-size: 0.9rem; font-weight: 700; color: #121821;
-                        }
-                        table {
-                            width: 100%; border-collapse: collapse; font-size: 0.85rem;
-                        }
-                        table th {
-                            background: #121821; color: #fff;
-                            padding: 8px 12px; text-align: center; font-size: 0.65rem;
-                        }
-                        table td {
-                            padding: 8px 12px; border-bottom: 1px solid #eef1ef;
-                            color: #2c3644; text-align: center;
-                            font-size: 0.8rem;
-                        }
-                        .footer {
-                            border-top: 1px solid #eef1ef; padding-top: 16px;
-                            margin-top: 16px; display: flex;
-                            justify-content: space-between; font-size: 0.7rem;
-                            color: #6d7883;
-                        }
-                        .footer .signature .line {
-                            width: 120px; border-bottom: 2px solid #121821;
-                            margin-top: 4px;
-                        }
-
-                        .notes-section {
-                            margin-top: 20px;
-                            padding-top: 16px;
-                            border-top: 2px dashed #c7d0cc;
-                            background: #f8f9fa;
-                            border-radius: 8px;
-                            padding: 16px 18px;
-                        }
-                        .notes-section .notes-title {
-                            font-size: 0.75rem;
-                            font-weight: 800;
-                            color: #7a5312;
-                            display: flex;
-                            align-items: center;
-                            gap: 8px;
-                            margin-bottom: 8px;
-                        }
-                        .notes-section .notes-title i {
-                            color: #dd9f2e;
-                            font-size: 0.8rem;
-                        }
-                        .notes-section .notes-content {
-                            font-size: 0.65rem;
-                            color: #2c3644;
-                            line-height: 1.8;
-                            padding-right: 4px;
-                        }
-                        .notes-section .notes-content p {
-                            margin-bottom: 4px;
-                            position: relative;
-                            padding-right: 18px;
-                        }
-                        .notes-section .notes-content p::before {
-                            content: '•';
-                            position: absolute;
-                            right: 0;
-                            color: #dd9f2e;
-                            font-weight: 700;
-                        }
-
-                        .print-footer-notes {
-                            margin-top: 18px;
-                            padding-top: 14px;
-                            border-top: 2px solid #c7d0cc;
-                            font-size: 0.6rem;
-                            color: #6d7883;
-                            line-height: 1.9;
-                        }
-                        .print-footer-notes strong {
-                            color: #2c3644;
-                        }
-                        .print-footer-notes .note-item {
-                            display: flex;
-                            align-items: flex-start;
-                            gap: 8px;
-                            margin-bottom: 3px;
-                        }
-                        .print-footer-notes .note-item i {
-                            color: #dd9f2e;
-                            font-size: 0.5rem;
-                            margin-top: 5px;
-                            flex-shrink: 0;
-                        }
-
-                        @media print {
-                            body { padding: 10px; }
-                            .invoice-header .logo-section .logo-box { border-color: #121821; }
-                            .notes-section {
-                                border-top: 2px dashed #c7d0cc !important;
-                                background: #f8f9fa !important;
-                                -webkit-print-color-adjust: exact !important;
-                                print-color-adjust: exact !important;
-                            }
-                            .print-footer-notes {
-                                border-top: 2px solid #c7d0cc !important;
-                                -webkit-print-color-adjust: exact !important;
-                                print-color-adjust: exact !important;
-                            }
-                        }
-                        @media (max-width: 600px) {
-                            .invoice-header { flex-direction: column; text-align: center; gap: 8px; }
-                            .invoice-header .invoice-title { text-align: center; border-right: none; border-top: 2px solid #dd9f2e; width: 100%; }
-                            .info-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
-                            .footer { flex-direction: column; gap: 8px; text-align: center; }
-                            .footer .signature .line { width: 90px; margin: 4px auto 0; }
-                            .notes-section { padding: 12px 14px; margin-top: 14px; }
-                            .notes-section .notes-title { font-size: 0.65rem; }
-                            .notes-section .notes-content { font-size: 0.55rem; line-height: 1.7; }
-                            .notes-section .notes-content p { padding-right: 16px; }
-                            .print-footer-notes { font-size: 0.5rem; }
-                            .print-footer-notes .note-item { gap: 6px; }
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div class="print-wrapper">${content}</div>
-                    <script>
-                        window.onload = function() {
-                            window.print();
-                            setTimeout(function() { window.close(); }, 1000);
-                        };
-                    <\/script>
-                </body>
-                </html>
-            `);
+                    <html dir="rtl">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>فاتورة - منتجع حياله</title>
+                        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+                        <style>
+                            /* جميع الأنماط مدمجة هنا */
+                            ${document.querySelector('style').innerHTML}
+                            body { padding: 20px; background: #fff; }
+                            .print-wrapper { max-width: 1100px; margin: 0 auto; }
+                            .print-preview-overlay .print-actions { display: none !important; }
+                            .print-preview-overlay { background: #fff !important; backdrop-filter: none !important; padding: 0 !important; position: static !important; }
+                            .print-preview-overlay .print-wrapper { max-height: none !important; box-shadow: none !important; padding: 10px !important; max-width: 1100px !important; width: 100% !important; border-radius: 0 !important; }
+                            .qr-section { background: #f8f9fa !important; border: 1px dashed #c7d0cc !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+                            .notes-section { border-top: 2px dashed #c7d0cc !important; background: #f8f9fa !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+                            .print-footer-notes { border-top: 2px solid #c7d0cc !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+                            .invoice-header .logo-section .logo-box { border-color: #121821 !important; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="print-wrapper">${content}</div>
+                        <script>
+                            window.onload = function() {
+                                window.print();
+                                setTimeout(function() { window.close(); }, 1000);
+                            };
+                        <\/script>
+                    </body>
+                    </html>
+                `);
             printWindow.document.close();
             closePrintPreview();
+        }
+
+        /**
+         * ============================================================
+         * DOWNLOAD PDF
+         * ============================================================
+         */
+        function downloadPDF() {
+            if (bookings.length === 0) {
+                showToast('⚠️ تنبيه', 'لا توجد حجوزات لتحويلها إلى PDF', 'error');
+                return;
+            }
+
+            // التأكد من وجود معاينة مفتوحة، وإلا نفتحها أولاً
+            var overlay = document.getElementById('printPreviewOverlay');
+            if (!overlay.classList.contains('show')) {
+                previewInvoice();
+                // الانتظار قليلاً ثم تحميل PDF
+                setTimeout(function() {
+                    generatePDFFromPreview();
+                }, 500);
+                return;
+            }
+
+            generatePDFFromPreview();
+        }
+
+        function generatePDFFromPreview() {
+            var element = document.getElementById('printPreviewContent');
+            if (!element) {
+                showToast('❌ خطأ', 'لم يتم العثور على محتوى المعاينة', 'error');
+                return;
+            }
+
+            showToast('⏳ جاري التحميل', 'جاري إنشاء ملف PDF...', 'warning');
+
+            var opt = {
+                margin: [10, 10, 10, 10],
+                filename: 'فاتورة_' + (invoiceNumber.value || 'invoice') + '.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: {
+                    scale: 2,
+                    useCORS: true,
+                    logging: false,
+                    letterRendering: true
+                },
+                jsPDF: {
+                    unit: 'mm',
+                    format: 'a4',
+                    orientation: 'portrait'
+                },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            };
+
+            // استخدام html2pdf لتحويل المحتوى إلى PDF
+            html2pdf().set(opt).from(element).save().then(function() {
+                showToast('✅ تم التحميل', 'تم تحميل ملف PDF بنجاح', 'success');
+            }).catch(function(error) {
+                console.error('❌ خطأ في تحميل PDF:', error);
+                showToast('❌ خطأ', 'فشل في تحميل PDF: ' + error.message, 'error');
+            });
         }
 
         /**
@@ -3522,12 +3591,13 @@
             totalAmountDisplay.value = '';
             netAmountDisplay.value = '';
             calculateFinancials();
+            currentQRCode = null;
             showToast('🔄 جديد', 'تم تجهيز فاتورة جديدة', 'warning');
         }
 
         /**
          * ============================================================
-         * LOAD CLIENTS FROM SUPABASE
+         * LOAD CLIENTS
          * ============================================================
          */
         async function loadClientsForSuggestions() {
@@ -3553,7 +3623,7 @@
 
         /**
          * ============================================================
-         * CLIENT SUGGESTIONS SYSTEM
+         * CLIENT SUGGESTIONS
          * ============================================================
          */
         var clientSuggestions = document.getElementById('clientSuggestions');
@@ -3578,11 +3648,11 @@
 
             if (results.length === 0) {
                 suggestionsList.innerHTML = `
-                    <div class="suggestion-item add-new" onclick="openAddClientModal('${searchTerm}')" data-index="0">
-                        <span><i class="fas fa-plus-circle"></i> إضافة عميل جديد: "${searchTerm}"</span>
-                    </div>
-                    <div class="no-results">لا توجد نتائج مطابقة</div>
-                `;
+                        <div class="suggestion-item add-new" onclick="openAddClientModal('${searchTerm}')" data-index="0">
+                            <span><i class="fas fa-plus-circle"></i> إضافة عميل جديد: "${searchTerm}"</span>
+                        </div>
+                        <div class="no-results">لا توجد نتائج مطابقة</div>
+                    `;
                 suggestionsList.classList.add('show');
                 selectedSuggestionIndex = -1;
                 return;
@@ -3591,18 +3661,18 @@
             var html = '';
             results.forEach(function(client, index) {
                 html += `
-                    <div class="suggestion-item" onclick="selectClient('${client.id}', '${client.name}', '${client.phone || ''}')" data-index="${index + 1}">
-                        <span>${client.name}</span>
-                        ${client.phone ? `<span class="client-phone">📱 ${client.phone}</span>` : ''}
-                    </div>
-                `;
+                        <div class="suggestion-item" onclick="selectClient('${client.id}', '${client.name}', '${client.phone || ''}')" data-index="${index + 1}">
+                            <span>${client.name}</span>
+                            ${client.phone ? `<span class="client-phone">📱 ${client.phone}</span>` : ''}
+                        </div>
+                    `;
             });
 
             html += `
-                <div class="suggestion-item add-new" onclick="openAddClientModal('${searchTerm}')" data-index="${results.length + 1}">
-                    <span><i class="fas fa-plus-circle"></i> إضافة عميل جديد</span>
-                </div>
-            `;
+                    <div class="suggestion-item add-new" onclick="openAddClientModal('${searchTerm}')" data-index="${results.length + 1}">
+                        <span><i class="fas fa-plus-circle"></i> إضافة عميل جديد</span>
+                    </div>
+                `;
 
             suggestionsList.innerHTML = html;
             suggestionsList.classList.add('show');
@@ -3691,7 +3761,6 @@
             }
         }
 
-        // Client input events
         clientNameInput.addEventListener('input', function() {
             var value = this.value.trim();
             if (value.length >= 1) {
@@ -3755,7 +3824,7 @@
 
         /**
          * ============================================================
-         * SEARCH INVOICE - البحث برقم ترتيب الفاتورة (الجزء الرقمي)
+         * SEARCH INVOICE
          * ============================================================
          */
         async function searchInvoice() {
@@ -3768,7 +3837,6 @@
             showToast('🔍 بحث', 'جاري البحث عن الفاتورة...', 'warning');
 
             try {
-                // جلب جميع الفواتير
                 var response = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=*', {
                     headers: {
                         'apikey': SUPABASE_ANON_KEY,
@@ -3781,13 +3849,10 @@
                 }
 
                 var allBookings = await response.json();
-
-                // فلترة النتائج حسب الرقم التسلسلي في نهاية رقم الفاتورة
                 var searchNum = parseInt(searchTerm);
                 var filteredData = [];
 
                 if (!isNaN(searchNum) && searchNum > 0) {
-                    // البحث بالرقم التسلسلي
                     filteredData = allBookings.filter(function(item) {
                         if (!item.invoice_number) return false;
                         var parts = item.invoice_number.split('-');
@@ -3798,7 +3863,6 @@
                         return false;
                     });
                 } else {
-                    // إذا كان الإدخال نصياً، ابحث بالطريقة العادية
                     filteredData = allBookings.filter(function(item) {
                         return item.invoice_number && item.invoice_number.toLowerCase().includes(searchTerm.toLowerCase());
                     });
@@ -3809,7 +3873,6 @@
                     return;
                 }
 
-                // تجميع الحجوزات حسب رقم الفاتورة
                 var groupedByInvoice = {};
                 filteredData.forEach(function(item) {
                     var key = item.invoice_number || 'بدون رقم';
@@ -3821,14 +3884,13 @@
 
                 var keys = Object.keys(groupedByInvoice);
 
-                // إذا كان هناك فاتورة واحدة فقط، تحميلها مباشرة
                 if (keys.length === 1) {
                     loadInvoiceDataFromSupabase(groupedByInvoice[keys[0]]);
-                    showToast('✅ تم العثور', 'تم العثور على ' + groupedByInvoice[keys[0]].length + ' حجز في الفاتورة ' + keys[0], 'success');
+                    showToast('✅ تم العثور', 'تم العثور على ' + groupedByInvoice[keys[0]].length + ' حجز في الفاتورة ' + keys[0],
+                        'success');
                     return;
                 }
 
-                // إذا كان هناك عدة فواتير، عرضها للمستخدم للاختيار
                 var choiceHtml = 'تم العثور على ' + filteredData.length + ' فاتورة:\n';
                 keys.forEach(function(key, index) {
                     choiceHtml += (index + 1) + '. ' + key + ' (' + groupedByInvoice[key].length + ' حجوزات)\n';
@@ -3854,7 +3916,7 @@
 
         /**
          * ============================================================
-         * LOAD INVOICE DATA FROM SUPABASE
+         * LOAD INVOICE DATA
          * ============================================================
          */
         function loadInvoiceDataFromSupabase(invoiceData) {
@@ -3932,6 +3994,7 @@
             totalAmountDisplay.value = '';
             netAmountDisplay.value = '';
             calculateFinancials();
+            currentQRCode = null;
             showToast('🔄 إلغاء', 'تم تفريغ النموذج بالكامل', 'warning');
         });
 
@@ -3946,7 +4009,7 @@
 
         /**
          * ============================================================
-         * SAVE INVOICE TO SUPABASE
+         * SAVE INVOICE
          * ============================================================
          */
         btnSaveInvoice.addEventListener('click', function() {
@@ -4091,7 +4154,8 @@
                 btnSaveInvoice.innerHTML = '<i class="fas fa-save"></i> حفظ';
 
                 if (warnings.length > 0) {
-                    showToast('⚠️ تم الحفظ مع تنبيهات', 'تم حفظ الفاتورة ولكن هناك حقول ناقصة:\n' + warnings.join('\n'), 'warning');
+                    showToast('⚠️ تم الحفظ مع تنبيهات', 'تم حفظ الفاتورة ولكن هناك حقول ناقصة:\n' + warnings.join('\n'),
+                    'warning');
                 } else {
                     showToast('✅ تم الحفظ', 'تم حفظ الفاتورة بنجاح في Supabase!', 'success', [
                         { label: 'معاينة', value: 'preview', class: 'btn-yes' },
