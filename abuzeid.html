@@ -1267,7 +1267,7 @@
     </div>
 
     <!-- ============================================================
-    JAVASCRIPT - بدون اسم العميل
+    JAVASCRIPT - مع إصلاح مشكلة الحذف
     ============================================================ -->
     <script>
         /**
@@ -1717,11 +1717,13 @@
             `;
 
             payments.forEach(function(item, index) {
+                // استخدام description أو client_name إذا كان موجوداً
+                var desc = item.description || item.client_name || '-';
                 html += `
                     <tr data-id="${item.id}">
                         <td>${index + 1}</td>
                         <td>${formatDate(item.payment_date)}</td>
-                        <td style="text-align:right;font-weight:600;">${escapeHtml(item.description || item.client_name || '-')}</td>
+                        <td style="text-align:right;font-weight:600;">${escapeHtml(desc)}</td>
                         <td style="font-weight:700;color:var(--teal);">${formatCurrency(parseFloat(item.amount) || 0)}</td>
                         <td>${escapeHtml(item.payment_method || '-')}</td>
                         <td>${escapeHtml(item.notes || '-')}</td>
@@ -1847,8 +1849,8 @@
             }
 
             var filtered = monthlyPayments.filter(function(item) {
-                return (item.description && item.description.toLowerCase().includes(searchTerm)) ||
-                    (item.client_name && item.client_name.toLowerCase().includes(searchTerm)) ||
+                var desc = item.description || item.client_name || '';
+                return desc.toLowerCase().includes(searchTerm) ||
                     (item.payment_method && item.payment_method.toLowerCase().includes(searchTerm)) ||
                     (item.notes && item.notes.toLowerCase().includes(searchTerm));
             });
@@ -1875,7 +1877,12 @@
         }
 
         function editPayment(id) {
+            // البحث في allPayments أولاً
             var item = allPayments.find(function(p) { return p.id === id; });
+            // إذا لم يتم العثور، البحث في monthlyPayments
+            if (!item) {
+                item = monthlyPayments.find(function(p) { return p.id === id; });
+            }
             if (!item) {
                 showToast('خطأ', 'الدفعة غير موجودة', 'error');
                 return;
@@ -1928,7 +1935,6 @@
             saveBtn.disabled = true;
             saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
 
-            // استخدام description بدلاً من client_name
             var paymentData = {
                 payment_date: date,
                 description: description,
@@ -1938,32 +1944,6 @@
                 updated_at: new Date().toISOString()
             };
 
-            // إذا كان الجدول يحتوي على client_name، نضيفه أيضاً
-            // ولكننا لا نستخدمه في الواجهة
-            try {
-                // التحقق من وجود عمود description
-                var checkResponse = await fetch(SUPABASE_URL + '/rest/v1/abuzaid_payments?limit=1&select=description', {
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
-                    }
-                });
-                
-                // إذا كان العمود غير موجود، نستخدم client_name
-                if (checkResponse.ok) {
-                    var checkData = await checkResponse.json();
-                    // إذا لم يكن description موجوداً، نستخدم client_name
-                    if (checkData && checkData.length > 0 && checkData[0].hasOwnProperty('description') === false) {
-                        paymentData.client_name = description;
-                        delete paymentData.description;
-                    }
-                }
-            } catch (e) {
-                // في حالة الخطأ، نستخدم client_name
-                paymentData.client_name = description;
-                delete paymentData.description;
-            }
-
             try {
                 var url = SUPABASE_URL + '/rest/v1/abuzaid_payments';
                 var methodType = 'POST';
@@ -1972,8 +1952,6 @@
                 if (isEdit) {
                     url += '?id=eq.' + editId;
                     methodType = 'PATCH';
-                    // في حالة التعديل، نحتفظ بالبيانات الموجودة
-                    delete paymentData.created_at;
                 }
 
                 var response = await fetch(url, {
@@ -1989,11 +1967,10 @@
 
                 if (!response.ok) {
                     var errorText = await response.text();
-                    // محاولة استخدام client_name بدلاً من description
+                    // إذا كان العمود description غير موجود، استخدم client_name
                     if (errorText.includes('description')) {
                         paymentData.client_name = description;
                         delete paymentData.description;
-                        // إعادة المحاولة
                         var retryResponse = await fetch(url, {
                             method: methodType,
                             headers: {
@@ -2018,7 +1995,8 @@
                     isEdit ? 'تم تحديث الدفعة بنجاح' : 'تم إضافة الدفعة بنجاح',
                     'success'
                 );
-                loadDashboard();
+                // تحديث البيانات بالكامل
+                await loadDashboard();
 
             } catch (error) {
                 console.error('❌ خطأ:', error);
@@ -2038,19 +2016,24 @@
 
         /**
          * ============================================================
-         * حذف دفعة
+         * حذف دفعة - إصلاح المشكلة
          * ============================================================
          */
         async function deletePayment(id) {
+            // البحث في allPayments و monthlyPayments
             var item = allPayments.find(function(p) { return p.id === id; });
+            if (!item) {
+                item = monthlyPayments.find(function(p) { return p.id === id; });
+            }
             if (!item) {
                 showToast('خطأ', 'الدفعة غير موجودة', 'error');
                 return;
             }
 
             var desc = item.description || item.client_name || '-';
-            if (!confirm('هل أنت متأكد من حذف هذه الدفعة؟\n\nالبيان: ' + desc + 
-                        '\nالمبلغ: ' + formatCurrency(parseFloat(item.amount) || 0))) {
+            var amountFormatted = formatCurrency(parseFloat(item.amount) || 0);
+            
+            if (!confirm('⚠️ هل أنت متأكد من حذف هذه الدفعة؟\n\n📌 البيان: ' + desc + '\n💰 المبلغ: ' + amountFormatted)) {
                 return;
             }
 
@@ -2064,15 +2047,16 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error('فشل في حذف الدفعة');
+                    throw new Error('فشل في حذف الدفعة: ' + response.status);
                 }
 
                 showToast('✅ تم الحذف', 'تم حذف الدفعة بنجاح', 'success');
-                loadDashboard();
+                // تحديث البيانات بالكامل
+                await loadDashboard();
 
             } catch (error) {
-                console.error('❌ خطأ:', error);
-                showToast('خطأ', 'فشل في حذف الدفعة', 'error');
+                console.error('❌ خطأ في الحذف:', error);
+                showToast('❌ خطأ', 'فشل في حذف الدفعة: ' + error.message, 'error');
             }
         }
 
@@ -2092,7 +2076,7 @@
         console.log('🤝 صفحة عمولة أبو زيد - منتجع حياله (مع Supabase)');
         console.log('📊 Supabase URL:', SUPABASE_URL);
         console.log('👤 المستخدم:', user.name || 'غير معروف');
-        console.log('✅ جاهزة للعمل - بدون اسم العميل');
+        console.log('✅ جاهزة للعمل - مع إصلاح مشكلة الحذف');
     </script>
 
 </body>
