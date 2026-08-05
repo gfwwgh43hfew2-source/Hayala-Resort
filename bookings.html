@@ -522,7 +522,7 @@
         }
 
         /* ============================================================
-           MAIN CONTENT - تم تحسينه لمنع خروج الجدول
+           MAIN CONTENT
            ============================================================ */
         .main-content {
             flex: 1;
@@ -653,7 +653,7 @@
         }
 
         /* ============================================================
-           CARD - تم تحسينه لمنع خروج المحتوى
+           CARD
            ============================================================ */
         .card {
             background: var(--surface);
@@ -711,7 +711,7 @@
         }
 
         /* ============================================================
-           TABLE - تم تحسينه لمنع الخروج عن الشاشة
+           TABLE - تم إخفاء عمود رقم الحجز
            ============================================================ */
         .table-wrapper {
             overflow-x: auto;
@@ -745,6 +745,12 @@
             top: 0;
             z-index: 10;
             min-width: 60px;
+        }
+
+        /* إخفاء عمود رقم الحجز (العمود الثاني) */
+        table thead th:nth-child(2),
+        table tbody td:nth-child(2) {
+            display: none;
         }
 
         table thead th:first-child {
@@ -781,8 +787,7 @@
         table tbody tr.is-future {
             background: rgba(47, 91, 138, 0.04);
         }
-        table tbody tr.is-future td:first-child,
-        table tbody tr.is-future td:nth-child(2) {
+        table tbody tr.is-future td:first-child {
             color: var(--blue);
             font-weight: 700;
         }
@@ -1006,7 +1011,7 @@
         }
 
         /* ============================================================
-           RESPONSIVE - تحسينات الجدول
+           RESPONSIVE - تحسينات الجدول مع إخفاء رقم الحجز
            ============================================================ */
         @media (max-width: 1200px) {
             table {
@@ -1027,7 +1032,7 @@
             }
             table {
                 font-size: calc(0.65rem * var(--scale-factor));
-                min-width: 900px;
+                min-width: 800px;
             }
             table thead th,
             table tbody td {
@@ -1036,12 +1041,12 @@
             /* إخفاء الأعمدة الأقل أهمية */
             table thead th:nth-child(3),
             table tbody td:nth-child(3),
+            table thead th:nth-child(7),
+            table tbody td:nth-child(7),
             table thead th:nth-child(8),
             table tbody td:nth-child(8),
             table thead th:nth-child(9),
-            table tbody td:nth-child(9),
-            table thead th:nth-child(10),
-            table tbody td:nth-child(10) {
+            table tbody td:nth-child(9) {
                 display: none;
             }
         }
@@ -1106,7 +1111,7 @@
 
             table {
                 font-size: 0.6rem;
-                min-width: 700px;
+                min-width: 600px;
             }
 
             table thead th,
@@ -1145,12 +1150,12 @@
             /* إخفاء المزيد من الأعمدة على الموبايل */
             table thead th:nth-child(4),
             table tbody td:nth-child(4),
+            table thead th:nth-child(10),
+            table tbody td:nth-child(10),
             table thead th:nth-child(11),
             table tbody td:nth-child(11),
-            table thead th:nth-child(14),
-            table tbody td:nth-child(14),
-            table thead th:nth-child(15),
-            table tbody td:nth-child(15) {
+            table thead th:nth-child(13),
+            table tbody td:nth-child(13) {
                 display: none;
             }
         }
@@ -1180,7 +1185,7 @@
 
             table {
                 font-size: 0.55rem;
-                min-width: 550px;
+                min-width: 480px;
             }
 
             table thead th,
@@ -1191,8 +1196,8 @@
             /* إخفاء الأعمدة غير الأساسية */
             table thead th:nth-child(5),
             table tbody td:nth-child(5),
-            table thead th:nth-child(7),
-            table tbody td:nth-child(7),
+            table thead th:nth-child(6),
+            table tbody td:nth-child(6),
             table thead th:nth-child(12),
             table tbody td:nth-child(12) {
                 display: none;
@@ -1602,7 +1607,7 @@
 
         /**
          * ============================================================
-         * 8. عرض الجدول
+         * 8. عرض الجدول - تم إزالة عمود رقم الحجز
          * ============================================================
          */
         function renderTable(data) {
@@ -1673,10 +1678,7 @@
                 html += `
                     <tr class="${rowClass}">
                         <td>${index + 1}</td>
-                        <td>
-                            ${bookingNumberDisplay} 
-                            ${isFuture ? '<span class="badge badge-future"><i class="fas fa-star"></i> مستقبلي</span>' : ''}
-                        </td>
+                        <td>${bookingNumberDisplay}</td>
                         <td>${invoiceDate}</td>
                         <td>${checkIn}</td>
                         <td>${checkOut}</td>
