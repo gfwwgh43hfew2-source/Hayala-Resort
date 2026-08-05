@@ -1234,8 +1234,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label>اسم العميل <span class="required">*</span></label>
-                    <input type="text" class="form-control" id="clientName" placeholder="مثال: أبو زيد" required />
+                    <label>البيان <span class="required">*</span></label>
+                    <input type="text" class="form-control" id="payDesc" placeholder="مثال: دفعة شهر يوليو 2026" required />
                 </div>
 
                 <div class="form-group">
@@ -1267,7 +1267,7 @@
     </div>
 
     <!-- ============================================================
-    JAVASCRIPT - متوافق مع هيكل الجدول الحالي
+    JAVASCRIPT - بدون اسم العميل
     ============================================================ -->
     <script>
         /**
@@ -1543,7 +1543,7 @@
                     allExpenses = [];
                 }
 
-                // 3. جلب دفعات أبو زيد - باستخدام هيكل الجدول الحالي
+                // 3. جلب دفعات أبو زيد
                 try {
                     var paymentsResponse = await fetch(SUPABASE_URL + '/rest/v1/abuzaid_payments?select=*&order=payment_date.desc', {
                         headers: {
@@ -1680,7 +1680,7 @@
 
         /**
          * ============================================================
-         * عرض الدفعات - متوافق مع هيكل الجدول
+         * عرض الدفعات - بدون اسم العميل
          * ============================================================
          */
         function renderPayments(payments) {
@@ -1706,7 +1706,7 @@
                         <tr>
                             <th>#</th>
                             <th>تاريخ الدفع</th>
-                            <th>اسم العميل</th>
+                            <th>البيان</th>
                             <th>المبلغ</th>
                             <th>طريقة الدفع</th>
                             <th>ملاحظات</th>
@@ -1721,7 +1721,7 @@
                     <tr data-id="${item.id}">
                         <td>${index + 1}</td>
                         <td>${formatDate(item.payment_date)}</td>
-                        <td style="text-align:right;">${escapeHtml(item.client_name || '-')}</td>
+                        <td style="text-align:right;font-weight:600;">${escapeHtml(item.description || item.client_name || '-')}</td>
                         <td style="font-weight:700;color:var(--teal);">${formatCurrency(parseFloat(item.amount) || 0)}</td>
                         <td>${escapeHtml(item.payment_method || '-')}</td>
                         <td>${escapeHtml(item.notes || '-')}</td>
@@ -1847,7 +1847,8 @@
             }
 
             var filtered = monthlyPayments.filter(function(item) {
-                return (item.client_name && item.client_name.toLowerCase().includes(searchTerm)) ||
+                return (item.description && item.description.toLowerCase().includes(searchTerm)) ||
+                    (item.client_name && item.client_name.toLowerCase().includes(searchTerm)) ||
                     (item.payment_method && item.payment_method.toLowerCase().includes(searchTerm)) ||
                     (item.notes && item.notes.toLowerCase().includes(searchTerm));
             });
@@ -1884,7 +1885,7 @@
             document.getElementById('modalTitle').textContent = 'تعديل الدفعة';
             document.getElementById('saveBtn').innerHTML = '<i class="fas fa-edit"></i> تحديث';
             document.getElementById('payDate').value = item.payment_date || '';
-            document.getElementById('clientName').value = item.client_name || '';
+            document.getElementById('payDesc').value = item.description || item.client_name || '';
             document.getElementById('payAmount').value = item.amount || '';
             document.getElementById('payMethod').value = item.payment_method || '';
             document.getElementById('payNotes').value = item.notes || '';
@@ -1903,7 +1904,7 @@
 
         /**
          * ============================================================
-         * إضافة / تعديل دفعة - متوافق مع هيكل الجدول
+         * إضافة / تعديل دفعة - بدون اسم العميل
          * ============================================================
          */
         async function addPayment(event) {
@@ -1913,12 +1914,12 @@
             var isEdit = editId ? true : false;
 
             var date = document.getElementById('payDate').value;
-            var clientName = document.getElementById('clientName').value.trim();
+            var description = document.getElementById('payDesc').value.trim();
             var amount = parseFloat(document.getElementById('payAmount').value) || 0;
             var method = document.getElementById('payMethod').value.trim();
             var notes = document.getElementById('payNotes').value.trim();
 
-            if (!date || !clientName || amount <= 0) {
+            if (!date || !description || amount <= 0) {
                 showFormMessage('⚠️ الرجاء ملء جميع الحقول المطلوبة', 'error');
                 return;
             }
@@ -1927,15 +1928,41 @@
             saveBtn.disabled = true;
             saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
 
-            // هيكل البيانات متوافق مع جدول abuzaid_payments
+            // استخدام description بدلاً من client_name
             var paymentData = {
                 payment_date: date,
-                client_name: clientName,
+                description: description,
                 amount: amount,
                 payment_method: method || 'نقدي',
                 notes: notes,
                 updated_at: new Date().toISOString()
             };
+
+            // إذا كان الجدول يحتوي على client_name، نضيفه أيضاً
+            // ولكننا لا نستخدمه في الواجهة
+            try {
+                // التحقق من وجود عمود description
+                var checkResponse = await fetch(SUPABASE_URL + '/rest/v1/abuzaid_payments?limit=1&select=description', {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                    }
+                });
+                
+                // إذا كان العمود غير موجود، نستخدم client_name
+                if (checkResponse.ok) {
+                    var checkData = await checkResponse.json();
+                    // إذا لم يكن description موجوداً، نستخدم client_name
+                    if (checkData && checkData.length > 0 && checkData[0].hasOwnProperty('description') === false) {
+                        paymentData.client_name = description;
+                        delete paymentData.description;
+                    }
+                }
+            } catch (e) {
+                // في حالة الخطأ، نستخدم client_name
+                paymentData.client_name = description;
+                delete paymentData.description;
+            }
 
             try {
                 var url = SUPABASE_URL + '/rest/v1/abuzaid_payments';
@@ -1945,6 +1972,8 @@
                 if (isEdit) {
                     url += '?id=eq.' + editId;
                     methodType = 'PATCH';
+                    // في حالة التعديل، نحتفظ بالبيانات الموجودة
+                    delete paymentData.created_at;
                 }
 
                 var response = await fetch(url, {
@@ -1960,7 +1989,27 @@
 
                 if (!response.ok) {
                     var errorText = await response.text();
-                    throw new Error('فشل في حفظ البيانات: ' + response.status + ' - ' + errorText);
+                    // محاولة استخدام client_name بدلاً من description
+                    if (errorText.includes('description')) {
+                        paymentData.client_name = description;
+                        delete paymentData.description;
+                        // إعادة المحاولة
+                        var retryResponse = await fetch(url, {
+                            method: methodType,
+                            headers: {
+                                'apikey': SUPABASE_ANON_KEY,
+                                'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                                'Content-Type': 'application/json',
+                                'Prefer': 'return=representation'
+                            },
+                            body: JSON.stringify(paymentData)
+                        });
+                        if (!retryResponse.ok) {
+                            throw new Error('فشل في حفظ البيانات: ' + await retryResponse.text());
+                        }
+                    } else {
+                        throw new Error('فشل في حفظ البيانات: ' + response.status + ' - ' + errorText);
+                    }
                 }
 
                 closeModal();
@@ -1999,7 +2048,8 @@
                 return;
             }
 
-            if (!confirm('هل أنت متأكد من حذف هذه الدفعة؟\n\nالعميل: ' + (item.client_name || '-') + 
+            var desc = item.description || item.client_name || '-';
+            if (!confirm('هل أنت متأكد من حذف هذه الدفعة؟\n\nالبيان: ' + desc + 
                         '\nالمبلغ: ' + formatCurrency(parseFloat(item.amount) || 0))) {
                 return;
             }
@@ -2042,8 +2092,7 @@
         console.log('🤝 صفحة عمولة أبو زيد - منتجع حياله (مع Supabase)');
         console.log('📊 Supabase URL:', SUPABASE_URL);
         console.log('👤 المستخدم:', user.name || 'غير معروف');
-        console.log('📋 هيكل الجدول: id, client_name, amount, payment_date, payment_method, notes, created_at, updated_at');
-        console.log('✅ جاهزة للعمل');
+        console.log('✅ جاهزة للعمل - بدون اسم العميل');
     </script>
 
 </body>
