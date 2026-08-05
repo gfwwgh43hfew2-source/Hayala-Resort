@@ -263,6 +263,9 @@
             opacity: 1;
             color: var(--accent-ink);
         }
+        nav a:hover .nav-icon {
+            opacity: 1;
+        }
 
         .header-actions {
             display: flex;
@@ -1358,7 +1361,9 @@
                     var discount = parseFloat(booking.discount) || 0;
                     var remaining = parseFloat(booking.remaining) || 0;
 
-                    clientMap[clientName].totalInvoices += total;
+                    // ===== التعديل المطلوب: إضافة total مباشرة (بدون خصم) =====
+                    // هذا يجعل "إجمالي الفواتير" يعكس نفس قيمة "الإجمالي" في سجل الحجوزات
+                    var net = total; // يتم إضافة total كامل بدلاً من total - discount
 
                     if (!clientMap[clientName]) {
                         clientMap[clientName] = {
@@ -1372,7 +1377,7 @@
                         };
                     }
 
-                    clientMap[clientName].totalInvoices += net;
+                    clientMap[clientName].totalInvoices += total; // ← التعديل الرئيسي: نضيف total بدلاً من net
                     clientMap[clientName].totalPaid += paid;
                     clientMap[clientName].totalDiscount += discount;
                     clientMap[clientName].totalRemaining += remaining;
@@ -1442,7 +1447,7 @@
             accounts.forEach(function(client) {
                 totalDue += client.totalRemaining;
                 totalPaid += client.totalPaid;
-                totalInvoices += client.totalInvoices;
+                totalInvoices += client.totalInvoices; // الآن تعكس total (بدون خصم)
             });
 
             kpiContainer.innerHTML = `
@@ -1528,7 +1533,7 @@
                         <td><strong>${client.name}</strong></td>
                         <td>${client.phone || '-'}</td>
                         <td>${client.bookingsCount}</td>
-                        <td style="font-weight:600;color:var(--ink);">${client.totalInvoices.toFixed(2)}</td>
+                        <td style="font-weight:700;color:var(--ink);">${client.totalInvoices.toFixed(2)}</td>
                         <td style="color:var(--accent-ink);">${client.totalDiscount.toFixed(2)}</td>
                         <td style="color:var(--teal);font-weight:600;">${client.totalPaid.toFixed(2)}</td>
                         <td style="font-weight:700;color:var(--rust);font-size:0.9rem;">${client.totalRemaining.toFixed(2)}</td>
@@ -1766,6 +1771,7 @@
         console.log('📊 Supabase URL:', SUPABASE_URL);
         console.log('👤 المستخدم:', user.name || 'غير معروف');
         console.log('✅ جاهزة للعمل');
+        console.log('📌 ملاحظة: تم تعديل حساب "إجمالي الفواتير" ليعكس قيمة total (بدون خصم)');
     </script>
 
 </body>
