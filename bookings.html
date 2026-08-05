@@ -1318,7 +1318,7 @@
                 <h1>
                     <i class="fas fa-calendar-check"></i>
                     سجل الحجوزات
-                    <span style="font-size:0.6rem;font-weight:700;color:var(--ink-mute);">(الأحدث أولاً)</span>
+                    <span style="font-size:0.6rem;font-weight:700;color:var(--ink-mute);">(رقم الفاتورة: الأحدث أولاً)</span>
                 </h1>
                 <div class="actions">
                     <a href="add-invoice.html" class="btn btn-success">
@@ -1341,7 +1341,7 @@
                     <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
                         <div style="position:relative;">
                             <i class="fas fa-search" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); color:var(--ink-mute); font-size:0.7rem;"></i>
-                            <input type="text" id="searchInput" placeholder="بحث عن حجز، عميل، أو عقار..." 
+                            <input type="text" id="searchInput" placeholder="بحث عن فاتورة، عميل، أو عقار..." 
                                    style="padding:8px 35px 8px 14px; border:1.5px solid var(--line); border-radius:10px; 
                                    font-family:var(--font-display); font-size:0.7rem; width:220px; 
                                    background:var(--surface); color:var(--ink); transition:all 0.3s ease; outline:none;">
@@ -1550,7 +1550,7 @@
 
         /**
          * ============================================================
-         * 7. جلب الحجوزات (مرتبة تنازلياً حسب تاريخ الدخول)
+         * 7. جلب الحجوزات (مرتبة تنازلياً حسب رقم الفاتورة)
          * ============================================================
          */
         async function loadBookings() {
@@ -1568,8 +1568,8 @@
             `;
 
             try {
-                // جلب البيانات مرتبة تنازلياً حسب check_in (الأحدث أولاً)
-                var response = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=*&order=check_in.desc', {
+                // جلب البيانات مرتبة تنازلياً حسب invoice_number (الأحدث أولاً)
+                var response = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=*&order=invoice_number.desc', {
                     headers: {
                         'apikey': SUPABASE_ANON_KEY,
                         'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
@@ -1585,7 +1585,7 @@
                 allBookings = await response.json();
                 filteredBookings = allBookings.slice();
                 renderTable(filteredBookings);
-                showToast('✅ تم التحميل', 'تم جلب ' + allBookings.length + ' حجز (الأحدث أولاً)', 'success');
+                showToast('✅ تم التحميل', 'تم جلب ' + allBookings.length + ' حجز (مرتب حسب رقم الفاتورة - الأحدث أولاً)', 'success');
 
             } catch (error) {
                 console.error('❌ خطأ في جلب البيانات:', error);
@@ -1632,7 +1632,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>رقم الحجز</th>
+                            <th>رقم الفاتورة</th>
                             <th>تاريخ الدخول</th>
                             <th>تاريخ الخروج</th>
                             <th>اسم العميل</th>
@@ -1664,7 +1664,7 @@
                 }
 
                 var isFuture = isFutureDate(item.check_in);
-                var bookingNumberDisplay = item.booking_number || '#' + (index + 1);
+                var invoiceNumberDisplay = item.invoice_number || '#' + (index + 1);
                 var rowClass = isFuture ? 'is-future' : '';
 
                 var checkIn = formatDate(item.check_in);
@@ -1674,7 +1674,7 @@
                 html += `
                     <tr class="${rowClass}" data-id="${itemId}">
                         <td>${index + 1}</td>
-                        <td>${bookingNumberDisplay}</td>
+                        <td style="font-weight:800;color:var(--accent-ink);">${invoiceNumberDisplay}</td>
                         <td>${checkIn}</td>
                         <td>${checkOut}</td>
                         <td style="font-weight:700;color:var(--ink);">${item.client_name || '-'}</td>
@@ -1699,7 +1699,7 @@
                 <div class="table-footer">
                     <span>إجمالي الحجوزات: <span class="count">${data.length}</span></span>
                     <span>آخر تحديث: ${new Date().toLocaleString('ar-EG')}</span>
-                    <span style="color:var(--teal);">⬆️ الأحدث أولاً</span>
+                    <span style="color:var(--teal);">⬆️ رقم الفاتورة: الأحدث أولاً</span>
                 </div>
             `;
 
@@ -1726,8 +1726,10 @@
 
             var clientName = item.client_name || 'غير معروف';
             var totalAmount = formatCurrency(parseFloat(item.total) || 0);
+            var invoiceNumber = item.invoice_number || 'غير معروف';
 
             if (!confirm('⚠️ هل أنت متأكد من حذف هذا الحجز؟\n\n' +
+                        '📄 رقم الفاتورة: ' + invoiceNumber + '\n' +
                         '👤 العميل: ' + clientName + '\n' +
                         '💰 الإجمالي: ' + totalAmount + '\n' +
                         '📅 تاريخ الدخول: ' + formatDate(item.check_in) + '\n\n' +
@@ -1774,7 +1776,7 @@
                 });
                 filteredBookings = allBookings.slice();
 
-                showToast('✅ تم الحذف', 'تم حذف حجز العميل "' + clientName + '" بنجاح', 'success');
+                showToast('✅ تم الحذف', 'تم حذف حجز العميل "' + clientName + '" (فاتورة: ' + invoiceNumber + ') بنجاح', 'success');
                 renderTable(filteredBookings);
 
             } catch (error) {
@@ -1800,16 +1802,16 @@
             } else {
                 filteredBookings = allBookings.filter(function(item) {
                     var clientName = (item.client_name || '').toLowerCase();
-                    var bookingNumber = String(item.booking_number || '').toLowerCase();
+                    var invoiceNumber = String(item.invoice_number || '').toLowerCase();
                     var propertyType = (item.property_type || '').toLowerCase();
                     var stayType = (item.stay_type || '').toLowerCase();
-                    var invoiceNumber = String(item.invoice_number || '').toLowerCase();
+                    var bookingNumber = String(item.booking_number || '').toLowerCase();
                     
                     return clientName.includes(term) || 
-                           bookingNumber.includes(term) || 
+                           invoiceNumber.includes(term) || 
                            propertyType.includes(term) ||
                            stayType.includes(term) ||
-                           invoiceNumber.includes(term);
+                           bookingNumber.includes(term);
                 });
             }
 
@@ -1830,7 +1832,7 @@
             console.log('📋 صفحة سجل الحجوزات - منتجع حياله');
             console.log('📊 Supabase URL:', SUPABASE_URL);
             console.log('👤 المستخدم:', user.name || 'غير معروف');
-            console.log('✅ التطبيق جاهز للعمل - الترتيب: الأحدث أولاً');
+            console.log('✅ التطبيق جاهز للعمل - الترتيب: رقم الفاتورة تنازلياً (الأحدث أولاً)');
         });
 
         /**
