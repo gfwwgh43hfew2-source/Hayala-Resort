@@ -2800,61 +2800,81 @@
         }
 
         /**
-         * ============================================================
-         * INVOICE NUMBER GENERATOR - Supabase
-         * ============================================================
-         */
-        async function generateInvoiceNumber() {
-            var today = new Date();
-            var year = today.getFullYear();
-            var month = String(today.getMonth() + 1).padStart(2, '0');
-            var day = String(today.getDate()).padStart(2, '0');
-            var dateStr = year + month + day;
+ * ============================================================
+ * INVOICE NUMBER GENERATOR - Supabase (مُحسّن)
+ * ============================================================
+ */
+async function generateInvoiceNumber() {
+    var today = new Date();
+    var year = today.getFullYear();
+    var month = String(today.getMonth() + 1).padStart(2, '0');
+    var day = String(today.getDate()).padStart(2, '0');
+    var dateStr = year + month + day;
 
-            try {
-                var response = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=invoice_number&order=invoice_number.desc&limit=1', {
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error('فشل في جلب الأرقام');
-                }
-
-                var data = await response.json();
-                var maxNumber = 0;
-
-                if (data && data.length > 0) {
-                    data.forEach(function(item) {
-                        if (item.invoice_number) {
-                            var parts = item.invoice_number.split('-');
-                            if (parts.length === 3) {
-                                var num = parseInt(parts[2]) || 0;
-                                if (num > maxNumber) {
-                                    maxNumber = num;
-                                }
-                            }
-                        }
-                    });
-                }
-
-                var newNumber = maxNumber + 1;
-                var num = String(newNumber).padStart(4, '0');
-                invoiceNumber.value = 'INV-' + dateStr + '-' + num;
-
-                console.log('📌 آخر رقم:', maxNumber, '→ رقم جديد:', newNumber);
-
-            } catch (error) {
-                console.error('❌ خطأ في توليد رقم الفاتورة:', error);
-                var lastNumber = parseInt(localStorage.getItem('hayala_last_invoice_number')) || 0;
-                var newNumber = lastNumber + 1;
-                var num = String(newNumber).padStart(4, '0');
-                invoiceNumber.value = 'INV-' + dateStr + '-' + num;
-                localStorage.setItem('hayala_last_invoice_number', newNumber);
+    try {
+        // جلب جميع أرقام الفواتير للاستعلام عن الأرقام بشكل صحيح
+        var response = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=invoice_number&order=invoice_number.desc&limit=1000', {
+            headers: {
+                'apikey': SUPABASE_ANON_KEY,
+                'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
             }
+        });
+
+        if (!response.ok) {
+            throw new Error('فشل في جلب الأرقام');
         }
+
+        var data = await response.json();
+        var maxNumber = 0;
+        var todayNumbers = [];
+
+        // تحليل جميع أرقام الفواتير
+        if (data && data.length > 0) {
+            data.forEach(function(item) {
+                if (item.invoice_number) {
+                    var parts = item.invoice_number.split('-');
+                    if (parts.length === 3) {
+                        var num = parseInt(parts[2]) || 0;
+                        var datePart = parts[1] || '';
+                        // تتبع الأرقام لنفس اليوم
+                        if (datePart === dateStr) {
+                            todayNumbers.push(num);
+                        }
+                        if (num > maxNumber) {
+                            maxNumber = num;
+                        }
+                    }
+                }
+            });
+        }
+
+        // استخدام الرقم التالي بناءً على أعلى رقم في اليوم
+        var nextNumber = 1;
+        if (todayNumbers.length > 0) {
+            var maxToday = Math.max.apply(null, todayNumbers);
+            nextNumber = maxToday + 1;
+        } else {
+            // إذا لم يكن هناك أرقام اليوم، استخدم الرقم التالي من التسلسل العام
+            nextNumber = maxNumber + 1;
+        }
+
+        var num = String(nextNumber).padStart(4, '0');
+        var newInvoiceNumber = 'INV-' + dateStr + '-' + num;
+        invoiceNumber.value = newInvoiceNumber;
+
+        console.log('📌 رقم الفاتورة الجديد:', newInvoiceNumber);
+        console.log('📌 أعلى رقم عام:', maxNumber, 'أرقام اليوم:', todayNumbers);
+
+    } catch (error) {
+        console.error('❌ خطأ في توليد رقم الفاتورة:', error);
+        // استخدام نظام بديل يعتمد على localStorage
+        var lastNumber = parseInt(localStorage.getItem('hayala_last_invoice_number')) || 0;
+        var newNumber = lastNumber + 1;
+        var num = String(newNumber).padStart(4, '0');
+        invoiceNumber.value = 'INV-' + dateStr + '-' + num;
+        localStorage.setItem('hayala_last_invoice_number', newNumber);
+    }
+}
 
         /**
          * ============================================================
