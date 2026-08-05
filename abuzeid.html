@@ -273,7 +273,7 @@
         }
 
         /* ============================================================
-           SIDEBAR — مغلقة افتراضياً على الموبايل
+           SIDEBAR
            ============================================================ */
         .sidebar-overlay {
             display: none;
@@ -621,7 +621,7 @@
             width: 100%;
             border-collapse: collapse;
             font-size: calc(0.8rem * var(--scale-factor));
-            min-width: 800px;
+            min-width: 700px;
         }
         table thead th {
             background: var(--surface-muted);
@@ -1009,7 +1009,7 @@
             .card-body { padding: 12px 14px; }
             .form-row { grid-template-columns: 1fr; }
             .modal { padding: 24px 18px; }
-            table { font-size: 0.7rem; min-width: 650px; }
+            table { font-size: 0.7rem; min-width: 550px; }
             table thead th, table tbody td { padding: 6px 8px; }
             .actions-cell { flex-direction: row; gap: 3px; }
             .mobile-nav-bottom { display: flex !important; }
@@ -1027,8 +1027,8 @@
             .card-header { flex-direction: column; align-items: stretch; gap: 8px; }
             .kpi-grid { grid-template-columns: 1fr; }
             .filters-grid { grid-template-columns: 1fr; }
-            table { font-size: 0.6rem; min-width: 500px; }
-            .btn-edit, .btn-delete, .btn-print { padding: 3px 6px; font-size: 0.55rem; }
+            table { font-size: 0.6rem; min-width: 450px; }
+            .btn-edit, .btn-delete { padding: 3px 6px; font-size: 0.55rem; }
         }
     </style>
 </head>
@@ -1083,7 +1083,7 @@
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <!-- ============================================================
-    SIDEBAR — مغلقة افتراضياً على الموبايل
+    SIDEBAR
     ============================================================ -->
     <div class="sidebar" id="sidebar">
         <div class="close-btn" id="closeSidebar"><i class="fas fa-times"></i></div>
@@ -1148,7 +1148,7 @@
                 <div class="filter-item">
                     <label for="month">الشهر</label>
                     <select id="month" onchange="loadDashboard()">
-                        <!-- سيتم تعبئتها بواسطة JavaScript مع خيار "كل الشهور" -->
+                        <!-- سيتم تعبئتها بواسطة JavaScript -->
                     </select>
                 </div>
                 <div class="filter-item">
@@ -1234,8 +1234,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label>البيان <span class="required">*</span></label>
-                    <input type="text" class="form-control" id="payDesc" placeholder="مثال: دفعة شهر يوليو" required />
+                    <label>اسم العميل <span class="required">*</span></label>
+                    <input type="text" class="form-control" id="clientName" placeholder="مثال: أبو زيد" required />
                 </div>
 
                 <div class="form-group">
@@ -1267,7 +1267,7 @@
     </div>
 
     <!-- ============================================================
-    JAVASCRIPT
+    JAVASCRIPT - متوافق مع هيكل الجدول الحالي
     ============================================================ -->
     <script>
         /**
@@ -1290,7 +1290,7 @@
 
         /**
          * ============================================================
-         * SIDEBAR TOGGLE — نفس آلية جميع الصفحات السابقة
+         * SIDEBAR TOGGLE
          * ============================================================
          */
         var navToggle = document.getElementById('navToggle');
@@ -1368,7 +1368,6 @@
             "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
         ];
 
-        // قيمة "كل الشهور" = -1
         var ALL_MONTHS_VALUE = -1;
 
         /**
@@ -1431,10 +1430,9 @@
             var month = Number(document.getElementById('month').value);
             var year = Number(document.getElementById('year').value);
 
-            // إذا كان الشهر = -1 (كل الشهور)، نرجع فترة كبيرة تغطي كل البيانات
             if (month === ALL_MONTHS_VALUE) {
-                var start = new Date(2020, 0, 1); // بداية 2020
-                var end = new Date(2030, 11, 31); // نهاية 2030
+                var start = new Date(2020, 0, 1);
+                var end = new Date(2030, 11, 31);
                 return { month: month, year: year, start: start, end: end, isAllMonths: true };
             }
 
@@ -1477,7 +1475,7 @@
 
         /**
          * ============================================================
-         * جلب البيانات من Supabase مع معالجة الأخطاء
+         * جلب البيانات من Supabase
          * ============================================================
          */
         async function loadDashboard() {
@@ -1545,7 +1543,7 @@
                     allExpenses = [];
                 }
 
-                // 3. جلب دفعات أبو زيد
+                // 3. جلب دفعات أبو زيد - باستخدام هيكل الجدول الحالي
                 try {
                     var paymentsResponse = await fetch(SUPABASE_URL + '/rest/v1/abuzaid_payments?select=*&order=payment_date.desc', {
                         headers: {
@@ -1595,7 +1593,7 @@
             var ratePercent = Number(document.getElementById('commissionRate').value || 0);
             var rate = ratePercent / 100;
 
-            // فلترة الفواتير حسب الفترة المحددة (كل الشهور أو شهر محدد)
+            // فلترة الفواتير حسب الفترة المحددة
             var monthlyBookings = allBookings.filter(function(item) {
                 return isWithinSelectedMonth(item.invoice_date, period);
             });
@@ -1622,7 +1620,7 @@
             var accountStatus = remainingAmount <= 0 ? "مسدد بالكامل" : "متبقي مستحق";
             var statusClass = remainingAmount <= 0 ? "status-paid" : "status-due";
 
-            // عرض الفترة في الحقل الرابع
+            // عرض الفترة
             var periodText = period.isAllMonths ? "كل الفترات" : months[period.month + 1] + ' ' + period.year;
             document.getElementById('monthStart').value = periodText;
 
@@ -1682,7 +1680,7 @@
 
         /**
          * ============================================================
-         * عرض الدفعات
+         * عرض الدفعات - متوافق مع هيكل الجدول
          * ============================================================
          */
         function renderPayments(payments) {
@@ -1708,7 +1706,7 @@
                         <tr>
                             <th>#</th>
                             <th>تاريخ الدفع</th>
-                            <th>البيان</th>
+                            <th>اسم العميل</th>
                             <th>المبلغ</th>
                             <th>طريقة الدفع</th>
                             <th>ملاحظات</th>
@@ -1723,7 +1721,7 @@
                     <tr data-id="${item.id}">
                         <td>${index + 1}</td>
                         <td>${formatDate(item.payment_date)}</td>
-                        <td style="text-align:right;">${escapeHtml(item.description || item.notes || '-')}</td>
+                        <td style="text-align:right;">${escapeHtml(item.client_name || '-')}</td>
                         <td style="font-weight:700;color:var(--teal);">${formatCurrency(parseFloat(item.amount) || 0)}</td>
                         <td>${escapeHtml(item.payment_method || '-')}</td>
                         <td>${escapeHtml(item.notes || '-')}</td>
@@ -1837,7 +1835,7 @@
 
         /**
          * ============================================================
-         * البحث والفلترة (للدفعات)
+         * البحث والفلترة
          * ============================================================
          */
         function filterPayments() {
@@ -1849,7 +1847,7 @@
             }
 
             var filtered = monthlyPayments.filter(function(item) {
-                return (item.description && item.description.toLowerCase().includes(searchTerm)) ||
+                return (item.client_name && item.client_name.toLowerCase().includes(searchTerm)) ||
                     (item.payment_method && item.payment_method.toLowerCase().includes(searchTerm)) ||
                     (item.notes && item.notes.toLowerCase().includes(searchTerm));
             });
@@ -1886,7 +1884,7 @@
             document.getElementById('modalTitle').textContent = 'تعديل الدفعة';
             document.getElementById('saveBtn').innerHTML = '<i class="fas fa-edit"></i> تحديث';
             document.getElementById('payDate').value = item.payment_date || '';
-            document.getElementById('payDesc').value = item.description || '';
+            document.getElementById('clientName').value = item.client_name || '';
             document.getElementById('payAmount').value = item.amount || '';
             document.getElementById('payMethod').value = item.payment_method || '';
             document.getElementById('payNotes').value = item.notes || '';
@@ -1905,7 +1903,7 @@
 
         /**
          * ============================================================
-         * إضافة / تعديل دفعة
+         * إضافة / تعديل دفعة - متوافق مع هيكل الجدول
          * ============================================================
          */
         async function addPayment(event) {
@@ -1915,12 +1913,12 @@
             var isEdit = editId ? true : false;
 
             var date = document.getElementById('payDate').value;
-            var description = document.getElementById('payDesc').value.trim();
+            var clientName = document.getElementById('clientName').value.trim();
             var amount = parseFloat(document.getElementById('payAmount').value) || 0;
             var method = document.getElementById('payMethod').value.trim();
             var notes = document.getElementById('payNotes').value.trim();
 
-            if (!date || !description || amount <= 0) {
+            if (!date || !clientName || amount <= 0) {
                 showFormMessage('⚠️ الرجاء ملء جميع الحقول المطلوبة', 'error');
                 return;
             }
@@ -1929,9 +1927,10 @@
             saveBtn.disabled = true;
             saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
 
+            // هيكل البيانات متوافق مع جدول abuzaid_payments
             var paymentData = {
                 payment_date: date,
-                description: description,
+                client_name: clientName,
                 amount: amount,
                 payment_method: method || 'نقدي',
                 notes: notes,
@@ -1960,7 +1959,8 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error('فشل في حفظ البيانات');
+                    var errorText = await response.text();
+                    throw new Error('فشل في حفظ البيانات: ' + response.status + ' - ' + errorText);
                 }
 
                 closeModal();
@@ -1999,7 +1999,7 @@
                 return;
             }
 
-            if (!confirm('هل أنت متأكد من حذف هذه الدفعة؟\n\nالبيان: ' + (item.description || item.notes || '') + 
+            if (!confirm('هل أنت متأكد من حذف هذه الدفعة؟\n\nالعميل: ' + (item.client_name || '-') + 
                         '\nالمبلغ: ' + formatCurrency(parseFloat(item.amount) || 0))) {
                 return;
             }
@@ -2042,6 +2042,7 @@
         console.log('🤝 صفحة عمولة أبو زيد - منتجع حياله (مع Supabase)');
         console.log('📊 Supabase URL:', SUPABASE_URL);
         console.log('👤 المستخدم:', user.name || 'غير معروف');
+        console.log('📋 هيكل الجدول: id, client_name, amount, payment_date, payment_method, notes, created_at, updated_at');
         console.log('✅ جاهزة للعمل');
     </script>
 
