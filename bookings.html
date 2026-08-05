@@ -981,6 +981,9 @@
             animation: fadeInUp 0.4s ease forwards;
         }
 
+        /* ============================================================
+           RESPONSIVE DESIGN - جميع الأعمدة تظهر في جميع الأحجام
+           ============================================================ */
         @media (max-width: 1200px) {
             table {
                 font-size: calc(0.7rem * var(--scale-factor));
@@ -1000,19 +1003,11 @@
             }
             table {
                 font-size: calc(0.65rem * var(--scale-factor));
-                min-width: 800px;
+                min-width: 900px;
             }
             table thead th,
             table tbody td {
                 padding: calc(6px * var(--scale-factor)) calc(6px * var(--scale-factor));
-            }
-            table thead th:nth-child(3),
-            table tbody td:nth-child(3),
-            table thead th:nth-child(7),
-            table tbody td:nth-child(7),
-            table thead th:nth-child(8),
-            table tbody td:nth-child(8) {
-                display: none;
             }
         }
 
@@ -1072,21 +1067,24 @@
             .table-wrapper {
                 margin: 0 -10px;
                 padding: 0 10px;
+                overflow-x: auto;
             }
 
             table {
-                font-size: 0.6rem;
-                min-width: 600px;
+                font-size: 0.55rem;
+                min-width: 850px;
+                width: 100%;
             }
 
             table thead th,
             table tbody td {
-                padding: 5px 6px;
+                padding: 4px 5px;
+                font-size: 0.5rem;
             }
 
             .badge {
-                font-size: 0.5rem;
-                padding: 2px 8px;
+                font-size: 0.45rem;
+                padding: 2px 6px;
             }
 
             .mobile-nav-bottom {
@@ -1106,19 +1104,10 @@
             }
 
             .table-footer {
-                font-size: 0.6rem;
+                font-size: 0.55rem;
                 flex-direction: column;
                 align-items: center;
                 text-align: center;
-            }
-
-            table thead th:nth-child(4),
-            table tbody td:nth-child(4),
-            table thead th:nth-child(10),
-            table tbody td:nth-child(10),
-            table thead th:nth-child(11),
-            table tbody td:nth-child(11) {
-                display: none;
             }
         }
 
@@ -1146,32 +1135,29 @@
             }
 
             table {
-                font-size: 0.55rem;
-                min-width: 480px;
+                font-size: 0.5rem;
+                min-width: 750px;
             }
 
             table thead th,
             table tbody td {
-                padding: 4px 5px;
-            }
-
-            table thead th:nth-child(5),
-            table tbody td:nth-child(5),
-            table thead th:nth-child(6),
-            table tbody td:nth-child(6),
-            table thead th:nth-child(12),
-            table tbody td:nth-child(12) {
-                display: none;
+                padding: 3px 4px;
+                font-size: 0.45rem;
             }
 
             .badge {
-                font-size: 0.45rem;
-                padding: 2px 6px;
+                font-size: 0.4rem;
+                padding: 1px 5px;
             }
 
             .btn {
                 font-size: 0.7rem;
                 padding: 6px 12px;
+            }
+
+            .btn-delete-row {
+                font-size: 0.6rem;
+                padding: 3px 6px;
             }
         }
 
@@ -1608,7 +1594,7 @@
 
         /**
          * ============================================================
-         * 8. عرض الجدول مع زر الحذف
+         * 8. عرض الجدول مع زر الحذف - جميع الأعمدة تظهر في كل الأحجام
          * ============================================================
          */
         function renderTable(data) {
@@ -1833,6 +1819,7 @@
             console.log('📊 Supabase URL:', SUPABASE_URL);
             console.log('👤 المستخدم:', user.name || 'غير معروف');
             console.log('✅ التطبيق جاهز للعمل - الترتيب: رقم الفاتورة تنازلياً (الأحدث أولاً)');
+            console.log('📱 جميع الأعمدة تظهر في جميع أحجام الشاشات');
         });
 
         /**
