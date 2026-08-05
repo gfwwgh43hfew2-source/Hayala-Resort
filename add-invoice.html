@@ -1447,7 +1447,7 @@
         }
 
         /* ============================================================
-           SYSTEM PRINT PREVIEW OVERLAY - تم تكبير النافذة
+           SYSTEM PRINT PREVIEW OVERLAY - تم تعديل الحجم للطباعة
            ============================================================ */
         .print-preview-overlay {
             display: none;
@@ -1514,11 +1514,12 @@
         .print-preview-overlay .print-wrapper {
             background: #ffffff;
             border-radius: calc(var(--radius) * var(--scale-factor));
-            max-width: calc(1100px * var(--scale-factor));
+            max-width: 210mm;
+            /* عرض مناسب للطباعة (A4) */
             width: 95%;
             max-height: 90vh;
             overflow-y: auto;
-            padding: calc(40px * var(--scale-factor)) calc(45px * var(--scale-factor));
+            padding: calc(30px * var(--scale-factor)) calc(35px * var(--scale-factor));
             box-shadow: 0 calc(20px * var(--scale-factor)) calc(60px * var(--scale-factor)) rgba(0, 0, 0, 0.4);
         }
 
@@ -1880,42 +1881,152 @@
         }
 
         /* ============================================================
-           PRINT MEDIA QUERY
+           PRINT MEDIA QUERY - التحكم في حجم الطباعة (حل مشكلة التكبير)
            ============================================================ */
         @media print {
             .print-preview-overlay .print-wrapper {
-                max-height: none !important;
+                max-width: 210mm !important;
+                width: 100% !important;
+                padding: 12px 16px !important;
+                margin: 0 auto !important;
                 box-shadow: none !important;
-                padding: calc(10px * var(--scale-factor)) !important;
+                border-radius: 0 !important;
+                max-height: none !important;
+                font-size: 12px !important;
+                background: #ffffff !important;
             }
+
             .print-preview-overlay .print-actions {
                 display: none !important;
             }
+
             .print-preview-overlay {
                 background: #ffffff !important;
                 backdrop-filter: none !important;
                 padding: 0 !important;
+                position: fixed !important;
+                inset: 0 !important;
+                z-index: 99999 !important;
             }
+
             .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box {
+                width: 60px !important;
+                height: 60px !important;
                 border-color: var(--ink) !important;
             }
+
+            .print-preview-overlay .print-wrapper .invoice-header .company-details h2 {
+                font-size: 18px !important;
+            }
+
+            .print-preview-overlay .print-wrapper .invoice-header .company-details p {
+                font-size: 10px !important;
+            }
+
             .print-preview-overlay .print-wrapper .invoice-header .invoice-title {
                 border: 2px solid var(--ink) !important;
                 background: var(--surface-muted) !important;
+                padding: 6px 12px !important;
+                min-width: 90px !important;
             }
+
             .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-code {
+                width: 80px !important;
+                height: 80px !important;
                 border: 2px solid var(--ink) !important;
+                padding: 4px !important;
+                margin-bottom: 3px !important;
             }
+
+            .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-label {
+                font-size: 8px !important;
+            }
+
+            .print-preview-overlay .print-wrapper .info-grid {
+                padding: 6px 10px !important;
+                gap: 4px !important;
+                margin-bottom: 10px !important;
+            }
+
+            .print-preview-overlay .print-wrapper .info-grid .item .label {
+                font-size: 8px !important;
+            }
+
+            .print-preview-overlay .print-wrapper .info-grid .item .value {
+                font-size: 12px !important;
+            }
+
+            .print-preview-overlay .print-wrapper table {
+                font-size: 11px !important;
+            }
+
+            .print-preview-overlay .print-wrapper table th {
+                padding: 4px 8px !important;
+                font-size: 9px !important;
+            }
+
+            .print-preview-overlay .print-wrapper table td {
+                padding: 4px 8px !important;
+                font-size: 10px !important;
+            }
+
+            .print-preview-overlay .print-wrapper .footer {
+                padding-top: 10px !important;
+                margin-top: 10px !important;
+                font-size: 10px !important;
+            }
+
+            .print-preview-overlay .print-wrapper .footer .signature .line {
+                width: 80px !important;
+            }
+
             .print-preview-overlay .print-wrapper .notes-section {
-                border-top: calc(2px * var(--scale-factor)) dashed var(--line-strong) !important;
-                background: var(--surface-muted) !important;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
+                padding: 8px 12px !important;
+                margin-top: 10px !important;
             }
+
+            .print-preview-overlay .print-wrapper .notes-section .notes-title {
+                font-size: 10px !important;
+            }
+
+            .print-preview-overlay .print-wrapper .notes-section .notes-content {
+                font-size: 9px !important;
+                line-height: 1.6 !important;
+            }
+
+            .print-preview-overlay .print-wrapper .notes-section .notes-content p {
+                padding-right: 14px !important;
+                margin-bottom: 2px !important;
+            }
+
             .print-preview-overlay .print-wrapper .print-footer-notes {
-                border-top: 2px solid var(--line-strong) !important;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
+                font-size: 8px !important;
+                padding-top: 8px !important;
+                margin-top: 10px !important;
+            }
+
+            .print-preview-overlay .print-wrapper .print-footer-notes .note-item {
+                gap: 4px !important;
+                margin-bottom: 1px !important;
+            }
+
+            .print-preview-overlay .print-wrapper .print-footer-notes .note-item i {
+                font-size: 4px !important;
+                margin-top: 3px !important;
+            }
+
+            .print-preview-overlay .print-wrapper .badge {
+                font-size: 8px !important;
+                padding: 1px 6px !important;
+            }
+
+            /* إخفاء شريط التمرير في الطباعة */
+            .print-preview-overlay .print-wrapper::-webkit-scrollbar {
+                display: none !important;
+            }
+
+            .print-preview-overlay .print-wrapper {
+                scrollbar-width: none !important;
             }
         }
 
@@ -3506,12 +3617,32 @@
                             <style>
                                 ${document.querySelector('style').innerHTML}
                                 body { padding: 20px; background: #fff; }
-                                .print-wrapper { max-width: 1100px; margin: 0 auto; }
+                                .print-wrapper { max-width: 210mm; margin: 0 auto; }
                                 .print-preview-overlay .print-actions { display: none !important; }
                                 .print-preview-overlay { background: #fff !important; backdrop-filter: none !important; padding: 0 !important; position: static !important; }
-                                .print-preview-overlay .print-wrapper { max-height: none !important; box-shadow: none !important; padding: 10px !important; max-width: 1100px !important; width: 100% !important; border-radius: 0 !important; }
-                                .invoice-header .invoice-title { border: 2px solid #121821 !important; background: #f4f6f5 !important; }
-                                .invoice-header .invoice-title .qr-code { border: 2px solid #121821 !important; }
+                                .print-preview-overlay .print-wrapper { max-height: none !important; box-shadow: none !important; padding: 12px 16px !important; max-width: 210mm !important; width: 100% !important; border-radius: 0 !important; font-size: 12px !important; }
+                                .invoice-header .invoice-title { border: 2px solid #121821 !important; background: #f4f6f5 !important; padding: 6px 12px !important; min-width: 90px !important; }
+                                .invoice-header .invoice-title .qr-code { width: 80px !important; height: 80px !important; border: 2px solid #121821 !important; padding: 4px !important; margin-bottom: 3px !important; }
+                                .invoice-header .invoice-title .qr-label { font-size: 8px !important; }
+                                .invoice-header .logo-section .logo-box { width: 60px !important; height: 60px !important; border-color: #121821 !important; }
+                                .invoice-header .company-details h2 { font-size: 18px !important; }
+                                .invoice-header .company-details p { font-size: 10px !important; }
+                                .info-grid { padding: 6px 10px !important; gap: 4px !important; margin-bottom: 10px !important; }
+                                .info-grid .item .label { font-size: 8px !important; }
+                                .info-grid .item .value { font-size: 12px !important; }
+                                table { font-size: 11px !important; }
+                                table th { padding: 4px 8px !important; font-size: 9px !important; }
+                                table td { padding: 4px 8px !important; font-size: 10px !important; }
+                                .footer { padding-top: 10px !important; margin-top: 10px !important; font-size: 10px !important; }
+                                .footer .signature .line { width: 80px !important; }
+                                .notes-section { padding: 8px 12px !important; margin-top: 10px !important; }
+                                .notes-section .notes-title { font-size: 10px !important; }
+                                .notes-section .notes-content { font-size: 9px !important; line-height: 1.6 !important; }
+                                .notes-section .notes-content p { padding-right: 14px !important; margin-bottom: 2px !important; }
+                                .print-footer-notes { font-size: 8px !important; padding-top: 8px !important; margin-top: 10px !important; }
+                                .print-footer-notes .note-item { gap: 4px !important; margin-bottom: 1px !important; }
+                                .print-footer-notes .note-item i { font-size: 4px !important; margin-top: 3px !important; }
+                                .badge { font-size: 8px !important; padding: 1px 6px !important; }
                                 .notes-section { border-top: 2px dashed #c7d0cc !important; background: #f8f9fa !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
                                 .print-footer-notes { border-top: 2px solid #c7d0cc !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
                                 .invoice-header .logo-section .logo-box { border-color: #121821 !important; }
