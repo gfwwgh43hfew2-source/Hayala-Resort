@@ -1441,7 +1441,7 @@
         }
 
         /* ============================================================
-           SYSTEM PRINT PREVIEW OVERLAY
+           SYSTEM PRINT PREVIEW OVERLAY - تم تكبير النافذة
            ============================================================ */
         .print-preview-overlay {
             display: none;
@@ -1499,37 +1499,37 @@
         .print-preview-overlay .print-wrapper {
             background: #ffffff;
             border-radius: calc(var(--radius) * var(--scale-factor));
-            max-width: calc(820px * var(--scale-factor));
-            width: 100%;
-            max-height: 80vh;
+            max-width: calc(1100px * var(--scale-factor)); /* تم التكبير من 820px إلى 1100px */
+            width: 95%;
+            max-height: 90vh; /* تم التكبير من 80vh إلى 90vh */
             overflow-y: auto;
-            padding: calc(30px * var(--scale-factor)) calc(35px * var(--scale-factor));
+            padding: calc(40px * var(--scale-factor)) calc(45px * var(--scale-factor));
             box-shadow: 0 calc(20px * var(--scale-factor)) calc(60px * var(--scale-factor)) rgba(0,0,0,0.4);
         }
 
         /* ============================================================
-           PRINT PREVIEW STYLES
+           PRINT PREVIEW STYLES - تم تكبير الخطوط
            ============================================================ */
         .print-preview-overlay .print-wrapper .invoice-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding-bottom: calc(16px * var(--scale-factor));
+            padding-bottom: calc(20px * var(--scale-factor));
             border-bottom: calc(3px * var(--scale-factor)) solid var(--ink);
-            margin-bottom: calc(16px * var(--scale-factor));
-            gap: calc(16px * var(--scale-factor));
+            margin-bottom: calc(20px * var(--scale-factor));
+            gap: calc(20px * var(--scale-factor));
         }
         .print-preview-overlay .print-wrapper .invoice-header .logo-section {
             display: flex;
             align-items: center;
-            gap: calc(12px * var(--scale-factor));
+            gap: calc(16px * var(--scale-factor));
         }
         .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box {
-            width: calc(70px * var(--scale-factor));
-            height: calc(70px * var(--scale-factor));
-            border-radius: calc(10px * var(--scale-factor));
+            width: calc(85px * var(--scale-factor));
+            height: calc(85px * var(--scale-factor));
+            border-radius: calc(12px * var(--scale-factor));
             overflow: hidden;
-            border: calc(2px * var(--scale-factor)) solid var(--accent);
+            border: calc(2.5px * var(--scale-factor)) solid var(--accent);
             background: #ffffff;
             display: flex;
             align-items: center;
@@ -1544,28 +1544,28 @@
             object-fit: contain;
         }
         .print-preview-overlay .print-wrapper .invoice-header .company-details h2 {
-            font-size: calc(1.3rem * var(--scale-factor));
+            font-size: calc(1.6rem * var(--scale-factor));
             font-weight: 900;
             color: var(--ink);
         }
         .print-preview-overlay .print-wrapper .invoice-header .company-details p {
-            font-size: calc(0.6rem * var(--scale-factor));
+            font-size: calc(0.7rem * var(--scale-factor));
             color: var(--ink-mute);
         }
         .print-preview-overlay .print-wrapper .invoice-header .invoice-title {
             text-align: left;
             background: var(--surface-muted);
-            padding: calc(6px * var(--scale-factor)) calc(16px * var(--scale-factor));
-            border-radius: calc(8px * var(--scale-factor));
-            border-right: calc(3px * var(--scale-factor)) solid var(--accent);
+            padding: calc(8px * var(--scale-factor)) calc(20px * var(--scale-factor));
+            border-radius: calc(10px * var(--scale-factor));
+            border-right: calc(4px * var(--scale-factor)) solid var(--accent);
         }
         .print-preview-overlay .print-wrapper .invoice-header .invoice-title .num {
-            font-size: calc(0.9rem * var(--scale-factor));
+            font-size: calc(1.1rem * var(--scale-factor));
             font-weight: 900;
             color: var(--ink);
         }
         .print-preview-overlay .print-wrapper .invoice-header .invoice-title .sub {
-            font-size: calc(0.55rem * var(--scale-factor));
+            font-size: calc(0.65rem * var(--scale-factor));
             color: var(--ink-mute);
             font-weight: 600;
         }
@@ -1573,20 +1573,20 @@
         .print-preview-overlay .print-wrapper .info-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr 1fr;
-            gap: calc(10px * var(--scale-factor));
-            margin-bottom: calc(14px * var(--scale-factor));
+            gap: calc(14px * var(--scale-factor));
+            margin-bottom: calc(18px * var(--scale-factor));
             background: var(--surface-muted);
-            padding: calc(10px * var(--scale-factor)) calc(14px * var(--scale-factor));
+            padding: calc(14px * var(--scale-factor)) calc(18px * var(--scale-factor));
             border-radius: calc(var(--radius-sm) * var(--scale-factor));
             border: 1px solid var(--line);
         }
         .print-preview-overlay .print-wrapper .info-grid .item .label {
-            font-size: calc(0.5rem * var(--scale-factor));
+            font-size: calc(0.6rem * var(--scale-factor));
             color: var(--ink-mute);
             font-weight: 700;
         }
         .print-preview-overlay .print-wrapper .info-grid .item .value {
-            font-size: calc(0.78rem * var(--scale-factor));
+            font-size: calc(0.9rem * var(--scale-factor));
             font-weight: 700;
             color: var(--ink);
         }
@@ -1594,72 +1594,73 @@
         .print-preview-overlay .print-wrapper table {
             width: 100%;
             border-collapse: collapse;
-            font-size: calc(0.7rem * var(--scale-factor));
+            font-size: calc(0.85rem * var(--scale-factor));
         }
         .print-preview-overlay .print-wrapper table th {
             background: var(--ink);
             color: #ffffff;
-            padding: calc(6px * var(--scale-factor)) calc(10px * var(--scale-factor));
+            padding: calc(8px * var(--scale-factor)) calc(12px * var(--scale-factor));
             text-align: center;
-            font-size: calc(0.55rem * var(--scale-factor));
+            font-size: calc(0.65rem * var(--scale-factor));
             font-weight: 700;
         }
         .print-preview-overlay .print-wrapper table td {
-            padding: calc(6px * var(--scale-factor)) calc(10px * var(--scale-factor));
+            padding: calc(8px * var(--scale-factor)) calc(12px * var(--scale-factor));
             border-bottom: 1px solid var(--line);
             color: var(--ink-soft);
             text-align: center;
+            font-size: calc(0.8rem * var(--scale-factor));
         }
 
         .print-preview-overlay .print-wrapper .footer {
             border-top: 1px solid var(--line);
-            padding-top: calc(12px * var(--scale-factor));
-            margin-top: calc(12px * var(--scale-factor));
+            padding-top: calc(16px * var(--scale-factor));
+            margin-top: calc(16px * var(--scale-factor));
             display: flex;
             justify-content: space-between;
-            font-size: calc(0.6rem * var(--scale-factor));
+            font-size: calc(0.7rem * var(--scale-factor));
             color: var(--ink-mute);
         }
         .print-preview-overlay .print-wrapper .footer .signature .line {
-            width: calc(100px * var(--scale-factor));
+            width: calc(120px * var(--scale-factor));
             border-bottom: calc(2px * var(--scale-factor)) solid var(--ink);
-            margin-top: calc(3px * var(--scale-factor));
+            margin-top: calc(4px * var(--scale-factor));
         }
 
         /* ============================================================
            NOTES SECTION - PRINT PREVIEW (محدث مع النصوص المطلوبة)
            ============================================================ */
         .print-preview-overlay .print-wrapper .notes-section {
-            margin-top: calc(16px * var(--scale-factor));
-            padding-top: calc(12px * var(--scale-factor));
+            margin-top: calc(20px * var(--scale-factor));
+            padding-top: calc(16px * var(--scale-factor));
             border-top: calc(2px * var(--scale-factor)) dashed var(--line-strong);
             background: var(--surface-muted);
             border-radius: calc(var(--radius-sm) * var(--scale-factor));
-            padding: calc(12px * var(--scale-factor)) calc(14px * var(--scale-factor));
+            padding: calc(16px * var(--scale-factor)) calc(18px * var(--scale-factor));
         }
         .print-preview-overlay .print-wrapper .notes-section .notes-title {
-            font-size: calc(0.65rem * var(--scale-factor));
+            font-size: calc(0.75rem * var(--scale-factor));
             font-weight: 800;
             color: var(--accent-ink);
             display: flex;
             align-items: center;
-            gap: calc(6px * var(--scale-factor));
-            margin-bottom: calc(6px * var(--scale-factor));
+            gap: calc(8px * var(--scale-factor));
+            margin-bottom: calc(8px * var(--scale-factor));
         }
         .print-preview-overlay .print-wrapper .notes-section .notes-title i {
             color: var(--accent);
-            font-size: calc(0.7rem * var(--scale-factor));
+            font-size: calc(0.8rem * var(--scale-factor));
         }
         .print-preview-overlay .print-wrapper .notes-section .notes-content {
-            font-size: calc(0.55rem * var(--scale-factor));
+            font-size: calc(0.65rem * var(--scale-factor));
             color: var(--ink-soft);
             line-height: 1.8;
             padding-right: calc(4px * var(--scale-factor));
         }
         .print-preview-overlay .print-wrapper .notes-section .notes-content p {
-            margin-bottom: calc(3px * var(--scale-factor));
+            margin-bottom: calc(4px * var(--scale-factor));
             position: relative;
-            padding-right: calc(16px * var(--scale-factor));
+            padding-right: calc(18px * var(--scale-factor));
         }
         .print-preview-overlay .print-wrapper .notes-section .notes-content p::before {
             content: '•';
@@ -1671,10 +1672,10 @@
 
         /* ===== النصوص المضافة الجديدة في الطباعة ===== */
         .print-preview-overlay .print-wrapper .print-footer-notes {
-            margin-top: calc(14px * var(--scale-factor));
-            padding-top: calc(10px * var(--scale-factor));
+            margin-top: calc(18px * var(--scale-factor));
+            padding-top: calc(14px * var(--scale-factor));
             border-top: 2px solid var(--line-strong);
-            font-size: calc(0.5rem * var(--scale-factor));
+            font-size: calc(0.6rem * var(--scale-factor));
             color: var(--ink-mute);
             line-height: 1.9;
         }
@@ -1684,13 +1685,13 @@
         .print-preview-overlay .print-wrapper .print-footer-notes .note-item {
             display: flex;
             align-items: flex-start;
-            gap: calc(6px * var(--scale-factor));
-            margin-bottom: calc(2px * var(--scale-factor));
+            gap: calc(8px * var(--scale-factor));
+            margin-bottom: calc(3px * var(--scale-factor));
         }
         .print-preview-overlay .print-wrapper .print-footer-notes .note-item i {
             color: var(--accent);
-            font-size: calc(0.45rem * var(--scale-factor));
-            margin-top: calc(4px * var(--scale-factor));
+            font-size: calc(0.5rem * var(--scale-factor));
+            margin-top: calc(5px * var(--scale-factor));
             flex-shrink: 0;
         }
 
@@ -1702,43 +1703,115 @@
                 padding: calc(20px * var(--scale-factor)) calc(16px * var(--scale-factor));
                 max-height: 70vh;
                 max-width: 95%;
+                max-width: 1100px;
             }
             .print-preview-overlay .print-wrapper .invoice-header {
                 flex-direction: column;
                 text-align: center;
-                gap: calc(8px * var(--scale-factor));
+                gap: calc(10px * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .invoice-header .invoice-title {
                 text-align: center;
                 border-right: none;
                 border-top: calc(2px * var(--scale-factor)) solid var(--accent);
-                padding: calc(4px * var(--scale-factor)) calc(12px * var(--scale-factor));
+                padding: calc(6px * var(--scale-factor)) calc(14px * var(--scale-factor));
                 width: 100%;
             }
             .print-preview-overlay .print-wrapper .info-grid {
                 grid-template-columns: 1fr 1fr;
-                gap: calc(6px * var(--scale-factor));
-                padding: calc(8px * var(--scale-factor)) calc(10px * var(--scale-factor));
+                gap: calc(8px * var(--scale-factor));
+                padding: calc(10px * var(--scale-factor)) calc(12px * var(--scale-factor));
             }
             .print-preview-overlay .print-actions button {
                 padding: calc(8px * var(--scale-factor)) calc(16px * var(--scale-factor));
                 font-size: calc(0.75rem * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper table {
-                font-size: calc(0.6rem * var(--scale-factor));
+                font-size: calc(0.65rem * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper table th,
+            .print-preview-overlay .print-wrapper table td {
+                padding: calc(5px * var(--scale-factor)) calc(8px * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .footer {
+                flex-direction: column;
+                gap: calc(10px * var(--scale-factor));
+                text-align: center;
+            }
+            .print-preview-overlay .print-wrapper .footer .signature .line {
+                width: calc(90px * var(--scale-factor));
+                margin: calc(4px * var(--scale-factor)) auto 0;
+            }
+            .print-preview-overlay .print-wrapper .notes-section {
+                padding: calc(12px * var(--scale-factor)) calc(14px * var(--scale-factor));
+                margin-top: calc(14px * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .notes-section .notes-title {
+                font-size: calc(0.65rem * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .notes-section .notes-content {
+                font-size: calc(0.55rem * var(--scale-factor));
+                line-height: 1.7;
+            }
+            .print-preview-overlay .print-wrapper .notes-section .notes-content p {
+                padding-right: calc(16px * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .print-footer-notes {
+                font-size: calc(0.5rem * var(--scale-factor));
+            }
+        }
+
+        @media (max-width: 480px) {
+            .print-preview-overlay .print-wrapper {
+                padding: calc(14px * var(--scale-factor)) calc(12px * var(--scale-factor));
+                max-height: 60vh;
+                max-width: 98%;
+                border-radius: calc(8px * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box {
+                width: calc(55px * var(--scale-factor));
+                height: calc(55px * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .invoice-header .company-details h2 {
+                font-size: calc(1.1rem * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .invoice-header .company-details p {
+                font-size: calc(0.55rem * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .info-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: calc(6px * var(--scale-factor));
+                padding: calc(8px * var(--scale-factor)) calc(10px * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .info-grid .item .value {
+                font-size: calc(0.7rem * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .info-grid .item .label {
+                font-size: calc(0.5rem * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper table {
+                font-size: calc(0.55rem * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper table th,
             .print-preview-overlay .print-wrapper table td {
                 padding: calc(4px * var(--scale-factor)) calc(6px * var(--scale-factor));
             }
+            .print-preview-overlay .print-actions button {
+                padding: calc(6px * var(--scale-factor)) calc(12px * var(--scale-factor));
+                font-size: calc(0.65rem * var(--scale-factor));
+            }
             .print-preview-overlay .print-wrapper .footer {
                 flex-direction: column;
                 gap: calc(8px * var(--scale-factor));
                 text-align: center;
+                font-size: calc(0.55rem * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .footer .signature .line {
-                width: calc(80px * var(--scale-factor));
-                margin: calc(3px * var(--scale-factor)) auto 0;
+                width: calc(70px * var(--scale-factor));
+                margin: calc(4px * var(--scale-factor)) auto 0;
+            }
+            .print-preview-overlay .print-wrapper .footer .signature p {
+                font-size: calc(0.55rem * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .notes-section {
                 padding: calc(10px * var(--scale-factor)) calc(12px * var(--scale-factor));
@@ -1749,88 +1822,17 @@
             }
             .print-preview-overlay .print-wrapper .notes-section .notes-content {
                 font-size: calc(0.5rem * var(--scale-factor));
-                line-height: 1.7;
-            }
-            .print-preview-overlay .print-wrapper .notes-section .notes-content p {
-                padding-right: calc(14px * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .print-footer-notes {
-                font-size: calc(0.45rem * var(--scale-factor));
-            }
-        }
-
-        @media (max-width: 480px) {
-            .print-preview-overlay .print-wrapper {
-                padding: calc(12px * var(--scale-factor)) calc(10px * var(--scale-factor));
-                max-height: 60vh;
-                max-width: 98%;
-                border-radius: calc(8px * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box {
-                width: calc(50px * var(--scale-factor));
-                height: calc(50px * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .invoice-header .company-details h2 {
-                font-size: calc(1rem * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .invoice-header .company-details p {
-                font-size: calc(0.5rem * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .info-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: calc(4px * var(--scale-factor));
-                padding: calc(6px * var(--scale-factor)) calc(8px * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .info-grid .item .value {
-                font-size: calc(0.65rem * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .info-grid .item .label {
-                font-size: calc(0.45rem * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper table {
-                font-size: calc(0.5rem * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper table th,
-            .print-preview-overlay .print-wrapper table td {
-                padding: calc(3px * var(--scale-factor)) calc(4px * var(--scale-factor));
-            }
-            .print-preview-overlay .print-actions button {
-                padding: calc(6px * var(--scale-factor)) calc(12px * var(--scale-factor));
-                font-size: calc(0.65rem * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .footer {
-                flex-direction: column;
-                gap: calc(6px * var(--scale-factor));
-                text-align: center;
-                font-size: calc(0.5rem * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .footer .signature .line {
-                width: calc(60px * var(--scale-factor));
-                margin: calc(3px * var(--scale-factor)) auto 0;
-            }
-            .print-preview-overlay .print-wrapper .footer .signature p {
-                font-size: calc(0.5rem * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .notes-section {
-                padding: calc(8px * var(--scale-factor)) calc(10px * var(--scale-factor));
-                margin-top: calc(10px * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .notes-section .notes-title {
-                font-size: calc(0.55rem * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .notes-section .notes-content {
-                font-size: calc(0.5rem * var(--scale-factor));
                 line-height: 1.6;
             }
             .print-preview-overlay .print-wrapper .notes-section .notes-content p {
-                padding-right: calc(12px * var(--scale-factor));
-                margin-bottom: calc(2px * var(--scale-factor));
+                padding-right: calc(14px * var(--scale-factor));
+                margin-bottom: calc(3px * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .print-footer-notes {
-                font-size: calc(0.4rem * var(--scale-factor));
+                font-size: calc(0.45rem * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .print-footer-notes .note-item {
-                gap: calc(4px * var(--scale-factor));
+                gap: calc(5px * var(--scale-factor));
             }
         }
 
@@ -2262,7 +2264,7 @@
         <div class="toast-container" id="toastContainer"></div>
 
         <!-- ============================================================
-        SYSTEM PRINT PREVIEW OVERLAY
+        SYSTEM PRINT PREVIEW OVERLAY - تم تكبير النافذة
         ============================================================ -->
         <div class="print-preview-overlay" id="printPreviewOverlay">
             <div class="print-wrapper" id="printPreviewContent">
@@ -2800,81 +2802,81 @@
         }
 
         /**
- * ============================================================
- * INVOICE NUMBER GENERATOR - Supabase (مُحسّن)
- * ============================================================
- */
-async function generateInvoiceNumber() {
-    var today = new Date();
-    var year = today.getFullYear();
-    var month = String(today.getMonth() + 1).padStart(2, '0');
-    var day = String(today.getDate()).padStart(2, '0');
-    var dateStr = year + month + day;
+         * ============================================================
+         * INVOICE NUMBER GENERATOR - Supabase (مُحسّن)
+         * ============================================================
+         */
+        async function generateInvoiceNumber() {
+            var today = new Date();
+            var year = today.getFullYear();
+            var month = String(today.getMonth() + 1).padStart(2, '0');
+            var day = String(today.getDate()).padStart(2, '0');
+            var dateStr = year + month + day;
 
-    try {
-        // جلب جميع أرقام الفواتير للاستعلام عن الأرقام بشكل صحيح
-        var response = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=invoice_number&order=invoice_number.desc&limit=1000', {
-            headers: {
-                'apikey': SUPABASE_ANON_KEY,
-                'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error('فشل في جلب الأرقام');
-        }
-
-        var data = await response.json();
-        var maxNumber = 0;
-        var todayNumbers = [];
-
-        // تحليل جميع أرقام الفواتير
-        if (data && data.length > 0) {
-            data.forEach(function(item) {
-                if (item.invoice_number) {
-                    var parts = item.invoice_number.split('-');
-                    if (parts.length === 3) {
-                        var num = parseInt(parts[2]) || 0;
-                        var datePart = parts[1] || '';
-                        // تتبع الأرقام لنفس اليوم
-                        if (datePart === dateStr) {
-                            todayNumbers.push(num);
-                        }
-                        if (num > maxNumber) {
-                            maxNumber = num;
-                        }
+            try {
+                // جلب جميع أرقام الفواتير للاستعلام عن الأرقام بشكل صحيح
+                var response = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=invoice_number&order=invoice_number.desc&limit=1000', {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
                     }
+                });
+
+                if (!response.ok) {
+                    throw new Error('فشل في جلب الأرقام');
                 }
-            });
+
+                var data = await response.json();
+                var maxNumber = 0;
+                var todayNumbers = [];
+
+                // تحليل جميع أرقام الفواتير
+                if (data && data.length > 0) {
+                    data.forEach(function(item) {
+                        if (item.invoice_number) {
+                            var parts = item.invoice_number.split('-');
+                            if (parts.length === 3) {
+                                var num = parseInt(parts[2]) || 0;
+                                var datePart = parts[1] || '';
+                                // تتبع الأرقام لنفس اليوم
+                                if (datePart === dateStr) {
+                                    todayNumbers.push(num);
+                                }
+                                if (num > maxNumber) {
+                                    maxNumber = num;
+                                }
+                            }
+                        }
+                    });
+                }
+
+                // استخدام الرقم التالي بناءً على أعلى رقم في اليوم
+                var nextNumber = 1;
+                if (todayNumbers.length > 0) {
+                    var maxToday = Math.max.apply(null, todayNumbers);
+                    nextNumber = maxToday + 1;
+                } else {
+                    // إذا لم يكن هناك أرقام اليوم، استخدم الرقم التالي من التسلسل العام
+                    nextNumber = maxNumber + 1;
+                }
+
+                var num = String(nextNumber).padStart(4, '0');
+                var newInvoiceNumber = 'INV-' + dateStr + '-' + num;
+                invoiceNumber.value = newInvoiceNumber;
+
+                console.log('📌 رقم الفاتورة الجديد:', newInvoiceNumber);
+                console.log('📌 أعلى رقم عام:', maxNumber, 'أرقام اليوم:', todayNumbers);
+
+            } catch (error) {
+                console.error('❌ خطأ في توليد رقم الفاتورة:', error);
+                // استخدام نظام بديل يعتمد على localStorage
+                var lastNumber = parseInt(localStorage.getItem('hayala_last_invoice_number')) || 0;
+                var newNumber = lastNumber + 1;
+                var num = String(newNumber).padStart(4, '0');
+                invoiceNumber.value = 'INV-' + dateStr + '-' + num;
+                localStorage.setItem('hayala_last_invoice_number', newNumber);
+            }
         }
-
-        // استخدام الرقم التالي بناءً على أعلى رقم في اليوم
-        var nextNumber = 1;
-        if (todayNumbers.length > 0) {
-            var maxToday = Math.max.apply(null, todayNumbers);
-            nextNumber = maxToday + 1;
-        } else {
-            // إذا لم يكن هناك أرقام اليوم، استخدم الرقم التالي من التسلسل العام
-            nextNumber = maxNumber + 1;
-        }
-
-        var num = String(nextNumber).padStart(4, '0');
-        var newInvoiceNumber = 'INV-' + dateStr + '-' + num;
-        invoiceNumber.value = newInvoiceNumber;
-
-        console.log('📌 رقم الفاتورة الجديد:', newInvoiceNumber);
-        console.log('📌 أعلى رقم عام:', maxNumber, 'أرقام اليوم:', todayNumbers);
-
-    } catch (error) {
-        console.error('❌ خطأ في توليد رقم الفاتورة:', error);
-        // استخدام نظام بديل يعتمد على localStorage
-        var lastNumber = parseInt(localStorage.getItem('hayala_last_invoice_number')) || 0;
-        var newNumber = lastNumber + 1;
-        var num = String(newNumber).padStart(4, '0');
-        invoiceNumber.value = 'INV-' + dateStr + '-' + num;
-        localStorage.setItem('hayala_last_invoice_number', newNumber);
-    }
-}
 
         /**
          * ============================================================
@@ -3314,7 +3316,7 @@ async function generateInvoiceNumber() {
                             padding: 20px;
                             background: #fff;
                         }
-                        .print-wrapper { max-width: 820px; margin: 0 auto; }
+                        .print-wrapper { max-width: 1100px; margin: 0 auto; }
                         .invoice-header {
                             display: flex; align-items: center; justify-content: space-between;
                             padding-bottom: 16px; border-bottom: 3px solid #121821;
@@ -3324,8 +3326,8 @@ async function generateInvoiceNumber() {
                             display: flex; align-items: center; gap: 12px;
                         }
                         .invoice-header .logo-section .logo-box {
-                            width: 70px; height: 70px; border-radius: 10px;
-                            overflow: hidden; border: 2px solid #dd9f2e;
+                            width: 85px; height: 85px; border-radius: 12px;
+                            overflow: hidden; border: 2.5px solid #dd9f2e;
                             background: #fff; display: flex; align-items: center; justify-content: center;
                             flex-shrink: 0;
                         }
@@ -3333,87 +3335,88 @@ async function generateInvoiceNumber() {
                             max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain;
                         }
                         .invoice-header .company-details h2 {
-                            font-size: 1.3rem; font-weight: 900; color: #121821;
+                            font-size: 1.6rem; font-weight: 900; color: #121821;
                         }
                         .invoice-header .company-details p {
-                            font-size: 0.6rem; color: #6d7883;
+                            font-size: 0.7rem; color: #6d7883;
                         }
                         .invoice-header .invoice-title {
                             text-align: left; background: #f4f6f5;
-                            padding: 6px 16px; border-radius: 8px;
-                            border-right: 3px solid #dd9f2e;
+                            padding: 8px 20px; border-radius: 10px;
+                            border-right: 4px solid #dd9f2e;
                         }
                         .invoice-header .invoice-title .num {
-                            font-size: 0.9rem; font-weight: 900; color: #121821;
+                            font-size: 1.1rem; font-weight: 900; color: #121821;
                         }
                         .invoice-header .invoice-title .sub {
-                            font-size: 0.55rem; color: #6d7883; font-weight: 600;
+                            font-size: 0.65rem; color: #6d7883; font-weight: 600;
                         }
                         .info-grid {
                             display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;
-                            gap: 10px; margin-bottom: 14px;
-                            background: #f8f9fa; padding: 10px 14px;
+                            gap: 14px; margin-bottom: 18px;
+                            background: #f8f9fa; padding: 14px 18px;
                             border-radius: 8px; border: 1px solid #eef1ef;
                         }
                         .info-grid .item .label {
-                            font-size: 0.5rem; color: #6d7883; font-weight: 700;
+                            font-size: 0.6rem; color: #6d7883; font-weight: 700;
                         }
                         .info-grid .item .value {
-                            font-size: 0.78rem; font-weight: 700; color: #121821;
+                            font-size: 0.9rem; font-weight: 700; color: #121821;
                         }
                         table {
-                            width: 100%; border-collapse: collapse; font-size: 0.7rem;
+                            width: 100%; border-collapse: collapse; font-size: 0.85rem;
                         }
                         table th {
                             background: #121821; color: #fff;
-                            padding: 6px 10px; text-align: center; font-size: 0.55rem;
+                            padding: 8px 12px; text-align: center; font-size: 0.65rem;
                         }
                         table td {
-                            padding: 6px 10px; border-bottom: 1px solid #eef1ef;
+                            padding: 8px 12px; border-bottom: 1px solid #eef1ef;
                             color: #2c3644; text-align: center;
+                            font-size: 0.8rem;
                         }
                         .footer {
-                            border-top: 1px solid #eef1ef; padding-top: 12px;
-                            margin-top: 12px; display: flex;
-                            justify-content: space-between; font-size: 0.6rem;
+                            border-top: 1px solid #eef1ef; padding-top: 16px;
+                            margin-top: 16px; display: flex;
+                            justify-content: space-between; font-size: 0.7rem;
                             color: #6d7883;
                         }
                         .footer .signature .line {
-                            width: 100px; border-bottom: 2px solid #121821;
-                            margin-top: 3px;
+                            width: 120px; border-bottom: 2px solid #121821;
+                            margin-top: 4px;
                         }
 
                         .notes-section {
-                            margin-top: 16px;
-                            padding-top: 12px;
+                            margin-top: 20px;
+                            padding-top: 16px;
                             border-top: 2px dashed #c7d0cc;
                             background: #f8f9fa;
                             border-radius: 8px;
-                            padding: 12px 14px;
+                            padding: 16px 18px;
                         }
                         .notes-section .notes-title {
-                            font-size: 0.65rem;
+                            font-size: 0.75rem;
                             font-weight: 800;
                             color: #7a5312;
                             display: flex;
                             align-items: center;
-                            gap: 6px;
-                            margin-bottom: 6px;
+                            gap: 8px;
+                            margin-bottom: 8px;
                         }
                         .notes-section .notes-title i {
                             color: #dd9f2e;
-                            font-size: 0.7rem;
+                            font-size: 0.8rem;
                         }
                         .notes-section .notes-content {
-                            font-size: 0.55rem;
+                            font-size: 0.65rem;
                             color: #2c3644;
                             line-height: 1.8;
                             padding-right: 4px;
                         }
                         .notes-section .notes-content p {
-                            margin-bottom: 3px;
+                            margin-bottom: 4px;
                             position: relative;
-                            padding-right: 16px;
+                            padding-right: 18px;
                         }
                         .notes-section .notes-content p::before {
                             content: '•';
@@ -3423,12 +3426,11 @@ async function generateInvoiceNumber() {
                             font-weight: 700;
                         }
 
-                        /* ===== النصوص المضافة الجديدة ===== */
                         .print-footer-notes {
-                            margin-top: 14px;
-                            padding-top: 10px;
+                            margin-top: 18px;
+                            padding-top: 14px;
                             border-top: 2px solid #c7d0cc;
-                            font-size: 0.5rem;
+                            font-size: 0.6rem;
                             color: #6d7883;
                             line-height: 1.9;
                         }
@@ -3438,13 +3440,13 @@ async function generateInvoiceNumber() {
                         .print-footer-notes .note-item {
                             display: flex;
                             align-items: flex-start;
-                            gap: 6px;
-                            margin-bottom: 2px;
+                            gap: 8px;
+                            margin-bottom: 3px;
                         }
                         .print-footer-notes .note-item i {
                             color: #dd9f2e;
-                            font-size: 0.45rem;
-                            margin-top: 4px;
+                            font-size: 0.5rem;
+                            margin-top: 5px;
                             flex-shrink: 0;
                         }
 
@@ -3466,15 +3468,15 @@ async function generateInvoiceNumber() {
                         @media (max-width: 600px) {
                             .invoice-header { flex-direction: column; text-align: center; gap: 8px; }
                             .invoice-header .invoice-title { text-align: center; border-right: none; border-top: 2px solid #dd9f2e; width: 100%; }
-                            .info-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
+                            .info-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
                             .footer { flex-direction: column; gap: 8px; text-align: center; }
-                            .footer .signature .line { width: 80px; margin: 3px auto 0; }
-                            .notes-section { padding: 8px 10px; margin-top: 10px; }
-                            .notes-section .notes-title { font-size: 0.55rem; }
-                            .notes-section .notes-content { font-size: 0.5rem; line-height: 1.6; }
-                            .notes-section .notes-content p { padding-right: 12px; }
-                            .print-footer-notes { font-size: 0.45rem; }
-                            .print-footer-notes .note-item { gap: 4px; }
+                            .footer .signature .line { width: 90px; margin: 4px auto 0; }
+                            .notes-section { padding: 12px 14px; margin-top: 14px; }
+                            .notes-section .notes-title { font-size: 0.65rem; }
+                            .notes-section .notes-content { font-size: 0.55rem; line-height: 1.7; }
+                            .notes-section .notes-content p { padding-right: 16px; }
+                            .print-footer-notes { font-size: 0.5rem; }
+                            .print-footer-notes .note-item { gap: 6px; }
                         }
                     </style>
                 </head>
@@ -3753,7 +3755,7 @@ async function generateInvoiceNumber() {
 
         /**
          * ============================================================
-         * SEARCH INVOICE - Supabase
+         * SEARCH INVOICE - البحث برقم ترتيب الفاتورة (الجزء الرقمي)
          * ============================================================
          */
         async function searchInvoice() {
@@ -3766,7 +3768,8 @@ async function generateInvoiceNumber() {
             showToast('🔍 بحث', 'جاري البحث عن الفاتورة...', 'warning');
 
             try {
-                var response = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=*&invoice_number=eq.' + encodeURIComponent(searchTerm), {
+                // جلب جميع الفواتير
+                var response = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=*', {
                     headers: {
                         'apikey': SUPABASE_ANON_KEY,
                         'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
@@ -3777,15 +3780,71 @@ async function generateInvoiceNumber() {
                     throw new Error('فشل في البحث');
                 }
 
-                var data = await response.json();
+                var allBookings = await response.json();
 
-                if (data && data.length > 0) {
-                    loadInvoiceDataFromSupabase(data);
-                    showToast('✅ تم العثور', 'تم العثور على ' + data.length + ' حجز', 'success');
+                // فلترة النتائج حسب الرقم التسلسلي في نهاية رقم الفاتورة
+                var searchNum = parseInt(searchTerm);
+                var filteredData = [];
+
+                if (!isNaN(searchNum) && searchNum > 0) {
+                    // البحث بالرقم التسلسلي
+                    filteredData = allBookings.filter(function(item) {
+                        if (!item.invoice_number) return false;
+                        var parts = item.invoice_number.split('-');
+                        if (parts.length === 3) {
+                            var seqNum = parseInt(parts[2]);
+                            return seqNum === searchNum;
+                        }
+                        return false;
+                    });
+                } else {
+                    // إذا كان الإدخال نصياً، ابحث بالطريقة العادية
+                    filteredData = allBookings.filter(function(item) {
+                        return item.invoice_number && item.invoice_number.toLowerCase().includes(searchTerm.toLowerCase());
+                    });
+                }
+
+                if (filteredData.length === 0) {
+                    showToast('❌ غير موجود', 'لم يتم العثور على فاتورة برقم ترتيب ' + searchTerm, 'error');
                     return;
                 }
 
-                showToast('❌ غير موجود', 'لم يتم العثور على فاتورة مطابقة', 'error');
+                // تجميع الحجوزات حسب رقم الفاتورة
+                var groupedByInvoice = {};
+                filteredData.forEach(function(item) {
+                    var key = item.invoice_number || 'بدون رقم';
+                    if (!groupedByInvoice[key]) {
+                        groupedByInvoice[key] = [];
+                    }
+                    groupedByInvoice[key].push(item);
+                });
+
+                var keys = Object.keys(groupedByInvoice);
+
+                // إذا كان هناك فاتورة واحدة فقط، تحميلها مباشرة
+                if (keys.length === 1) {
+                    loadInvoiceDataFromSupabase(groupedByInvoice[keys[0]]);
+                    showToast('✅ تم العثور', 'تم العثور على ' + groupedByInvoice[keys[0]].length + ' حجز في الفاتورة ' + keys[0], 'success');
+                    return;
+                }
+
+                // إذا كان هناك عدة فواتير، عرضها للمستخدم للاختيار
+                var choiceHtml = 'تم العثور على ' + filteredData.length + ' فاتورة:\n';
+                keys.forEach(function(key, index) {
+                    choiceHtml += (index + 1) + '. ' + key + ' (' + groupedByInvoice[key].length + ' حجوزات)\n';
+                });
+                choiceHtml += '\nاختر رقم الفاتورة (1-' + keys.length + '):';
+
+                var choice = prompt(choiceHtml);
+                if (choice) {
+                    var choiceIndex = parseInt(choice) - 1;
+                    if (choiceIndex >= 0 && choiceIndex < keys.length) {
+                        loadInvoiceDataFromSupabase(groupedByInvoice[keys[choiceIndex]]);
+                        showToast('✅ تم التحميل', 'تم تحميل الفاتورة ' + keys[choiceIndex], 'success');
+                    } else {
+                        showToast('❌ إلغاء', 'تم إلغاء الاختيار', 'warning');
+                    }
+                }
 
             } catch (error) {
                 console.error('❌ خطأ:', error);
@@ -3960,124 +4019,98 @@ async function generateInvoiceNumber() {
         });
 
         /**
- * ============================================================
- * SAVE TO SUPABASE - مع عرض تفاصيل الخطأ
- * ============================================================
- */
-async function saveInvoiceToSupabase(invoiceData) {
-    btnSaveInvoice.disabled = true;
-    btnSaveInvoice.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
+         * ============================================================
+         * SAVE TO SUPABASE
+         * ============================================================
+         */
+        async function saveInvoiceToSupabase(invoiceData) {
+            btnSaveInvoice.disabled = true;
+            btnSaveInvoice.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
 
-    try {
-        var warnings = [];
-        var bookingsToSave = [];
-
-        invoiceData.bookings.forEach(function(item, index) {
-            if (!item.property) {
-                warnings.push('الحجز ' + (index + 1) + ': نوع العقار فارغ');
-            }
-            if (!item.checkIn) {
-                warnings.push('الحجز ' + (index + 1) + ': تاريخ الدخول فارغ');
-            }
-
-            // بناء كائن البيانات
-            var booking = {
-                invoice_number: invoiceData.number || '',
-                invoice_date: invoiceData.date || new Date().toISOString().split('T')[0],
-                check_in: item.checkIn || null,
-                check_out: item.checkOut || null,
-                client_name: invoiceData.client || '',
-                client_phone: invoiceData.phone || '',
-                property_type: item.property || '',
-                nights: parseInt(item.nights) || 0,
-                price_per_night: parseFloat(item.dailyPrice) || 0,
-                discount: parseFloat(invoiceData.discount) || 0,
-                paid: parseFloat(invoiceData.paid) || 0,
-                remaining: parseFloat(invoiceData.remaining) || 0,
-                total: parseFloat(item.total) || 0,
-                payment_status: parseFloat(invoiceData.remaining) <= 0 ? 'Fully Paid' : 'Balance Due',
-                stay_type: item.stayType || 'مبيت'
-            };
-
-            // إضافة الحقول الاختيارية فقط إذا كانت موجودة
-            if (item.checkInTime) booking.check_in_time = item.checkInTime;
-            if (item.checkOutTime) booking.check_out_time = item.checkOutTime;
-            if (invoiceData.book) booking.booking_number = invoiceData.book;
-
-            bookingsToSave.push(booking);
-        });
-
-        // حفظ كل حجز مع عرض تفاصيل الخطأ
-        var savedCount = 0;
-        var errors = [];
-
-        for (var i = 0; i < bookingsToSave.length; i++) {
             try {
-                var booking = bookingsToSave[i];
-                
-                console.log('📤 إرسال الحجز ' + (i + 1) + ':');
-                console.log(JSON.stringify(booking, null, 2));
+                var warnings = [];
+                var bookingsToSave = invoiceData.bookings.map(function(item, index) {
+                    if (!item.property) {
+                        warnings.push('الحجز ' + (index + 1) + ': نوع العقار فارغ');
+                    }
+                    if (!item.checkIn) {
+                        warnings.push('الحجز ' + (index + 1) + ': تاريخ الدخول فارغ');
+                    }
 
-                var response = await fetch(SUPABASE_URL + '/rest/v1/bookings', {
-                    method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
-                        'Content-Type': 'application/json',
-                        'Prefer': 'return=representation'
-                    },
-                    body: JSON.stringify(booking)
+                    return {
+                        invoice_number: invoiceData.number || '',
+                        booking_number: '',
+                        invoice_date: invoiceData.date || new Date().toISOString().split('T')[0],
+                        check_in: item.checkIn || null,
+                        check_out: item.checkOut || null,
+                        client_name: invoiceData.client || '',
+                        client_phone: invoiceData.phone || '',
+                        property_type: item.property || '',
+                        nights: parseInt(item.nights) || 0,
+                        price_per_night: parseFloat(item.dailyPrice) || 0,
+                        discount: parseFloat(invoiceData.discount) || 0,
+                        paid: parseFloat(invoiceData.paid) || 0,
+                        remaining: parseFloat(invoiceData.remaining) || 0,
+                        total: parseFloat(item.total) || 0,
+                        payment_status: parseFloat(invoiceData.remaining) <= 0 ? 'Fully Paid' : 'Balance Due',
+                        stay_type: item.stayType || 'مبيت',
+                        check_in_time: item.checkInTime || '',
+                        check_out_time: item.checkOutTime || '',
+                        time_note: '',
+                        notes: ''
+                    };
                 });
 
-                if (!response.ok) {
-                    var errorText = await response.text();
-                    console.error('❌ تفاصيل الخطأ للحجز ' + (i + 1) + ':');
-                    console.error('Status:', response.status);
-                    console.error('Error:', errorText);
-                    errors.push('الحجز ' + (i + 1) + ': ' + response.status + ' - ' + errorText);
-                } else {
-                    var result = await response.json();
-                    console.log('✅ تم حفظ الحجز ' + (i + 1) + ':', result);
-                    savedCount++;
+                var savePromises = bookingsToSave.map(function(booking) {
+                    return fetch(SUPABASE_URL + '/rest/v1/bookings', {
+                        method: 'POST',
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                            'Content-Type': 'application/json',
+                            'Prefer': 'return=minimal'
+                        },
+                        body: JSON.stringify(booking)
+                    });
+                });
+
+                var responses = await Promise.all(savePromises);
+                var allSuccess = responses.every(function(r) { return r.ok; });
+
+                if (!allSuccess) {
+                    var errors = [];
+                    responses.forEach(function(r, index) {
+                        if (!r.ok) {
+                            errors.push('الحجز ' + (index + 1) + ': ' + r.status);
+                        }
+                    });
+                    throw new Error('فشل في حفظ بعض البيانات: ' + errors.join(', '));
                 }
-            } catch (err) {
-                console.error('❌ خطأ في الحجز ' + (i + 1) + ':', err.message);
-                errors.push('الحجز ' + (i + 1) + ': ' + err.message);
+
+                btnSaveInvoice.disabled = false;
+                btnSaveInvoice.innerHTML = '<i class="fas fa-save"></i> حفظ';
+
+                if (warnings.length > 0) {
+                    showToast('⚠️ تم الحفظ مع تنبيهات', 'تم حفظ الفاتورة ولكن هناك حقول ناقصة:\n' + warnings.join('\n'), 'warning');
+                } else {
+                    showToast('✅ تم الحفظ', 'تم حفظ الفاتورة بنجاح في Supabase!', 'success', [
+                        { label: 'معاينة', value: 'preview', class: 'btn-yes' },
+                        { label: 'لا', value: 'no', class: 'btn-no' }
+                    ]).then(function(result) {
+                        if (result === 'preview') {
+                            previewInvoice();
+                        }
+                        resetForm();
+                    });
+                }
+
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+                showToast('❌ خطأ', 'حدث خطأ في حفظ الفاتورة: ' + error.message, 'error');
+                btnSaveInvoice.disabled = false;
+                btnSaveInvoice.innerHTML = '<i class="fas fa-save"></i> حفظ';
             }
         }
-
-        btnSaveInvoice.disabled = false;
-        btnSaveInvoice.innerHTML = '<i class="fas fa-save"></i> حفظ';
-
-        if (errors.length > 0) {
-            // عرض تفاصيل الخطأ في Console وفي Toast
-            var errorDetails = errors.join('\n');
-            console.error('❌ جميع الأخطاء:', errorDetails);
-            showToast('❌ خطأ في الحفظ', 'فشل في حفظ الحجوزات.\n' + errorDetails, 'error');
-            return;
-        }
-
-        if (warnings.length > 0) {
-            showToast('⚠️ تم الحفظ مع تنبيهات', 'تم حفظ ' + savedCount + ' حجز\n' + warnings.join('\n'), 'warning');
-        } else {
-            showToast('✅ تم الحفظ', 'تم حفظ ' + savedCount + ' حجز بنجاح!', 'success', [
-                { label: 'معاينة', value: 'preview', class: 'btn-yes' },
-                { label: 'لا', value: 'no', class: 'btn-no' }
-            ]).then(function(result) {
-                if (result === 'preview') {
-                    previewInvoice();
-                }
-                resetForm();
-            });
-        }
-
-    } catch (error) {
-        console.error('❌ خطأ عام:', error);
-        showToast('❌ خطأ', 'حدث خطأ في حفظ الفاتورة: ' + error.message, 'error');
-        btnSaveInvoice.disabled = false;
-        btnSaveInvoice.innerHTML = '<i class="fas fa-save"></i> حفظ';
-    }
-}
 
         /**
          * ============================================================
