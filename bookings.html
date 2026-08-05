@@ -24,7 +24,7 @@
 
     <style>
         /* ============================================================
-           ROOT VARIABLES
+           ROOT VARIABLES - ثابتة كما هي
            ============================================================ */
         :root {
             --ink: #121821;
@@ -47,14 +47,13 @@
             --radius-sm: 9px;
             --shadow: 0 14px 34px -16px rgba(18,24,33,0.28);
             --shadow-sm: 0 3px 10px -4px rgba(18,24,33,0.18);
+            --shadow-lg: 0 20px 60px -20px rgba(18,24,33,0.3);
             --font-display: 'Cairo', 'Segoe UI', Tahoma, Arial, sans-serif;
             --font-mono: 'JetBrains Mono', ui-monospace, monospace;
             --header-height: 60px;
             --stripe-height: 4px;
             --mobile-nav-height: 56px;
             --sidebar-w: 270px;
-
-            /* ===== SCALE DOWN 10% ===== */
             --scale-factor: 0.9;
         }
 
@@ -113,7 +112,7 @@
             height: calc(var(--stripe-height) * var(--scale-factor));
             flex-shrink: 0;
             display: flex;
-            border-radius: calc(4px * var(--scale-factor)) calc(4px * var(--scale-factor)) 0 0;
+            border-radius: 0;
             overflow: hidden;
         }
         .swatch-stripe span {
@@ -133,20 +132,22 @@
         }
 
         /* ============================================================
-           HEADER - تصميم محسّن
+           HEADER - تصميم احترافي محسن
            ============================================================ */
         header {
             position: sticky;
             top: 0;
             z-index: 1000;
-            padding: 0 calc(20px * var(--scale-factor));
-            background: rgba(255, 255, 255, 0.97);
-            backdrop-filter: blur(16px);
+            padding: 0 calc(24px * var(--scale-factor));
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
             border-bottom: 1px solid var(--line);
             height: calc(var(--header-height) * var(--scale-factor));
             display: flex;
             align-items: center;
             flex-shrink: 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
         }
         header .header-content {
             display: flex;
@@ -157,12 +158,12 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: calc(11px * var(--scale-factor));
+            gap: calc(12px * var(--scale-factor));
             flex-shrink: 0;
         }
         .logo-mark {
-            width: calc(36px * var(--scale-factor));
-            height: calc(36px * var(--scale-factor));
+            width: calc(38px * var(--scale-factor));
+            height: calc(38px * var(--scale-factor));
             border-radius: calc(10px * var(--scale-factor));
             background: var(--ink);
             display: grid;
@@ -171,6 +172,11 @@
             gap: calc(3px * var(--scale-factor));
             padding: calc(6px * var(--scale-factor));
             flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(18,24,33,0.15);
+            transition: transform 0.3s ease;
+        }
+        .logo-mark:hover {
+            transform: scale(1.05);
         }
         .logo-mark span {
             border-radius: calc(2px * var(--scale-factor));
@@ -188,77 +194,101 @@
             background: var(--blue);
         }
         .logo-text h1 {
-            font-size: calc(0.95rem * var(--scale-factor));
-            font-weight: 800;
+            font-size: calc(1rem * var(--scale-factor));
+            font-weight: 900;
             color: var(--ink);
-            line-height: 1.25;
-            letter-spacing: -0.2px;
+            line-height: 1.2;
+            letter-spacing: -0.3px;
         }
         .logo-text span {
-            font-size: calc(0.62rem * var(--scale-factor));
+            font-size: calc(0.6rem * var(--scale-factor));
             color: var(--ink-mute);
             display: block;
             font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
-        /* ===== القائمة العلوية - تصميم محسّن ===== */
+        /* ===== القائمة العلوية - تصميم احترافي ===== */
         nav {
             display: flex;
             align-items: center;
-            gap: calc(2px * var(--scale-factor));
+            gap: calc(4px * var(--scale-factor));
             flex-wrap: wrap;
             background: var(--surface);
-            padding: calc(3px * var(--scale-factor));
+            padding: calc(4px * var(--scale-factor));
             border-radius: calc(50px * var(--scale-factor));
             border: 1px solid var(--line);
-            box-shadow: 0 1px 4px rgba(0,0,0,0.02);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
         }
         nav a {
             color: var(--ink-mute);
             font-weight: 700;
             font-size: calc(0.65rem * var(--scale-factor));
-            transition: 0.25s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
-            padding: calc(6px * var(--scale-factor)) calc(14px * var(--scale-factor));
+            padding: calc(7px * var(--scale-factor)) calc(16px * var(--scale-factor));
             border-radius: calc(50px * var(--scale-factor));
             white-space: nowrap;
             letter-spacing: 0.2px;
             display: flex;
             align-items: center;
-            gap: calc(4px * var(--scale-factor));
+            gap: calc(6px * var(--scale-factor));
+            background: transparent;
         }
-        nav a::after {
+        nav a::before {
             content: '';
             position: absolute;
-            bottom: calc(3px * var(--scale-factor));
-            right: 50%;
-            width: 0;
-            height: calc(2px * var(--scale-factor));
-            background: var(--accent);
-            transition: 0.3s ease;
-            border-radius: 10px;
-            transform: translateX(50%);
+            inset: 0;
+            border-radius: calc(50px * var(--scale-factor));
+            padding: 1px;
+            background: linear-gradient(135deg, var(--accent), var(--teal));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        nav a:hover::before {
+            opacity: 1;
         }
         nav a:hover {
             color: var(--ink);
             background: var(--surface-muted);
+            transform: translateY(-1px);
+        }
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: calc(4px * var(--scale-factor));
+            right: 50%;
+            width: 0;
+            height: calc(2.5px * var(--scale-factor));
+            background: var(--accent);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 10px;
+            transform: translateX(50%);
         }
         nav a:hover::after {
-            width: 40%;
+            width: 35%;
         }
         nav a.active {
             color: var(--ink);
             background: var(--accent-soft);
             font-weight: 800;
+            box-shadow: 0 2px 8px rgba(221, 159, 46, 0.15);
         }
         nav a.active::after {
-            width: 40%;
+            width: 45%;
             background: var(--accent);
+        }
+        nav a.active::before {
+            opacity: 0;
         }
 
         nav a .nav-icon {
             font-size: calc(0.7rem * var(--scale-factor));
             opacity: 0.7;
+            transition: opacity 0.3s ease;
         }
         nav a.active .nav-icon {
             opacity: 1;
@@ -271,27 +301,33 @@
         .header-actions {
             display: flex;
             align-items: center;
-            gap: calc(6px * var(--scale-factor));
+            gap: calc(8px * var(--scale-factor));
             flex-shrink: 0;
         }
         .header-actions button {
-            width: calc(32px * var(--scale-factor));
-            height: calc(32px * var(--scale-factor));
-            border-radius: calc(8px * var(--scale-factor));
+            width: calc(34px * var(--scale-factor));
+            height: calc(34px * var(--scale-factor));
+            border-radius: calc(10px * var(--scale-factor));
             border: 1px solid var(--line);
             background: var(--surface);
             color: var(--ink-mute);
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: calc(0.8rem * var(--scale-factor));
+            position: relative;
         }
         .header-actions button:hover {
             background: var(--ink);
             border-color: var(--ink);
             color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(18,24,33,0.15);
+        }
+        .header-actions button:active {
+            transform: translateY(0px);
         }
         .hamburger {
             display: none;
@@ -302,6 +338,11 @@
             border-radius: calc(8px * var(--scale-factor));
             border: 1px solid var(--line);
             background: var(--surface);
+            transition: all 0.3s ease;
+        }
+        .hamburger:hover {
+            background: var(--surface-muted);
+            border-color: var(--line-strong);
         }
 
         /* ============================================================
@@ -311,11 +352,12 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(18, 24, 33, 0.35);
+            background: rgba(18, 24, 33, 0.45);
             z-index: 999;
-            backdrop-filter: blur(3px);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: none;
         }
         .sidebar-overlay.active {
@@ -333,9 +375,9 @@
             border-left: 1px solid var(--line);
             z-index: 1000;
             padding: calc(60px * var(--scale-factor)) calc(18px * var(--scale-factor)) calc(30px * var(--scale-factor));
-            transition: right 0.35s ease;
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             overflow-y: auto;
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-lg);
         }
 
         @media (max-width: 768px) {
@@ -351,7 +393,6 @@
         }
 
         @media (min-width: 769px) {
-            /* إخفاء السايدبار تماماً على الكمبيوتر */
             .sidebar,
             .sidebar-overlay,
             .hamburger {
@@ -361,40 +402,54 @@
 
         .sidebar .close-btn {
             position: absolute;
-            top: calc(12px * var(--scale-factor));
-            left: calc(12px * var(--scale-factor));
+            top: calc(14px * var(--scale-factor));
+            left: calc(14px * var(--scale-factor));
             font-size: calc(1.2rem * var(--scale-factor));
             color: var(--ink-mute);
             cursor: pointer;
-            padding: calc(4px * var(--scale-factor)) calc(8px * var(--scale-factor));
-            border-radius: calc(8px * var(--scale-factor));
+            padding: calc(6px * var(--scale-factor)) calc(10px * var(--scale-factor));
+            border-radius: calc(10px * var(--scale-factor));
             border: 1px solid var(--line);
+            transition: all 0.3s ease;
+            background: var(--surface);
         }
         .sidebar .close-btn:hover {
             background: var(--accent-soft);
             color: var(--accent-ink);
+            border-color: var(--accent);
+        }
+        .sidebar .menu-items {
+            margin-top: 10px;
         }
         .sidebar .menu-items a {
             display: flex;
             align-items: center;
-            gap: calc(10px * var(--scale-factor));
-            padding: calc(9px * var(--scale-factor)) calc(12px * var(--scale-factor));
-            border-radius: calc(8px * var(--scale-factor));
+            gap: calc(12px * var(--scale-factor));
+            padding: calc(10px * var(--scale-factor)) calc(14px * var(--scale-factor));
+            border-radius: calc(10px * var(--scale-factor));
             color: var(--ink-soft);
             font-weight: 700;
             font-size: calc(0.85rem * var(--scale-factor));
-            transition: 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 2px;
         }
         .sidebar .menu-items a i {
-            width: calc(18px * var(--scale-factor));
+            width: calc(20px * var(--scale-factor));
             color: var(--ink-mute);
+            text-align: center;
+            transition: all 0.3s ease;
         }
         .sidebar .menu-items a:hover {
             background: var(--surface-muted);
+            transform: translateX(-4px);
+        }
+        .sidebar .menu-items a:hover i {
+            color: var(--accent);
         }
         .sidebar .menu-items a.active {
             background: var(--accent-soft);
             color: var(--accent-ink);
+            box-shadow: 0 2px 8px rgba(221, 159, 46, 0.1);
         }
         .sidebar .menu-items a.active i {
             color: var(--accent-ink);
@@ -410,11 +465,13 @@
             left: 0;
             right: 0;
             z-index: 998;
-            background: #ffffff;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border-top: 1px solid var(--line);
             padding: calc(4px * var(--scale-factor)) 0 calc(4px * var(--scale-factor) + env(safe-area-inset-bottom));
             height: calc(var(--mobile-nav-height) * var(--scale-factor));
-            box-shadow: 0 calc(-4px * var(--scale-factor)) calc(20px * var(--scale-factor)) rgba(0,0,0,0.04);
+            box-shadow: 0 calc(-4px * var(--scale-factor)) calc(30px * var(--scale-factor)) rgba(0,0,0,0.06);
         }
         .mobile-nav-bottom ul {
             display: flex;
@@ -423,79 +480,109 @@
             height: 100%;
             align-items: center;
             margin: 0;
-            padding: 0;
+            padding: 0 8px;
         }
         .mobile-nav-bottom ul li {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: calc(1px * var(--scale-factor));
+            gap: calc(2px * var(--scale-factor));
             font-size: calc(0.4rem * var(--scale-factor));
             color: var(--ink-mute);
-            transition: 0.2s;
-            padding: calc(2px * var(--scale-factor)) calc(8px * var(--scale-factor));
-            border-radius: calc(6px * var(--scale-factor));
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: calc(4px * var(--scale-factor)) calc(12px * var(--scale-factor));
+            border-radius: calc(10px * var(--scale-factor));
             cursor: pointer;
             flex: 1;
+            position: relative;
         }
         .mobile-nav-bottom ul li i {
-            font-size: calc(0.85rem * var(--scale-factor));
+            font-size: calc(0.9rem * var(--scale-factor));
+            transition: all 0.3s ease;
+        }
+        .mobile-nav-bottom ul li span {
+            font-weight: 600;
+            font-size: calc(0.45rem * var(--scale-factor));
         }
         .mobile-nav-bottom ul li:hover,
         .mobile-nav-bottom ul li.active {
             color: var(--accent-ink);
         }
+        .mobile-nav-bottom ul li.active i {
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+        .mobile-nav-bottom ul li.active::after {
+            content: '';
+            position: absolute;
+            top: -1px;
+            right: 30%;
+            left: 30%;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 0 0 3px 3px;
+        }
         .mobile-nav-bottom ul li a {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: calc(1px * var(--scale-factor));
+            gap: calc(2px * var(--scale-factor));
             color: inherit;
             text-decoration: none;
             width: 100%;
         }
 
         /* ============================================================
-           MAIN CONTENT - تنسيق صفحة الحجوزات
+           MAIN CONTENT - تنسيق احترافي
            ============================================================ */
         .main-content {
             flex: 1;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            padding: calc(14px * var(--scale-factor)) calc(18px * var(--scale-factor)) calc(16px * var(--scale-factor)) calc(18px * var(--scale-factor));
+            padding: calc(16px * var(--scale-factor)) calc(24px * var(--scale-factor)) calc(20px * var(--scale-factor)) calc(24px * var(--scale-factor));
+            background: var(--paper);
         }
 
         .page-wrapper {
             flex: 1;
             overflow-y: auto;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             width: 100%;
+            padding: 0 4px;
         }
 
         /* ============================================================
-           HEADER SECTION
+           PAGE HEADER
            ============================================================ */
         .page-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 16px 0 20px;
+            padding: 12px 0 20px;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 16px;
+            border-bottom: 1px solid var(--line);
+            margin-bottom: 20px;
         }
 
         .page-header h1 {
-            font-size: calc(1.3rem * var(--scale-factor));
-            font-weight: 800;
+            font-size: calc(1.4rem * var(--scale-factor));
+            font-weight: 900;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            color: var(--ink);
+            letter-spacing: -0.3px;
         }
 
         .page-header h1 i {
             color: var(--accent);
+            background: var(--accent-soft);
+            padding: 10px;
+            border-radius: 12px;
+            font-size: calc(1.1rem * var(--scale-factor));
         }
 
         .page-header .actions {
@@ -506,58 +593,86 @@
         }
 
         /* ============================================================
-           BUTTONS
+           BUTTONS - محسنة
            ============================================================ */
         .btn {
-            padding: calc(8px * var(--scale-factor)) calc(18px * var(--scale-factor));
+            padding: calc(9px * var(--scale-factor)) calc(22px * var(--scale-factor));
             border: none;
-            border-radius: calc(10px * var(--scale-factor));
+            border-radius: calc(12px * var(--scale-factor));
             font-family: var(--font-display);
             font-weight: 700;
             font-size: calc(0.8rem * var(--scale-factor));
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            letter-spacing: 0.2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .btn:hover::after {
+            opacity: 1;
         }
 
         .btn-primary {
             background: var(--ink);
             color: #ffffff;
+            box-shadow: 0 4px 14px rgba(18,24,33,0.2);
         }
         .btn-primary:hover {
             background: var(--ink-soft);
-            transform: translateY(calc(-2px * var(--scale-factor)));
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(18,24,33,0.25);
+        }
+        .btn-primary:active {
+            transform: translateY(0px);
         }
 
         .btn-success {
             background: var(--teal);
             color: #ffffff;
+            box-shadow: 0 4px 14px rgba(29,123,108,0.25);
         }
         .btn-success:hover {
             background: #156b5d;
-            transform: translateY(calc(-2px * var(--scale-factor)));
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(29,123,108,0.3);
+        }
+        .btn-success:active {
+            transform: translateY(0px);
         }
 
         .btn-warning {
             background: var(--accent);
             color: var(--accent-ink);
+            box-shadow: 0 4px 14px rgba(221,159,46,0.2);
         }
         .btn-warning:hover {
             background: var(--accent-ink);
             color: #fff;
-            transform: translateY(calc(-2px * var(--scale-factor)));
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(221,159,46,0.3);
         }
 
         .btn-danger {
             background: var(--rust);
             color: #ffffff;
+            box-shadow: 0 4px 14px rgba(191,79,48,0.2);
         }
         .btn-danger:hover {
             background: #a63a31;
-            transform: translateY(calc(-2px * var(--scale-factor)));
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(191,79,48,0.3);
         }
 
         .btn-outline {
@@ -566,101 +681,133 @@
             color: var(--ink-soft);
         }
         .btn-outline:hover {
-            background: var(--surface-muted);
-            border-color: var(--line-strong);
+            background: var(--surface);
+            border-color: var(--ink-mute);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
         }
 
         .btn-sm {
-            padding: calc(4px * var(--scale-factor)) calc(10px * var(--scale-factor));
+            padding: calc(5px * var(--scale-factor)) calc(12px * var(--scale-factor));
             font-size: calc(0.65rem * var(--scale-factor));
             border-radius: calc(8px * var(--scale-factor));
         }
 
         /* ============================================================
-           CARD
+           CARD - تصميم احترافي
            ============================================================ */
         .card {
             background: var(--surface);
-            border-radius: calc(16px * var(--scale-factor));
-            box-shadow: var(--shadow-sm);
+            border-radius: calc(18px * var(--scale-factor));
+            box-shadow: var(--shadow);
             border: 1px solid var(--line);
             overflow: hidden;
+            transition: box-shadow 0.3s ease;
+        }
+        .card:hover {
+            box-shadow: var(--shadow-lg);
         }
 
         .card-header {
-            padding: calc(16px * var(--scale-factor)) calc(20px * var(--scale-factor));
+            padding: calc(18px * var(--scale-factor)) calc(24px * var(--scale-factor));
             border-bottom: 1px solid var(--line);
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 12px;
+            background: rgba(255,255,255,0.5);
         }
 
         .card-header h2 {
-            font-size: calc(0.9rem * var(--scale-factor));
+            font-size: calc(0.95rem * var(--scale-factor));
             font-weight: 800;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            color: var(--ink);
+        }
+
+        .card-header h2 i {
+            color: var(--accent);
         }
 
         .card-header .badge {
             background: var(--surface-muted);
-            padding: calc(2px * var(--scale-factor)) calc(12px * var(--scale-factor));
+            padding: calc(3px * var(--scale-factor)) calc(14px * var(--scale-factor));
             border-radius: 50px;
             font-size: calc(0.65rem * var(--scale-factor));
             font-weight: 700;
             color: var(--ink-mute);
+            border: 1px solid var(--line);
         }
 
         .card-body {
-            padding: calc(18px * var(--scale-factor)) calc(20px * var(--scale-factor));
+            padding: calc(20px * var(--scale-factor)) calc(24px * var(--scale-factor));
             overflow-x: auto;
+            background: var(--surface);
         }
 
         /* ============================================================
-           TABLE
+           TABLE - تصميم احترافي
            ============================================================ */
         table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
             font-size: calc(0.8rem * var(--scale-factor));
-            min-width: 1100px;
+            min-width: 1200px;
         }
 
         table thead th {
             background: var(--surface-muted);
-            padding: calc(10px * var(--scale-factor)) calc(12px * var(--scale-factor));
+            padding: calc(12px * var(--scale-factor)) calc(14px * var(--scale-factor));
             text-align: center;
             font-weight: 700;
-            font-size: calc(0.65rem * var(--scale-factor));
+            font-size: calc(0.62rem * var(--scale-factor));
             color: var(--ink-mute);
             text-transform: uppercase;
             letter-spacing: 0.5px;
             border-bottom: 2px solid var(--line);
             white-space: nowrap;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        table thead th:first-child {
+            border-radius: 0 8px 0 0;
+        }
+        table thead th:last-child {
+            border-radius: 8px 0 0 0;
         }
 
         table tbody td {
-            padding: calc(10px * var(--scale-factor)) calc(12px * var(--scale-factor));
+            padding: calc(11px * var(--scale-factor)) calc(14px * var(--scale-factor));
             text-align: center;
             border-bottom: 1px solid var(--line);
             color: var(--ink-soft);
             font-size: calc(0.78rem * var(--scale-factor));
             white-space: nowrap;
+            transition: background 0.2s ease;
         }
 
+        table tbody tr {
+            transition: all 0.2s ease;
+        }
         table tbody tr:hover {
             background: var(--surface-muted);
+            transform: scale(1.001);
         }
 
         table tbody tr:last-child td {
             border-bottom: none;
         }
 
+        table tbody tr.is-future {
+            background: rgba(47, 91, 138, 0.03);
+        }
         table tbody tr.is-future td:first-child,
-        table tbody tr.is-future td:nth-child(3) {
+        table tbody tr.is-future td:nth-child(2) {
             color: var(--blue);
             font-weight: 700;
         }
@@ -668,28 +815,35 @@
         .badge {
             display: inline-flex;
             align-items: center;
-            gap: 4px;
-            padding: 3px 12px;
+            gap: 5px;
+            padding: 4px 14px;
             border-radius: 50px;
-            font-size: 0.65rem;
+            font-size: 0.62rem;
             font-weight: 700;
             letter-spacing: 0.2px;
+            border: 1px solid transparent;
         }
         .badge-paid {
             background: var(--teal-soft);
             color: var(--teal);
+            border-color: rgba(29,123,108,0.15);
         }
         .badge-balance {
             background: var(--rust-soft);
             color: var(--rust);
+            border-color: rgba(191,79,48,0.15);
         }
         .badge-type {
             background: var(--surface-muted);
             color: var(--ink-mute);
+            border-color: var(--line);
         }
         .badge-future {
             background: var(--accent-soft);
             color: var(--accent-ink);
+            border-color: rgba(221,159,46,0.15);
+            font-size: 0.55rem;
+            padding: 2px 10px;
         }
 
         .actions-cell {
@@ -700,35 +854,35 @@
         }
 
         /* ============================================================
-           TOAST
+           TOAST - محسنة
            ============================================================ */
         .toast-container {
             position: fixed;
             top: calc(80px * var(--scale-factor));
-            right: calc(20px * var(--scale-factor));
+            right: calc(24px * var(--scale-factor));
             z-index: 99999;
-            max-width: calc(380px * var(--scale-factor));
+            max-width: calc(400px * var(--scale-factor));
             width: 90%;
             pointer-events: none;
             display: flex;
             flex-direction: column;
-            gap: calc(8px * var(--scale-factor));
+            gap: calc(10px * var(--scale-factor));
         }
 
         .toast {
             background: var(--surface);
             border: 1px solid var(--line);
-            border-radius: calc(12px * var(--scale-factor));
-            padding: calc(12px * var(--scale-factor)) calc(16px * var(--scale-factor));
+            border-radius: calc(14px * var(--scale-factor));
+            padding: calc(14px * var(--scale-factor)) calc(18px * var(--scale-factor));
             display: flex;
             align-items: center;
-            gap: calc(10px * var(--scale-factor));
-            transform: translateX(calc(20px * var(--scale-factor)));
-            transition: all 0.4s ease;
+            gap: calc(12px * var(--scale-factor));
+            transform: translateX(calc(30px * var(--scale-factor)));
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             opacity: 0;
             pointer-events: auto;
-            box-shadow: var(--shadow);
-            border-right: calc(4px * var(--scale-factor)) solid var(--ink);
+            box-shadow: var(--shadow-lg);
+            border-right: calc(5px * var(--scale-factor)) solid var(--ink);
         }
 
         .toast.show {
@@ -737,10 +891,10 @@
         }
 
         .toast .toast-icon {
-            font-size: calc(1rem * var(--scale-factor));
-            width: calc(30px * var(--scale-factor));
-            height: calc(30px * var(--scale-factor));
-            min-width: calc(30px * var(--scale-factor));
+            font-size: calc(1.1rem * var(--scale-factor));
+            width: calc(34px * var(--scale-factor));
+            height: calc(34px * var(--scale-factor));
+            min-width: calc(34px * var(--scale-factor));
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -761,14 +915,14 @@
         }
 
         .toast .toast-title {
-            font-size: calc(0.82rem * var(--scale-factor));
+            font-size: calc(0.85rem * var(--scale-factor));
             font-weight: 800;
             color: var(--ink);
         }
         .toast .toast-message {
             font-size: calc(0.72rem * var(--scale-factor));
             color: var(--ink-mute);
-            margin-top: calc(1px * var(--scale-factor));
+            margin-top: calc(2px * var(--scale-factor));
         }
 
         .toast .toast-close {
@@ -779,6 +933,17 @@
             font-size: calc(0.85rem * var(--scale-factor));
             padding: calc(4px * var(--scale-factor));
             margin-right: auto;
+            transition: all 0.2s ease;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .toast .toast-close:hover {
+            background: var(--surface-muted);
+            color: var(--ink);
         }
 
         /* ============================================================
@@ -786,20 +951,22 @@
            ============================================================ */
         .empty-state {
             text-align: center;
-            padding: calc(50px * var(--scale-factor)) calc(20px * var(--scale-factor));
+            padding: calc(60px * var(--scale-factor)) calc(20px * var(--scale-factor));
             color: var(--ink-mute);
         }
 
         .empty-state i {
-            font-size: calc(3rem * var(--scale-factor));
-            opacity: 0.3;
-            margin-bottom: 16px;
+            font-size: calc(3.5rem * var(--scale-factor));
+            opacity: 0.25;
+            margin-bottom: 20px;
             display: block;
+            color: var(--ink);
         }
 
         .empty-state p {
-            font-size: calc(0.85rem * var(--scale-factor));
+            font-size: calc(0.9rem * var(--scale-factor));
             color: var(--ink-soft);
+            font-weight: 600;
         }
 
         .empty-state span {
@@ -809,8 +976,8 @@
 
         .spinner {
             display: inline-block;
-            width: calc(30px * var(--scale-factor));
-            height: calc(30px * var(--scale-factor));
+            width: calc(36px * var(--scale-factor));
+            height: calc(36px * var(--scale-factor));
             border: 3px solid var(--line);
             border-top: 3px solid var(--accent);
             border-radius: 50%;
@@ -840,6 +1007,11 @@
                 flex-direction: column;
                 align-items: stretch;
                 gap: 12px;
+                padding: 8px 0 16px;
+            }
+
+            .page-header h1 {
+                font-size: 1.2rem;
             }
 
             .page-header .actions {
@@ -851,13 +1023,20 @@
                 justify-content: center;
             }
 
+            .card-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+                padding: 14px 16px;
+            }
+
             .card-body {
                 padding: 12px 14px;
             }
 
             table {
                 font-size: 0.7rem;
-                min-width: 700px;
+                min-width: 750px;
             }
 
             table thead th,
@@ -866,13 +1045,14 @@
             }
 
             .actions-cell {
-                flex-direction: column;
+                flex-direction: row;
                 gap: 4px;
             }
 
             .actions-cell .btn {
-                width: 100%;
-                justify-content: center;
+                width: auto;
+                padding: 4px 10px;
+                font-size: 0.6rem;
             }
 
             .mobile-nav-bottom {
@@ -884,22 +1064,31 @@
             nav {
                 display: none !important;
             }
+
+            .toast-container {
+                top: 70px;
+                right: 12px;
+                max-width: calc(100% - 24px);
+            }
         }
 
         @media (max-width: 480px) {
             .page-header h1 {
-                font-size: 1.1rem;
+                font-size: 1rem;
             }
 
-            .card-header {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 8px;
+            .page-header h1 i {
+                padding: 8px;
+                font-size: 0.9rem;
+            }
+
+            .card-header h2 {
+                font-size: 0.85rem;
             }
 
             table {
                 font-size: 0.6rem;
-                min-width: 500px;
+                min-width: 550px;
             }
 
             table thead th:nth-child(3),
@@ -907,29 +1096,53 @@
                 display: none;
             }
 
-            .header .breadcrumb {
-                display: none;
+            .badge {
+                font-size: 0.5rem;
+                padding: 2px 8px;
             }
         }
 
-        .fade-up {
-            opacity: 0;
-            transform: translateY(8px);
-            animation: fadeUp .55s var(--ease) forwards;
-        }
-        @keyframes fadeUp {
+        /* ============================================================
+           ANIMATIONS
+           ============================================================ */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
+        .card {
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .page-header {
+            animation: fadeInUp 0.4s ease forwards;
+        }
+
         /* ============================================================
-           SCALE DOWN THE MAIN CONTENT TO 90%
-           ========================================================== */
-        .main-content {
-            transform: scale(0.9);
-            transform-origin: top center;
+           TABLE FOOTER
+           ============================================================ */
+        .table-footer {
+            padding: 14px 0 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-top: 1px solid var(--line);
+            margin-top: 8px;
+            color: var(--ink-mute);
+            font-size: 0.7rem;
+        }
+
+        .table-footer .count {
+            font-weight: 700;
+            color: var(--ink);
         }
     </style>
 </head>
@@ -972,8 +1185,8 @@
                 <a href="#"><i class="fas fa-chart-pie nav-icon"></i> التقارير</a>
             </nav>
             <div class="header-actions">
-                <button aria-label="بحث"><i class="fas fa-search"></i></button>
-                <button aria-label="إشعارات"><i class="fas fa-bell"></i></button>
+                <button aria-label="بحث" title="بحث"><i class="fas fa-search"></i></button>
+                <button aria-label="إشعارات" title="إشعارات"><i class="fas fa-bell"></i></button>
                 <div class="hamburger" id="navToggle"><i class="fas fa-bars"></i></div>
             </div>
         </div>
@@ -1035,7 +1248,7 @@
                 </h1>
                 <div class="actions">
                     <a href="add-invoice.html" class="btn btn-success">
-                        <i class="fas fa-plus"></i> حجز جديد
+                        <i class="fas fa-plus-circle"></i> حجز جديد
                     </a>
                     <button class="btn btn-outline" onclick="loadBookings()">
                         <i class="fas fa-sync-alt"></i> تحديث
@@ -1047,12 +1260,27 @@
             <div class="card">
                 <div class="card-header">
                     <h2>
-                        <i class="fas fa-list"></i>
+                        <i class="fas fa-list-ul"></i>
                         قائمة الحجوزات
                         <span class="badge" id="countBadge">0</span>
                     </h2>
-                    <div>
-                        <input type="text" id="searchInput" placeholder="🔍 بحث عن حجز، عميل، أو عقار..." class="form-control" style="width:260px;padding:6px 12px;font-size:0.7rem;" oninput="filterTable()">
+                    <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                        <div style="position:relative;">
+                            <i class="fas fa-search" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); color:var(--ink-mute); font-size:0.7rem;"></i>
+                            <input type="text" id="searchInput" placeholder="بحث عن حجز، عميل، أو عقار..." 
+                                   style="padding:8px 35px 8px 14px; border:1.5px solid var(--line); border-radius:10px; 
+                                   font-family:var(--font-display); font-size:0.7rem; width:260px; 
+                                   background:var(--surface); color:var(--ink); transition:all 0.3s ease; outline:none;">
+                            <style>
+                                #searchInput:focus {
+                                    border-color: var(--accent);
+                                    box-shadow: 0 0 0 4px rgba(221,159,46,0.1);
+                                }
+                                #searchInput::placeholder {
+                                    color: var(--ink-mute);
+                                }
+                            </style>
+                        </div>
                     </div>
                 </div>
                 <div class="card-body">
@@ -1092,10 +1320,8 @@
          * 3. المتغيرات العامة
          * ============================================================
          */
-        var allBookings = []; // جميع الحجوزات من قاعدة البيانات
-        var filteredBookings = []; // الحجوزات بعد التصفية
-        var currentPage = 1; // الصفحة الحالية
-        var itemsPerPage = 20; // عدد العناصر في الصفحة
+        var allBookings = [];
+        var filteredBookings = [];
 
         /**
          * ============================================================
@@ -1195,7 +1421,7 @@
                 setTimeout(function() {
                     if (toast.parentElement) toast.remove();
                 }, 300);
-            }, 4000);
+            }, 4500);
         }
 
         /**
@@ -1334,7 +1560,6 @@
             `;
 
             data.forEach(function(item, index) {
-                // حساب القيم المالية
                 var total = parseFloat(item.total) || 0;
                 var paid = parseFloat(item.paid) || 0;
                 var remaining = parseFloat(item.remaining) || 0;
@@ -1342,7 +1567,6 @@
                 var pricePerNight = parseFloat(item.price_per_night) || 0;
                 var discount = parseFloat(item.discount) || 0;
 
-                // تحديد حالة الدفع
                 var statusBadge = '';
                 if (item.payment_status === 'Fully Paid' || remaining <= 0) {
                     statusBadge = '<span class="badge badge-paid"><i class="fas fa-check-circle"></i> مدفوع بالكامل</span>';
@@ -1352,12 +1576,10 @@
                     statusBadge = '<span class="badge badge-balance"><i class="fas fa-clock"></i> غير مدفوع</span>';
                 }
 
-                // التحقق من الحجوزات المستقبلية
                 var isFuture = isFutureDate(item.check_in);
                 var bookingNumberDisplay = item.booking_number || '#' + (index + 1);
                 var rowClass = isFuture ? 'is-future' : '';
 
-                // تنسيق التواريخ
                 var invoiceDate = formatDate(item.invoice_date);
                 var checkIn = formatDate(item.check_in);
                 var checkOut = formatDate(item.check_out);
@@ -1389,8 +1611,9 @@
             html += `
                     </tbody>
                 </table>
-                <div style="padding: 12px 0; text-align: center; font-size: 0.7rem; color: var(--ink-mute);">
-                    عرض ${data.length} حجز
+                <div class="table-footer">
+                    <span>إجمالي الحجوزات: <span class="count">${data.length}</span></span>
+                    <span>آخر تحديث: ${new Date().toLocaleString('ar-EG')}</span>
                 </div>
             `;
 
@@ -1439,7 +1662,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             loadBookings();
             
-            // عرض رسالة ترحيب في Console
             console.log('📋 صفحة سجل الحجوزات - منتجع حياله');
             console.log('📊 Supabase URL:', SUPABASE_URL);
             console.log('👤 المستخدم:', user.name || 'غير معروف');
@@ -1454,7 +1676,7 @@
         setInterval(function() {
             loadBookings();
             console.log('🔄 تم التحديث التلقائي للبيانات');
-        }, 300000); // 5 دقائق
+        }, 300000);
 
         /**
          * ============================================================
