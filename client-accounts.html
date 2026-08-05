@@ -1358,8 +1358,7 @@
                     var discount = parseFloat(booking.discount) || 0;
                     var remaining = parseFloat(booking.remaining) || 0;
 
-                    // حساب net بعد الخصم
-                    var net = total - discount;
+                    clientMap[clientName].totalInvoices += total;
 
                     if (!clientMap[clientName]) {
                         clientMap[clientName] = {
