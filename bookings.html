@@ -56,9 +56,6 @@
             --scale-factor: 0.9;
         }
 
-        /* ============================================================
-           GLOBAL RESET & SCALING
-           ============================================================ */
         * {
             margin: 0;
             padding: 0;
@@ -86,9 +83,6 @@
             color: inherit;
         }
 
-        /* ============================================================
-           SCROLLBAR STYLING
-           ============================================================ */
         ::-webkit-scrollbar {
             width: calc(5px * var(--scale-factor));
             height: calc(5px * var(--scale-factor));
@@ -104,9 +98,6 @@
             background: var(--ink-mute);
         }
 
-        /* ============================================================
-           SWATCH STRIPE
-           ============================================================ */
         .swatch-stripe {
             height: calc(var(--stripe-height) * var(--scale-factor));
             flex-shrink: 0;
@@ -117,22 +108,11 @@
         .swatch-stripe span {
             flex: 1;
         }
-        .swatch-stripe span:nth-child(1) {
-            background: var(--accent);
-        }
-        .swatch-stripe span:nth-child(2) {
-            background: var(--teal);
-        }
-        .swatch-stripe span:nth-child(3) {
-            background: var(--rust);
-        }
-        .swatch-stripe span:nth-child(4) {
-            background: var(--blue);
-        }
+        .swatch-stripe span:nth-child(1) { background: var(--accent); }
+        .swatch-stripe span:nth-child(2) { background: var(--teal); }
+        .swatch-stripe span:nth-child(3) { background: var(--rust); }
+        .swatch-stripe span:nth-child(4) { background: var(--blue); }
 
-        /* ============================================================
-           HEADER
-           ============================================================ */
         header {
             position: sticky;
             top: 0;
@@ -179,18 +159,10 @@
         .logo-mark span {
             border-radius: calc(2px * var(--scale-factor));
         }
-        .logo-mark span:nth-child(1) {
-            background: var(--accent);
-        }
-        .logo-mark span:nth-child(2) {
-            background: var(--teal);
-        }
-        .logo-mark span:nth-child(3) {
-            background: var(--rust);
-        }
-        .logo-mark span:nth-child(4) {
-            background: var(--blue);
-        }
+        .logo-mark span:nth-child(1) { background: var(--accent); }
+        .logo-mark span:nth-child(2) { background: var(--teal); }
+        .logo-mark span:nth-child(3) { background: var(--rust); }
+        .logo-mark span:nth-child(4) { background: var(--blue); }
         .logo-text h1 {
             font-size: calc(1rem * var(--scale-factor));
             font-weight: 900;
@@ -339,9 +311,6 @@
             border-color: var(--line-strong);
         }
 
-        /* ============================================================
-           SIDEBAR - تظهر فقط على الموبايل
-           ============================================================ */
         .sidebar-overlay {
             display: none;
             position: fixed;
@@ -445,9 +414,6 @@
             color: var(--accent-ink);
         }
 
-        /* ============================================================
-           MOBILE NAV BOTTOM
-           ============================================================ */
         .mobile-nav-bottom {
             display: none;
             position: fixed;
@@ -521,9 +487,6 @@
             width: 100%;
         }
 
-        /* ============================================================
-           MAIN CONTENT
-           ============================================================ */
         .main-content {
             flex: 1;
             display: flex;
@@ -544,9 +507,6 @@
             padding: 0;
         }
 
-        /* ============================================================
-           PAGE HEADER
-           ============================================================ */
         .page-header {
             display: flex;
             align-items: center;
@@ -585,9 +545,6 @@
             flex-shrink: 0;
         }
 
-        /* ============================================================
-           BUTTONS
-           ============================================================ */
         .btn {
             padding: calc(9px * var(--scale-factor)) calc(22px * var(--scale-factor));
             border: none;
@@ -640,6 +597,17 @@
             box-shadow: 0 8px 25px rgba(29,123,108,0.3);
         }
 
+        .btn-danger {
+            background: var(--rust);
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(191,79,48,0.25);
+        }
+        .btn-danger:hover {
+            background: #a63a31;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(191,79,48,0.3);
+        }
+
         .btn-outline {
             background: transparent;
             border: 1.5px solid var(--line);
@@ -652,9 +620,12 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.06);
         }
 
-        /* ============================================================
-           CARD
-           ============================================================ */
+        .btn-sm {
+            padding: calc(5px * var(--scale-factor)) calc(10px * var(--scale-factor));
+            font-size: calc(0.6rem * var(--scale-factor));
+            border-radius: calc(8px * var(--scale-factor));
+        }
+
         .card {
             background: var(--surface);
             border-radius: calc(18px * var(--scale-factor));
@@ -710,9 +681,6 @@
             max-width: 100%;
         }
 
-        /* ============================================================
-           TABLE - تم إخفاء عمود رقم الحجز
-           ============================================================ */
         .table-wrapper {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
@@ -745,12 +713,6 @@
             top: 0;
             z-index: 10;
             min-width: 60px;
-        }
-
-        /* إخفاء عمود رقم الحجز (العمود الثاني) */
-        table thead th:nth-child(2),
-        table tbody td:nth-child(2) {
-            display: none;
         }
 
         table thead th:first-child {
@@ -792,9 +754,6 @@
             font-weight: 700;
         }
 
-        /* ============================================================
-           BADGE
-           ============================================================ */
         .badge {
             display: inline-flex;
             align-items: center;
@@ -828,6 +787,29 @@
             border-color: rgba(221,159,46,0.15);
             font-size: 0.5rem;
             padding: 2px 8px;
+        }
+
+        /* ============================================================
+           زر الحذف
+           ============================================================ */
+        .btn-delete-row {
+            background: rgba(239, 68, 68, 0.12);
+            color: #EF4444;
+            border: none;
+            padding: calc(5px * var(--scale-factor)) calc(10px * var(--scale-factor));
+            border-radius: calc(6px * var(--scale-factor));
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: calc(0.7rem * var(--scale-factor));
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .btn-delete-row:hover {
+            background: #EF4444;
+            color: #fff;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(239,68,68,0.3);
         }
 
         /* ============================================================
@@ -923,9 +905,6 @@
             color: var(--ink);
         }
 
-        /* ============================================================
-           EMPTY STATE
-           ============================================================ */
         .empty-state {
             text-align: center;
             padding: calc(60px * var(--scale-factor)) calc(20px * var(--scale-factor));
@@ -962,14 +941,9 @@
         }
 
         @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+            to { transform: rotate(360deg); }
         }
 
-        /* ============================================================
-           TABLE FOOTER
-           ============================================================ */
         .table-footer {
             padding: 12px 0 4px;
             display: flex;
@@ -988,9 +962,6 @@
             color: var(--ink);
         }
 
-        /* ============================================================
-           ANIMATIONS
-           ============================================================ */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -1010,9 +981,6 @@
             animation: fadeInUp 0.4s ease forwards;
         }
 
-        /* ============================================================
-           RESPONSIVE - تحسينات الجدول مع إخفاء رقم الحجز
-           ============================================================ */
         @media (max-width: 1200px) {
             table {
                 font-size: calc(0.7rem * var(--scale-factor));
@@ -1038,15 +1006,12 @@
             table tbody td {
                 padding: calc(6px * var(--scale-factor)) calc(6px * var(--scale-factor));
             }
-            /* إخفاء الأعمدة الأقل أهمية */
             table thead th:nth-child(3),
             table tbody td:nth-child(3),
             table thead th:nth-child(7),
             table tbody td:nth-child(7),
             table thead th:nth-child(8),
-            table tbody td:nth-child(8),
-            table thead th:nth-child(9),
-            table tbody td:nth-child(9) {
+            table tbody td:nth-child(8) {
                 display: none;
             }
         }
@@ -1147,15 +1112,12 @@
                 text-align: center;
             }
 
-            /* إخفاء المزيد من الأعمدة على الموبايل */
             table thead th:nth-child(4),
             table tbody td:nth-child(4),
             table thead th:nth-child(10),
             table tbody td:nth-child(10),
             table thead th:nth-child(11),
-            table tbody td:nth-child(11),
-            table thead th:nth-child(13),
-            table tbody td:nth-child(13) {
+            table tbody td:nth-child(11) {
                 display: none;
             }
         }
@@ -1193,7 +1155,6 @@
                 padding: 4px 5px;
             }
 
-            /* إخفاء الأعمدة غير الأساسية */
             table thead th:nth-child(5),
             table tbody td:nth-child(5),
             table thead th:nth-child(6),
@@ -1214,7 +1175,6 @@
             }
         }
 
-        /* تحسين التمرير العمودي */
         .page-wrapper::-webkit-scrollbar {
             width: 4px;
         }
@@ -1227,6 +1187,28 @@
         }
         .page-wrapper::-webkit-scrollbar-thumb:hover {
             background: var(--ink-mute);
+        }
+
+        /* ============================================================
+           مؤشر التحديث
+           ============================================================ */
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(255,255,255,0.6);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .loading-overlay.show {
+            display: flex;
+        }
+        .loading-overlay .spinner {
+            width: 50px;
+            height: 50px;
+            border-width: 4px;
         }
     </style>
 </head>
@@ -1319,6 +1301,13 @@
     <div class="toast-container" id="toastContainer"></div>
 
     <!-- ============================================================
+    LOADING OVERLAY
+    ============================================================ -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- ============================================================
     MAIN CONTENT
     ============================================================ -->
     <div class="main-content">
@@ -1329,6 +1318,7 @@
                 <h1>
                     <i class="fas fa-calendar-check"></i>
                     سجل الحجوزات
+                    <span style="font-size:0.6rem;font-weight:700;color:var(--ink-mute);">(الأحدث أولاً)</span>
                 </h1>
                 <div class="actions">
                     <a href="add-invoice.html" class="btn btn-success">
@@ -1554,13 +1544,21 @@
             }
         }
 
+        function getBookingId(item) {
+            return item.id || item.booking_id || item.invoice_number;
+        }
+
         /**
          * ============================================================
-         * 7. جلب الحجوزات
+         * 7. جلب الحجوزات (مرتبة تنازلياً حسب تاريخ الدخول)
          * ============================================================
          */
         async function loadBookings() {
             var container = document.getElementById('tableContainer');
+            var overlay = document.getElementById('loadingOverlay');
+            
+            overlay.classList.add('show');
+
             container.innerHTML = `
                 <div class="empty-state">
                     <div class="spinner"></div>
@@ -1570,6 +1568,7 @@
             `;
 
             try {
+                // جلب البيانات مرتبة تنازلياً حسب check_in (الأحدث أولاً)
                 var response = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=*&order=check_in.desc', {
                     headers: {
                         'apikey': SUPABASE_ANON_KEY,
@@ -1586,7 +1585,7 @@
                 allBookings = await response.json();
                 filteredBookings = allBookings.slice();
                 renderTable(filteredBookings);
-                showToast('✅ تم التحميل', 'تم جلب ' + allBookings.length + ' حجز', 'success');
+                showToast('✅ تم التحميل', 'تم جلب ' + allBookings.length + ' حجز (الأحدث أولاً)', 'success');
 
             } catch (error) {
                 console.error('❌ خطأ في جلب البيانات:', error);
@@ -1603,11 +1602,13 @@
                 `;
                 showToast('❌ خطأ', 'فشل في تحميل الحجوزات', 'error');
             }
+
+            overlay.classList.remove('show');
         }
 
         /**
          * ============================================================
-         * 8. عرض الجدول - تم إزالة عمود رقم الحجز
+         * 8. عرض الجدول مع زر الحذف
          * ============================================================
          */
         function renderTable(data) {
@@ -1632,19 +1633,16 @@
                         <tr>
                             <th>#</th>
                             <th>رقم الحجز</th>
-                            <th>تاريخ الفاتورة</th>
                             <th>تاريخ الدخول</th>
                             <th>تاريخ الخروج</th>
                             <th>اسم العميل</th>
                             <th>نوع العقار</th>
                             <th>عدد الأيام</th>
-                            <th>السعر اليومي</th>
-                            <th>الخصم</th>
-                            <th>المدفوع</th>
-                            <th>المتبقي</th>
                             <th>الإجمالي</th>
+                            <th>المتبقي</th>
                             <th>الحالة</th>
                             <th>نوع الإقامة</th>
+                            <th>إجراء</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -1655,8 +1653,6 @@
                 var paid = parseFloat(item.paid) || 0;
                 var remaining = parseFloat(item.remaining) || 0;
                 var nights = parseInt(item.nights) || 0;
-                var pricePerNight = parseFloat(item.price_per_night) || 0;
-                var discount = parseFloat(item.discount) || 0;
 
                 var statusBadge = '';
                 if (item.payment_status === 'Fully Paid' || remaining <= 0) {
@@ -1671,27 +1667,28 @@
                 var bookingNumberDisplay = item.booking_number || '#' + (index + 1);
                 var rowClass = isFuture ? 'is-future' : '';
 
-                var invoiceDate = formatDate(item.invoice_date);
                 var checkIn = formatDate(item.check_in);
                 var checkOut = formatDate(item.check_out);
+                var itemId = getBookingId(item);
 
                 html += `
-                    <tr class="${rowClass}">
+                    <tr class="${rowClass}" data-id="${itemId}">
                         <td>${index + 1}</td>
                         <td>${bookingNumberDisplay}</td>
-                        <td>${invoiceDate}</td>
                         <td>${checkIn}</td>
                         <td>${checkOut}</td>
                         <td style="font-weight:700;color:var(--ink);">${item.client_name || '-'}</td>
                         <td><span class="badge badge-type">${item.property_type || '-'}</span></td>
                         <td>${nights}</td>
-                        <td>${formatCurrency(pricePerNight)}</td>
-                        <td>${formatCurrency(discount)}</td>
-                        <td>${formatCurrency(paid)}</td>
-                        <td style="font-weight:700;color:var(--rust);">${formatCurrency(remaining)}</td>
                         <td style="font-weight:800;color:var(--ink);">${formatCurrency(total)}</td>
+                        <td style="font-weight:700;color:var(--rust);">${formatCurrency(remaining)}</td>
                         <td>${statusBadge}</td>
                         <td>${item.stay_type || '-'}</td>
+                        <td>
+                            <button class="btn-delete-row" onclick="deleteBooking('${itemId}')" title="حذف الحجز">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
                     </tr>
                 `;
             });
@@ -1702,6 +1699,7 @@
                 <div class="table-footer">
                     <span>إجمالي الحجوزات: <span class="count">${data.length}</span></span>
                     <span>آخر تحديث: ${new Date().toLocaleString('ar-EG')}</span>
+                    <span style="color:var(--teal);">⬆️ الأحدث أولاً</span>
                 </div>
             `;
 
@@ -1711,7 +1709,85 @@
 
         /**
          * ============================================================
-         * 9. البحث والفلترة
+         * 9. حذف الحجز
+         * ============================================================
+         */
+        async function deleteBooking(id) {
+            // البحث عن الحجز في allBookings
+            var item = allBookings.find(function(p) { 
+                var itemId = getBookingId(p);
+                return String(itemId) === String(id); 
+            });
+
+            if (!item) {
+                showToast('❌ خطأ', 'الحجز غير موجود', 'error');
+                return;
+            }
+
+            var clientName = item.client_name || 'غير معروف';
+            var totalAmount = formatCurrency(parseFloat(item.total) || 0);
+
+            if (!confirm('⚠️ هل أنت متأكد من حذف هذا الحجز؟\n\n' +
+                        '👤 العميل: ' + clientName + '\n' +
+                        '💰 الإجمالي: ' + totalAmount + '\n' +
+                        '📅 تاريخ الدخول: ' + formatDate(item.check_in) + '\n\n' +
+                        '❗ هذا الإجراء لا يمكن التراجع عنه')) {
+                return;
+            }
+
+            var overlay = document.getElementById('loadingOverlay');
+            overlay.classList.add('show');
+
+            try {
+                // محاولة الحذف باستخدام id
+                var response = await fetch(SUPABASE_URL + '/rest/v1/bookings?id=eq.' + id, {
+                    method: 'DELETE',
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                    }
+                });
+
+                if (!response.ok) {
+                    // محاولة الحذف باستخدام invoice_number إذا فشل id
+                    if (item.invoice_number) {
+                        var retryResponse = await fetch(SUPABASE_URL + '/rest/v1/bookings?invoice_number=eq.' + item.invoice_number, {
+                            method: 'DELETE',
+                            headers: {
+                                'apikey': SUPABASE_ANON_KEY,
+                                'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                            }
+                        });
+                        if (!retryResponse.ok) {
+                            throw new Error('فشل في حذف الحجز: ' + retryResponse.status);
+                        }
+                    } else {
+                        throw new Error('فشل في حذف الحجز: ' + response.status);
+                    }
+                }
+
+                // حذف من المصفوفات المحلية
+                var idToRemove = String(id);
+                allBookings = allBookings.filter(function(p) { 
+                    var itemId = getBookingId(p);
+                    return String(itemId) !== idToRemove; 
+                });
+                filteredBookings = allBookings.slice();
+
+                showToast('✅ تم الحذف', 'تم حذف حجز العميل "' + clientName + '" بنجاح', 'success');
+                renderTable(filteredBookings);
+
+            } catch (error) {
+                console.error('❌ خطأ في الحذف:', error);
+                showToast('❌ خطأ', 'فشل في حذف الحجز: ' + error.message, 'error');
+            }
+
+            overlay.classList.remove('show');
+        }
+
+        /**
+         * ============================================================
+         * 10. البحث والفلترة
          * ============================================================
          */
         var searchInput = document.getElementById('searchInput');
@@ -1727,11 +1803,13 @@
                     var bookingNumber = String(item.booking_number || '').toLowerCase();
                     var propertyType = (item.property_type || '').toLowerCase();
                     var stayType = (item.stay_type || '').toLowerCase();
+                    var invoiceNumber = String(item.invoice_number || '').toLowerCase();
                     
                     return clientName.includes(term) || 
                            bookingNumber.includes(term) || 
                            propertyType.includes(term) ||
-                           stayType.includes(term);
+                           stayType.includes(term) ||
+                           invoiceNumber.includes(term);
                 });
             }
 
@@ -1744,7 +1822,7 @@
 
         /**
          * ============================================================
-         * 10. تحميل الصفحة
+         * 11. تحميل الصفحة
          * ============================================================
          */
         document.addEventListener('DOMContentLoaded', function() {
@@ -1752,12 +1830,12 @@
             console.log('📋 صفحة سجل الحجوزات - منتجع حياله');
             console.log('📊 Supabase URL:', SUPABASE_URL);
             console.log('👤 المستخدم:', user.name || 'غير معروف');
-            console.log('✅ التطبيق جاهز للعمل');
+            console.log('✅ التطبيق جاهز للعمل - الترتيب: الأحدث أولاً');
         });
 
         /**
          * ============================================================
-         * 11. تحديث تلقائي
+         * 12. تحديث تلقائي
          * ============================================================
          */
         setInterval(function() {
@@ -1767,11 +1845,12 @@
 
         /**
          * ============================================================
-         * 12. دوال عامة
+         * 13. دوال عامة
          * ============================================================
          */
         window.loadBookings = loadBookings;
         window.filterTable = filterTable;
+        window.deleteBooking = deleteBooking;
 
         console.log('✅ تم تحميل جميع الوظائف بنجاح');
     </script>
