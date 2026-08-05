@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    
     <style>
         /* ============================================================
            ROOT VARIABLES
@@ -1880,321 +1881,6 @@
         }
 
         /* ============================================================
-           PRINT MEDIA QUERY - حل مشكلة اللوجو
-           ============================================================ */
-        @media print {
-            /* إخفاء أزرار الطباعة */
-            .print-preview-overlay .print-actions {
-                display: none !important;
-            }
-
-            /* جعل الخلفية بيضاء */
-            .print-preview-overlay {
-                background: #ffffff !important;
-                backdrop-filter: none !important;
-                padding: 0 !important;
-                position: fixed !important;
-                inset: 0 !important;
-                z-index: 99999 !important;
-            }
-
-            /* التحكم في حجم الصفحة */
-            .print-preview-overlay .print-wrapper {
-                max-width: 210mm !important;
-                width: 100% !important;
-                padding: 15px 20px !important;
-                margin: 0 auto !important;
-                box-shadow: none !important;
-                border-radius: 0 !important;
-                max-height: none !important;
-                background: #ffffff !important;
-                font-size: inherit !important;
-            }
-
-            /* ===== الحل النهائي للوجو ===== */
-            .print-preview-overlay .print-wrapper .invoice-header .logo-section {
-                display: flex !important;
-                align-items: center !important;
-                gap: 10px !important;
-                flex-shrink: 0 !important;
-            }
-
-            .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box {
-                width: 50px !important;
-                height: 50px !important;
-                min-width: 50px !important;
-                max-width: 50px !important;
-                min-height: 50px !important;
-                max-height: 50px !important;
-                border: 1.5px solid var(--ink) !important;
-                overflow: hidden !important;
-                flex-shrink: 0 !important;
-                background: #ffffff !important;
-                border-radius: 6px !important;
-                padding: 3px !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-            }
-
-            .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box img {
-                width: 100% !important;
-                height: 100% !important;
-                max-width: 100% !important;
-                max-height: 100% !important;
-                object-fit: contain !important;
-                display: block !important;
-                margin: 0 auto !important;
-            }
-
-            /* Fallback للصورة إذا لم تظهر */
-            .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box span {
-                font-size: 20px !important;
-                font-weight: 900 !important;
-                color: var(--ink) !important;
-            }
-
-            /* الحفاظ على باقي التصميم */
-            .print-preview-overlay .print-wrapper .invoice-header .company-details h2 {
-                font-size: 14px !important;
-                font-weight: 900 !important;
-                color: var(--ink) !important;
-                line-height: 1.2 !important;
-            }
-
-            .print-preview-overlay .print-wrapper .invoice-header .company-details p {
-                font-size: 8px !important;
-                color: var(--ink-mute) !important;
-                line-height: 1.3 !important;
-            }
-
-            .print-preview-overlay .print-wrapper .invoice-header {
-                display: flex !important;
-                align-items: center !important;
-                justify-content: space-between !important;
-                padding-bottom: 10px !important;
-                border-bottom: 2px solid var(--ink) !important;
-                margin-bottom: 10px !important;
-                gap: 10px !important;
-                flex-direction: row !important;
-            }
-
-            .print-preview-overlay .print-wrapper .invoice-header .invoice-title {
-                display: flex !important;
-                flex-direction: column !important;
-                align-items: center !important;
-                justify-content: center !important;
-                min-width: 80px !important;
-                background: var(--surface-muted) !important;
-                padding: 4px 10px !important;
-                border-radius: 6px !important;
-                border: 1.5px solid var(--accent) !important;
-                flex-shrink: 0 !important;
-            }
-
-            .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-code {
-                width: 65px !important;
-                height: 65px !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                background: #ffffff !important;
-                border-radius: 4px !important;
-                padding: 3px !important;
-                border: 1.5px solid var(--line-strong) !important;
-                margin-bottom: 2px !important;
-            }
-
-            .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-code canvas,
-            .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-code img {
-                width: 100% !important;
-                height: 100% !important;
-                max-width: 100% !important;
-                max-height: 100% !important;
-            }
-
-            .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-label {
-                font-size: 6px !important;
-                color: var(--ink-mute) !important;
-                text-align: center !important;
-                font-weight: 600 !important;
-            }
-
-            .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-label strong {
-                color: var(--ink) !important;
-            }
-
-            /* الحفاظ على info-grid */
-            .print-preview-overlay .print-wrapper .info-grid {
-                display: grid !important;
-                grid-template-columns: 1fr 1fr 1fr 1fr 1fr !important;
-                gap: 6px !important;
-                margin-bottom: 10px !important;
-                background: var(--surface-muted) !important;
-                padding: 8px 12px !important;
-                border-radius: 6px !important;
-                border: 1px solid var(--line) !important;
-            }
-
-            .print-preview-overlay .print-wrapper .info-grid .item .label {
-                font-size: 7px !important;
-                color: var(--ink-mute) !important;
-                font-weight: 700 !important;
-            }
-
-            .print-preview-overlay .print-wrapper .info-grid .item .value {
-                font-size: 10px !important;
-                font-weight: 700 !important;
-                color: var(--ink) !important;
-            }
-
-            /* الحفاظ على الجدول */
-            .print-preview-overlay .print-wrapper table {
-                width: 100% !important;
-                border-collapse: collapse !important;
-                font-size: 9px !important;
-            }
-
-            .print-preview-overlay .print-wrapper table th {
-                background: var(--ink) !important;
-                color: #ffffff !important;
-                padding: 4px 8px !important;
-                text-align: center !important;
-                font-size: 7px !important;
-                font-weight: 700 !important;
-            }
-
-            .print-preview-overlay .print-wrapper table td {
-                padding: 4px 8px !important;
-                border-bottom: 1px solid var(--line) !important;
-                color: var(--ink-soft) !important;
-                text-align: center !important;
-                font-size: 8px !important;
-            }
-
-            /* الحفاظ على التذييل */
-            .print-preview-overlay .print-wrapper .footer {
-                border-top: 1px solid var(--line) !important;
-                padding-top: 10px !important;
-                margin-top: 10px !important;
-                display: flex !important;
-                justify-content: space-between !important;
-                font-size: 8px !important;
-                color: var(--ink-mute) !important;
-                flex-direction: row !important;
-            }
-
-            .print-preview-overlay .print-wrapper .footer .signature .line {
-                width: 60px !important;
-            }
-
-            /* الحفاظ على الملاحظات */
-            .print-preview-overlay .print-wrapper .notes-section {
-                margin-top: 10px !important;
-                padding-top: 10px !important;
-                border-top: 1.5px dashed var(--line-strong) !important;
-                background: var(--surface-muted) !important;
-                border-radius: 6px !important;
-                padding: 10px 12px !important;
-            }
-
-            .print-preview-overlay .print-wrapper .notes-section .notes-title {
-                font-size: 8px !important;
-                font-weight: 800 !important;
-                color: var(--accent-ink) !important;
-            }
-
-            .print-preview-overlay .print-wrapper .notes-section .notes-content {
-                font-size: 7px !important;
-                color: var(--ink-soft) !important;
-                line-height: 1.5 !important;
-            }
-
-            .print-preview-overlay .print-wrapper .notes-section .notes-content p {
-                padding-right: 12px !important;
-                margin-bottom: 2px !important;
-            }
-
-            /* النصوص الإضافية */
-            .print-preview-overlay .print-wrapper .print-footer-notes {
-                margin-top: 10px !important;
-                padding-top: 8px !important;
-                border-top: 1.5px solid var(--line-strong) !important;
-                font-size: 6.5px !important;
-                color: var(--ink-mute) !important;
-                line-height: 1.6 !important;
-            }
-
-            .print-preview-overlay .print-wrapper .print-footer-notes .note-item {
-                display: flex !important;
-                align-items: flex-start !important;
-                gap: 4px !important;
-                margin-bottom: 1px !important;
-            }
-
-            .print-preview-overlay .print-wrapper .print-footer-notes .note-item i {
-                font-size: 4px !important;
-                margin-top: 2px !important;
-            }
-
-            /* إخفاء شريط التمرير */
-            .print-preview-overlay .print-wrapper::-webkit-scrollbar {
-                display: none !important;
-            }
-
-            .print-preview-overlay .print-wrapper {
-                scrollbar-width: none !important;
-            }
-
-            /* دعم الألوان في الطباعة */
-            .print-preview-overlay .print-wrapper .notes-section,
-            .print-preview-overlay .print-wrapper .print-footer-notes,
-            .print-preview-overlay .print-wrapper .info-grid,
-            .print-preview-overlay .print-wrapper .invoice-header .invoice-title,
-            .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-
-            .print-preview-overlay .print-wrapper .badge {
-                display: inline-flex !important;
-                align-items: center !important;
-                gap: 2px !important;
-                padding: 1px 6px !important;
-                border-radius: 50px !important;
-                font-size: 6px !important;
-                font-weight: 700 !important;
-                letter-spacing: 0.2px !important;
-                border: 1px solid transparent !important;
-            }
-
-            .print-preview-overlay .print-wrapper .badge i {
-                font-size: 5px !important;
-            }
-
-            .print-preview-overlay .print-wrapper .badge-paid {
-                background: var(--teal-soft) !important;
-                color: var(--teal) !important;
-            }
-
-            .print-preview-overlay .print-wrapper .badge-balance {
-                background: var(--rust-soft) !important;
-                color: var(--rust) !important;
-            }
-
-            .print-preview-overlay .print-wrapper .badge-type {
-                background: var(--surface-muted) !important;
-                color: var(--ink-mute) !important;
-                border-color: var(--line) !important;
-            }
-
-            .print-preview-overlay .print-wrapper .badge-future {
-                background: var(--accent-soft) !important;
-                color: var(--accent-ink) !important;
-            }
-        }
-
-        /* ============================================================
            CLIENT SUGGESTIONS STYLES
            ============================================================ */
         .client-suggestions {
@@ -2479,31 +2165,296 @@
         }
 
         /* ============================================================
-           PRINT PDF BUTTON STYLES
+           PRINT MEDIA QUERY - حل جذري لمشكلة اللوجو
            ============================================================ */
-        .btn-pdf {
-            padding: calc(6px * var(--scale-factor)) calc(16px * var(--scale-factor));
-            border-radius: calc(8px * var(--scale-factor));
-            background: var(--blue);
-            border: none;
-            color: #ffffff;
-            font-weight: 700;
-            font-size: calc(0.7rem * var(--scale-factor));
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: calc(5px * var(--scale-factor));
-            height: calc(32px * var(--scale-factor));
-            justify-content: center;
-            font-family: var(--font-display);
-        }
-        .btn-pdf i {
-            color: #ffffff;
-        }
-        .btn-pdf:hover {
-            background: #1a4a6b;
-            transform: translateY(calc(-1px * var(--scale-factor)));
+        @media print {
+            /* إخفاء أزرار الطباعة */
+            .print-preview-overlay .print-actions {
+                display: none !important;
+            }
+
+            /* جعل الخلفية بيضاء */
+            .print-preview-overlay {
+                background: #ffffff !important;
+                backdrop-filter: none !important;
+                padding: 0 !important;
+                position: fixed !important;
+                inset: 0 !important;
+                z-index: 99999 !important;
+            }
+
+            .print-preview-overlay .print-wrapper {
+                max-width: 210mm !important;
+                width: 100% !important;
+                padding: 15px 20px !important;
+                margin: 0 auto !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                max-height: none !important;
+                background: #ffffff !important;
+            }
+
+            /* ===== التحكم في حجم اللوجو في الطباعة ===== */
+            .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box {
+                width: 65px !important;
+                height: 65px !important;
+                min-width: 65px !important;
+                max-width: 65px !important;
+                min-height: 65px !important;
+                max-height: 65px !important;
+                border: 2px solid var(--accent) !important;
+                border-radius: 10px !important;
+                overflow: hidden !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                background: #ffffff !important;
+                padding: 4px !important;
+                flex-shrink: 0 !important;
+            }
+
+            .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box img {
+                width: 100% !important;
+                height: 100% !important;
+                max-width: 100% !important;
+                max-height: 100% !important;
+                object-fit: contain !important;
+                display: block !important;
+                margin: 0 auto !important;
+            }
+
+            .print-preview-overlay .print-wrapper .invoice-header .logo-section {
+                display: flex !important;
+                align-items: center !important;
+                gap: 10px !important;
+                flex-shrink: 0 !important;
+            }
+
+            .print-preview-overlay .print-wrapper .invoice-header .company-details h2 {
+                font-size: 14px !important;
+                font-weight: 900 !important;
+                color: var(--ink) !important;
+                line-height: 1.2 !important;
+            }
+
+            .print-preview-overlay .print-wrapper .invoice-header .company-details p {
+                font-size: 8px !important;
+                color: var(--ink-mute) !important;
+                line-height: 1.3 !important;
+            }
+
+            .print-preview-overlay .print-wrapper .invoice-header {
+                display: flex !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                padding-bottom: 10px !important;
+                border-bottom: 2px solid var(--ink) !important;
+                margin-bottom: 10px !important;
+                gap: 10px !important;
+                flex-direction: row !important;
+            }
+
+            .print-preview-overlay .print-wrapper .invoice-header .invoice-title {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                min-width: 80px !important;
+                background: var(--surface-muted) !important;
+                padding: 4px 10px !important;
+                border-radius: 6px !important;
+                border: 1.5px solid var(--accent) !important;
+                flex-shrink: 0 !important;
+            }
+
+            .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-code {
+                width: 65px !important;
+                height: 65px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                background: #ffffff !important;
+                border-radius: 4px !important;
+                padding: 3px !important;
+                border: 1.5px solid var(--line-strong) !important;
+                margin-bottom: 2px !important;
+            }
+
+            .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-code canvas,
+            .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-code img {
+                width: 100% !important;
+                height: 100% !important;
+                max-width: 100% !important;
+                max-height: 100% !important;
+            }
+
+            .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-label {
+                font-size: 6px !important;
+                color: var(--ink-mute) !important;
+                text-align: center !important;
+                font-weight: 600 !important;
+            }
+
+            .print-preview-overlay .print-wrapper .info-grid {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr 1fr 1fr 1fr !important;
+                gap: 6px !important;
+                margin-bottom: 10px !important;
+                background: var(--surface-muted) !important;
+                padding: 8px 12px !important;
+                border-radius: 6px !important;
+                border: 1px solid var(--line) !important;
+            }
+
+            .print-preview-overlay .print-wrapper .info-grid .item .label {
+                font-size: 7px !important;
+                color: var(--ink-mute) !important;
+                font-weight: 700 !important;
+            }
+
+            .print-preview-overlay .print-wrapper .info-grid .item .value {
+                font-size: 10px !important;
+                font-weight: 700 !important;
+                color: var(--ink) !important;
+            }
+
+            .print-preview-overlay .print-wrapper table {
+                width: 100% !important;
+                border-collapse: collapse !important;
+                font-size: 9px !important;
+            }
+
+            .print-preview-overlay .print-wrapper table th {
+                background: var(--ink) !important;
+                color: #ffffff !important;
+                padding: 4px 8px !important;
+                text-align: center !important;
+                font-size: 7px !important;
+                font-weight: 700 !important;
+            }
+
+            .print-preview-overlay .print-wrapper table td {
+                padding: 4px 8px !important;
+                border-bottom: 1px solid var(--line) !important;
+                color: var(--ink-soft) !important;
+                text-align: center !important;
+                font-size: 8px !important;
+            }
+
+            .print-preview-overlay .print-wrapper .footer {
+                border-top: 1px solid var(--line) !important;
+                padding-top: 10px !important;
+                margin-top: 10px !important;
+                display: flex !important;
+                justify-content: space-between !important;
+                font-size: 8px !important;
+                color: var(--ink-mute) !important;
+                flex-direction: row !important;
+            }
+
+            .print-preview-overlay .print-wrapper .footer .signature .line {
+                width: 60px !important;
+            }
+
+            .print-preview-overlay .print-wrapper .notes-section {
+                margin-top: 10px !important;
+                padding-top: 10px !important;
+                border-top: 1.5px dashed var(--line-strong) !important;
+                background: var(--surface-muted) !important;
+                border-radius: 6px !important;
+                padding: 10px 12px !important;
+            }
+
+            .print-preview-overlay .print-wrapper .notes-section .notes-title {
+                font-size: 8px !important;
+                font-weight: 800 !important;
+                color: var(--accent-ink) !important;
+            }
+
+            .print-preview-overlay .print-wrapper .notes-section .notes-content {
+                font-size: 7px !important;
+                color: var(--ink-soft) !important;
+                line-height: 1.5 !important;
+            }
+
+            .print-preview-overlay .print-wrapper .notes-section .notes-content p {
+                padding-right: 12px !important;
+                margin-bottom: 2px !important;
+            }
+
+            .print-preview-overlay .print-wrapper .print-footer-notes {
+                margin-top: 10px !important;
+                padding-top: 8px !important;
+                border-top: 1.5px solid var(--line-strong) !important;
+                font-size: 6.5px !important;
+                color: var(--ink-mute) !important;
+                line-height: 1.6 !important;
+            }
+
+            .print-preview-overlay .print-wrapper .print-footer-notes .note-item {
+                display: flex !important;
+                align-items: flex-start !important;
+                gap: 4px !important;
+                margin-bottom: 1px !important;
+            }
+
+            .print-preview-overlay .print-wrapper .print-footer-notes .note-item i {
+                font-size: 4px !important;
+                margin-top: 2px !important;
+            }
+
+            .print-preview-overlay .print-wrapper::-webkit-scrollbar {
+                display: none !important;
+            }
+
+            .print-preview-overlay .print-wrapper {
+                scrollbar-width: none !important;
+            }
+
+            .print-preview-overlay .print-wrapper .notes-section,
+            .print-preview-overlay .print-wrapper .print-footer-notes,
+            .print-preview-overlay .print-wrapper .info-grid,
+            .print-preview-overlay .print-wrapper .invoice-header .invoice-title,
+            .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .print-preview-overlay .print-wrapper .badge {
+                display: inline-flex !important;
+                align-items: center !important;
+                gap: 2px !important;
+                padding: 1px 6px !important;
+                border-radius: 50px !important;
+                font-size: 6px !important;
+                font-weight: 700 !important;
+                border: 1px solid transparent !important;
+            }
+
+            .print-preview-overlay .print-wrapper .badge i {
+                font-size: 5px !important;
+            }
+
+            .print-preview-overlay .print-wrapper .badge-paid {
+                background: var(--teal-soft) !important;
+                color: var(--teal) !important;
+            }
+
+            .print-preview-overlay .print-wrapper .badge-balance {
+                background: var(--rust-soft) !important;
+                color: var(--rust) !important;
+            }
+
+            .print-preview-overlay .print-wrapper .badge-type {
+                background: var(--surface-muted) !important;
+                color: var(--ink-mute) !important;
+                border-color: var(--line) !important;
+            }
+
+            .print-preview-overlay .print-wrapper .badge-future {
+                background: var(--accent-soft) !important;
+                color: var(--accent-ink) !important;
+            }
         }
     </style>
 </head>
@@ -3760,77 +3711,348 @@
 
         /**
          * ============================================================
-         * EXECUTE PRINT
+         * EXECUTE PRINT - طباعة عبر نافذة المتصفح
          * ============================================================
          */
         function executePrint() {
+            // التأكد من وجود محتوى للمعاينة
+            var overlay = document.getElementById('printPreviewOverlay');
+            if (!overlay.classList.contains('show')) {
+                previewInvoice();
+                setTimeout(function() {
+                    openPrintWindow();
+                }, 600);
+                return;
+            }
+            openPrintWindow();
+        }
+
+        /**
+         * ============================================================
+         * OPEN PRINT WINDOW - فتح نافذة الطباعة
+         * ============================================================
+         */
+        function openPrintWindow() {
             var content = document.getElementById('printPreviewContent').innerHTML;
-            var printWindow = window.open('', '_blank', 'width=1100,height=800');
+            var styles = document.querySelector('style').innerHTML;
+
+            var printWindow = window.open('', '_blank', 'width=1100,height=800,scrollbars=yes');
             if (!printWindow) {
                 showToast('❌ خطأ', 'تم حظر النوافذ المنبثقة، يرجى السماح بها', 'error');
                 return;
             }
 
             printWindow.document.write(`
-                        <html dir="rtl">
-                        <head>
-                            <meta charset="UTF-8">
-                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                            <title>فاتورة - منتجع حياله</title>
-                            <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-                            <style>
-                                ${document.querySelector('style').innerHTML}
-                                body { padding: 20px; background: #fff; }
-                                .print-wrapper { max-width: 210mm; margin: 0 auto; }
-                                .print-preview-overlay .print-actions { display: none !important; }
-                                .print-preview-overlay { background: #fff !important; backdrop-filter: none !important; padding: 0 !important; position: static !important; }
-                                .print-preview-overlay .print-wrapper { max-height: none !important; box-shadow: none !important; padding: 12px 16px !important; max-width: 210mm !important; width: 100% !important; border-radius: 0 !important; font-size: 12px !important; }
-                                .invoice-header .invoice-title { border: 2px solid #121821 !important; background: #f4f6f5 !important; padding: 6px 12px !important; min-width: 90px !important; }
-                                .invoice-header .invoice-title .qr-code { width: 80px !important; height: 80px !important; border: 2px solid #121821 !important; padding: 4px !important; margin-bottom: 3px !important; }
-                                .invoice-header .invoice-title .qr-label { font-size: 8px !important; }
-                                .invoice-header .logo-section .logo-box { width: 60px !important; height: 60px !important; border-color: #121821 !important; border-width: 1.5px !important; padding: 3px !important; }
-                                .invoice-header .company-details h2 { font-size: 16px !important; }
-                                .invoice-header .company-details p { font-size: 9px !important; }
-                                .info-grid { padding: 6px 10px !important; gap: 4px !important; margin-bottom: 10px !important; }
-                                .info-grid .item .label { font-size: 7px !important; }
-                                .info-grid .item .value { font-size: 11px !important; }
-                                table { font-size: 10px !important; }
-                                table th { padding: 4px 8px !important; font-size: 8px !important; }
-                                table td { padding: 4px 8px !important; font-size: 9px !important; }
-                                .footer { padding-top: 10px !important; margin-top: 10px !important; font-size: 9px !important; }
-                                .footer .signature .line { width: 70px !important; }
-                                .notes-section { padding: 8px 12px !important; margin-top: 10px !important; }
-                                .notes-section .notes-title { font-size: 9px !important; }
-                                .notes-section .notes-content { font-size: 8px !important; line-height: 1.5 !important; }
-                                .notes-section .notes-content p { padding-right: 12px !important; margin-bottom: 2px !important; }
-                                .print-footer-notes { font-size: 7px !important; padding-top: 8px !important; margin-top: 10px !important; }
-                                .print-footer-notes .note-item { gap: 4px !important; margin-bottom: 1px !important; }
-                                .print-footer-notes .note-item i { font-size: 4px !important; margin-top: 2px !important; }
-                                .badge { font-size: 7px !important; padding: 1px 6px !important; }
-                                .badge i { font-size: 6px !important; }
-                                .notes-section { border-top: 2px dashed #c7d0cc !important; background: #f8f9fa !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-                                .print-footer-notes { border-top: 2px solid #c7d0cc !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-                                .invoice-header .logo-section .logo-box { border-color: #121821 !important; }
-                            </style>
-                        </head>
-                        <body>
-                            <div class="print-wrapper">${content}</div>
-                            <script>
-                                window.onload = function() {
-                                    window.print();
-                                    setTimeout(function() { window.close(); }, 1000);
-                                };
-                            <\/script>
-                        </body>
-                        </html>
-                    `);
+                <!DOCTYPE html>
+                <html dir="rtl">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>فاتورة - منتجع حياله</title>
+                    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+                    <style>
+                        /* ===== نسخ جميع الأنماط ===== */
+                        ${styles}
+                        
+                        /* ===== أنماط خاصة بالطباعة ===== */
+                        body {
+                            background: #ffffff !important;
+                            padding: 20px !important;
+                            margin: 0 !important;
+                            font-family: 'Cairo', sans-serif !important;
+                        }
+                        
+                        .print-wrapper {
+                            max-width: 210mm !important;
+                            margin: 0 auto !important;
+                            background: #ffffff !important;
+                            padding: 20px 25px !important;
+                        }
+                        
+                        /* إخفاء أزرار الطباعة في النافذة الجديدة */
+                        .print-actions {
+                            display: none !important;
+                        }
+                        
+                        /* ===== التحكم في حجم اللوجو عند الطباعة ===== */
+                        .invoice-header .logo-section .logo-box {
+                            width: 65px !important;
+                            height: 65px !important;
+                            min-width: 65px !important;
+                            max-width: 65px !important;
+                            min-height: 65px !important;
+                            max-height: 65px !important;
+                            border: 2px solid var(--accent) !important;
+                            border-radius: 10px !important;
+                            overflow: hidden !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: center !important;
+                            background: #ffffff !important;
+                            padding: 4px !important;
+                            flex-shrink: 0 !important;
+                        }
+                        
+                        .invoice-header .logo-section .logo-box img {
+                            width: 100% !important;
+                            height: 100% !important;
+                            max-width: 100% !important;
+                            max-height: 100% !important;
+                            object-fit: contain !important;
+                            display: block !important;
+                            margin: 0 auto !important;
+                        }
+                        
+                        /* الحفاظ على باقي التصميم */
+                        .invoice-header {
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: space-between !important;
+                            padding-bottom: 12px !important;
+                            border-bottom: 2px solid var(--ink) !important;
+                            margin-bottom: 12px !important;
+                            gap: 12px !important;
+                            flex-direction: row !important;
+                        }
+                        
+                        .invoice-header .logo-section {
+                            display: flex !important;
+                            align-items: center !important;
+                            gap: 10px !important;
+                        }
+                        
+                        .invoice-header .company-details h2 {
+                            font-size: 16px !important;
+                            font-weight: 900 !important;
+                            color: var(--ink) !important;
+                            line-height: 1.2 !important;
+                        }
+                        
+                        .invoice-header .company-details p {
+                            font-size: 9px !important;
+                            color: var(--ink-mute) !important;
+                            line-height: 1.3 !important;
+                        }
+                        
+                        .invoice-header .invoice-title {
+                            display: flex !important;
+                            flex-direction: column !important;
+                            align-items: center !important;
+                            justify-content: center !important;
+                            min-width: 90px !important;
+                            background: var(--surface-muted) !important;
+                            padding: 5px 10px !important;
+                            border-radius: 8px !important;
+                            border: 2px solid var(--accent) !important;
+                            flex-shrink: 0 !important;
+                        }
+                        
+                        .invoice-header .invoice-title .qr-code {
+                            width: 70px !important;
+                            height: 70px !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: center !important;
+                            background: #ffffff !important;
+                            border-radius: 6px !important;
+                            padding: 4px !important;
+                            border: 2px solid var(--line-strong) !important;
+                            margin-bottom: 3px !important;
+                        }
+                        
+                        .invoice-header .invoice-title .qr-code canvas,
+                        .invoice-header .invoice-title .qr-code img {
+                            width: 100% !important;
+                            height: 100% !important;
+                            max-width: 100% !important;
+                            max-height: 100% !important;
+                        }
+                        
+                        .invoice-header .invoice-title .qr-label {
+                            font-size: 7px !important;
+                            color: var(--ink-mute) !important;
+                            text-align: center !important;
+                            font-weight: 600 !important;
+                        }
+                        
+                        .info-grid {
+                            display: grid !important;
+                            grid-template-columns: 1fr 1fr 1fr 1fr 1fr !important;
+                            gap: 6px !important;
+                            margin-bottom: 12px !important;
+                            background: var(--surface-muted) !important;
+                            padding: 8px 12px !important;
+                            border-radius: 8px !important;
+                            border: 1px solid var(--line) !important;
+                        }
+                        
+                        .info-grid .item .label {
+                            font-size: 7px !important;
+                            color: var(--ink-mute) !important;
+                            font-weight: 700 !important;
+                        }
+                        
+                        .info-grid .item .value {
+                            font-size: 11px !important;
+                            font-weight: 700 !important;
+                            color: var(--ink) !important;
+                        }
+                        
+                        table {
+                            width: 100% !important;
+                            border-collapse: collapse !important;
+                            font-size: 10px !important;
+                        }
+                        
+                        table th {
+                            background: var(--ink) !important;
+                            color: #ffffff !important;
+                            padding: 5px 8px !important;
+                            text-align: center !important;
+                            font-size: 8px !important;
+                            font-weight: 700 !important;
+                        }
+                        
+                        table td {
+                            padding: 5px 8px !important;
+                            border-bottom: 1px solid var(--line) !important;
+                            color: var(--ink-soft) !important;
+                            text-align: center !important;
+                            font-size: 9px !important;
+                        }
+                        
+                        .footer {
+                            border-top: 1px solid var(--line) !important;
+                            padding-top: 10px !important;
+                            margin-top: 10px !important;
+                            display: flex !important;
+                            justify-content: space-between !important;
+                            font-size: 8px !important;
+                            color: var(--ink-mute) !important;
+                            flex-direction: row !important;
+                        }
+                        
+                        .footer .signature .line {
+                            width: 70px !important;
+                            border-bottom: 2px solid var(--ink) !important;
+                            margin-top: 4px !important;
+                        }
+                        
+                        .notes-section {
+                            margin-top: 12px !important;
+                            padding-top: 10px !important;
+                            border-top: 2px dashed var(--line-strong) !important;
+                            background: var(--surface-muted) !important;
+                            border-radius: 8px !important;
+                            padding: 10px 14px !important;
+                        }
+                        
+                        .notes-section .notes-title {
+                            font-size: 9px !important;
+                            font-weight: 800 !important;
+                            color: var(--accent-ink) !important;
+                        }
+                        
+                        .notes-section .notes-content {
+                            font-size: 8px !important;
+                            color: var(--ink-soft) !important;
+                            line-height: 1.5 !important;
+                        }
+                        
+                        .notes-section .notes-content p {
+                            padding-right: 12px !important;
+                            margin-bottom: 2px !important;
+                        }
+                        
+                        .print-footer-notes {
+                            margin-top: 10px !important;
+                            padding-top: 8px !important;
+                            border-top: 2px solid var(--line-strong) !important;
+                            font-size: 7px !important;
+                            color: var(--ink-mute) !important;
+                            line-height: 1.6 !important;
+                        }
+                        
+                        .print-footer-notes .note-item {
+                            display: flex !important;
+                            align-items: flex-start !important;
+                            gap: 4px !important;
+                            margin-bottom: 1px !important;
+                        }
+                        
+                        .print-footer-notes .note-item i {
+                            font-size: 4px !important;
+                            margin-top: 2px !important;
+                        }
+                        
+                        .badge {
+                            display: inline-flex !important;
+                            align-items: center !important;
+                            gap: 2px !important;
+                            padding: 1px 6px !important;
+                            border-radius: 50px !important;
+                            font-size: 6px !important;
+                            font-weight: 700 !important;
+                            border: 1px solid transparent !important;
+                        }
+                        
+                        .badge i {
+                            font-size: 5px !important;
+                        }
+                        
+                        .badge-paid {
+                            background: var(--teal-soft) !important;
+                            color: var(--teal) !important;
+                        }
+                        
+                        .badge-balance {
+                            background: var(--rust-soft) !important;
+                            color: var(--rust) !important;
+                        }
+                        
+                        .badge-type {
+                            background: var(--surface-muted) !important;
+                            color: var(--ink-mute) !important;
+                            border-color: var(--line) !important;
+                        }
+                        
+                        .badge-future {
+                            background: var(--accent-soft) !important;
+                            color: var(--accent-ink) !important;
+                        }
+                        
+                        .notes-section,
+                        .print-footer-notes,
+                        .info-grid,
+                        .invoice-header .invoice-title,
+                        .invoice-header .logo-section .logo-box {
+                            -webkit-print-color-adjust: exact !important;
+                            print-color-adjust: exact !important;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="print-wrapper">${content}</div>
+                    <script>
+                        window.onload = function() {
+                            window.print();
+                            setTimeout(function() {
+                                window.close();
+                            }, 1000);
+                        };
+                    <\/script>
+                </body>
+                </html>
+            `);
+
             printWindow.document.close();
             closePrintPreview();
         }
 
         /**
          * ============================================================
-         * DOWNLOAD PDF
+         * DOWNLOAD PDF - باستخدام html2pdf مباشرة
          * ============================================================
          */
         function downloadPDF() {
@@ -3844,13 +4066,18 @@
                 previewInvoice();
                 setTimeout(function() {
                     generatePDFFromPreview();
-                }, 600);
+                }, 800);
                 return;
             }
 
             generatePDFFromPreview();
         }
 
+        /**
+         * ============================================================
+         * GENERATE PDF FROM PREVIEW - إنشاء PDF من المعاينة
+         * ============================================================
+         */
         function generatePDFFromPreview() {
             var element = document.getElementById('printPreviewContent');
             if (!element) {
@@ -3861,29 +4088,51 @@
             showToast('⏳ جاري التحميل', 'جاري إنشاء ملف PDF...', 'warning');
 
             var opt = {
-                margin: [10, 10, 10, 10],
+                margin: {
+                    top: 15,
+                    bottom: 15,
+                    left: 15,
+                    right: 15
+                },
                 filename: 'فاتورة_' + (invoiceNumber.value || 'invoice') + '.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
+                image: {
+                    type: 'jpeg',
+                    quality: 0.98
+                },
                 html2canvas: {
                     scale: 2,
                     useCORS: true,
                     logging: false,
-                    letterRendering: true
+                    letterRendering: true,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff',
+                    width: element.scrollWidth,
+                    height: element.scrollHeight
                 },
                 jsPDF: {
                     unit: 'mm',
                     format: 'a4',
                     orientation: 'portrait'
                 },
-                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+                pagebreak: {
+                    mode: ['avoid-all', 'css', 'legacy']
+                }
             };
 
-            html2pdf().set(opt).from(element).save().then(function() {
-                showToast('✅ تم التحميل', 'تم تحميل ملف PDF بنجاح', 'success');
-            }).catch(function(error) {
-                console.error('❌ خطأ في تحميل PDF:', error);
-                showToast('❌ خطأ', 'فشل في تحميل PDF: ' + error.message, 'error');
-            });
+            html2pdf()
+                .set(opt)
+                .from(element)
+                .save()
+                .then(function() {
+                    showToast('✅ تم التحميل', 'تم تحميل ملف PDF بنجاح', 'success');
+                    setTimeout(function() {
+                        closePrintPreview();
+                    }, 1500);
+                })
+                .catch(function(error) {
+                    console.error('❌ خطأ في تحميل PDF:', error);
+                    showToast('❌ خطأ', 'فشل في تحميل PDF: ' + error.message, 'error');
+                });
         }
 
         /**
