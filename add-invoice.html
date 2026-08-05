@@ -3245,46 +3245,66 @@
             calculateFinancials();
         }
 
-        /**
-         * ============================================================
-         * GENERATE QR CODE
-         * ============================================================
-         */
-        function generateQRCode(invoiceNumber, client, total) {
-            var qrContainer = document.getElementById('qrCodeContainer');
-            if (!qrContainer) return;
+       /**
+ * ============================================================
+ * GENERATE QR CODE - مع معالجة الأخطاء
+ * ============================================================
+ */
+function generateQRCode(invoiceNumber, client, total) {
+    var qrContainer = document.getElementById('qrCodeContainer');
+    if (!qrContainer) {
+        console.warn('⚠️ حاوية QR Code غير موجودة');
+        return;
+    }
 
-            // تنظيف الحاوية
-            qrContainer.innerHTML = '';
+    // تنظيف الحاوية
+    qrContainer.innerHTML = '';
 
-            // إنشاء محتوى QR Code (معلومات مختصرة عن الفاتورة)
-            var qrData = {
-                invoice: invoiceNumber || '----',
-                client: client || 'غير محدد',
-                total: total || '0.00',
-                date: new Date().toLocaleDateString('ar-EG'),
-                company: settings.companyName || 'منتجع حياله'
-            };
+    // التحقق من وجود مكتبة QRCode
+    if (typeof QRCode === 'undefined') {
+        console.warn('⚠️ مكتبة QRCode غير محملة، سيتم عرض رسالة بديلة');
+        qrContainer.innerHTML = `
+            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;background:#f8f9fa;border-radius:8px;padding:10px;">
+                <i class="fas fa-qrcode" style="font-size:2rem;color:var(--accent);margin-bottom:4px;"></i>
+                <span style="font-size:0.5rem;color:var(--ink-mute);text-align:center;">${invoiceNumber || '----'}</span>
+            </div>
+        `;
+        return;
+    }
 
-            var qrText = JSON.stringify(qrData);
+    // إنشاء محتوى QR Code
+    var qrData = {
+        invoice: invoiceNumber || '----',
+        client: client || 'غير محدد',
+        total: total || '0.00',
+        date: new Date().toLocaleDateString('ar-EG'),
+        company: settings.companyName || 'منتجع حياله'
+    };
 
-            // إنشاء QR Code
-            try {
-                var qr = new QRCode(qrContainer, {
-                    text: qrText,
-                    width: 200,
-                    height: 200,
-                    colorDark: '#121821',
-                    colorLight: '#ffffff',
-                    correctLevel: QRCode.CorrectLevel.H
-                });
-                currentQRCode = qr;
-                console.log('✅ تم إنشاء QR Code بنجاح');
-            } catch (error) {
-                console.error('❌ خطأ في إنشاء QR Code:', error);
-                qrContainer.innerHTML = '<span style="color:var(--rust);font-size:0.6rem;">خطأ في إنشاء QR</span>';
-            }
-        }
+    var qrText = JSON.stringify(qrData);
+
+    try {
+        var qr = new QRCode(qrContainer, {
+            text: qrText,
+            width: 200,
+            height: 200,
+            colorDark: '#121821',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.H
+        });
+        currentQRCode = qr;
+        console.log('✅ تم إنشاء QR Code بنجاح');
+    } catch (error) {
+        console.error('❌ خطأ في إنشاء QR Code:', error);
+        qrContainer.innerHTML = `
+            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;background:#f8f9fa;border-radius:8px;padding:10px;">
+                <i class="fas fa-exclamation-triangle" style="font-size:1.5rem;color:var(--rust);margin-bottom:4px;"></i>
+                <span style="font-size:0.5rem;color:var(--rust);text-align:center;">خطأ في إنشاء QR</span>
+                <span style="font-size:0.4rem;color:var(--ink-mute);text-align:center;">${invoiceNumber || ''}</span>
+            </div>
+        `;
+    }
+}
 
         /**
          * ============================================================
