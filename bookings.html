@@ -18,7 +18,7 @@
         })();
     </script>
 
-    <title>إدارة العملاء - منتجع حياله</title>
+    <title>سجل الحجوزات - منتجع حياله</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
@@ -456,7 +456,7 @@
         }
 
         /* ============================================================
-           MAIN CONTENT - تنسيق صفحة العملاء
+           MAIN CONTENT - تنسيق صفحة الحجوزات
            ============================================================ */
         .main-content {
             flex: 1;
@@ -626,7 +626,7 @@
             width: 100%;
             border-collapse: collapse;
             font-size: calc(0.8rem * var(--scale-factor));
-            min-width: 700px;
+            min-width: 1100px;
         }
 
         table thead th {
@@ -647,6 +647,8 @@
             text-align: center;
             border-bottom: 1px solid var(--line);
             color: var(--ink-soft);
+            font-size: calc(0.78rem * var(--scale-factor));
+            white-space: nowrap;
         }
 
         table tbody tr:hover {
@@ -657,144 +659,44 @@
             border-bottom: none;
         }
 
+        table tbody tr.is-future td:first-child,
+        table tbody tr.is-future td:nth-child(3) {
+            color: var(--blue);
+            font-weight: 700;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 12px;
+            border-radius: 50px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+        }
+        .badge-paid {
+            background: var(--teal-soft);
+            color: var(--teal);
+        }
+        .badge-balance {
+            background: var(--rust-soft);
+            color: var(--rust);
+        }
+        .badge-type {
+            background: var(--surface-muted);
+            color: var(--ink-mute);
+        }
+        .badge-future {
+            background: var(--accent-soft);
+            color: var(--accent-ink);
+        }
+
         .actions-cell {
             display: flex;
             gap: 6px;
             justify-content: center;
             flex-wrap: wrap;
-        }
-
-        /* ============================================================
-           MODAL
-           ============================================================ */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(4px);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .modal-overlay.show {
-            display: flex;
-        }
-
-        .modal {
-            background: var(--surface);
-            border-radius: calc(16px * var(--scale-factor));
-            max-width: 560px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            padding: calc(28px * var(--scale-factor)) calc(32px * var(--scale-factor));
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-            animation: modalIn 0.25s ease;
-        }
-
-        @keyframes modalIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px) scale(0.96);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        .modal-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 24px;
-        }
-
-        .modal-header h2 {
-            font-size: calc(1.1rem * var(--scale-factor));
-            font-weight: 800;
-        }
-
-        .modal-close {
-            width: calc(36px * var(--scale-factor));
-            height: calc(36px * var(--scale-factor));
-            border-radius: 50%;
-            border: none;
-            background: var(--surface-muted);
-            color: var(--ink-mute);
-            font-size: calc(1rem * var(--scale-factor));
-            cursor: pointer;
-            transition: 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-close:hover {
-            background: var(--line);
-        }
-
-        /* ============================================================
-           FORM
-           ============================================================ */
-        .form-group {
-            margin-bottom: calc(16px * var(--scale-factor));
-        }
-
-        .form-group label {
-            display: block;
-            font-size: calc(0.7rem * var(--scale-factor));
-            font-weight: 700;
-            color: var(--ink-soft);
-            margin-bottom: 4px;
-        }
-
-        .form-group label .required {
-            color: var(--rust);
-        }
-
-        .form-control {
-            width: 100%;
-            padding: calc(8px * var(--scale-factor)) calc(12px * var(--scale-factor));
-            border: 1.5px solid var(--line);
-            border-radius: calc(10px * var(--scale-factor));
-            font-family: var(--font-display);
-            font-size: calc(0.8rem * var(--scale-factor));
-            color: var(--ink);
-            background: var(--surface);
-            transition: border-color 0.2s, box-shadow 0.2s;
-            outline: none;
-        }
-
-        .form-control:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 4px rgba(221, 159, 46, 0.12);
-        }
-
-        .form-control::placeholder {
-            color: var(--ink-mute);
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: calc(12px * var(--scale-factor));
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 24px;
-            padding-top: 20px;
-            border-top: 1px solid var(--line);
-        }
-
-        .form-actions .btn {
-            flex: 1;
-            justify-content: center;
         }
 
         /* ============================================================
@@ -953,17 +855,9 @@
                 padding: 12px 14px;
             }
 
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .modal {
-                padding: 24px 18px;
-            }
-
             table {
                 font-size: 0.7rem;
-                min-width: 500px;
+                min-width: 700px;
             }
 
             table thead th,
@@ -1005,13 +899,37 @@
 
             table {
                 font-size: 0.6rem;
-                min-width: 400px;
+                min-width: 500px;
             }
 
             table thead th:nth-child(3),
             table tbody td:nth-child(3) {
                 display: none;
             }
+
+            .header .breadcrumb {
+                display: none;
+            }
+        }
+
+        .fade-up {
+            opacity: 0;
+            transform: translateY(8px);
+            animation: fadeUp .55s var(--ease) forwards;
+        }
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ============================================================
+           SCALE DOWN THE MAIN CONTENT TO 90%
+           ========================================================== */
+        .main-content {
+            transform: scale(0.9);
+            transform-origin: top center;
         }
     </style>
 </head>
@@ -1037,15 +955,15 @@
                     <span></span><span></span><span></span><span></span>
                 </div>
                 <div class="logo-text">
-                    <h1>إدارة العملاء</h1>
+                    <h1>سجل الحجوزات</h1>
                     <span>منتجع حياله</span>
                 </div>
             </div>
             <nav>
                 <a href="index.html"><i class="fas fa-home nav-icon"></i> الرئيسية</a>
                 <a href="add-invoice.html"><i class="fas fa-file-invoice nav-icon"></i> فاتورة جديدة</a>
-                <a href="bookings.html"><i class="fas fa-list nav-icon"></i> سجل الحجوزات</a>
-                <a href="clients.html" class="active"><i class="fas fa-users nav-icon"></i> العملاء</a>
+                <a href="bookings.html" class="active"><i class="fas fa-list nav-icon"></i> سجل الحجوزات</a>
+                <a href="clients.html"><i class="fas fa-users nav-icon"></i> العملاء</a>
                 <a href="properties.html"><i class="fas fa-building nav-icon"></i> العقارات</a>
                 <a href="expenses.html"><i class="fas fa-money-bill-wave nav-icon"></i> المصاريف</a>
                 <a href="abuzeid.html"><i class="fas fa-hand-holding-heart nav-icon"></i> عمولة أبو زيد</a>
@@ -1062,7 +980,7 @@
     </header>
 
     <!-- ============================================================
-    SIDEBAR OVERLAY (تظهر فقط على الموبايل)
+    SIDEBAR OVERLAY
     ============================================================ -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
@@ -1074,8 +992,8 @@
         <div class="menu-items">
             <a href="index.html"><i class="fas fa-home"></i> الرئيسية</a>
             <a href="add-invoice.html"><i class="fas fa-file-invoice"></i> فاتورة جديدة</a>
-            <a href="bookings.html"><i class="fas fa-list"></i> سجل الحجوزات</a>
-            <a href="clients.html" class="active"><i class="fas fa-users"></i> العملاء</a>
+            <a href="bookings.html" class="active"><i class="fas fa-list"></i> سجل الحجوزات</a>
+            <a href="clients.html"><i class="fas fa-users"></i> العملاء</a>
             <a href="properties.html"><i class="fas fa-building"></i> العقارات</a>
             <a href="expenses.html"><i class="fas fa-money-bill-wave"></i> المصاريف</a>
             <a href="abuzeid.html"><i class="fas fa-hand-holding-heart"></i> عمولة أبو زيد</a>
@@ -1092,9 +1010,9 @@
         <ul>
             <li><a href="index.html"><i class="fas fa-home"></i><span>الرئيسية</span></a></li>
             <li><a href="add-invoice.html"><i class="fas fa-file-invoice"></i><span>فاتورة</span></a></li>
-            <li><a href="bookings.html"><i class="fas fa-list"></i><span>الحجوزات</span></a></li>
-            <li class="active"><a href="clients.html"><i class="fas fa-users"></i><span>العملاء</span></a></li>
-            <li><a href="properties.html"><i class="fas fa-building"></i><span>العقارات</span></a></li>
+            <li class="active"><a href="bookings.html"><i class="fas fa-list"></i><span>الحجوزات</span></a></li>
+            <li><a href="clients.html"><i class="fas fa-users"></i><span>العملاء</span></a></li>
+            <li><a href="expenses.html"><i class="fas fa-money-bill-wave"></i><span>المصاريف</span></a></li>
         </ul>
     </nav>
 
@@ -1112,14 +1030,14 @@
             <!-- ===== PAGE HEADER ===== -->
             <div class="page-header">
                 <h1>
-                    <i class="fas fa-users"></i>
-                    إدارة العملاء
+                    <i class="fas fa-calendar-check"></i>
+                    سجل الحجوزات
                 </h1>
                 <div class="actions">
-                    <button class="btn btn-success" onclick="openAddModal()">
-                        <i class="fas fa-plus"></i> إضافة عميل
-                    </button>
-                    <button class="btn btn-outline" onclick="loadClients()">
+                    <a href="add-invoice.html" class="btn btn-success">
+                        <i class="fas fa-plus"></i> حجز جديد
+                    </a>
+                    <button class="btn btn-outline" onclick="loadBookings()">
                         <i class="fas fa-sync-alt"></i> تحديث
                     </button>
                 </div>
@@ -1130,11 +1048,11 @@
                 <div class="card-header">
                     <h2>
                         <i class="fas fa-list"></i>
-                        قائمة العملاء
+                        قائمة الحجوزات
                         <span class="badge" id="countBadge">0</span>
                     </h2>
                     <div>
-                        <input type="text" id="searchInput" placeholder="🔍 بحث عن عميل..." class="form-control" style="width:220px;padding:6px 12px;font-size:0.7rem;" oninput="filterTable()">
+                        <input type="text" id="searchInput" placeholder="🔍 بحث عن حجز، عميل، أو عقار..." class="form-control" style="width:260px;padding:6px 12px;font-size:0.7rem;" oninput="filterTable()">
                     </div>
                 </div>
                 <div class="card-body">
@@ -1148,79 +1066,22 @@
     </div>
 
     <!-- ============================================================
-    MODAL - إضافة / تعديل عميل
-    ============================================================ -->
-    <div class="modal-overlay" id="clientModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h2 id="modalTitle">إضافة عميل جديد</h2>
-                <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
-            </div>
-
-            <form id="clientForm" onsubmit="saveClient(event)">
-                <input type="hidden" id="editId" value="">
-
-                <div class="form-group">
-                    <label>اسم العميل <span class="required">*</span></label>
-                    <input type="text" class="form-control" id="clientName" placeholder="أدخل اسم العميل" required />
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>رقم الجوال</label>
-                        <input type="text" class="form-control" id="clientPhone" placeholder="05xxxxxxxx" />
-                    </div>
-                    <div class="form-group">
-                        <label>البريد الإلكتروني</label>
-                        <input type="email" class="form-control" id="clientEmail" placeholder="example@email.com" />
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>العنوان</label>
-                    <input type="text" class="form-control" id="clientAddress" placeholder="عنوان العميل" />
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>رقم الهوية</label>
-                        <input type="text" class="form-control" id="clientIdNumber" placeholder="رقم الهوية" />
-                    </div>
-                    <div class="form-group">
-                        <label>الرصيد الافتتاحي (ر.س)</label>
-                        <input type="number" class="form-control" id="clientBalance" placeholder="0.00" value="0" step="0.01" />
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>ملاحظات</label>
-                    <textarea class="form-control" id="clientNotes" rows="2" placeholder="ملاحظات إضافية..."></textarea>
-                </div>
-
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-success" id="submitBtn">
-                        <i class="fas fa-save"></i> حفظ
-                    </button>
-                    <button type="button" class="btn btn-outline" onclick="closeModal()">إلغاء</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- ============================================================
-    JAVASCRIPT
+    JAVASCRIPT - الكود الكامل والمتكامل
     ============================================================ -->
     <script>
         /**
          * ============================================================
-         * التحقق من تسجيل الدخول
+         * 1. التحقق من تسجيل الدخول
          * ============================================================
          */
         var user = window.currentUser || JSON.parse(localStorage.getItem('user') || '{}');
+        if (!user || !user.email) {
+            window.location.href = 'login.html';
+        }
 
         /**
          * ============================================================
-         * SUPABASE CONFIGURATION
+         * 2. إعدادات SUPABASE
          * ============================================================
          */
         var SUPABASE_URL = 'https://zwuvcblrrrriuylajvba.supabase.co';
@@ -1228,7 +1089,17 @@
 
         /**
          * ============================================================
-         * SIDEBAR TOGGLE — فقط للموبايل
+         * 3. المتغيرات العامة
+         * ============================================================
+         */
+        var allBookings = []; // جميع الحجوزات من قاعدة البيانات
+        var filteredBookings = []; // الحجوزات بعد التصفية
+        var currentPage = 1; // الصفحة الحالية
+        var itemsPerPage = 20; // عدد العناصر في الصفحة
+
+        /**
+         * ============================================================
+         * 4. SIDEBAR TOGGLE - فقط للموبايل
          * ============================================================
          */
         var navToggle = document.getElementById('navToggle');
@@ -1272,7 +1143,6 @@
                 if (window.innerWidth <= 768 && (sidebar.classList.contains('open') || mobileOpen)) {
                     toggleSidebar();
                 }
-                closeModal();
             }
         });
 
@@ -1288,15 +1158,7 @@
 
         /**
          * ============================================================
-         * المتغيرات العامة
-         * ============================================================
-         */
-        var clients = [];
-        var editId = null;
-
-        /**
-         * ============================================================
-         * TOAST SYSTEM
+         * 5. نظام TOAST للإشعارات
          * ============================================================
          */
         function showToast(title, message, type) {
@@ -1338,53 +1200,97 @@
 
         /**
          * ============================================================
-         * جلب العملاء من Supabase
+         * 6. دوال مساعدة لتنسيق التاريخ والأرقام
          * ============================================================
          */
-        async function loadClients() {
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+            try {
+                var d = new Date(dateStr);
+                if (isNaN(d.getTime())) return '-';
+                return d.toLocaleDateString('ar-EG', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit'
+                });
+            } catch (e) {
+                return '-';
+            }
+        }
+
+        function formatCurrency(amount) {
+            if (amount === undefined || amount === null || isNaN(amount)) return '0.00';
+            return parseFloat(amount).toFixed(2);
+        }
+
+        function isFutureDate(dateStr) {
+            if (!dateStr) return false;
+            try {
+                var today = new Date();
+                var todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+                var d = new Date(dateStr);
+                if (isNaN(d.getTime())) return false;
+                var dOnly = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+                return dOnly >= todayDate;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        /**
+         * ============================================================
+         * 7. جلب الحجوزات من Supabase
+         * ============================================================
+         */
+        async function loadBookings() {
             var container = document.getElementById('tableContainer');
             container.innerHTML = `
                 <div class="empty-state">
                     <div class="spinner"></div>
                     <p>جاري تحميل البيانات...</p>
+                    <span>يرجى الانتظار</span>
                 </div>
             `;
 
             try {
-                var response = await fetch(SUPABASE_URL + '/rest/v1/clients?select=*&order=created_at.desc', {
+                var response = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=*&order=check_in.desc', {
                     headers: {
                         'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                        'Content-Type': 'application/json'
                     }
                 });
 
                 if (!response.ok) {
-                    throw new Error('فشل في جلب البيانات');
+                    var errorText = await response.text();
+                    throw new Error('فشل في جلب البيانات: ' + response.status + ' ' + errorText);
                 }
 
-                clients = await response.json();
-                renderTable(clients);
+                allBookings = await response.json();
+                filteredBookings = allBookings.slice();
+                renderTable(filteredBookings);
+                showToast('✅ تم التحميل', 'تم جلب ' + allBookings.length + ' حجز', 'success');
 
             } catch (error) {
-                console.error('❌ خطأ:', error);
+                console.error('❌ خطأ في جلب البيانات:', error);
                 container.innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-exclamation-triangle" style="color:var(--rust);"></i>
                         <p style="color:var(--rust);">حدث خطأ في تحميل البيانات</p>
                         <span>${error.message}</span>
                         <br><br>
-                        <button class="btn btn-primary" onclick="loadClients()">
+                        <button class="btn btn-primary" onclick="loadBookings()">
                             <i class="fas fa-sync-alt"></i> إعادة المحاولة
                         </button>
                     </div>
                 `;
-                showToast('خطأ', 'فشل في تحميل العملاء', 'error');
+                showToast('❌ خطأ', 'فشل في تحميل الحجوزات', 'error');
             }
         }
 
         /**
          * ============================================================
-         * عرض الجدول
+         * 8. عرض الجدول مع جميع البيانات
          * ============================================================
          */
         function renderTable(data) {
@@ -1394,9 +1300,9 @@
             if (!data || data.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
-                        <i class="fas fa-users"></i>
-                        <p>لا يوجد عملاء</p>
-                        <span>اضغط على "إضافة عميل" لإضافة أول عميل</span>
+                        <i class="fas fa-calendar-check"></i>
+                        <p>لا توجد حجوزات</p>
+                        <span>اضغط على "حجز جديد" لإضافة أول حجز</span>
                     </div>
                 `;
                 countBadge.textContent = '0';
@@ -1408,32 +1314,74 @@
                     <thead>
                         <tr>
                             <th>#</th>
+                            <th>رقم الحجز</th>
+                            <th>تاريخ الفاتورة</th>
+                            <th>تاريخ الدخول</th>
+                            <th>تاريخ الخروج</th>
                             <th>اسم العميل</th>
-                            <th>الجوال</th>
-                            <th>البريد الإلكتروني</th>
-                            <th>الإجراءات</th>
+                            <th>نوع العقار</th>
+                            <th>عدد الأيام</th>
+                            <th>السعر اليومي</th>
+                            <th>الخصم</th>
+                            <th>المدفوع</th>
+                            <th>المتبقي</th>
+                            <th>الإجمالي</th>
+                            <th>الحالة</th>
+                            <th>نوع الإقامة</th>
                         </tr>
                     </thead>
                     <tbody>
             `;
 
             data.forEach(function(item, index) {
+                // حساب القيم المالية
+                var total = parseFloat(item.total) || 0;
+                var paid = parseFloat(item.paid) || 0;
+                var remaining = parseFloat(item.remaining) || 0;
+                var nights = parseInt(item.nights) || 0;
+                var pricePerNight = parseFloat(item.price_per_night) || 0;
+                var discount = parseFloat(item.discount) || 0;
+
+                // تحديد حالة الدفع
+                var statusBadge = '';
+                if (item.payment_status === 'Fully Paid' || remaining <= 0) {
+                    statusBadge = '<span class="badge badge-paid"><i class="fas fa-check-circle"></i> مدفوع بالكامل</span>';
+                } else if (paid > 0 && remaining > 0) {
+                    statusBadge = '<span class="badge badge-balance"><i class="fas fa-clock"></i> مدفوع جزئياً</span>';
+                } else {
+                    statusBadge = '<span class="badge badge-balance"><i class="fas fa-clock"></i> غير مدفوع</span>';
+                }
+
+                // التحقق من الحجوزات المستقبلية
+                var isFuture = isFutureDate(item.check_in);
+                var bookingNumberDisplay = item.booking_number || '#' + (index + 1);
+                var rowClass = isFuture ? 'is-future' : '';
+
+                // تنسيق التواريخ
+                var invoiceDate = formatDate(item.invoice_date);
+                var checkIn = formatDate(item.check_in);
+                var checkOut = formatDate(item.check_out);
+
                 html += `
-                    <tr data-id="${item.id}">
+                    <tr class="${rowClass}">
                         <td>${index + 1}</td>
-                        <td><strong>${item.name}</strong></td>
-                        <td>${item.phone || '-'}</td>
-                        <td>${item.email || '-'}</td>
                         <td>
-                            <div class="actions-cell">
-                                <button class="btn btn-warning btn-sm" onclick="openEditModal('${item.id}')">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="btn btn-danger btn-sm" onclick="deleteClient('${item.id}')">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
+                            ${bookingNumberDisplay} 
+                            ${isFuture ? '<span class="badge badge-future"><i class="fas fa-star"></i> مستقبلي</span>' : ''}
                         </td>
+                        <td>${invoiceDate}</td>
+                        <td>${checkIn}</td>
+                        <td>${checkOut}</td>
+                        <td style="font-weight:700;color:var(--ink);">${item.client_name || '-'}</td>
+                        <td><span class="badge badge-type">${item.property_type || '-'}</span></td>
+                        <td>${nights}</td>
+                        <td>${formatCurrency(pricePerNight)}</td>
+                        <td>${formatCurrency(discount)}</td>
+                        <td>${formatCurrency(paid)}</td>
+                        <td style="font-weight:700;color:var(--rust);">${formatCurrency(remaining)}</td>
+                        <td style="font-weight:800;color:var(--ink);">${formatCurrency(total)}</td>
+                        <td>${statusBadge}</td>
+                        <td>${item.stay_type || '-'}</td>
                     </tr>
                 `;
             });
@@ -1441,6 +1389,9 @@
             html += `
                     </tbody>
                 </table>
+                <div style="padding: 12px 0; text-align: center; font-size: 0.7rem; color: var(--ink-mute);">
+                    عرض ${data.length} حجز
+                </div>
             `;
 
             container.innerHTML = html;
@@ -1449,228 +1400,71 @@
 
         /**
          * ============================================================
-         * البحث والفلترة
+         * 9. البحث والفلترة
          * ============================================================
          */
+        var searchInput = document.getElementById('searchInput');
+
         function filterTable() {
-            var searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
-            if (!searchTerm) {
-                renderTable(clients);
-                return;
-            }
+            var term = searchInput.value.toLowerCase().trim();
 
-            var filtered = clients.filter(function(item) {
-                return item.name.toLowerCase().includes(searchTerm) ||
-                    (item.phone && item.phone.includes(searchTerm)) ||
-                    (item.email && item.email.toLowerCase().includes(searchTerm));
-            });
-
-            renderTable(filtered);
-        }
-
-        /**
-         * ============================================================
-         * فتح نموذج الإضافة
-         * ============================================================
-         */
-        function openAddModal() {
-            editId = null;
-            document.getElementById('editId').value = '';
-            document.getElementById('modalTitle').textContent = 'إضافة عميل جديد';
-            document.getElementById('submitBtn').innerHTML = '<i class="fas fa-save"></i> حفظ';
-            document.getElementById('clientForm').reset();
-            document.getElementById('clientBalance').value = '0';
-            document.getElementById('clientModal').classList.add('show');
-        }
-
-        /**
-         * ============================================================
-         * فتح نموذج التعديل
-         * ============================================================
-         */
-        function openEditModal(id) {
-            var item = clients.find(function(p) { return p.id === id; });
-            if (!item) {
-                showToast('خطأ', 'العميل غير موجود', 'error');
-                return;
-            }
-
-            editId = id;
-            document.getElementById('editId').value = id;
-            document.getElementById('modalTitle').textContent = 'تعديل بيانات العميل';
-            document.getElementById('submitBtn').innerHTML = '<i class="fas fa-edit"></i> تحديث';
-            document.getElementById('clientName').value = item.name || '';
-            document.getElementById('clientPhone').value = item.phone || '';
-            document.getElementById('clientEmail').value = item.email || '';
-            document.getElementById('clientAddress').value = item.address || '';
-            document.getElementById('clientIdNumber').value = item.id_number || '';
-            document.getElementById('clientBalance').value = item.opening_balance || 0;
-            document.getElementById('clientNotes').value = item.notes || '';
-
-            document.getElementById('clientModal').classList.add('show');
-        }
-
-        /**
-         * ============================================================
-         * إغلاق النموذج
-         * ============================================================
-         */
-        function closeModal() {
-            document.getElementById('clientModal').classList.remove('show');
-        }
-
-        /**
-         * ============================================================
-         * حفظ العميل (إضافة أو تعديل)
-         * ============================================================
-         */
-        async function saveClient(event) {
-            event.preventDefault();
-
-            var name = document.getElementById('clientName').value.trim();
-            var phone = document.getElementById('clientPhone').value.trim();
-            var email = document.getElementById('clientEmail').value.trim();
-            var address = document.getElementById('clientAddress').value.trim();
-            var idNumber = document.getElementById('clientIdNumber').value.trim();
-            var openingBalance = parseFloat(document.getElementById('clientBalance').value) || 0;
-            var notes = document.getElementById('clientNotes').value.trim();
-            var editId = document.getElementById('editId').value;
-
-            if (!name) {
-                showToast('تنبيه', 'يرجى إدخال اسم العميل', 'warning');
-                document.getElementById('clientName').focus();
-                return;
-            }
-
-            var data = {
-                name: name,
-                phone: phone,
-                email: email,
-                address: address,
-                id_number: idNumber,
-                opening_balance: openingBalance,
-                notes: notes,
-                updated_at: new Date().toISOString()
-            };
-
-            var isEdit = editId ? true : false;
-            var url = SUPABASE_URL + '/rest/v1/clients';
-            var method = 'POST';
-            var body = data;
-
-            if (isEdit) {
-                url += '?id=eq.' + editId;
-                method = 'PATCH';
-            }
-
-            try {
-                var response = await fetch(url, {
-                    method: method,
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
-                        'Content-Type': 'application/json',
-                        'Prefer': 'return=representation'
-                    },
-                    body: JSON.stringify(body)
+            if (!term) {
+                filteredBookings = allBookings.slice();
+            } else {
+                filteredBookings = allBookings.filter(function(item) {
+                    var clientName = (item.client_name || '').toLowerCase();
+                    var bookingNumber = String(item.booking_number || '').toLowerCase();
+                    var propertyType = (item.property_type || '').toLowerCase();
+                    var stayType = (item.stay_type || '').toLowerCase();
+                    
+                    return clientName.includes(term) || 
+                           bookingNumber.includes(term) || 
+                           propertyType.includes(term) ||
+                           stayType.includes(term);
                 });
-
-                if (!response.ok) {
-                    throw new Error('فشل في حفظ البيانات');
-                }
-
-                closeModal();
-                showToast(
-                    isEdit ? '✅ تم التعديل' : '✅ تم الإضافة',
-                    isEdit ? 'تم تحديث بيانات العميل بنجاح' : 'تم إضافة العميل بنجاح',
-                    'success'
-                );
-                loadClients();
-
-            } catch (error) {
-                console.error('❌ خطأ:', error);
-                showToast('خطأ', 'فشل في حفظ البيانات', 'error');
             }
+
+            renderTable(filteredBookings);
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('input', filterTable);
         }
 
         /**
          * ============================================================
-         * حذف العميل
-         * ============================================================
-         */
-        async function deleteClient(id) {
-            var item = clients.find(function(p) { return p.id === id; });
-            if (!item) {
-                showToast('خطأ', 'العميل غير موجود', 'error');
-                return;
-            }
-
-            if (!confirm('هل أنت متأكد من حذف عميل "' + item.name + '"؟')) {
-                return;
-            }
-
-            try {
-                var response = await fetch(SUPABASE_URL + '/rest/v1/clients?id=eq.' + id, {
-                    method: 'DELETE',
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error('فشل في حذف العميل');
-                }
-
-                showToast('✅ تم الحذف', 'تم حذف عميل "' + item.name + '" بنجاح', 'success');
-                loadClients();
-
-            } catch (error) {
-                console.error('❌ خطأ:', error);
-                showToast('خطأ', 'فشل في حذف العميل', 'error');
-            }
-        }
-
-        /**
-         * ============================================================
-         * تحميل الصفحة
+         * 10. تحميل الصفحة عند بدء التشغيل
          * ============================================================
          */
         document.addEventListener('DOMContentLoaded', function() {
-            loadClients();
+            loadBookings();
+            
+            // عرض رسالة ترحيب في Console
+            console.log('📋 صفحة سجل الحجوزات - منتجع حياله');
+            console.log('📊 Supabase URL:', SUPABASE_URL);
+            console.log('👤 المستخدم:', user.name || 'غير معروف');
+            console.log('✅ التطبيق جاهز للعمل');
         });
 
         /**
          * ============================================================
-         * إغلاق المودال بالضغط على Escape
+         * 11. تحديث تلقائي كل 5 دقائق
          * ============================================================
          */
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeModal();
-            }
-        });
+        setInterval(function() {
+            loadBookings();
+            console.log('🔄 تم التحديث التلقائي للبيانات');
+        }, 300000); // 5 دقائق
 
         /**
          * ============================================================
-         * إغلاق المودال بالضغط على الخلفية
+         * 12. دالة التحديث اليدوي من الزر
          * ============================================================
          */
-        document.getElementById('clientModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
-        });
+        window.loadBookings = loadBookings;
+        window.filterTable = filterTable;
 
-        /**
-         * ============================================================
-         * رسالة الترحيب في Console
-         * ============================================================
-         */
-        console.log('👥 صفحة إدارة العملاء - منتجع حياله');
-        console.log('📊 Supabase URL:', SUPABASE_URL);
-        console.log('👤 المستخدم:', user.name || 'غير معروف');
-        console.log('✅ جاهزة للعمل');
+        console.log('✅ تم تحميل جميع الوظائف بنجاح');
     </script>
 
 </body>
