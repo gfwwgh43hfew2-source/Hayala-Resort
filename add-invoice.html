@@ -1523,7 +1523,7 @@
         }
 
         /* ============================================================
-           PRINT PREVIEW STYLES - مع QR Code في الجهة اليسرى العلوية
+           PRINT PREVIEW STYLES - مع QR Code في الأعلى بدلاً من بطاقة الرقم
            ============================================================ */
         .print-preview-overlay .print-wrapper .invoice-header {
             display: flex;
@@ -1567,70 +1567,44 @@
             font-size: calc(0.7rem * var(--scale-factor));
             color: var(--ink-mute);
         }
-        .print-preview-overlay .print-wrapper .invoice-header .invoice-title {
-            text-align: left;
-            background: var(--surface-muted);
-            padding: calc(8px * var(--scale-factor)) calc(20px * var(--scale-factor));
-            border-radius: calc(10px * var(--scale-factor));
-            border-right: calc(4px * var(--scale-factor)) solid var(--accent);
-        }
-        .print-preview-overlay .print-wrapper .invoice-header .invoice-title .num {
-            font-size: calc(1.1rem * var(--scale-factor));
-            font-weight: 900;
-            color: var(--ink);
-        }
-        .print-preview-overlay .print-wrapper .invoice-header .invoice-title .sub {
-            font-size: calc(0.65rem * var(--scale-factor));
-            color: var(--ink-mute);
-            font-weight: 600;
-        }
 
-        /* ===== QR CODE SECTION - الجهة اليسرى العلوية ===== */
-        .print-preview-overlay .print-wrapper .qr-section {
+        /* ===== QR Code في الأعلى بدلاً من بطاقة الرقم ===== */
+        .print-preview-overlay .print-wrapper .invoice-header .invoice-title {
             display: flex;
-            justify-content: flex-start;
-            margin-bottom: calc(12px * var(--scale-factor));
-        }
-        .print-preview-overlay .print-wrapper .qr-section .qr-box {
-            display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: calc(12px * var(--scale-factor));
+            justify-content: center;
+            min-width: calc(130px * var(--scale-factor));
             background: var(--surface-muted);
-            padding: calc(8px * var(--scale-factor)) calc(14px * var(--scale-factor));
-            border-radius: calc(8px * var(--scale-factor));
-            border: 1px dashed var(--line-strong);
+            padding: calc(8px * var(--scale-factor)) calc(16px * var(--scale-factor));
+            border-radius: calc(10px * var(--scale-factor));
+            border: 2px solid var(--accent);
         }
-        .print-preview-overlay .print-wrapper .qr-section .qr-box .qr-code {
-            width: calc(70px * var(--scale-factor));
-            height: calc(70px * var(--scale-factor));
+        .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-code {
+            width: calc(120px * var(--scale-factor));
+            height: calc(120px * var(--scale-factor));
             display: flex;
             align-items: center;
             justify-content: center;
             background: #ffffff;
-            border-radius: calc(6px * var(--scale-factor));
-            padding: calc(4px * var(--scale-factor));
-            border: 1px solid var(--line);
+            border-radius: calc(8px * var(--scale-factor));
+            padding: calc(6px * var(--scale-factor));
+            border: 2px solid var(--line-strong);
+            margin-bottom: calc(4px * var(--scale-factor));
         }
-        .print-preview-overlay .print-wrapper .qr-section .qr-box .qr-code canvas,
-        .print-preview-overlay .print-wrapper .qr-section .qr-box .qr-code img {
+        .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-code canvas,
+        .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-code img {
             width: 100% !important;
             height: 100% !important;
         }
-        .print-preview-overlay .print-wrapper .qr-section .qr-box .qr-info {
-            font-size: calc(0.55rem * var(--scale-factor));
+        .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-label {
+            font-size: calc(0.5rem * var(--scale-factor));
             color: var(--ink-mute);
             text-align: center;
+            font-weight: 600;
         }
-        .print-preview-overlay .print-wrapper .qr-section .qr-box .qr-info strong {
+        .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-label strong {
             color: var(--ink);
-            display: block;
-            font-size: calc(0.6rem * var(--scale-factor));
-            margin-bottom: calc(2px * var(--scale-factor));
-        }
-        .print-preview-overlay .print-wrapper .qr-section .qr-box .qr-info .qr-desc {
-            display: block;
-            font-size: calc(0.45rem * var(--scale-factor));
-            color: var(--ink-3);
         }
 
         /* ===== INFO GRID - 5 أعمدة ===== */
@@ -1770,11 +1744,14 @@
                 gap: calc(10px * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .invoice-header .invoice-title {
-                text-align: center;
-                border-right: none;
-                border-top: calc(2px * var(--scale-factor)) solid var(--accent);
-                padding: calc(6px * var(--scale-factor)) calc(14px * var(--scale-factor));
                 width: 100%;
+                border-right: none;
+                border-top: 2px solid var(--accent);
+                padding: calc(8px * var(--scale-factor)) calc(14px * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-code {
+                width: calc(100px * var(--scale-factor));
+                height: calc(100px * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .info-grid {
                 grid-template-columns: 1fr 1fr;
@@ -1818,15 +1795,6 @@
             .print-preview-overlay .print-wrapper .print-footer-notes {
                 font-size: calc(0.5rem * var(--scale-factor));
             }
-            .print-preview-overlay .print-wrapper .qr-section .qr-box {
-                flex-direction: column;
-                gap: calc(8px * var(--scale-factor));
-                padding: calc(8px * var(--scale-factor)) calc(12px * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .qr-section .qr-box .qr-code {
-                width: calc(60px * var(--scale-factor));
-                height: calc(60px * var(--scale-factor));
-            }
         }
 
         @media (max-width: 480px) {
@@ -1845,6 +1813,10 @@
             }
             .print-preview-overlay .print-wrapper .invoice-header .company-details p {
                 font-size: calc(0.55rem * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-code {
+                width: calc(80px * var(--scale-factor));
+                height: calc(80px * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .info-grid {
                 grid-template-columns: 1fr 1fr;
@@ -1902,18 +1874,8 @@
             .print-preview-overlay .print-wrapper .print-footer-notes .note-item {
                 gap: calc(5px * var(--scale-factor));
             }
-            .print-preview-overlay .print-wrapper .qr-section .qr-box .qr-code {
-                width: calc(50px * var(--scale-factor));
-                height: calc(50px * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .qr-section .qr-box .qr-info {
-                font-size: calc(0.5rem * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .qr-section .qr-box .qr-info strong {
-                font-size: calc(0.55rem * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .qr-section .qr-box .qr-info .qr-desc {
-                font-size: calc(0.4rem * var(--scale-factor));
+            .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-label {
+                font-size: calc(0.45rem * var(--scale-factor));
             }
         }
 
@@ -1937,6 +1899,13 @@
             .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box {
                 border-color: var(--ink) !important;
             }
+            .print-preview-overlay .print-wrapper .invoice-header .invoice-title {
+                border: 2px solid var(--ink) !important;
+                background: var(--surface-muted) !important;
+            }
+            .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-code {
+                border: 2px solid var(--ink) !important;
+            }
             .print-preview-overlay .print-wrapper .notes-section {
                 border-top: calc(2px * var(--scale-factor)) dashed var(--line-strong) !important;
                 background: var(--surface-muted) !important;
@@ -1947,15 +1916,6 @@
                 border-top: 2px solid var(--line-strong) !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
-            }
-            .print-preview-overlay .print-wrapper .qr-section .qr-box {
-                background: var(--surface-muted) !important;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-                border: 1px dashed var(--line-strong) !important;
-            }
-            .print-preview-overlay .print-wrapper .qr-section .qr-box .qr-code {
-                border: 1px solid var(--line) !important;
             }
         }
 
@@ -3265,7 +3225,7 @@
 
         /**
          * ============================================================
-         * GENERATE QR CODE
+         * GENERATE QR CODE - حجم كبير 120x120
          * ============================================================
          */
         function generateQRCode(invoiceNumber, client, total) {
@@ -3285,12 +3245,13 @@
                 return;
             }
 
-            // إنشاء محتوى QR Code (مختصر)
+            // إنشاء محتوى QR Code
             var qrData = {
                 invoice: invoiceNumber || '----',
                 client: client || 'غير محدد',
                 total: total || '0.00',
-                date: new Date().toLocaleDateString('ar-EG')
+                date: new Date().toLocaleDateString('ar-EG'),
+                company: settings.companyName || 'منتجع حياله'
             };
 
             var qrText = JSON.stringify(qrData);
@@ -3298,8 +3259,8 @@
             try {
                 var qr = new QRCode(qrContainer, {
                     text: qrText,
-                    width: 70,
-                    height: 70,
+                    width: 120,
+                    height: 120,
                     colorDark: '#121821',
                     colorLight: '#ffffff',
                     correctLevel: QRCode.CorrectLevel.H
@@ -3314,7 +3275,7 @@
 
         /**
          * ============================================================
-         * GENERATE QR CODE - باستخدام API خارجي (بديل)
+         * GENERATE QR CODE - API خارجي (حجم 120x120)
          * ============================================================
          */
         function generateQRCodeExternal(invoiceNumber, client, total) {
@@ -3331,7 +3292,7 @@
             var qrText = JSON.stringify(qrData);
             var encodedText = encodeURIComponent(qrText);
 
-            var qrImageUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=70x70&data=' + encodedText +
+            var qrImageUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=' + encodedText +
                 '&bgcolor=ffffff&color=121821';
 
             var img = document.createElement('img');
@@ -3344,8 +3305,8 @@
             img.onerror = function() {
                 qrContainer.innerHTML = `
                             <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;background:#f8f9fa;border-radius:4px;">
-                                <i class="fas fa-qrcode" style="font-size:1.2rem;color:var(--accent);"></i>
-                                <span style="font-size:0.4rem;color:var(--ink-mute);">${invoiceNumber || ''}</span>
+                                <i class="fas fa-qrcode" style="font-size:2rem;color:var(--accent);"></i>
+                                <span style="font-size:0.5rem;color:var(--ink-mute);">${invoiceNumber || ''}</span>
                             </div>
                         `;
             };
@@ -3359,7 +3320,7 @@
 
         /**
          * ============================================================
-         * SYSTEM PRINT PREVIEW - مع QR Code في الجهة اليسرى العلوية
+         * SYSTEM PRINT PREVIEW - مع QR Code في الأعلى بدلاً من بطاقة الرقم
          * ============================================================
          */
         function previewInvoice() {
@@ -3386,7 +3347,7 @@
 
             var printContent = document.getElementById('printPreviewContent');
 
-            // بناء HTML مع QR Code في الجهة اليسرى العلوية
+            // بناء HTML مع QR Code في الأعلى بدلاً من بطاقة الرقم
             var html = `
                         <div class="invoice-header">
                             <div class="logo-section">
@@ -3399,22 +3360,13 @@
                                     <p style="font-size:0.55rem;color:#6d7883;">📞 ${companyPhone}</p>
                                 </div>
                             </div>
+                            <!-- ===== QR Code في الأعلى بدلاً من بطاقة الرقم ===== -->
                             <div class="invoice-title">
-                                <div class="num"># ${invNum}</div>
-                                <div class="sub">فاتورة مبيعات</div>
-                            </div>
-                        </div>
-
-                        <!-- ===== QR Code في الجهة اليسرى العلوية ===== -->
-                        <div class="qr-section">
-                            <div class="qr-box">
                                 <div class="qr-code" id="qrCodeContainer">
                                     <!-- سيتم وضع QR Code هنا بواسطة JavaScript -->
                                 </div>
-                                <div class="qr-info">
-                                    <strong>رمز التحقق</strong>
-                                    <span>فاتورة: ${invNum}</span>
-                                    <span class="qr-desc">امسح الكود للتحقق</span>
+                                <div class="qr-label">
+                                    <strong>فاتورة: ${invNum}</strong>
                                 </div>
                             </div>
                         </div>
@@ -3552,14 +3504,14 @@
                             <title>فاتورة - منتجع حياله</title>
                             <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
                             <style>
-                                /* جميع الأنماط مدمجة هنا */
                                 ${document.querySelector('style').innerHTML}
                                 body { padding: 20px; background: #fff; }
                                 .print-wrapper { max-width: 1100px; margin: 0 auto; }
                                 .print-preview-overlay .print-actions { display: none !important; }
                                 .print-preview-overlay { background: #fff !important; backdrop-filter: none !important; padding: 0 !important; position: static !important; }
                                 .print-preview-overlay .print-wrapper { max-height: none !important; box-shadow: none !important; padding: 10px !important; max-width: 1100px !important; width: 100% !important; border-radius: 0 !important; }
-                                .qr-section .qr-box { background: #f8f9fa !important; border: 1px dashed #c7d0cc !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+                                .invoice-header .invoice-title { border: 2px solid #121821 !important; background: #f4f6f5 !important; }
+                                .invoice-header .invoice-title .qr-code { border: 2px solid #121821 !important; }
                                 .notes-section { border-top: 2px dashed #c7d0cc !important; background: #f8f9fa !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
                                 .print-footer-notes { border-top: 2px solid #c7d0cc !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
                                 .invoice-header .logo-section .logo-box { border-color: #121821 !important; }
