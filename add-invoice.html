@@ -3499,161 +3499,161 @@
             qrContainer.appendChild(img);
         }
 
-        /**
-         * ============================================================
-         * SYSTEM PRINT PREVIEW - مع QR Code في الأعلى بدلاً من بطاقة الرقم
-         * ============================================================
-         */
-        function previewInvoice() {
-            if (bookings.length === 0) {
-                showToast('⚠️ تنبيه', 'لا توجد حجوزات للمعاينة', 'error');
-                return;
-            }
+       /**
+ * ============================================================
+ * SYSTEM PRINT PREVIEW - مع QR Code في الأعلى بدلاً من بطاقة الرقم
+ * ============================================================
+ */
+function previewInvoice() {
+    if (bookings.length === 0) {
+        showToast('⚠️ تنبيه', 'لا توجد حجوزات للمعاينة', 'error');
+        return;
+    }
 
-            var client = clientName.value.trim() || 'غير محدد';
-            var phone = clientPhone.value.trim() || 'غير محدد';
-            var invNum = invoiceNumber.value.trim() || '----';
-            var book = bookNumber.value.trim() || '----';
-            var date = invoiceDate.value ? new Date(invoiceDate.value).toLocaleDateString('ar-EG') : '----';
-            var total = totalAmount.textContent;
-            var discount = displayDiscount.textContent;
-            var paid = displayPaid.textContent;
-            var remaining = displayRemaining.textContent;
+    var client = clientName.value.trim() || 'غير محدد';
+    var phone = clientPhone.value.trim() || 'غير محدد';
+    var invNum = invoiceNumber.value.trim() || '----';
+    var book = bookNumber.value.trim() || '----';
+    var date = invoiceDate.value ? new Date(invoiceDate.value).toLocaleDateString('ar-EG') : '----';
+    var total = totalAmount.textContent;
+    var discount = displayDiscount.textContent;
+    var paid = displayPaid.textContent;
+    var remaining = displayRemaining.textContent;
 
-            var companyName = settings.companyName || 'منتجع حياله';
-            var companyAddress = settings.companyAddress || '';
-            var companyPhone = settings.companyPhone || '';
-            var companyLogo = settings.companyLogo || '';
-            var footer = settings.invoiceFooter || 'شكراً لثقتكم بنا';
+    var companyName = settings.companyName || 'منتجع حياله';
+    var companyAddress = settings.companyAddress || '';
+    var companyPhone = settings.companyPhone || '';
+    var companyLogo = settings.companyLogo || '';
+    var footer = settings.invoiceFooter || 'شكراً لثقتكم بنا';
 
-            var printContent = document.getElementById('printPreviewContent');
+    var printContent = document.getElementById('printPreviewContent');
 
-            // بناء HTML مع QR Code في الأعلى بدلاً من بطاقة الرقم
-            var html = `
-                        <div class="invoice-header">
-                            <div class="logo-section">
-                                <div class="logo-box">
-                                    ${companyLogo ? `<img src="${companyLogo}" alt="منتجع حياله" />` : `<span style="font-size:1.8rem;font-weight:900;color:#121821;">ح</span>`}
-                                </div>
-                                <div class="company-details">
-                                    <h2>${companyName}</h2>
-                                    <p>${companyAddress}</p>
-                                    <p style="font-size:0.55rem;color:#6d7883;">📞 ${companyPhone}</p>
-                                </div>
-                            </div>
-                            <!-- ===== QR Code في الأعلى بدلاً من بطاقة الرقم ===== -->
-                            <div class="invoice-title">
-                                <div class="qr-code" id="qrCodeContainer">
-                                    <!-- سيتم وضع QR Code هنا بواسطة JavaScript -->
-                                </div>
-                                <div class="qr-label">
-                                    <strong>فاتورة: ${invNum}</strong>
-                                </div>
-                            </div>
-                        </div>
+    // بناء HTML مع QR Code في الأعلى بدلاً من بطاقة الرقم
+    var html = `
+        <div class="invoice-header">
+            <div class="logo-section">
+                <div class="logo-box">
+                    ${companyLogo ? `<img src="${companyLogo}" alt="منتجع حياله" />` : `<span style="font-size:1.8rem;font-weight:900;color:#121821;">ح</span>`}
+                </div>
+                <div class="company-details">
+                    <h2>${companyName}</h2>
+                    <p>${companyAddress}</p>
+                    <p style="font-size:0.55rem;color:#6d7883;">📞 ${companyPhone}</p>
+                </div>
+            </div>
+            <!-- ===== QR Code في الأعلى بدلاً من بطاقة الرقم ===== -->
+            <div class="invoice-title">
+                <div class="qr-code" id="qrCodeContainer">
+                    <!-- سيتم وضع QR Code هنا بواسطة JavaScript -->
+                </div>
+                <div class="qr-label">
+                    <strong>فاتورة: ${invNum}</strong>
+                </div>
+            </div>
+        </div>
 
-                        <!-- ===== لوحة المعلومات (5 أعمدة) ===== -->
-                        <div class="info-grid">
-                            <div class="item"><span class="label">رقم الفاتورة</span><div class="value">${invNum}</div></div>
-                            <div class="item"><span class="label">الرقم الدفتري</span><div class="value">${book}</div></div>
-                            <div class="item"><span class="label">التاريخ</span><div class="value">${date}</div></div>
-                            <div class="item"><span class="label">الجوال</span><div class="value">${phone}</div></div>
-                            <div class="item"><span class="label">العميل</span><div class="value">${client}</div></div>
-                        </div>
+        <!-- ===== لوحة المعلومات (5 أعمدة) ===== -->
+        <div class="info-grid">
+            <div class="item"><span class="label">رقم الفاتورة</span><div class="value">${invNum}</div></div>
+            <div class="item"><span class="label">الرقم الدفتري</span><div class="value">${book}</div></div>
+            <div class="item"><span class="label">التاريخ</span><div class="value">${date}</div></div>
+            <div class="item"><span class="label">الجوال</span><div class="value">${phone}</div></div>
+            <div class="item"><span class="label">العميل</span><div class="value">${client}</div></div>
+        </div>
 
-                        <!-- ===== جدول الحجوزات ===== -->
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th style="width:30px;">#</th>
-                                    <th style="text-align:right;">نوع العقار</th>
-                                    <th>عدد الأيام</th>
-                                    <th>السعر اليومي</th>
-                                    <th>الإجمالي</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                        `;
+        <!-- ===== جدول الحجوزات ===== -->
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:30px;">#</th>
+                    <th style="text-align:right;">نوع العقار</th>
+                    <th>عدد الأيام</th>
+                    <th>السعر اليومي</th>
+                    <th>الإجمالي</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
 
-            bookings.forEach(function(item, index) {
-                html += `
-                                <tr>
-                                    <td>${index + 1}</td>
-                                    <td style="text-align:right;">${item.property}</td>
-                                    <td>${item.nights}</td>
-                                    <td>${item.dailyPrice.toFixed(2)}</td>
-                                    <td style="font-weight:700;color:var(--teal);">${item.total.toFixed(2)}</td>
-                                </tr>
-                            `;
-            });
+    bookings.forEach(function(item, index) {
+        html += `
+            <tr>
+                <td>${index + 1}</td>
+                <td style="text-align:right;">${item.property}</td>
+                <td>${item.nights}</td>
+                <td>${item.dailyPrice.toFixed(2)}</td>
+                <td style="font-weight:700;color:var(--teal);">${item.total.toFixed(2)}</td>
+            </tr>
+        `;
+    });
 
-            html += `
-                            </tbody>
-                        </table>
+    html += `
+            </tbody>
+        </table>
 
-                        <!-- ===== التذييل ===== -->
-                        <div class="footer">
-                            <div>
-                                <div style="display:flex;gap:20px;flex-wrap:wrap;margin-bottom:6px;">
-                                    <span><strong>الإجمالي:</strong> ${total} ر.س</span>
-                                    <span><strong>الخصم:</strong> ${discount} ر.س</span>
-                                    <span><strong>المدفوع:</strong> ${paid} ر.س</span>
-                                    <span style="color:var(--teal);"><strong>المتبقي:</strong> ${remaining} ر.س</span>
-                                </div>
-                                <p style="font-size:0.55rem;color:#8a9aaa;">${footer}</p>
-                            </div>
-                            <div class="signature">
-                                <p>توقيع المستلم</p>
-                                <div class="line"></div>
-                                <p style="font-size:0.5rem;color:#8a9aaa;">شكراً لثقتكم بنا</p>
-                            </div>
-                        </div>
+        <!-- ===== التذييل ===== -->
+        <div class="footer">
+            <div>
+                <div style="display:flex;gap:20px;flex-wrap:wrap;margin-bottom:6px;">
+                    <span><strong>الإجمالي:</strong> ${total} ر.س</span>
+                    <span><strong>الخصم:</strong> ${discount} ر.س</span>
+                    <span><strong>المدفوع:</strong> ${paid} ر.س</span>
+                    <span style="color:var(--teal);"><strong>المتبقي:</strong> ${remaining} ر.س</span>
+                </div>
+                <p style="font-size:0.55rem;color:#8a9aaa;">${footer}</p>
+            </div>
+            <div class="signature">
+                <p>توقيع المستلم</p>
+                <div class="line"></div>
+                <p style="font-size:0.5rem;color:#8a9aaa;">شكراً لثقتكم بنا</p>
+            </div>
+        </div>
 
-                        <!-- ===== ملاحظات ===== -->
-                        <div class="notes-section">
-                            <div class="notes-title">
-                                <i class="fas fa-sticky-note"></i> ملاحظات
-                            </div>
-                            <div class="notes-content">
-                                <p>إدارة المنتجع غير مسؤولة عن فقدان أو تلف المقنيات الشخصية، لذا توصي بالتأكد من عدم نسيان أي أغراض قبل المغادرة</p>
-                                <p>يمنع إحداث أي تلف أو تخريب في مرافق المنتجع أو محتوياته، ويحمل المستأجر قيمة أي أضرار تنتج عن الاستخدام غير المعتدل</p>
-                            </div>
-                        </div>
+        <!-- ===== ملاحظات ===== -->
+        <div class="notes-section">
+            <div class="notes-title">
+                <i class="fas fa-sticky-note"></i> ملاحظات
+            </div>
+            <div class="notes-content">
+                <p>إدارة المنتجع غير مسؤولة عن فقدان أو تلف المقنيات الشخصية، لذا توصي بالتأكد من عدم نسيان أي أغراض قبل المغادرة</p>
+                <p>يمنع إحداث أي تلف أو تخريب في مرافق المنتجع أو محتوياته، ويحمل المستأجر قيمة أي أضرار تنتج عن الاستخدام غير المعتدل</p>
+            </div>
+        </div>
 
-                        <!-- ===== النصوص الإضافية ===== -->
-                        <div class="print-footer-notes">
-                            <div class="note-item">
-                                <i class="fas fa-circle"></i>
-                                <span><strong>آملين مراعاة التالي :</strong></span>
-                            </div>
-                            <div class="note-item">
-                                <i class="fas fa-circle"></i>
-                                <span>لا نأخذ تأمين ولا نعمل تشييك بعد الخروج (أمانة المسلم تكفي).</span>
-                            </div>
-                            <div class="note-item">
-                                <i class="fas fa-circle"></i>
-                                <span>في حال بقاء أي أغراض (غير مثمنة) دون مراجعة مباشرة من المستأجر يحق لإدارة المنتجع التصرف بها وفق ما تراه.</span>
-                            </div>
-                            <div class="note-item">
-                                <i class="fas fa-circle"></i>
-                                <span>تفهم المرافقون طابع المكان كمزرعة شعبية ليست كالفنادق مثلاً.</span>
-                            </div>
-                            <div class="note-item">
-                                <i class="fas fa-circle"></i>
-                                <span>يرجى التأكد من قراءة التفاصيل بدقة (يمكنكم طلب فيديوهات إضافية للمكان).</span>
-                            </div>
-                        </div>
-                    `;
+        <!-- ===== النصوص الإضافية ===== -->
+        <div class="print-footer-notes">
+            <div class="note-item">
+                <i class="fas fa-circle"></i>
+                <span><strong>آملين مراعاة التالي :</strong></span>
+            </div>
+            <div class="note-item">
+                <i class="fas fa-circle"></i>
+                <span>لا نأخذ تأمين ولا نعمل تشييك بعد الخروج (أمانة المسلم تكفي).</span>
+            </div>
+            <div class="note-item">
+                <i class="fas fa-circle"></i>
+                <span>في حال بقاء أي أغراض (غير مثمنة) دون مراجعة مباشرة من المستأجر يحق لإدارة المنتجع التصرف بها وفق ما تراه.</span>
+            </div>
+            <div class="note-item">
+                <i class="fas fa-circle"></i>
+                <span>تفهم المرافقون طابع المكان كمزرعة شعبية ليست كالفنادق مثلاً.</span>
+            </div>
+            <div class="note-item">
+                <i class="fas fa-circle"></i>
+                <span>يرجى التأكد من قراءة التفاصيل بدقة (يمكنكم طلب فيديوهات إضافية للمكان).</span>
+            </div>
+        </div>
+    `;
 
-            printContent.innerHTML = html;
+    printContent.innerHTML = html;
 
-            // إنشاء QR Code بعد عرض المحتوى
-            setTimeout(function() {
-                generateQRCode(invNum, client, total);
-            }, 200);
+    // إنشاء QR Code بعد عرض المحتوى
+    setTimeout(function() {
+        generateQRCode(invNum, client, total);
+    }, 200);
 
-            document.getElementById('printPreviewOverlay').classList.add('show');
-        }
+    document.getElementById('printPreviewOverlay').classList.add('show');
+}
 
         /**
          * ============================================================
