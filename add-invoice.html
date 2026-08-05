@@ -4757,99 +4757,120 @@
         });
 
         /**
-         * ============================================================
-         * SAVE TO SUPABASE
-         * ============================================================
-         */
-        async function saveInvoiceToSupabase(invoiceData) {
-            btnSaveInvoice.disabled = true;
-            btnSaveInvoice.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
+ * ============================================================
+ * SAVE TO SUPABASE - متوافق مع هيكل الجدول
+ * ============================================================
+ */
+async function saveInvoiceToSupabase(invoiceData) {
+    btnSaveInvoice.disabled = true;
+    btnSaveInvoice.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
 
+    try {
+        var warnings = [];
+        var bookingsToSave = invoiceData.bookings.map(function(item, index) {
+            if (!item.property) {
+                warnings.push('الحجز ' + (index + 1) + ': نوع العقار فارغ');
+            }
+            if (!item.checkIn) {
+                warnings.push('الحجز ' + (index + 1) + ': تاريخ الدخول فارغ');
+            }
+
+            // ===== البيانات المتطابقة مع هيكل الجدول =====
+            var booking = {
+                invoice_number: invoiceData.number || null,
+                booking_number: invoiceData.book || null,
+                invoice_date: invoiceData.date || new Date().toISOString().split('T')[0],
+                check_in: item.checkIn || null,
+                check_out: item.checkOut || null,
+                client_name: invoiceData.client || null,
+                client_phone: invoiceData.phone || null,
+                property_type: item.property || null,
+                nights: parseInt(item.nights) || 0,
+                price_per_night: parseFloat(item.dailyPrice) || 0,
+                discount: parseFloat(invoiceData.discount) || 0,
+                paid: parseFloat(invoiceData.paid) || 0,
+                remaining: parseFloat(invoiceData.remaining) || 0,
+                total: parseFloat(item.total) || 0,
+                payment_status: parseFloat(invoiceData.remaining) <= 0 ? 'Fully Paid' : 'Balance Due',
+                stay_type: item.stayType || 'مبيت',
+                check_in_time: item.checkInTime || null,
+                check_out_time: item.checkOutTime || null,
+                time_note: item.timeNote || null,
+                notes: item.notes || null
+            };
+
+            // إزالة أي مفاتيح بقيمة undefined
+            Object.keys(booking).forEach(function(key) {
+                if (booking[key] === undefined) {
+                    delete booking[key];
+                }
+            });
+
+            return booking;
+        });
+
+        // ===== حفظ كل حجز على حدة مع معالجة الأخطاء =====
+        var savedCount = 0;
+        var errors = [];
+
+        for (var i = 0; i < bookingsToSave.length; i++) {
+            var booking = bookingsToSave[i];
+            
             try {
-                var warnings = [];
-                var bookingsToSave = invoiceData.bookings.map(function(item, index) {
-                    if (!item.property) {
-                        warnings.push('الحجز ' + (index + 1) + ': نوع العقار فارغ');
-                    }
-                    if (!item.checkIn) {
-                        warnings.push('الحجز ' + (index + 1) + ': تاريخ الدخول فارغ');
-                    }
-
-                    return {
-                        invoice_number: invoiceData.number || '',
-                        booking_number: '',
-                        invoice_date: invoiceData.date || new Date().toISOString().split('T')[0],
-                        check_in: item.checkIn || null,
-                        check_out: item.checkOut || null,
-                        client_name: invoiceData.client || '',
-                        client_phone: invoiceData.phone || '',
-                        property_type: item.property || '',
-                        nights: parseInt(item.nights) || 0,
-                        price_per_night: parseFloat(item.dailyPrice) || 0,
-                        discount: parseFloat(invoiceData.discount) || 0,
-                        paid: parseFloat(invoiceData.paid) || 0,
-                        remaining: parseFloat(invoiceData.remaining) || 0,
-                        total: parseFloat(item.total) || 0,
-                        payment_status: parseFloat(invoiceData.remaining) <= 0 ? 'Fully Paid' : 'Balance Due',
-                        stay_type: item.stayType || 'مبيت',
-                        check_in_time: item.checkInTime || '',
-                        check_out_time: item.checkOutTime || '',
-                        time_note: '',
-                        notes: ''
-                    };
+                var response = await fetch(SUPABASE_URL + '/rest/v1/bookings', {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify(booking)
                 });
 
-                var savePromises = bookingsToSave.map(function(booking) {
-                    return fetch(SUPABASE_URL + '/rest/v1/bookings', {
-                        method: 'POST',
-                        headers: {
-                            'apikey': SUPABASE_ANON_KEY,
-                            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
-                            'Content-Type': 'application/json',
-                            'Prefer': 'return=minimal'
-                        },
-                        body: JSON.stringify(booking)
-                    });
-                });
-
-                var responses = await Promise.all(savePromises);
-                var allSuccess = responses.every(function(r) { return r.ok; });
-
-                if (!allSuccess) {
-                    var errors = [];
-                    responses.forEach(function(r, index) {
-                        if (!r.ok) {
-                            errors.push('الحجز ' + (index + 1) + ': ' + r.status);
-                        }
-                    });
-                    throw new Error('فشل في حفظ بعض البيانات: ' + errors.join(', '));
-                }
-
-                btnSaveInvoice.disabled = false;
-                btnSaveInvoice.innerHTML = '<i class="fas fa-save"></i> حفظ';
-
-                if (warnings.length > 0) {
-                    showToast('⚠️ تم الحفظ مع تنبيهات', 'تم حفظ الفاتورة ولكن هناك حقول ناقصة:\n' + warnings.join('\n'),
-                        'warning');
+                if (response.ok) {
+                    savedCount++;
+                    console.log('✅ تم حفظ الحجز ' + (i + 1));
                 } else {
-                    showToast('✅ تم الحفظ', 'تم حفظ الفاتورة بنجاح في Supabase!', 'success', [
-                        { label: 'معاينة', value: 'preview', class: 'btn-yes' },
-                        { label: 'لا', value: 'no', class: 'btn-no' }
-                    ]).then(function(result) {
-                        if (result === 'preview') {
-                            previewInvoice();
-                        }
-                        resetForm();
-                    });
+                    var errorText = await response.text();
+                    console.error('❌ خطأ في الحجز ' + (i + 1) + ':', errorText);
+                    errors.push('الحجز ' + (i + 1) + ': ' + response.status + ' - ' + errorText);
                 }
-
-            } catch (error) {
-                console.error('❌ خطأ:', error);
-                showToast('❌ خطأ', 'حدث خطأ في حفظ الفاتورة: ' + error.message, 'error');
-                btnSaveInvoice.disabled = false;
-                btnSaveInvoice.innerHTML = '<i class="fas fa-save"></i> حفظ';
+            } catch (e) {
+                console.error('❌ خطأ في الحجز ' + (i + 1) + ':', e.message);
+                errors.push('الحجز ' + (i + 1) + ': ' + e.message);
             }
         }
+
+        btnSaveInvoice.disabled = false;
+        btnSaveInvoice.innerHTML = '<i class="fas fa-save"></i> حفظ';
+
+        if (savedCount === 0) {
+            showToast('❌ خطأ', 'فشل في حفظ جميع الحجوزات: ' + errors.join(' | '), 'error');
+            return;
+        }
+
+        if (errors.length > 0) {
+            showToast('⚠️ تم الحفظ جزئياً', 'تم حفظ ' + savedCount + ' من ' + bookingsToSave.length + ' حجوزات\n' + errors.join('\n'), 'warning');
+        } else {
+            showToast('✅ تم الحفظ', 'تم حفظ الفاتورة بنجاح في Supabase!', 'success', [
+                { label: 'معاينة', value: 'preview', class: 'btn-yes' },
+                { label: 'لا', value: 'no', class: 'btn-no' }
+            ]).then(function(result) {
+                if (result === 'preview') {
+                    previewInvoice();
+                }
+                resetForm();
+            });
+        }
+
+    } catch (error) {
+        console.error('❌ خطأ:', error);
+        showToast('❌ خطأ', 'حدث خطأ في حفظ الفاتورة: ' + error.message, 'error');
+        btnSaveInvoice.disabled = false;
+        btnSaveInvoice.innerHTML = '<i class="fas fa-save"></i> حفظ';
+    }
+}
 
         /**
          * ============================================================
