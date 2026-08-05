@@ -1267,7 +1267,7 @@
     </div>
 
     <!-- ============================================================
-    JAVASCRIPT - مع إصلاح مشكلة الحذف
+    JAVASCRIPT - مع إصلاح مشكلة الحذف نهائياً
     ============================================================ -->
     <script>
         /**
@@ -1680,7 +1680,7 @@
 
         /**
          * ============================================================
-         * عرض الدفعات - بدون اسم العميل
+         * عرض الدفعات
          * ============================================================
          */
         function renderPayments(payments) {
@@ -1717,7 +1717,6 @@
             `;
 
             payments.forEach(function(item, index) {
-                // استخدام description أو client_name إذا كان موجوداً
                 var desc = item.description || item.client_name || '-';
                 html += `
                     <tr data-id="${item.id}">
@@ -1878,13 +1877,13 @@
 
         function editPayment(id) {
             // البحث في allPayments أولاً
-            var item = allPayments.find(function(p) { return p.id === id; });
+            var item = allPayments.find(function(p) { return String(p.id) === String(id); });
             // إذا لم يتم العثور، البحث في monthlyPayments
             if (!item) {
-                item = monthlyPayments.find(function(p) { return p.id === id; });
+                item = monthlyPayments.find(function(p) { return String(p.id) === String(id); });
             }
             if (!item) {
-                showToast('خطأ', 'الدفعة غير موجودة', 'error');
+                showToast('❌ خطأ', 'الدفعة غير موجودة', 'error');
                 return;
             }
 
@@ -1911,7 +1910,7 @@
 
         /**
          * ============================================================
-         * إضافة / تعديل دفعة - بدون اسم العميل
+         * إضافة / تعديل دفعة
          * ============================================================
          */
         async function addPayment(event) {
@@ -1967,7 +1966,6 @@
 
                 if (!response.ok) {
                     var errorText = await response.text();
-                    // إذا كان العمود description غير موجود، استخدم client_name
                     if (errorText.includes('description')) {
                         paymentData.client_name = description;
                         delete paymentData.description;
@@ -1995,7 +1993,7 @@
                     isEdit ? 'تم تحديث الدفعة بنجاح' : 'تم إضافة الدفعة بنجاح',
                     'success'
                 );
-                // تحديث البيانات بالكامل
+                // إعادة تحميل البيانات بالكامل
                 await loadDashboard();
 
             } catch (error) {
@@ -2016,21 +2014,50 @@
 
         /**
          * ============================================================
-         * حذف دفعة - إصلاح المشكلة
+         * حذف دفعة - إصلاح نهائي
          * ============================================================
          */
         async function deletePayment(id) {
-            // البحث في allPayments و monthlyPayments
-            var item = allPayments.find(function(p) { return p.id === id; });
+            // محاولة البحث في allPayments أولاً
+            var item = allPayments.find(function(p) { 
+                return String(p.id) === String(id); 
+            });
+            
+            // إذا لم يتم العثور، البحث في monthlyPayments
             if (!item) {
-                item = monthlyPayments.find(function(p) { return p.id === id; });
+                item = monthlyPayments.find(function(p) { 
+                    return String(p.id) === String(id); 
+                });
             }
+            
+            // إذا لم يتم العثور، محاولة جلب الدفعة مباشرة من قاعدة البيانات
             if (!item) {
-                showToast('خطأ', 'الدفعة غير موجودة', 'error');
+                try {
+                    var fetchResponse = await fetch(SUPABASE_URL + '/rest/v1/abuzaid_payments?id=eq.' + id, {
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                        }
+                    });
+                    if (fetchResponse.ok) {
+                        var data = await fetchResponse.json();
+                        if (data && data.length > 0) {
+                            item = data[0];
+                            // إضافة الدفعة إلى allPayments لتحديثها
+                            allPayments.push(item);
+                        }
+                    }
+                } catch (e) {
+                    console.warn('⚠️ خطأ في جلب الدفعة:', e.message);
+                }
+            }
+            
+            if (!item) {
+                showToast('❌ خطأ', 'الدفعة غير موجودة في قاعدة البيانات', 'error');
                 return;
             }
 
-            var desc = item.description || item.client_name || '-';
+            var desc = item.description || item.client_name || 'بدون بيان';
             var amountFormatted = formatCurrency(parseFloat(item.amount) || 0);
             
             if (!confirm('⚠️ هل أنت متأكد من حذف هذه الدفعة؟\n\n📌 البيان: ' + desc + '\n💰 المبلغ: ' + amountFormatted)) {
@@ -2047,17 +2074,109 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error('فشل في حذف الدفعة: ' + response.status);
+                    var errorText = await response.text();
+                    throw new Error('فشل في حذف الدفعة: ' + response.status + ' - ' + errorText);
                 }
 
+                // حذف الدفعة من allPayments و monthlyPayments محلياً
+                allPayments = allPayments.filter(function(p) { 
+                    return String(p.id) !== String(id); 
+                });
+                monthlyPayments = monthlyPayments.filter(function(p) { 
+                    return String(p.id) !== String(id); 
+                });
+
                 showToast('✅ تم الحذف', 'تم حذف الدفعة بنجاح', 'success');
-                // تحديث البيانات بالكامل
-                await loadDashboard();
+                
+                // تحديث العرض
+                renderPayments(monthlyPayments);
+                
+                // إعادة حساب المؤشرات
+                calculateKPIs();
 
             } catch (error) {
                 console.error('❌ خطأ في الحذف:', error);
                 showToast('❌ خطأ', 'فشل في حذف الدفعة: ' + error.message, 'error');
             }
+        }
+
+        /**
+         * ============================================================
+         * حساب المؤشرات بشكل منفصل (للتحديث بعد الحذف)
+         * ============================================================
+         */
+        function calculateKPIs() {
+            var period = getSelectedPeriod();
+            var ratePercent = Number(document.getElementById('commissionRate').value || 0);
+            var rate = ratePercent / 100;
+
+            var monthlyBookings = allBookings.filter(function(item) {
+                return isWithinSelectedMonth(item.invoice_date, period);
+            });
+
+            var monthlyExpenses = allExpenses.filter(function(item) {
+                return isWithinSelectedMonth(item.date, period);
+            });
+
+            var totalInvoices = sum(monthlyBookings.map(function(item) { 
+                return parseFloat(item.total || 0) - parseFloat(item.discount || 0); 
+            }));
+            var operatingExpenses = sum(monthlyExpenses.map(function(item) { return parseFloat(item.total || item.amount || 0); }));
+            var commissionBase = Math.max(0, totalInvoices - operatingExpenses);
+            var commissionDue = commissionBase * rate;
+            var receivedAmount = sum(monthlyPayments.map(function(item) { return parseFloat(item.amount || 0); }));
+            var remainingAmount = commissionDue - receivedAmount;
+            var accountStatus = remainingAmount <= 0 ? "مسدد بالكامل" : "متبقي مستحق";
+            var statusClass = remainingAmount <= 0 ? "status-paid" : "status-due";
+
+            var periodText = period.isAllMonths ? "كل الفترات" : months[period.month + 1] + ' ' + period.year;
+            document.getElementById('monthStart').value = periodText;
+
+            var kpiContainer = document.getElementById('kpiContainer');
+            kpiContainer.innerHTML = `
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <span class="icon">💰</span>
+                        <div class="number">${formatCurrency(totalInvoices)}</div>
+                        <div class="label">إجمالي الفواتير</div>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="icon">📊</span>
+                        <div class="number">${formatCurrency(operatingExpenses)}</div>
+                        <div class="label">المصروفات التشغيلية</div>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="icon">📈</span>
+                        <div class="number">${formatCurrency(commissionBase)}</div>
+                        <div class="label">صافي أساس العمولة</div>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="icon">🤝</span>
+                        <div class="number">${formatCurrency(commissionDue)}</div>
+                        <div class="label">العمولة المستحقة</div>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="icon">💳</span>
+                        <div class="number">${formatCurrency(receivedAmount)}</div>
+                        <div class="label">المبالغ الواصلة</div>
+                    </div>
+                    <div class="kpi-card ${statusClass}">
+                        <span class="icon">${remainingAmount <= 0 ? '✅' : '⏳'}</span>
+                        <div class="number">${formatCurrency(remainingAmount)}</div>
+                        <div class="label">المتبقي</div>
+                    </div>
+                    <div class="kpi-card ${statusClass}">
+                        <span class="icon">📌</span>
+                        <div class="number" style="font-size:1.1rem;">${accountStatus}</div>
+                        <div class="label">حالة الحساب</div>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="icon">⚙️</span>
+                        <div class="number">${ratePercent.toFixed(1)}%</div>
+                        <div class="label">نسبة العمولة</div>
+                    </div>
+                </div>
+            `;
         }
 
         /**
@@ -2076,7 +2195,7 @@
         console.log('🤝 صفحة عمولة أبو زيد - منتجع حياله (مع Supabase)');
         console.log('📊 Supabase URL:', SUPABASE_URL);
         console.log('👤 المستخدم:', user.name || 'غير معروف');
-        console.log('✅ جاهزة للعمل - مع إصلاح مشكلة الحذف');
+        console.log('✅ جاهزة للعمل - مع إصلاح مشكلة الحذف نهائياً');
     </script>
 
 </body>
