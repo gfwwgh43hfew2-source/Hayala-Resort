@@ -24,7 +24,7 @@
 
     <style>
         /* ============================================================
-           ROOT VARIABLES - ثابتة كما هي
+           ROOT VARIABLES
            ============================================================ */
         :root {
             --ink: #121821;
@@ -49,7 +49,6 @@
             --shadow-sm: 0 3px 10px -4px rgba(18,24,33,0.18);
             --shadow-lg: 0 20px 60px -20px rgba(18,24,33,0.3);
             --font-display: 'Cairo', 'Segoe UI', Tahoma, Arial, sans-serif;
-            --font-mono: 'JetBrains Mono', ui-monospace, monospace;
             --header-height: 60px;
             --stripe-height: 4px;
             --mobile-nav-height: 56px;
@@ -132,16 +131,15 @@
         }
 
         /* ============================================================
-           HEADER - تصميم احترافي محسن
+           HEADER
            ============================================================ */
         header {
             position: sticky;
             top: 0;
             z-index: 1000;
-            padding: 0 calc(24px * var(--scale-factor));
+            padding: 0 calc(20px * var(--scale-factor));
             background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
             border-bottom: 1px solid var(--line);
             height: calc(var(--header-height) * var(--scale-factor));
             display: flex;
@@ -208,7 +206,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* ===== القائمة العلوية - تصميم احترافي ===== */
         nav {
             display: flex;
             align-items: center;
@@ -326,9 +323,6 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(18,24,33,0.15);
         }
-        .header-actions button:active {
-            transform: translateY(0px);
-        }
         .hamburger {
             display: none;
             font-size: calc(1.05rem * var(--scale-factor));
@@ -346,7 +340,7 @@
         }
 
         /* ============================================================
-           SIDEBAR — تظهر فقط على الموبايل
+           SIDEBAR - تظهر فقط على الموبايل
            ============================================================ */
         .sidebar-overlay {
             display: none;
@@ -355,7 +349,6 @@
             background: rgba(18, 24, 33, 0.45);
             z-index: 999;
             backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
             opacity: 0;
             transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: none;
@@ -418,9 +411,6 @@
             color: var(--accent-ink);
             border-color: var(--accent);
         }
-        .sidebar .menu-items {
-            margin-top: 10px;
-        }
         .sidebar .menu-items a {
             display: flex;
             align-items: center;
@@ -467,7 +457,6 @@
             z-index: 998;
             background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
             border-top: 1px solid var(--line);
             padding: calc(4px * var(--scale-factor)) 0 calc(4px * var(--scale-factor) + env(safe-area-inset-bottom));
             height: calc(var(--mobile-nav-height) * var(--scale-factor));
@@ -533,24 +522,26 @@
         }
 
         /* ============================================================
-           MAIN CONTENT - تنسيق احترافي
+           MAIN CONTENT - تم تحسينه لمنع خروج الجدول
            ============================================================ */
         .main-content {
             flex: 1;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            padding: calc(16px * var(--scale-factor)) calc(24px * var(--scale-factor)) calc(20px * var(--scale-factor)) calc(24px * var(--scale-factor));
+            padding: calc(16px * var(--scale-factor)) calc(20px * var(--scale-factor)) calc(20px * var(--scale-factor)) calc(20px * var(--scale-factor));
             background: var(--paper);
+            min-width: 0;
         }
 
         .page-wrapper {
             flex: 1;
             overflow-y: auto;
-            max-width: 1400px;
+            overflow-x: hidden;
+            max-width: 100%;
             margin: 0 auto;
             width: 100%;
-            padding: 0 4px;
+            padding: 0;
         }
 
         /* ============================================================
@@ -575,6 +566,7 @@
             gap: 12px;
             color: var(--ink);
             letter-spacing: -0.3px;
+            flex-shrink: 0;
         }
 
         .page-header h1 i {
@@ -590,10 +582,11 @@
             gap: 10px;
             align-items: center;
             flex-wrap: wrap;
+            flex-shrink: 0;
         }
 
         /* ============================================================
-           BUTTONS - محسنة
+           BUTTONS
            ============================================================ */
         .btn {
             padding: calc(9px * var(--scale-factor)) calc(22px * var(--scale-factor));
@@ -610,6 +603,7 @@
             letter-spacing: 0.2px;
             position: relative;
             overflow: hidden;
+            white-space: nowrap;
         }
 
         .btn::after {
@@ -634,9 +628,6 @@
             transform: translateY(-3px);
             box-shadow: 0 8px 25px rgba(18,24,33,0.25);
         }
-        .btn-primary:active {
-            transform: translateY(0px);
-        }
 
         .btn-success {
             background: var(--teal);
@@ -647,32 +638,6 @@
             background: #156b5d;
             transform: translateY(-3px);
             box-shadow: 0 8px 25px rgba(29,123,108,0.3);
-        }
-        .btn-success:active {
-            transform: translateY(0px);
-        }
-
-        .btn-warning {
-            background: var(--accent);
-            color: var(--accent-ink);
-            box-shadow: 0 4px 14px rgba(221,159,46,0.2);
-        }
-        .btn-warning:hover {
-            background: var(--accent-ink);
-            color: #fff;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(221,159,46,0.3);
-        }
-
-        .btn-danger {
-            background: var(--rust);
-            color: #ffffff;
-            box-shadow: 0 4px 14px rgba(191,79,48,0.2);
-        }
-        .btn-danger:hover {
-            background: #a63a31;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(191,79,48,0.3);
         }
 
         .btn-outline {
@@ -687,14 +652,8 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.06);
         }
 
-        .btn-sm {
-            padding: calc(5px * var(--scale-factor)) calc(12px * var(--scale-factor));
-            font-size: calc(0.65rem * var(--scale-factor));
-            border-radius: calc(8px * var(--scale-factor));
-        }
-
         /* ============================================================
-           CARD - تصميم احترافي
+           CARD - تم تحسينه لمنع خروج المحتوى
            ============================================================ */
         .card {
             background: var(--surface);
@@ -703,13 +662,14 @@
             border: 1px solid var(--line);
             overflow: hidden;
             transition: box-shadow 0.3s ease;
+            max-width: 100%;
         }
         .card:hover {
             box-shadow: var(--shadow-lg);
         }
 
         .card-header {
-            padding: calc(18px * var(--scale-factor)) calc(24px * var(--scale-factor));
+            padding: calc(16px * var(--scale-factor)) calc(20px * var(--scale-factor));
             border-bottom: 1px solid var(--line);
             display: flex;
             align-items: center;
@@ -726,6 +686,7 @@
             align-items: center;
             gap: 10px;
             color: var(--ink);
+            flex-shrink: 0;
         }
 
         .card-header h2 i {
@@ -743,37 +704,49 @@
         }
 
         .card-body {
-            padding: calc(20px * var(--scale-factor)) calc(24px * var(--scale-factor));
+            padding: calc(16px * var(--scale-factor)) calc(16px * var(--scale-factor));
             overflow-x: auto;
             background: var(--surface);
+            max-width: 100%;
         }
 
         /* ============================================================
-           TABLE - تصميم احترافي
+           TABLE - تم تحسينه لمنع الخروج عن الشاشة
            ============================================================ */
+        .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 0;
+            padding: 0;
+            max-width: 100%;
+            border-radius: 12px;
+        }
+
         table {
             width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            font-size: calc(0.8rem * var(--scale-factor));
-            min-width: 1200px;
+            border-collapse: collapse;
+            font-size: calc(0.75rem * var(--scale-factor));
+            min-width: 0;
+            table-layout: auto;
         }
 
         table thead th {
             background: var(--surface-muted);
-            padding: calc(12px * var(--scale-factor)) calc(14px * var(--scale-factor));
+            padding: calc(10px * var(--scale-factor)) calc(10px * var(--scale-factor));
             text-align: center;
             font-weight: 700;
-            font-size: calc(0.62rem * var(--scale-factor));
+            font-size: calc(0.58rem * var(--scale-factor));
             color: var(--ink-mute);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
             border-bottom: 2px solid var(--line);
             white-space: nowrap;
             position: sticky;
             top: 0;
             z-index: 10;
+            min-width: 60px;
         }
+
         table thead th:first-child {
             border-radius: 0 8px 0 0;
         }
@@ -782,13 +755,16 @@
         }
 
         table tbody td {
-            padding: calc(11px * var(--scale-factor)) calc(14px * var(--scale-factor));
+            padding: calc(9px * var(--scale-factor)) calc(10px * var(--scale-factor));
             text-align: center;
             border-bottom: 1px solid var(--line);
             color: var(--ink-soft);
-            font-size: calc(0.78rem * var(--scale-factor));
+            font-size: calc(0.72rem * var(--scale-factor));
             white-space: nowrap;
             transition: background 0.2s ease;
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         table tbody tr {
@@ -796,7 +772,6 @@
         }
         table tbody tr:hover {
             background: var(--surface-muted);
-            transform: scale(1.001);
         }
 
         table tbody tr:last-child td {
@@ -804,7 +779,7 @@
         }
 
         table tbody tr.is-future {
-            background: rgba(47, 91, 138, 0.03);
+            background: rgba(47, 91, 138, 0.04);
         }
         table tbody tr.is-future td:first-child,
         table tbody tr.is-future td:nth-child(2) {
@@ -812,16 +787,20 @@
             font-weight: 700;
         }
 
+        /* ============================================================
+           BADGE
+           ============================================================ */
         .badge {
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            padding: 4px 14px;
+            gap: 4px;
+            padding: 3px 10px;
             border-radius: 50px;
-            font-size: 0.62rem;
+            font-size: 0.58rem;
             font-weight: 700;
             letter-spacing: 0.2px;
             border: 1px solid transparent;
+            white-space: nowrap;
         }
         .badge-paid {
             background: var(--teal-soft);
@@ -842,19 +821,12 @@
             background: var(--accent-soft);
             color: var(--accent-ink);
             border-color: rgba(221,159,46,0.15);
-            font-size: 0.55rem;
-            padding: 2px 10px;
-        }
-
-        .actions-cell {
-            display: flex;
-            gap: 6px;
-            justify-content: center;
-            flex-wrap: wrap;
+            font-size: 0.5rem;
+            padding: 2px 8px;
         }
 
         /* ============================================================
-           TOAST - محسنة
+           TOAST
            ============================================================ */
         .toast-container {
             position: fixed;
@@ -991,115 +963,24 @@
         }
 
         /* ============================================================
-           RESPONSIVE
+           TABLE FOOTER
            ============================================================ */
-        @media (max-width: 768px) {
-            :root {
-                --scale-factor: 1;
-            }
-
-            .main-content {
-                padding: 12px;
-                padding-bottom: calc(80px + env(safe-area-inset-bottom));
-            }
-
-            .page-header {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 12px;
-                padding: 8px 0 16px;
-            }
-
-            .page-header h1 {
-                font-size: 1.2rem;
-            }
-
-            .page-header .actions {
-                justify-content: stretch;
-            }
-
-            .page-header .actions .btn {
-                flex: 1;
-                justify-content: center;
-            }
-
-            .card-header {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 10px;
-                padding: 14px 16px;
-            }
-
-            .card-body {
-                padding: 12px 14px;
-            }
-
-            table {
-                font-size: 0.7rem;
-                min-width: 750px;
-            }
-
-            table thead th,
-            table tbody td {
-                padding: 6px 8px;
-            }
-
-            .actions-cell {
-                flex-direction: row;
-                gap: 4px;
-            }
-
-            .actions-cell .btn {
-                width: auto;
-                padding: 4px 10px;
-                font-size: 0.6rem;
-            }
-
-            .mobile-nav-bottom {
-                display: flex !important;
-            }
-            .hamburger {
-                display: flex !important;
-            }
-            nav {
-                display: none !important;
-            }
-
-            .toast-container {
-                top: 70px;
-                right: 12px;
-                max-width: calc(100% - 24px);
-            }
+        .table-footer {
+            padding: 12px 0 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-top: 1px solid var(--line);
+            margin-top: 8px;
+            color: var(--ink-mute);
+            font-size: 0.7rem;
         }
 
-        @media (max-width: 480px) {
-            .page-header h1 {
-                font-size: 1rem;
-            }
-
-            .page-header h1 i {
-                padding: 8px;
-                font-size: 0.9rem;
-            }
-
-            .card-header h2 {
-                font-size: 0.85rem;
-            }
-
-            table {
-                font-size: 0.6rem;
-                min-width: 550px;
-            }
-
-            table thead th:nth-child(3),
-            table tbody td:nth-child(3) {
-                display: none;
-            }
-
-            .badge {
-                font-size: 0.5rem;
-                padding: 2px 8px;
-            }
+        .table-footer .count {
+            font-weight: 700;
+            color: var(--ink);
         }
 
         /* ============================================================
@@ -1125,24 +1006,222 @@
         }
 
         /* ============================================================
-           TABLE FOOTER
+           RESPONSIVE - تحسينات الجدول
            ============================================================ */
-        .table-footer {
-            padding: 14px 0 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-            border-top: 1px solid var(--line);
-            margin-top: 8px;
-            color: var(--ink-mute);
-            font-size: 0.7rem;
+        @media (max-width: 1200px) {
+            table {
+                font-size: calc(0.7rem * var(--scale-factor));
+            }
+            table thead th,
+            table tbody td {
+                padding: calc(8px * var(--scale-factor)) calc(8px * var(--scale-factor));
+            }
         }
 
-        .table-footer .count {
-            font-weight: 700;
-            color: var(--ink);
+        @media (max-width: 992px) {
+            .main-content {
+                padding: calc(12px * var(--scale-factor));
+            }
+            .card-body {
+                padding: calc(12px * var(--scale-factor));
+            }
+            table {
+                font-size: calc(0.65rem * var(--scale-factor));
+                min-width: 900px;
+            }
+            table thead th,
+            table tbody td {
+                padding: calc(6px * var(--scale-factor)) calc(6px * var(--scale-factor));
+            }
+            /* إخفاء الأعمدة الأقل أهمية */
+            table thead th:nth-child(3),
+            table tbody td:nth-child(3),
+            table thead th:nth-child(8),
+            table tbody td:nth-child(8),
+            table thead th:nth-child(9),
+            table tbody td:nth-child(9),
+            table thead th:nth-child(10),
+            table tbody td:nth-child(10) {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --scale-factor: 1;
+            }
+
+            .main-content {
+                padding: 10px;
+                padding-bottom: calc(80px + env(safe-area-inset-bottom));
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+                padding: 8px 0 14px;
+            }
+
+            .page-header h1 {
+                font-size: 1.1rem;
+            }
+
+            .page-header h1 i {
+                padding: 8px;
+                font-size: 0.9rem;
+            }
+
+            .page-header .actions {
+                justify-content: stretch;
+            }
+
+            .page-header .actions .btn {
+                flex: 1;
+                justify-content: center;
+                font-size: 0.75rem;
+                padding: 8px 14px;
+            }
+
+            .card-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+                padding: 12px 14px;
+            }
+
+            .card-header h2 {
+                font-size: 0.85rem;
+            }
+
+            .card-body {
+                padding: 10px;
+                overflow-x: auto;
+            }
+
+            .table-wrapper {
+                margin: 0 -10px;
+                padding: 0 10px;
+            }
+
+            table {
+                font-size: 0.6rem;
+                min-width: 700px;
+            }
+
+            table thead th,
+            table tbody td {
+                padding: 5px 6px;
+            }
+
+            .badge {
+                font-size: 0.5rem;
+                padding: 2px 8px;
+            }
+
+            .mobile-nav-bottom {
+                display: flex !important;
+            }
+            .hamburger {
+                display: flex !important;
+            }
+            nav {
+                display: none !important;
+            }
+
+            .toast-container {
+                top: 70px;
+                right: 12px;
+                max-width: calc(100% - 24px);
+            }
+
+            .table-footer {
+                font-size: 0.6rem;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            /* إخفاء المزيد من الأعمدة على الموبايل */
+            table thead th:nth-child(4),
+            table tbody td:nth-child(4),
+            table thead th:nth-child(11),
+            table tbody td:nth-child(11),
+            table thead th:nth-child(14),
+            table tbody td:nth-child(14),
+            table thead th:nth-child(15),
+            table tbody td:nth-child(15) {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header h1 {
+                font-size: 0.95rem;
+            }
+
+            .page-header h1 i {
+                padding: 6px;
+                font-size: 0.8rem;
+            }
+
+            .card-header h2 {
+                font-size: 0.8rem;
+            }
+
+            .card-body {
+                padding: 8px;
+            }
+
+            .table-wrapper {
+                margin: 0 -8px;
+                padding: 0 8px;
+            }
+
+            table {
+                font-size: 0.55rem;
+                min-width: 550px;
+            }
+
+            table thead th,
+            table tbody td {
+                padding: 4px 5px;
+            }
+
+            /* إخفاء الأعمدة غير الأساسية */
+            table thead th:nth-child(5),
+            table tbody td:nth-child(5),
+            table thead th:nth-child(7),
+            table tbody td:nth-child(7),
+            table thead th:nth-child(12),
+            table tbody td:nth-child(12) {
+                display: none;
+            }
+
+            .badge {
+                font-size: 0.45rem;
+                padding: 2px 6px;
+            }
+
+            .btn {
+                font-size: 0.7rem;
+                padding: 6px 12px;
+            }
+        }
+
+        /* تحسين التمرير العمودي */
+        .page-wrapper::-webkit-scrollbar {
+            width: 4px;
+        }
+        .page-wrapper::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .page-wrapper::-webkit-scrollbar-thumb {
+            background: var(--line-strong);
+            border-radius: 10px;
+        }
+        .page-wrapper::-webkit-scrollbar-thumb:hover {
+            background: var(--ink-mute);
         }
     </style>
 </head>
@@ -1198,7 +1277,7 @@
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <!-- ============================================================
-    SIDEBAR — تظهر فقط على الموبايل
+    SIDEBAR
     ============================================================ -->
     <div class="sidebar" id="sidebar">
         <div class="close-btn" id="closeSidebar"><i class="fas fa-times"></i></div>
@@ -1269,7 +1348,7 @@
                             <i class="fas fa-search" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); color:var(--ink-mute); font-size:0.7rem;"></i>
                             <input type="text" id="searchInput" placeholder="بحث عن حجز، عميل، أو عقار..." 
                                    style="padding:8px 35px 8px 14px; border:1.5px solid var(--line); border-radius:10px; 
-                                   font-family:var(--font-display); font-size:0.7rem; width:260px; 
+                                   font-family:var(--font-display); font-size:0.7rem; width:220px; 
                                    background:var(--surface); color:var(--ink); transition:all 0.3s ease; outline:none;">
                             <style>
                                 #searchInput:focus {
@@ -1279,12 +1358,19 @@
                                 #searchInput::placeholder {
                                     color: var(--ink-mute);
                                 }
+                                @media (max-width: 480px) {
+                                    #searchInput {
+                                        width: 160px;
+                                        font-size: 0.6rem;
+                                        padding: 6px 30px 6px 10px;
+                                    }
+                                }
                             </style>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
-                    <div id="tableContainer">
+                    <div class="table-wrapper" id="tableContainer">
                         <!-- سيتم تعبئتها بواسطة JavaScript -->
                     </div>
                 </div>
@@ -1294,7 +1380,7 @@
     </div>
 
     <!-- ============================================================
-    JAVASCRIPT - الكود الكامل والمتكامل
+    JAVASCRIPT
     ============================================================ -->
     <script>
         /**
@@ -1325,7 +1411,7 @@
 
         /**
          * ============================================================
-         * 4. SIDEBAR TOGGLE - فقط للموبايل
+         * 4. SIDEBAR TOGGLE
          * ============================================================
          */
         var navToggle = document.getElementById('navToggle');
@@ -1384,7 +1470,7 @@
 
         /**
          * ============================================================
-         * 5. نظام TOAST للإشعارات
+         * 5. TOAST SYSTEM
          * ============================================================
          */
         function showToast(title, message, type) {
@@ -1426,7 +1512,7 @@
 
         /**
          * ============================================================
-         * 6. دوال مساعدة لتنسيق التاريخ والأرقام
+         * 6. دوال مساعدة
          * ============================================================
          */
         function formatDate(dateStr) {
@@ -1465,7 +1551,7 @@
 
         /**
          * ============================================================
-         * 7. جلب الحجوزات من Supabase
+         * 7. جلب الحجوزات
          * ============================================================
          */
         async function loadBookings() {
@@ -1516,7 +1602,7 @@
 
         /**
          * ============================================================
-         * 8. عرض الجدول مع جميع البيانات
+         * 8. عرض الجدول
          * ============================================================
          */
         function renderTable(data) {
@@ -1656,12 +1742,11 @@
 
         /**
          * ============================================================
-         * 10. تحميل الصفحة عند بدء التشغيل
+         * 10. تحميل الصفحة
          * ============================================================
          */
         document.addEventListener('DOMContentLoaded', function() {
             loadBookings();
-            
             console.log('📋 صفحة سجل الحجوزات - منتجع حياله');
             console.log('📊 Supabase URL:', SUPABASE_URL);
             console.log('👤 المستخدم:', user.name || 'غير معروف');
@@ -1670,7 +1755,7 @@
 
         /**
          * ============================================================
-         * 11. تحديث تلقائي كل 5 دقائق
+         * 11. تحديث تلقائي
          * ============================================================
          */
         setInterval(function() {
@@ -1680,7 +1765,7 @@
 
         /**
          * ============================================================
-         * 12. دالة التحديث اليدوي من الزر
+         * 12. دوال عامة
          * ============================================================
          */
         window.loadBookings = loadBookings;
