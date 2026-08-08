@@ -2157,7 +2157,7 @@
         }
 
         /* ============================================================
-           PRINT MEDIA QUERY - التصميم المحسن بالكامل للطباعة مع التعديلات المطلوبة
+           PRINT MEDIA QUERY - التصميم المحسن للطباعة مع التعديلات المطلوبة
            ============================================================ */
         @media print {
             /* إخفاء جميع عناصر التحكم في الطباعة */
@@ -2822,7 +2822,7 @@
     </script>
 
     <!-- ============================================================
-    JAVASCRIPT - تم الحفاظ على كل شيء مع التعديلات المطلوبة
+    JAVASCRIPT
     ============================================================ -->
     <script>
         /**
@@ -3556,6 +3556,9 @@
                         <div class="qr-code" id="qrCodeContainer">
                             <!-- سيتم وضع QR Code هنا بواسطة JavaScript -->
                         </div>
+                        <div class="qr-label">
+                            <strong>فاتورة: ${invNum}</strong>
+                        </div>
                     </div>
                 </div>
 
@@ -3625,7 +3628,7 @@
                     </div>
                 </div>
 
-                <!-- ===== ملاحظات - تم دمج جميع الملاحظات وتعديل النص ===== -->
+                <!-- ===== ملاحظات مدمجة مع تعديل النص ===== -->
                 <div class="notes-section">
                     <div class="notes-title">
                         <i class="fas fa-sticky-note"></i> ملاحظات
@@ -3910,7 +3913,9 @@
                         
                         .notes-section,
                         .time-info,
-                        .info-grid {
+                        .info-grid,
+                        .invoice-header .invoice-title,
+                        .invoice-header .logo-section .logo-box {
                             -webkit-print-color-adjust: exact !important;
                             print-color-adjust: exact !important;
                         }
@@ -4539,7 +4544,7 @@
 
         /**
          * ============================================================
-         * SAVE TO SUPABASE - متوافق مع هيكل الجدول
+         * SAVE TO SUPABASE
          * ============================================================
          */
         async function saveInvoiceToSupabase(invoiceData) {
