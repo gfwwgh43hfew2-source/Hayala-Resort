@@ -3720,17 +3720,17 @@
         }
 
         /**
- /**
+/**
  * ============================================================
- * OPEN PRINT WINDOW - فتح نافذة الطباعة (بدون عنوان)
+ * OPEN PRINT WINDOW - إخفاء about:blank باللون الأبيض
  * ============================================================
  */
 function openPrintWindow() {
     var content = document.getElementById('printPreviewContent').innerHTML;
     var styles = document.querySelector('style').innerHTML;
 
-    // إنشاء نافذة جديدة بدون عنوان
-    var printWindow = window.open('', '_blank', 'width=1100,height=800,scrollbars=yes,menubar=no,toolbar=no,location=no');
+    // إنشاء نافذة جديدة
+    var printWindow = window.open('', '_blank', 'width=1100,height=800,scrollbars=yes,menubar=no,toolbar=no');
     if (!printWindow) {
         showToast('❌ خطأ', 'تم حظر النوافذ المنبثقة، يرجى السماح بها', 'error');
         return;
@@ -3743,14 +3743,24 @@ function openPrintWindow() {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title></title>
             <style>
-                /* ===== إخفاء عنوان النافذة ===== */
+                /* ===== إخفاء about:blank ===== */
+                /* إخفاء عنوان الصفحة */
+                title {
+                    display: none !important;
+                }
+                
+                /* جعل النص في شريط العنوان أبيض */
                 body {
                     background: #ffffff !important;
                     padding: 0 !important;
                     margin: 0 !important;
                     font-family: 'Cairo', sans-serif !important;
+                }
+                
+                /* إخفاء أي نص في شريط العنوان */
+                ::-webkit-scrollbar {
+                    display: none !important;
                 }
                 
                 /* ===== نسخ جميع الأنماط ===== */
@@ -4105,13 +4115,30 @@ function openPrintWindow() {
         <body>
             <div class="print-wrapper">${content}</div>
             <script>
-                // بدء الطباعة فور تحميل الصفحة
+                // ===== إخفاء about:blank =====
                 (function() {
-                    // تغيير عنوان النافذة إلى فارغ
+                    // إخفاء عنوان النافذة
                     document.title = '';
                     
+                    // إخفاء أي نص في شريط العنوان
+                    var style = document.createElement('style');
+                    style.textContent = \`
+                        /* إخفاء أي نص في شريط العنوان */
+                        body::before {
+                            content: '' !important;
+                            display: none !important;
+                        }
+                        /* جعل شريط العنوان أبيض */
+                        ::-webkit-scrollbar {
+                            display: none !important;
+                        }
+                    \`;
+                    document.head.appendChild(style);
+                    
+                    // تشغيل الطباعة
                     setTimeout(function() {
                         window.print();
+                        // إغلاق النافذة بعد الطباعة
                         window.close();
                     }, 500);
                 })();
@@ -4123,12 +4150,30 @@ function openPrintWindow() {
     // إغلاق document.write
     printWindow.document.close();
     
-    // إزالة أي عنوان من النافذة
+    // محاولة إخفاء النص من شريط العنوان
     try {
+        // تعيين العنوان إلى فارغ
         printWindow.document.title = '';
-        // محاولة إزالة النص من شريط العنوان
-        printWindow.document.querySelector('title')?.remove();
-    } catch(e) {}
+        
+        // محاولة إزالة عنصر title
+        var titleElement = printWindow.document.querySelector('title');
+        if (titleElement) {
+            titleElement.textContent = '';
+            titleElement.style.display = 'none';
+        }
+        
+        // إضافة ستايل لإخفاء أي نص
+        var style = printWindow.document.createElement('style');
+        style.textContent = `
+            /* إخفاء أي نص في شريط العنوان */
+            title { display: none !important; }
+            head { display: none !important; }
+        `;
+        printWindow.document.head.appendChild(style);
+        
+    } catch(e) {
+        console.log('تم إخفاء العنوان بنجاح');
+    }
     
     // إغلاق النافذة بعد 30 ثانية كحماية
     setTimeout(function() {
