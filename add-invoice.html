@@ -3569,12 +3569,12 @@
     qrContainer.appendChild(img);
 }
 
-        /**
-         * ============================================================
-         * SYSTEM PRINT PREVIEW - مع QR Code في الأعلى بدلاً من بطاقة الرقم
-         * ============================================================
-         */
-        function previewInvoice() {
+       /**
+ * ============================================================
+ * SYSTEM PRINT PREVIEW - مع QR Code في الأعلى بدلاً من بطاقة الرقم
+ * ============================================================
+ */
+function previewInvoice() {
     if (bookings.length === 0) {
         showToast('⚠️ تنبيه', 'لا توجد حجوزات للمعاينة', 'error');
         return;
@@ -3590,9 +3590,10 @@
     var paid = displayPaid.textContent;
     var remaining = displayRemaining.textContent;
 
-    var companyName = settings.companyName || 'منتجع حياله';
-    var companyAddress = settings.companyAddress || '';
-    var companyPhone = settings.companyPhone || '';
+    // ===== تعديل اسم المنتجع ورقم الهاتف هنا =====
+    var companyName = 'منتجع وشاليهات حيالة القصيم';
+    var companyAddress = settings.companyAddress || 'القصيم / بريدة - حي الخليج';
+    var companyPhone = '0509982400';
     var companyLogo = settings.companyLogo || '';
     var footer = settings.invoiceFooter || 'شكراً لثقتكم بنا';
 
@@ -3727,12 +3728,12 @@
     document.getElementById('printPreviewOverlay').classList.add('show');
 }
 
-        /**
-         * ============================================================
-         * OPEN PRINT WINDOW - فتح نافذة الطباعة
-         * ============================================================
-         */
-       function openPrintWindow() {
+/**
+ * ============================================================
+ * OPEN PRINT WINDOW - فتح نافذة الطباعة
+ * ============================================================
+ */
+function openPrintWindow() {
     var content = document.getElementById('printPreviewContent').innerHTML;
     var styles = document.querySelector('style').innerHTML;
 
@@ -3748,7 +3749,7 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>فاتورة - منتجع حياله</title>
+            <title>فاتورة - منتجع وشاليهات حيالة القصيم</title>
             <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
             <style>
@@ -3838,14 +3839,14 @@
                 }
                 
                 .invoice-header .company-details h2 {
-                    font-size: 20px !important;
+                    font-size: 18px !important;
                     font-weight: 900 !important;
                     color: var(--ink) !important;
-                    line-height: 1.2 !important;
+                    line-height: 1.3 !important;
                 }
                 
                 .invoice-header .company-details p {
-                    font-size: 11px !important;
+                    font-size: 10px !important;
                     color: var(--ink-mute) !important;
                     line-height: 1.4 !important;
                 }
