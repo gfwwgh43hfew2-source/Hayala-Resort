@@ -3720,16 +3720,17 @@
         }
 
         /**
+ /**
  * ============================================================
- * OPEN PRINT WINDOW - فتح نافذة الطباعة
+ * OPEN PRINT WINDOW - فتح نافذة الطباعة (بدون عنوان)
  * ============================================================
  */
 function openPrintWindow() {
     var content = document.getElementById('printPreviewContent').innerHTML;
     var styles = document.querySelector('style').innerHTML;
 
-    // إنشاء نافذة جديدة
-    var printWindow = window.open('', '_blank', 'width=1100,height=800,scrollbars=yes,menubar=no,toolbar=no');
+    // إنشاء نافذة جديدة بدون عنوان
+    var printWindow = window.open('', '_blank', 'width=1100,height=800,scrollbars=yes,menubar=no,toolbar=no,location=no');
     if (!printWindow) {
         showToast('❌ خطأ', 'تم حظر النوافذ المنبثقة، يرجى السماح بها', 'error');
         return;
@@ -3742,14 +3743,9 @@ function openPrintWindow() {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>فاتورة - ${invoiceNumber.value || 'طباعة'}</title>
-            <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+            <title></title>
             <style>
-                /* ===== نسخ جميع الأنماط ===== */
-                ${styles}
-                
-                /* ===== أنماط خاصة بالطباعة ===== */
+                /* ===== إخفاء عنوان النافذة ===== */
                 body {
                     background: #ffffff !important;
                     padding: 0 !important;
@@ -3757,6 +3753,10 @@ function openPrintWindow() {
                     font-family: 'Cairo', sans-serif !important;
                 }
                 
+                /* ===== نسخ جميع الأنماط ===== */
+                ${styles}
+                
+                /* ===== أنماط خاصة بالطباعة ===== */
                 .print-wrapper {
                     max-width: 210mm !important;
                     margin: 0 auto !important;
@@ -3800,7 +3800,6 @@ function openPrintWindow() {
                     margin: 0 auto !important;
                 }
                 
-                /* الحفاظ على باقي التصميم */
                 .invoice-header {
                     display: flex !important;
                     align-items: center !important;
@@ -4072,7 +4071,6 @@ function openPrintWindow() {
                     print-color-adjust: exact !important;
                 }
                 
-                /* ===== منع تكسر الجدول ===== */
                 table tbody tr {
                     page-break-inside: avoid !important;
                     break-inside: avoid !important;
@@ -4093,7 +4091,6 @@ function openPrintWindow() {
                     break-inside: avoid !important;
                 }
                 
-                /* ===== استغلال المساحة بالكامل ===== */
                 .print-wrapper {
                     display: flex !important;
                     flex-direction: column !important;
@@ -4110,10 +4107,11 @@ function openPrintWindow() {
             <script>
                 // بدء الطباعة فور تحميل الصفحة
                 (function() {
-                    // تأخير بسيط للتأكد من تحميل جميع الصور والخطوط
+                    // تغيير عنوان النافذة إلى فارغ
+                    document.title = '';
+                    
                     setTimeout(function() {
                         window.print();
-                        // إغلاق النافذة بعد الطباعة مباشرة
                         window.close();
                     }, 500);
                 })();
@@ -4122,15 +4120,17 @@ function openPrintWindow() {
         </html>
     `);
 
-    // إغلاق document.write ومنع أي كتابة إضافية
+    // إغلاق document.write
     printWindow.document.close();
     
-    // إزالة about:blank من شريط العنوان
+    // إزالة أي عنوان من النافذة
     try {
-        printWindow.document.title = 'فاتورة - ' + (invoiceNumber.value || 'طباعة');
+        printWindow.document.title = '';
+        // محاولة إزالة النص من شريط العنوان
+        printWindow.document.querySelector('title')?.remove();
     } catch(e) {}
     
-    // إغلاق النافذة إذا لم يتم الطباعة خلال 10 ثواني (حماية)
+    // إغلاق النافذة بعد 30 ثانية كحماية
     setTimeout(function() {
         try {
             if (printWindow && !printWindow.closed) {
