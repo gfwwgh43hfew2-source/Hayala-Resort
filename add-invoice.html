@@ -3631,27 +3631,49 @@
                     <div class="item"><span class="label">العميل</span><div class="value">${client}</div></div>
                 </div>
 
-                <!-- ===== جدول الحجوزات ===== -->
+                <!-- ===== جدول الحجوزات مع إضافة وقت الدخول ووقت الخروج ===== -->
                 <table>
                     <thead>
                         <tr>
-                            <th style="width:30px;">#</th>
-                            <th style="text-align:right;">نوع العقار</th>
-                            <th>عدد الأيام</th>
-                            <th>السعر اليومي</th>
-                            <th>الإجمالي</th>
+                            <th style="width:25px;">#</th>
+                            <th style="text-align:right;width:25%;">نوع العقار</th>
+                            <th style="width:12%;">عدد الأيام</th>
+                            <th style="width:14%;">السعر اليومي</th>
+                            <th style="width:12%;">وقت الدخول</th>
+                            <th style="width:12%;">وقت الخروج</th>
+                            <th style="width:15%;">الإجمالي</th>
                         </tr>
                     </thead>
                     <tbody>
                 `;
 
     bookings.forEach(function(item, index) {
+        // تنسيق الوقت لعرضه بشكل جميل
+        var checkInTime = item.checkInTime || '----';
+        var checkOutTime = item.checkOutTime || '----';
+        
+        // إذا كان الوقت موجوداً، قم بتنسيقه (إزالة الثواني إن وجدت)
+        if (checkInTime && checkInTime !== '----') {
+            var timeParts = checkInTime.split(':');
+            if (timeParts.length >= 2) {
+                checkInTime = timeParts[0] + ':' + timeParts[1];
+            }
+        }
+        if (checkOutTime && checkOutTime !== '----') {
+            var timeParts2 = checkOutTime.split(':');
+            if (timeParts2.length >= 2) {
+                checkOutTime = timeParts2[0] + ':' + timeParts2[1];
+            }
+        }
+
         html += `
                                 <tr>
                                     <td>${index + 1}</td>
                                     <td style="text-align:right;">${item.property}</td>
                                     <td>${item.nights}</td>
                                     <td>${item.dailyPrice.toFixed(2)}</td>
+                                    <td style="font-family:monospace;font-size:0.7rem;">${checkInTime}</td>
+                                    <td style="font-family:monospace;font-size:0.7rem;">${checkOutTime}</td>
                                     <td style="font-weight:700;color:var(--teal);">${item.total.toFixed(2)}</td>
                                 </tr>
                             `;
@@ -3704,39 +3726,13 @@
 
     document.getElementById('printPreviewOverlay').classList.add('show');
 }
-        /**
-         * ============================================================
-         * CLOSE PRINT PREVIEW
-         * ============================================================
-         */
-        function closePrintPreview() {
-            document.getElementById('printPreviewOverlay').classList.remove('show');
-        }
-
-        /**
-         * ============================================================
-         * EXECUTE PRINT - طباعة عبر نافذة المتصفح
-         * ============================================================
-         */
-        function executePrint() {
-            // التأكد من وجود محتوى للمعاينة
-            var overlay = document.getElementById('printPreviewOverlay');
-            if (!overlay.classList.contains('show')) {
-                previewInvoice();
-                setTimeout(function() {
-                    openPrintWindow();
-                }, 600);
-                return;
-            }
-            openPrintWindow();
-        }
 
         /**
          * ============================================================
          * OPEN PRINT WINDOW - فتح نافذة الطباعة
          * ============================================================
          */
-        function openPrintWindow() {
+       function openPrintWindow() {
     var content = document.getElementById('printPreviewContent').innerHTML;
     var styles = document.querySelector('style').innerHTML;
 
@@ -3776,7 +3772,6 @@
                     box-sizing: border-box !important;
                 }
                 
-                /* إخفاء أزرار الطباعة في النافذة الجديدة */
                 .print-actions {
                     display: none !important;
                 }
@@ -3825,7 +3820,6 @@
                     max-height: 100% !important;
                 }
                 
-                /* تحسين توزيع المسافات */
                 .invoice-header {
                     display: flex !important;
                     align-items: center !important;
@@ -3890,28 +3884,76 @@
                     color: var(--ink) !important;
                 }
                 
+                /* ===== أنماط الجدول مع الأعمدة الجديدة ===== */
                 table {
                     width: 100% !important;
                     border-collapse: collapse !important;
-                    font-size: 12px !important;
+                    font-size: 11px !important;
                     margin-bottom: 4px !important;
                 }
                 
                 table th {
                     background: var(--ink) !important;
                     color: #ffffff !important;
-                    padding: 10px 12px !important;
+                    padding: 8px 10px !important;
                     text-align: center !important;
-                    font-size: 10px !important;
+                    font-size: 9px !important;
                     font-weight: 700 !important;
                 }
                 
                 table td {
-                    padding: 10px 12px !important;
+                    padding: 8px 10px !important;
                     border-bottom: 1px solid var(--line) !important;
                     color: var(--ink-soft) !important;
                     text-align: center !important;
-                    font-size: 11px !important;
+                    font-size: 10px !important;
+                }
+                
+                /* ===== تنسيق عمود الوقت ===== */
+                table td:nth-child(5),
+                table td:nth-child(6) {
+                    font-family: 'JetBrains Mono', monospace !important;
+                    font-size: 9px !important;
+                    color: var(--ink-mute) !important;
+                }
+                
+                /* ===== عرض الأعمدة ===== */
+                table th:nth-child(1),
+                table td:nth-child(1) {
+                    width: 25px !important;
+                    min-width: 25px !important;
+                    max-width: 25px !important;
+                }
+                
+                table th:nth-child(2),
+                table td:nth-child(2) {
+                    width: 25% !important;
+                    text-align: right !important;
+                }
+                
+                table th:nth-child(3),
+                table td:nth-child(3) {
+                    width: 12% !important;
+                }
+                
+                table th:nth-child(4),
+                table td:nth-child(4) {
+                    width: 14% !important;
+                }
+                
+                table th:nth-child(5),
+                table td:nth-child(5) {
+                    width: 12% !important;
+                }
+                
+                table th:nth-child(6),
+                table td:nth-child(6) {
+                    width: 12% !important;
+                }
+                
+                table th:nth-child(7),
+                table td:nth-child(7) {
+                    width: 15% !important;
                 }
                 
                 .footer {
@@ -3934,16 +3976,6 @@
                 
                 .footer .signature p {
                     font-size: 11px !important;
-                }
-                
-                .footer .total-details {
-                    font-size: 12px !important;
-                }
-                
-                .footer .total-details .total-amount {
-                    font-size: 16px !important;
-                    font-weight: 900 !important;
-                    color: var(--teal) !important;
                 }
                 
                 .notes-section {
@@ -4030,7 +4062,6 @@
                     print-color-adjust: exact !important;
                 }
                 
-                /* ===== منع تكسر الجدول ===== */
                 table tbody tr {
                     page-break-inside: avoid !important;
                     break-inside: avoid !important;
@@ -4046,7 +4077,6 @@
                     break-inside: avoid !important;
                 }
                 
-                /* ===== استغلال المساحة بالكامل ===== */
                 .print-wrapper {
                     display: flex !important;
                     flex-direction: column !important;
@@ -4055,6 +4085,15 @@
                 
                 .footer {
                     margin-top: auto !important;
+                }
+                
+                /* ===== طباعة الألوان ===== */
+                .notes-section,
+                .info-grid,
+                .badge,
+                .footer .total-details .total-amount {
+                    -webkit-print-color-adjust: exact !important;
+                    print-color-adjust: exact !important;
                 }
             </style>
         </head>
@@ -4075,7 +4114,6 @@
     printWindow.document.close();
     closePrintPreview();
 }
-
         /**
          * ============================================================
          * DOWNLOAD PDF - باستخدام html2pdf مباشرة
