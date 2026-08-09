@@ -2186,7 +2186,6 @@
            PRINT MEDIA QUERY - التصميم المحسن بالكامل للطباعة
            ============================================================ */
         @media print {
-            /* إخفاء جميع عناصر التحكم في الطباعة */
             .print-preview-overlay .print-actions {
                 display: none !important;
             }
@@ -2212,13 +2211,11 @@
                 overflow: visible !important;
             }
 
-            /* ===== استغلال المساحة بالكامل ===== */
             .print-preview-overlay .print-wrapper * {
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
             }
 
-            /* ===== تذييل الصفحة ===== */
             .print-preview-overlay .print-wrapper .invoice-footer {
                 margin-top: 15px !important;
                 padding-top: 10px !important;
@@ -2229,7 +2226,7 @@
                 flex-wrap: wrap !important;
             }
 
-            /* ===== تكبير الشعار ===== */
+            /* ===== تكبير الشعار وإزالة الإطار الذهبي ===== */
             .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box {
                 width: 156px !important;
                 height: 156px !important;
@@ -2263,29 +2260,7 @@
                 print-color-adjust: exact !important;
             }
 
-            /* ===== تكبير الـ Header ===== */
-            .print-preview-overlay .print-wrapper .invoice-header {
-                padding-bottom: 18px !important;
-                margin-bottom: 18px !important;
-                border-bottom-width: 3px !important;
-                gap: 15px !important;
-            }
-
-            .print-preview-overlay .print-wrapper .invoice-header .logo-section {
-                gap: 15px !important;
-            }
-
-            .print-preview-overlay .print-wrapper .invoice-header .company-details h2 {
-                font-size: 20px !important;
-                font-weight: 900 !important;
-            }
-
-            .print-preview-overlay .print-wrapper .invoice-header .company-details p {
-                font-size: 11px !important;
-                line-height: 1.4 !important;
-            }
-
-            /* ===== تكبير QR Code ===== */
+            /* ===== تصغير QR Code وإزالة الإطار الذهبي ===== */
             .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-code {
                 width: 72px !important;
                 height: 72px !important;
@@ -2311,7 +2286,27 @@
                 border-width: 2px !important;
             }
 
-            /* ===== تكبير شبكة المعلومات ===== */
+            .print-preview-overlay .print-wrapper .invoice-header {
+                padding-bottom: 18px !important;
+                margin-bottom: 18px !important;
+                border-bottom-width: 3px !important;
+                gap: 15px !important;
+            }
+
+            .print-preview-overlay .print-wrapper .invoice-header .logo-section {
+                gap: 15px !important;
+            }
+
+            .print-preview-overlay .print-wrapper .invoice-header .company-details h2 {
+                font-size: 20px !important;
+                font-weight: 900 !important;
+            }
+
+            .print-preview-overlay .print-wrapper .invoice-header .company-details p {
+                font-size: 11px !important;
+                line-height: 1.4 !important;
+            }
+
             .print-preview-overlay .print-wrapper .info-grid {
                 display: grid !important;
                 grid-template-columns: 1fr 1fr 1fr 1fr 1fr !important;
@@ -2332,7 +2327,6 @@
                 font-weight: 700 !important;
             }
 
-            /* ===== تكبير الجدول وصفوفه ===== */
             .print-preview-overlay .print-wrapper table {
                 width: 100% !important;
                 border-collapse: collapse !important;
@@ -2351,7 +2345,6 @@
                 border-bottom-width: 1px !important;
             }
 
-            /* ===== تكبير الإجماليات ===== */
             .print-preview-overlay .print-wrapper .footer {
                 padding-top: 18px !important;
                 margin-top: 18px !important;
@@ -2379,7 +2372,6 @@
                 color: var(--teal) !important;
             }
 
-            /* ===== تكبير الملاحظات ===== */
             .print-preview-overlay .print-wrapper .notes-section {
                 margin-top: 16px !important;
                 padding-top: 14px !important;
@@ -2409,7 +2401,6 @@
                 margin-bottom: 4px !important;
             }
 
-            /* ===== تكبير النصوص الإضافية ===== */
             .print-preview-overlay .print-wrapper .print-footer-notes {
                 margin-top: 14px !important;
                 padding-top: 12px !important;
@@ -2428,7 +2419,6 @@
                 margin-top: 4px !important;
             }
 
-            /* ===== توزيع متوازن للفراغات ===== */
             .print-preview-overlay .print-wrapper .invoice-header {
                 display: flex !important;
                 align-items: center !important;
@@ -2443,7 +2433,6 @@
                 flex-direction: row !important;
             }
 
-            /* ===== منع تكسر الجدول ===== */
             .print-preview-overlay .print-wrapper table tbody tr {
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
@@ -2459,7 +2448,6 @@
                 break-inside: avoid !important;
             }
 
-            /* ===== إزالة أي فراغات كبيرة غير مستغلة ===== */
             .print-preview-overlay .print-wrapper {
                 display: flex !important;
                 flex-direction: column !important;
@@ -2470,7 +2458,6 @@
                 margin-top: auto !important;
             }
 
-            /* ===== تنسيق الشارات ===== */
             .print-preview-overlay .print-wrapper .badge {
                 display: inline-flex !important;
                 align-items: center !important;
@@ -2507,7 +2494,6 @@
                 color: var(--accent-ink) !important;
             }
 
-            /* ===== تحسينات عامة ===== */
             .print-preview-overlay .print-wrapper::-webkit-scrollbar {
                 display: none !important;
             }
@@ -2516,7 +2502,6 @@
                 scrollbar-width: none !important;
             }
 
-            /* ===== طباعة الألوان ===== */
             .print-preview-overlay .print-wrapper .notes-section,
             .print-preview-overlay .print-wrapper .print-footer-notes,
             .print-preview-overlay .print-wrapper .info-grid,
@@ -3688,7 +3673,6 @@
             `;
 
             bookings.forEach(function(item, index) {
-                // تنسيق تاريخ ووقت الدخول
                 var checkInDateFormatted = item.checkIn ? new Date(item.checkIn).toLocaleDateString('ar-EG') : 'غير محدد';
                 var checkInTimeFormatted = item.checkInTime ? item.checkInTime : 'غير محدد';
                 var checkOutDateFormatted = item.checkOut ? new Date(item.checkOut).toLocaleDateString('ar-EG') : 'غير محدد';
@@ -3736,7 +3720,6 @@
                     </div>
                 </div>
 
-                <!-- ===== الملاحظات المدمجة والمرتبة ===== -->
                 <div class="notes-section">
                     <div class="notes-title">
                         <i class="fas fa-sticky-note"></i> ملاحظات
@@ -3839,8 +3822,6 @@
                             box-sizing: border-box !important;
                         }
                         .print-actions { display: none !important; }
-                        
-                        /* ===== التحكم في حجم اللوجو - تكبير 156px وإزالة الإطار الذهبي ===== */
                         .invoice-header .logo-section .logo-box {
                             width: 156px !important;
                             height: 156px !important;
@@ -3879,8 +3860,6 @@
                             -webkit-print-color-adjust: exact !important;
                             print-color-adjust: exact !important;
                         }
-
-                        /* ===== تصغير QR Code بنسبة 40% وإزالة الإطار الذهبي ===== */
                         .invoice-header .invoice-title .qr-code {
                             width: 72px !important;
                             height: 72px !important;
@@ -3903,7 +3882,6 @@
                             padding: 6px 10px !important;
                             border-width: 2px !important;
                         }
-
                         .invoice-header {
                             display: flex !important;
                             align-items: center !important;
@@ -4160,15 +4138,20 @@
 
             showToast('⏳ جاري التحميل', 'جاري إنشاء ملف PDF...', 'warning');
 
-            // ===== تجهيز اسم الملف باسم العميل =====
-            var rawClientName = clientName.value.trim() || 'فاتورة';
+            // ===== الحصول على اسم العميل من الحقل مباشرة =====
+            var clientNameValue = document.getElementById('clientName').value.trim();
+            var rawClientName = clientNameValue || 'فاتورة';
+            
             // إزالة الرموز الممنوعة في أسماء الملفات
             var safeClientName = rawClientName.replace(/[\\\/:*?"<>|]/g, '').trim();
             if (!safeClientName) {
                 safeClientName = 'فاتورة';
             }
 
-            var fileName = safeClientName + ' - ' + (invoiceNumber.value || 'invoice') + '.pdf';
+            // ===== الحصول على رقم الفاتورة =====
+            var invoiceNum = document.getElementById('invoiceNumber').value.trim() || 'invoice';
+
+            var fileName = safeClientName + ' - ' + invoiceNum + '.pdf';
 
             console.log('📄 اسم الملف المطلوب حفظه:', fileName);
 
