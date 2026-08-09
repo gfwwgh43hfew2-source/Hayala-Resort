@@ -1524,7 +1524,8 @@
         }
 
         /* ============================================================
-           PRINT PREVIEW STYLES
+           PRINT PREVIEW STYLES - مع تكبير اللوجو 156px وإزالة الإطار الذهبي
+           وتصغير QR Code 40% وإزالة الإطار الذهبي
            ============================================================ */
         .print-preview-overlay .print-wrapper .invoice-header {
             display: flex;
@@ -1564,6 +1565,11 @@
             width: auto;
             height: auto;
             object-fit: contain;
+        }
+        .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box span {
+            font-size: calc(2.8rem * var(--scale-factor));
+            font-weight: 900;
+            color: #121821;
         }
         .print-preview-overlay .print-wrapper .invoice-header .company-details h2 {
             font-size: calc(1.6rem * var(--scale-factor));
@@ -1729,7 +1735,7 @@
         }
 
         /* ============================================================
-           PRINT PREVIEW RESPONSIVE
+           PRINT PREVIEW RESPONSIVE - تكبير اللوجو وتصغير QR Code
            ============================================================ */
         @media (max-width: 768px) {
             .print-preview-overlay .print-wrapper {
@@ -1751,6 +1757,9 @@
                 max-height: calc(120px * var(--scale-factor));
                 border-radius: calc(14px * var(--scale-factor));
                 padding: calc(8px * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box span {
+                font-size: calc(2.2rem * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .invoice-header .invoice-title {
                 width: 100%;
@@ -1825,17 +1834,20 @@
                 border-radius: calc(12px * var(--scale-factor));
                 padding: calc(6px * var(--scale-factor));
             }
-            .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-code {
-                width: calc(50px * var(--scale-factor));
-                height: calc(50px * var(--scale-factor));
-                padding: calc(2px * var(--scale-factor));
-                border: none !important;
+            .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box span {
+                font-size: calc(1.8rem * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .invoice-header .company-details h2 {
                 font-size: calc(1.1rem * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .invoice-header .company-details p {
                 font-size: calc(0.55rem * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-code {
+                width: calc(50px * var(--scale-factor));
+                height: calc(50px * var(--scale-factor));
+                padding: calc(2px * var(--scale-factor));
+                border: none !important;
             }
             .print-preview-overlay .print-wrapper .info-grid {
                 grid-template-columns: 1fr 1fr;
@@ -2184,8 +2196,10 @@
 
         /* ============================================================
            PRINT MEDIA QUERY - التصميم المحسن بالكامل للطباعة
+           مع تكبير اللوجو 156px وتصغير QR Code 40% وإزالة الإطار الذهبي
            ============================================================ */
         @media print {
+            /* إخفاء جميع عناصر التحكم في الطباعة */
             .print-preview-overlay .print-actions {
                 display: none !important;
             }
@@ -2211,11 +2225,13 @@
                 overflow: visible !important;
             }
 
+            /* ===== استغلال المساحة بالكامل ===== */
             .print-preview-overlay .print-wrapper * {
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
             }
 
+            /* ===== تذييل الصفحة ===== */
             .print-preview-overlay .print-wrapper .invoice-footer {
                 margin-top: 15px !important;
                 padding-top: 10px !important;
@@ -2226,7 +2242,7 @@
                 flex-wrap: wrap !important;
             }
 
-            /* ===== تكبير الشعار وإزالة الإطار الذهبي ===== */
+            /* ===== تكبير الشعار إلى 156px وإزالة الإطار الذهبي ===== */
             .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box {
                 width: 156px !important;
                 height: 156px !important;
@@ -2260,14 +2276,30 @@
                 print-color-adjust: exact !important;
             }
 
-            /* ===== تصغير QR Code وإزالة الإطار الذهبي ===== */
+            .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box span {
+                font-size: 2.8rem !important;
+                font-weight: 900 !important;
+                color: #121821 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            /* ===== تصغير QR Code إلى 72px وإزالة الإطار الذهبي ===== */
             .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-code {
                 width: 72px !important;
                 height: 72px !important;
-                padding: 4px !important;
-                border: none !important;
+                min-width: 72px !important;
+                max-width: 72px !important;
+                min-height: 72px !important;
+                max-height: 72px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
                 background: #ffffff !important;
                 border-radius: 8px !important;
+                padding: 4px !important;
+                border: none !important;
+                box-shadow: none !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
             }
@@ -2278,14 +2310,11 @@
                 height: 100% !important;
                 max-width: 100% !important;
                 max-height: 100% !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
 
-            .print-preview-overlay .print-wrapper .invoice-header .invoice-title {
-                min-width: 90px !important;
-                padding: 6px 10px !important;
-                border-width: 2px !important;
-            }
-
+            /* ===== تكبير الـ Header ===== */
             .print-preview-overlay .print-wrapper .invoice-header {
                 padding-bottom: 18px !important;
                 margin-bottom: 18px !important;
@@ -2307,6 +2336,17 @@
                 line-height: 1.4 !important;
             }
 
+            .print-preview-overlay .print-wrapper .invoice-header .invoice-title {
+                min-width: 90px !important;
+                padding: 6px 10px !important;
+                border-width: 2px !important;
+            }
+
+            .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-label {
+                font-size: 7px !important;
+            }
+
+            /* ===== تكبير شبكة المعلومات ===== */
             .print-preview-overlay .print-wrapper .info-grid {
                 display: grid !important;
                 grid-template-columns: 1fr 1fr 1fr 1fr 1fr !important;
@@ -2327,6 +2367,7 @@
                 font-weight: 700 !important;
             }
 
+            /* ===== تكبير الجدول وصفوفه ===== */
             .print-preview-overlay .print-wrapper table {
                 width: 100% !important;
                 border-collapse: collapse !important;
@@ -2345,6 +2386,7 @@
                 border-bottom-width: 1px !important;
             }
 
+            /* ===== تكبير الإجماليات ===== */
             .print-preview-overlay .print-wrapper .footer {
                 padding-top: 18px !important;
                 margin-top: 18px !important;
@@ -2372,6 +2414,7 @@
                 color: var(--teal) !important;
             }
 
+            /* ===== تكبير الملاحظات ===== */
             .print-preview-overlay .print-wrapper .notes-section {
                 margin-top: 16px !important;
                 padding-top: 14px !important;
@@ -2401,6 +2444,7 @@
                 margin-bottom: 4px !important;
             }
 
+            /* ===== تكبير النصوص الإضافية ===== */
             .print-preview-overlay .print-wrapper .print-footer-notes {
                 margin-top: 14px !important;
                 padding-top: 12px !important;
@@ -2419,6 +2463,7 @@
                 margin-top: 4px !important;
             }
 
+            /* ===== توزيع متوازن للفراغات ===== */
             .print-preview-overlay .print-wrapper .invoice-header {
                 display: flex !important;
                 align-items: center !important;
@@ -2433,6 +2478,7 @@
                 flex-direction: row !important;
             }
 
+            /* ===== منع تكسر الجدول ===== */
             .print-preview-overlay .print-wrapper table tbody tr {
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
@@ -2448,6 +2494,7 @@
                 break-inside: avoid !important;
             }
 
+            /* ===== إزالة أي فراغات كبيرة غير مستغلة ===== */
             .print-preview-overlay .print-wrapper {
                 display: flex !important;
                 flex-direction: column !important;
@@ -2458,6 +2505,7 @@
                 margin-top: auto !important;
             }
 
+            /* ===== تنسيق الشارات ===== */
             .print-preview-overlay .print-wrapper .badge {
                 display: inline-flex !important;
                 align-items: center !important;
@@ -2494,6 +2542,7 @@
                 color: var(--accent-ink) !important;
             }
 
+            /* ===== تحسينات عامة ===== */
             .print-preview-overlay .print-wrapper::-webkit-scrollbar {
                 display: none !important;
             }
@@ -2502,6 +2551,7 @@
                 scrollbar-width: none !important;
             }
 
+            /* ===== طباعة الألوان ===== */
             .print-preview-overlay .print-wrapper .notes-section,
             .print-preview-overlay .print-wrapper .print-footer-notes,
             .print-preview-overlay .print-wrapper .info-grid,
@@ -3508,7 +3558,7 @@
 
         /**
          * ============================================================
-         * GENERATE QR CODE - حجم مصغر 72px (40% أصغر من 120px) وإزالة الإطار
+         * GENERATE QR CODE - حجم مصغر 72px (تصغير 40% من 120px)
          * ============================================================
          */
         function generateQRCode(invoiceNumber, client, total) {
@@ -3549,7 +3599,7 @@
                     correctLevel: QRCode.CorrectLevel.H
                 });
                 currentQRCode = qr;
-                console.log('✅ تم إنشاء QR Code مصغر (72px) بنجاح');
+                console.log('✅ تم إنشاء QR Code بنجاح (72px)');
             } catch (error) {
                 console.error('❌ خطأ في إنشاء QR Code:', error);
                 generateQRCodeExternal(invoiceNumber, client, total);
@@ -3588,14 +3638,14 @@
             img.onerror = function() {
                 qrContainer.innerHTML = `
                             <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;background:#f8f9fa;border-radius:4px;">
-                                <i class="fas fa-qrcode" style="font-size:1.5rem;color:var(--accent);"></i>
+                                <i class="fas fa-qrcode" style="font-size:1.2rem;color:var(--accent);"></i>
                                 <span style="font-size:0.4rem;color:var(--ink-mute);">${invoiceNumber || ''}</span>
                             </div>
                         `;
             };
 
             img.onload = function() {
-                console.log('✅ تم إنشاء QR Code مصغر بواسطة API خارجي');
+                console.log('✅ تم إنشاء QR Code بواسطة API خارجي (72px)');
             };
 
             qrContainer.appendChild(img);
@@ -3603,7 +3653,7 @@
 
         /**
          * ============================================================
-         * PREVIEW INVOICE - عرض الفاتورة مع تاريخ ووقت الدخول والخروج
+         * PREVIEW INVOICE - معاينة الفاتورة
          * ============================================================
          */
         function previewInvoice() {
@@ -3662,7 +3712,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th style="width:25px;">#</th>
+                            <th style="width:30px;">#</th>
                             <th style="text-align:right;">نوع العقار</th>
                             <th>عدد الأيام</th>
                             <th>السعر اليومي</th>
@@ -3673,11 +3723,6 @@
             `;
 
             bookings.forEach(function(item, index) {
-                var checkInDateFormatted = item.checkIn ? new Date(item.checkIn).toLocaleDateString('ar-EG') : 'غير محدد';
-                var checkInTimeFormatted = item.checkInTime ? item.checkInTime : 'غير محدد';
-                var checkOutDateFormatted = item.checkOut ? new Date(item.checkOut).toLocaleDateString('ar-EG') : 'غير محدد';
-                var checkOutTimeFormatted = item.checkOutTime ? item.checkOutTime : 'غير محدد';
-                
                 html += `
                     <tr>
                         <td>${index + 1}</td>
@@ -3685,16 +3730,6 @@
                         <td>${item.nights}</td>
                         <td>${item.dailyPrice.toFixed(2)}</td>
                         <td style="font-weight:700;color:var(--teal);">${item.total.toFixed(2)}</td>
-                    </tr>
-                    <tr style="background:var(--surface-muted);">
-                        <td colspan="5" style="text-align:right;font-size:0.6rem;color:var(--ink-mute);padding:4px 12px;border-bottom:1px solid var(--line);">
-                            <i class="fas fa-calendar-check" style="margin-left:6px;color:var(--teal);"></i>
-                            <strong>تاريخ ووقت الدخول:</strong> ${checkInDateFormatted} - ${checkInTimeFormatted}
-                            <span style="margin-right:16px;"></span>
-                            <i class="fas fa-calendar-times" style="margin-left:6px;color:var(--rust);"></i>
-                            <strong>تاريخ ووقت الخروج:</strong> ${checkOutDateFormatted} - ${checkOutTimeFormatted}
-                            ${item.stayType ? `<span style="margin-right:16px;background:var(--accent-soft);padding:1px 10px;border-radius:4px;font-weight:600;color:var(--accent-ink);font-size:0.55rem;">${item.stayType}</span>` : ''}
-                        </td>
                     </tr>
                 `;
             });
@@ -3720,6 +3755,7 @@
                     </div>
                 </div>
 
+                <!-- ===== الملاحظات المدمجة والمرتبة ===== -->
                 <div class="notes-section">
                     <div class="notes-title">
                         <i class="fas fa-sticky-note"></i> ملاحظات
@@ -3759,6 +3795,7 @@
          * ============================================================
          */
         function executePrint() {
+            // التأكد من وجود محتوى للمعاينة
             var overlay = document.getElementById('printPreviewOverlay');
             if (!overlay.classList.contains('show')) {
                 previewInvoice();
@@ -3772,18 +3809,29 @@
 
         /**
          * ============================================================
-         * OPEN PRINT WINDOW - عبر iframe مخفي
+         * OPEN PRINT WINDOW - عبر iframe مخفي مع اسم العميل
          * ============================================================
          */
         function openPrintWindow() {
             var content = document.getElementById('printPreviewContent').innerHTML;
             var styles = document.querySelector('style').innerHTML;
 
+            // ===== الحصول على اسم العميل لتوليد عنوان الصفحة =====
+            var clientNameValue = document.getElementById('clientName').value.trim() || 'فاتورة';
+            var safeClientName = clientNameValue.replace(/[\\\/:*?"<>|]/g, '').trim();
+            if (!safeClientName) {
+                safeClientName = 'فاتورة';
+            }
+            var invoiceNumValue = document.getElementById('invoiceNumber').value || 'invoice';
+            var pageTitle = safeClientName + ' - ' + invoiceNumValue;
+
+            // إزالة أي iframe طباعة سابق قبل إنشاء واحد جديد
             var oldFrame = document.getElementById('printFrame');
             if (oldFrame) {
                 oldFrame.remove();
             }
 
+            // إنشاء iframe مخفي بدل فتح نافذة منبثقة جديدة
             var iframe = document.createElement('iframe');
             iframe.id = 'printFrame';
             iframe.style.position = 'fixed';
@@ -3803,16 +3851,24 @@
                 <head>
                     <meta charset="UTF-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>فاتورة ${invoiceNumber.value || ''} - ${settings.companyName || 'منتجع حياله'}</title>
+                    <title>${pageTitle}</title>
                     <style>
+                        /* ===== إعدادات أساسية ===== */
                         body {
                             background: #ffffff !important;
                             padding: 0 !important;
                             margin: 0 !important;
                             font-family: 'Cairo', sans-serif !important;
                         }
-                        ::-webkit-scrollbar { display: none !important; }
+
+                        ::-webkit-scrollbar {
+                            display: none !important;
+                        }
+
+                        /* ===== نسخ جميع أنماط الصفحة الأصلية ===== */
                         ${styles}
+
+                        /* ===== أنماط خاصة بنافذة الطباعة ===== */
                         .print-wrapper {
                             max-width: 210mm !important;
                             margin: 0 auto !important;
@@ -3821,7 +3877,12 @@
                             min-height: 100vh !important;
                             box-sizing: border-box !important;
                         }
-                        .print-actions { display: none !important; }
+
+                        .print-actions {
+                            display: none !important;
+                        }
+
+                        /* ===== التحكم في حجم اللوجو - تكبير 156px وإزالة الإطار الذهبي ===== */
                         .invoice-header .logo-section .logo-box {
                             width: 156px !important;
                             height: 156px !important;
@@ -3842,6 +3903,7 @@
                             -webkit-print-color-adjust: exact !important;
                             print-color-adjust: exact !important;
                         }
+
                         .invoice-header .logo-section .logo-box img {
                             width: 100% !important;
                             height: 100% !important;
@@ -3853,6 +3915,7 @@
                             -webkit-print-color-adjust: exact !important;
                             print-color-adjust: exact !important;
                         }
+
                         .invoice-header .logo-section .logo-box span {
                             font-size: 2.8rem !important;
                             font-weight: 900 !important;
@@ -3860,28 +3923,37 @@
                             -webkit-print-color-adjust: exact !important;
                             print-color-adjust: exact !important;
                         }
+
+                        /* ===== تصغير QR Code إلى 72px وإزالة الإطار الذهبي ===== */
                         .invoice-header .invoice-title .qr-code {
                             width: 72px !important;
                             height: 72px !important;
-                            padding: 4px !important;
-                            border: none !important;
+                            min-width: 72px !important;
+                            max-width: 72px !important;
+                            min-height: 72px !important;
+                            max-height: 72px !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: center !important;
                             background: #ffffff !important;
                             border-radius: 8px !important;
+                            padding: 4px !important;
+                            border: none !important;
+                            box-shadow: none !important;
                             -webkit-print-color-adjust: exact !important;
                             print-color-adjust: exact !important;
                         }
+
                         .invoice-header .invoice-title .qr-code canvas,
                         .invoice-header .invoice-title .qr-code img {
                             width: 100% !important;
                             height: 100% !important;
                             max-width: 100% !important;
                             max-height: 100% !important;
+                            -webkit-print-color-adjust: exact !important;
+                            print-color-adjust: exact !important;
                         }
-                        .invoice-header .invoice-title {
-                            min-width: 90px !important;
-                            padding: 6px 10px !important;
-                            border-width: 2px !important;
-                        }
+
                         .invoice-header {
                             display: flex !important;
                             align-items: center !important;
@@ -3892,22 +3964,50 @@
                             gap: 15px !important;
                             flex-direction: row !important;
                         }
+
                         .invoice-header .logo-section {
                             display: flex !important;
                             align-items: center !important;
                             gap: 15px !important;
                         }
+
                         .invoice-header .company-details h2 {
                             font-size: 20px !important;
                             font-weight: 900 !important;
                             color: var(--ink) !important;
                             line-height: 1.2 !important;
                         }
+
                         .invoice-header .company-details p {
                             font-size: 11px !important;
                             color: var(--ink-mute) !important;
                             line-height: 1.4 !important;
                         }
+
+                        .invoice-header .invoice-title {
+                            display: flex !important;
+                            flex-direction: column !important;
+                            align-items: center !important;
+                            justify-content: center !important;
+                            min-width: 90px !important;
+                            background: var(--surface-muted) !important;
+                            padding: 6px 10px !important;
+                            border-radius: 8px !important;
+                            border: 2px solid var(--accent) !important;
+                            flex-shrink: 0 !important;
+                        }
+
+                        .invoice-header .invoice-title .qr-label {
+                            font-size: 7px !important;
+                            color: var(--ink-mute) !important;
+                            text-align: center !important;
+                            font-weight: 600 !important;
+                        }
+
+                        .invoice-header .invoice-title .qr-label strong {
+                            color: var(--ink) !important;
+                        }
+
                         .info-grid {
                             display: grid !important;
                             grid-template-columns: 1fr 1fr 1fr 1fr 1fr !important;
@@ -3918,22 +4018,26 @@
                             border-radius: 8px !important;
                             border: 1px solid var(--line) !important;
                         }
+
                         .info-grid .item .label {
                             font-size: 9px !important;
                             color: var(--ink-mute) !important;
                             font-weight: 700 !important;
                         }
+
                         .info-grid .item .value {
                             font-size: 14px !important;
                             font-weight: 700 !important;
                             color: var(--ink) !important;
                         }
+
                         table {
                             width: 100% !important;
                             border-collapse: collapse !important;
                             font-size: 12px !important;
                             margin-bottom: 4px !important;
                         }
+
                         table th {
                             background: var(--ink) !important;
                             color: #ffffff !important;
@@ -3942,6 +4046,7 @@
                             font-size: 10px !important;
                             font-weight: 700 !important;
                         }
+
                         table td {
                             padding: 10px 12px !important;
                             border-bottom: 1px solid var(--line) !important;
@@ -3949,6 +4054,7 @@
                             text-align: center !important;
                             font-size: 11px !important;
                         }
+
                         .footer {
                             border-top: 2px solid var(--line) !important;
                             padding-top: 18px !important;
@@ -3960,22 +4066,27 @@
                             flex-direction: row !important;
                             align-items: flex-start !important;
                         }
+
                         .footer .signature .line {
                             width: 100px !important;
                             border-bottom: 2px solid var(--ink) !important;
                             margin-top: 6px !important;
                         }
+
                         .footer .signature p {
                             font-size: 11px !important;
                         }
+
                         .footer .total-details {
                             font-size: 12px !important;
                         }
+
                         .footer .total-details .total-amount {
                             font-size: 16px !important;
                             font-weight: 900 !important;
                             color: var(--teal) !important;
                         }
+
                         .notes-section {
                             margin-top: 16px !important;
                             padding-top: 14px !important;
@@ -3984,6 +4095,7 @@
                             background: var(--surface-muted) !important;
                             border-radius: 8px !important;
                         }
+
                         .notes-section .notes-title {
                             font-size: 11px !important;
                             font-weight: 800 !important;
@@ -3993,19 +4105,23 @@
                             gap: 10px !important;
                             margin-bottom: 10px !important;
                         }
+
                         .notes-section .notes-title i {
                             font-size: 12px !important;
                         }
+
                         .notes-section .notes-content {
                             font-size: 10px !important;
                             color: var(--ink-soft) !important;
                             line-height: 1.8 !important;
                         }
+
                         .notes-section .notes-content p {
                             padding-right: 16px !important;
                             margin-bottom: 4px !important;
                             position: relative !important;
                         }
+
                         .notes-section .notes-content p::before {
                             content: '•' !important;
                             position: absolute !important;
@@ -4013,6 +4129,7 @@
                             color: var(--accent) !important;
                             font-weight: 700 !important;
                         }
+
                         .print-footer-notes {
                             margin-top: 14px !important;
                             padding-top: 12px !important;
@@ -4021,21 +4138,61 @@
                             color: var(--ink-mute) !important;
                             line-height: 1.8 !important;
                         }
+
                         .print-footer-notes .note-item {
                             display: flex !important;
                             align-items: flex-start !important;
                             gap: 6px !important;
                             margin-bottom: 2px !important;
                         }
+
                         .print-footer-notes .note-item i {
                             color: var(--accent) !important;
                             font-size: 6px !important;
                             margin-top: 4px !important;
                             flex-shrink: 0 !important;
                         }
+
                         .print-footer-notes strong {
                             color: var(--ink-soft) !important;
                         }
+
+                        .badge {
+                            display: inline-flex !important;
+                            align-items: center !important;
+                            gap: 4px !important;
+                            padding: 2px 10px !important;
+                            border-radius: 50px !important;
+                            font-size: 9px !important;
+                            font-weight: 700 !important;
+                            border: 1px solid transparent !important;
+                        }
+
+                        .badge i {
+                            font-size: 8px !important;
+                        }
+
+                        .badge-paid {
+                            background: var(--teal-soft) !important;
+                            color: var(--teal) !important;
+                        }
+
+                        .badge-balance {
+                            background: var(--rust-soft) !important;
+                            color: var(--rust) !important;
+                        }
+
+                        .badge-type {
+                            background: var(--surface-muted) !important;
+                            color: var(--ink-mute) !important;
+                            border-color: var(--line) !important;
+                        }
+
+                        .badge-future {
+                            background: var(--accent-soft) !important;
+                            color: var(--accent-ink) !important;
+                        }
+
                         .notes-section,
                         .print-footer-notes,
                         .info-grid,
@@ -4046,30 +4203,37 @@
                             -webkit-print-color-adjust: exact !important;
                             print-color-adjust: exact !important;
                         }
+
                         table tbody tr {
                             page-break-inside: avoid !important;
                             break-inside: avoid !important;
                         }
+
                         .notes-section {
                             page-break-inside: avoid !important;
                             break-inside: avoid !important;
                         }
+
                         .print-footer-notes {
                             page-break-inside: avoid !important;
                             break-inside: avoid !important;
                         }
+
                         .footer {
                             page-break-inside: avoid !important;
                             break-inside: avoid !important;
                         }
+
                         .print-wrapper {
                             display: flex !important;
                             flex-direction: column !important;
                             min-height: 100vh !important;
                         }
+
                         .footer {
                             margin-top: auto !important;
                         }
+
                         @page {
                             size: A4;
                             margin: 0;
@@ -4083,6 +4247,7 @@
             `);
             doc.close();
 
+            // انتظار تحميل الصور (اللوجو والـ QR Code) قبل استدعاء الطباعة
             setTimeout(function() {
                 try {
                     iframe.contentWindow.focus();
@@ -4091,6 +4256,8 @@
                     console.error('❌ خطأ أثناء تنفيذ الطباعة:', e);
                     showToast('❌ خطأ', 'حدث خطأ أثناء تجهيز الطباعة', 'error');
                 }
+
+                // إزالة الـ iframe من الصفحة بعد انتهاء عملية الطباعة
                 setTimeout(function() {
                     if (iframe && iframe.parentNode) {
                         iframe.remove();
@@ -4103,7 +4270,8 @@
 
         /**
          * ============================================================
-         * DOWNLOAD PDF - حفظ باسم العميل تلقائياً
+         * DOWNLOAD PDF - باستخدام html2pdf مع تحميل يدوي بالاسم الصحيح
+         * يتم حفظ الملف باسم العميل تلقائياً
          * ============================================================
          */
         function downloadPDF() {
@@ -4138,20 +4306,15 @@
 
             showToast('⏳ جاري التحميل', 'جاري إنشاء ملف PDF...', 'warning');
 
-            // ===== الحصول على اسم العميل من الحقل مباشرة =====
-            var clientNameValue = document.getElementById('clientName').value.trim();
-            var rawClientName = clientNameValue || 'فاتورة';
-            
-            // إزالة الرموز الممنوعة في أسماء الملفات
+            // ===== تجهيز اسم الملف باسم العميل =====
+            var rawClientName = document.getElementById('clientName').value.trim() || 'فاتورة';
+            // إزالة الرموز الممنوعة في أسماء الملفات على أنظمة ويندوز وماك ولينكس
             var safeClientName = rawClientName.replace(/[\\\/:*?"<>|]/g, '').trim();
             if (!safeClientName) {
                 safeClientName = 'فاتورة';
             }
 
-            // ===== الحصول على رقم الفاتورة =====
-            var invoiceNum = document.getElementById('invoiceNumber').value.trim() || 'invoice';
-
-            var fileName = safeClientName + ' - ' + invoiceNum + '.pdf';
+            var fileName = safeClientName + ' - ' + (document.getElementById('invoiceNumber').value || 'invoice') + '.pdf';
 
             console.log('📄 اسم الملف المطلوب حفظه:', fileName);
 
@@ -4187,6 +4350,7 @@
                 }
             };
 
+            // ===== توليد الـ PDF كـ Blob ثم التحكم بالتحميل يدوياً =====
             html2pdf()
                 .set(opt)
                 .from(element)
@@ -4204,7 +4368,7 @@
                         URL.revokeObjectURL(blobUrl);
                     }, 3000);
 
-                    showToast('✅ تم التحميل', 'تم تحميل ملف PDF بنجاح باسم: ' + fileName, 'success');
+                    showToast('✅ تم التحميل', 'تم تحميل ملف PDF بنجاح', 'success');
                     setTimeout(function() {
                         closePrintPreview();
                     }, 1500);
@@ -4752,6 +4916,7 @@
                         warnings.push('الحجز ' + (index + 1) + ': تاريخ الدخول فارغ');
                     }
 
+                    // ===== البيانات المتطابقة مع هيكل الجدول =====
                     var booking = {
                         invoice_number: invoiceData.number || null,
                         booking_number: invoiceData.book || null,
@@ -4775,6 +4940,7 @@
                         notes: item.notes || null
                     };
 
+                    // إزالة أي مفاتيح بقيمة undefined
                     Object.keys(booking).forEach(function(key) {
                         if (booking[key] === undefined) {
                             delete booking[key];
@@ -4784,6 +4950,7 @@
                     return booking;
                 });
 
+                // ===== حفظ كل حجز على حدة مع معالجة الأخطاء =====
                 var savedCount = 0;
                 var errors = [];
 
@@ -4883,11 +5050,6 @@
             console.log('📊 Supabase URL:', SUPABASE_URL);
             console.log('👤 المستخدم:', user.name || 'غير معروف');
             console.log('✅ النظام جاهز للعمل مع Supabase');
-            console.log('📐 حجم اللوجو: 156px (تم تكبير 30%)');
-            console.log('📐 حجم QR Code: 72px (تم تصغير 40%)');
-            console.log('🖼️ تم إزالة الإطارات الذهبية حول اللوجو و QR Code');
-            console.log('📁 سيتم حفظ ملفات PDF باسم العميل تلقائياً');
-            console.log('🕐 سيتم عرض تاريخ ووقت الدخول والخروج في الفاتورة');
         });
     </script>
 
