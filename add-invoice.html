@@ -3706,359 +3706,452 @@
          * EXECUTE PRINT - طباعة عبر نافذة المتصفح
          * ============================================================
          */
-       /**
- * ============================================================
- /**
-/**
-/**
- * ============================================================
- * EXECUTE PRINT - طباعة باستخدام iframe مخفي
- * ============================================================
- */
-function executePrint() {
-    // التأكد من وجود محتوى للمعاينة
-    var overlay = document.getElementById('printPreviewOverlay');
-    if (!overlay.classList.contains('show')) {
-        previewInvoice();
-        setTimeout(function() {
-            executePrintWithIframe();
-        }, 600);
-        return;
-    }
-    executePrintWithIframe();
-}
-
-/**
- * ============================================================
- * PRINT WITH IFRAME - طباعة باستخدام iframe مخفي تماماً
- * ============================================================
- */
-function executePrintWithIframe() {
-    // الحصول على محتوى المعاينة
-    var printContent = document.getElementById('printPreviewContent');
-    if (!printContent) {
-        showToast('❌ خطأ', 'لم يتم العثور على محتوى للطباعة', 'error');
-        return;
-    }
-
-    // إغلاق المعاينة أولاً
-    closePrintPreview();
-
-    // إنشاء iframe مخفي تماماً
-    var iframe = document.createElement('iframe');
-    iframe.style.cssText = `
-        position: absolute;
-        top: -9999px;
-        left: -9999px;
-        width: 1px;
-        height: 1px;
-        border: none;
-        visibility: hidden;
-        opacity: 0;
-        pointer-events: none;
-        display: none;
-    `;
-    document.body.appendChild(iframe);
-
-    // الحصول على محتوى الـ iframe
-    var iframeDoc = iframe.contentWindow.document;
-    
-    // كتابة المحتوى في الـ iframe
-    iframeDoc.open();
-    iframeDoc.write(`
-        <!DOCTYPE html>
-        <html dir="rtl">
-        <head>
-            <meta charset="UTF-8">
-            <title></title>
-            <style>
-                /* ===== إخفاء كل شيء قد يظهر ===== */
-                title { display: none !important; }
-                head { display: none !important; }
-                html, body {
-                    margin: 0;
-                    padding: 0;
-                    background: white;
-                    direction: rtl;
-                    font-family: 'Cairo', sans-serif;
-                    height: 100%;
-                }
-                
-                /* ===== إخفاء أي نص في شريط الحالة ===== */
-                body::before {
-                    content: '' !important;
-                    display: none !important;
-                }
-                
-                /* ===== منع ظهور أي نص ===== */
-                * {
-                    -webkit-print-color-adjust: exact !important;
-                    print-color-adjust: exact !important;
-                }
-                
-                .print-wrapper {
-                    max-width: 210mm;
-                    margin: 0 auto;
-                    background: white;
-                    padding: 12mm 15mm;
-                    box-sizing: border-box;
-                }
-                
-                .invoice-header {
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    padding-bottom: 18px;
-                    border-bottom: 3px solid #121821;
-                    margin-bottom: 18px;
-                    gap: 15px;
-                }
-                
-                .logo-section {
-                    display: flex;
-                    align-items: center;
-                    gap: 15px;
-                }
-                
-                .logo-box {
-                    width: 80px;
-                    height: 80px;
-                    border: 2.5px solid #dd9f2e;
-                    border-radius: 12px;
-                    overflow: hidden;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    background: white;
-                    padding: 5px;
-                }
-                
-                .logo-box img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: contain;
-                }
-                
-                .company-details h2 {
-                    font-size: 20px;
-                    font-weight: 900;
-                    color: #121821;
-                    margin: 0;
-                }
-                
-                .company-details p {
-                    font-size: 11px;
-                    color: #6d7883;
-                    margin: 2px 0;
-                }
-                
-                .invoice-title {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: center;
-                    min-width: 100px;
-                    background: #f4f6f5;
-                    padding: 8px 12px;
-                    border-radius: 8px;
-                    border: 2px solid #dd9f2e;
-                }
-                
-                .qr-code {
-                    width: 85px;
-                    height: 85px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    background: white;
-                    border-radius: 6px;
-                    padding: 5px;
-                    border: 2px solid #c7d0cc;
-                    margin-bottom: 4px;
-                }
-                
-                .qr-code canvas,
-                .qr-code img {
-                    width: 100% !important;
-                    height: 100% !important;
-                }
-                
-                .qr-label {
-                    font-size: 8px;
-                    color: #6d7883;
-                    text-align: center;
-                    font-weight: 600;
-                }
-                
-                .info-grid {
-                    display: grid;
-                    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-                    gap: 10px;
-                    margin-bottom: 16px;
-                    background: #f4f6f5;
-                    padding: 12px 16px;
-                    border-radius: 8px;
-                    border: 1px solid #dde3e0;
-                }
-                
-                .info-grid .item .label {
-                    font-size: 9px;
-                    color: #6d7883;
-                    font-weight: 700;
-                }
-                
-                .info-grid .item .value {
-                    font-size: 14px;
-                    font-weight: 700;
-                    color: #121821;
-                }
-                
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    font-size: 12px;
-                    margin-bottom: 4px;
-                }
-                
-                table th {
-                    background: #121821;
-                    color: white;
-                    padding: 10px 12px;
-                    text-align: center;
-                    font-size: 10px;
-                    font-weight: 700;
-                }
-                
-                table td {
-                    padding: 10px 12px;
-                    border-bottom: 1px solid #dde3e0;
-                    color: #2c3644;
-                    text-align: center;
-                    font-size: 11px;
-                }
-                
-                .footer {
-                    border-top: 2px solid #dde3e0;
-                    padding-top: 18px;
-                    margin-top: 18px;
-                    display: flex;
-                    justify-content: space-between;
-                    font-size: 11px;
-                    color: #6d7883;
-                }
-                
-                .signature .line {
-                    width: 100px;
-                    border-bottom: 2px solid #121821;
-                    margin-top: 6px;
-                }
-                
-                .notes-section {
-                    margin-top: 16px;
-                    padding: 16px 18px;
-                    border-top: 2px dashed #c7d0cc;
-                    background: #f4f6f5;
-                    border-radius: 8px;
-                }
-                
-                .notes-title {
-                    font-size: 11px;
-                    font-weight: 800;
-                    color: #7a5312;
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    margin-bottom: 10px;
-                }
-                
-                .notes-content {
-                    font-size: 10px;
-                    color: #2c3644;
-                    line-height: 1.8;
-                }
-                
-                .notes-content p {
-                    padding-right: 16px;
-                    margin-bottom: 4px;
-                    position: relative;
-                }
-                
-                .notes-content p::before {
-                    content: '•';
-                    position: absolute;
-                    right: 0;
-                    color: #dd9f2e;
-                    font-weight: 700;
-                }
-                
-                table tbody tr {
-                    page-break-inside: avoid;
-                    break-inside: avoid;
-                }
-                
-                .notes-section {
-                    page-break-inside: avoid;
-                    break-inside: avoid;
-                }
-                
-                .footer {
-                    page-break-inside: avoid;
-                    break-inside: avoid;
-                }
-                
-                .notes-section,
-                .info-grid {
-                    -webkit-print-color-adjust: exact !important;
-                    print-color-adjust: exact !important;
-                }
-            </style>
-        </head>
-        <body>
-            ${printContent.innerHTML}
-            <script>
-                // ===== إخفاء كل شيء =====
-                (function() {
-                    // 1. إخفاء عنوان الصفحة
-                    document.title = '';
-                    
-                    // 2. إزالة عنصر title
-                    var titles = document.querySelectorAll('title');
-                    titles.forEach(function(el) {
-                        el.textContent = '';
-                        el.style.display = 'none';
-                        el.remove();
-                    });
-                    
-                    // 3. إخفاء head بالكامل
-                    var head = document.querySelector('head');
-                    if (head) {
-                        head.style.display = 'none';
-                    }
-                    
-                    // 4. بدء الطباعة
-                    window.print();
-                    
-                    // 5. إغلاق النافذة بعد الطباعة
-                    setTimeout(function() {
-                        window.close();
-                    }, 1000);
-                })();
-            <\/script>
-        </body>
-        </html>
-    `);
-    iframeDoc.close();
-
-    // إزالة الـ iframe بعد الطباعة
-    setTimeout(function() {
-        if (iframe.parentNode) {
-            iframe.parentNode.removeChild(iframe);
+        function executePrint() {
+            // التأكد من وجود محتوى للمعاينة
+            var overlay = document.getElementById('printPreviewOverlay');
+            if (!overlay.classList.contains('show')) {
+                previewInvoice();
+                setTimeout(function() {
+                    openPrintWindow();
+                }, 600);
+                return;
+            }
+            openPrintWindow();
         }
-    }, 3000);
-}
+
         /**
          * ============================================================
-         * DOWNLOAD PDF - باستخدام html2pdf مباشرة
+         * OPEN PRINT WINDOW - عبر iframe مخفي لتفادي ظهور about:blank
+         * ============================================================
+         */
+        function openPrintWindow() {
+            var content = document.getElementById('printPreviewContent').innerHTML;
+            var styles = document.querySelector('style').innerHTML;
+
+            // إزالة أي iframe طباعة سابق قبل إنشاء واحد جديد
+            var oldFrame = document.getElementById('printFrame');
+            if (oldFrame) {
+                oldFrame.remove();
+            }
+
+            // إنشاء iframe مخفي بدل فتح نافذة منبثقة جديدة
+            var iframe = document.createElement('iframe');
+            iframe.id = 'printFrame';
+            iframe.style.position = 'fixed';
+            iframe.style.right = '0';
+            iframe.style.bottom = '0';
+            iframe.style.width = '0';
+            iframe.style.height = '0';
+            iframe.style.border = '0';
+            iframe.style.visibility = 'hidden';
+            document.body.appendChild(iframe);
+
+            var doc = iframe.contentWindow.document;
+            doc.open();
+            doc.write(`
+                <!DOCTYPE html>
+                <html dir="rtl">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>فاتورة ${invoiceNumber.value || ''} - ${settings.companyName || 'منتجع حياله'}</title>
+                    <style>
+                        /* ===== إعدادات أساسية ===== */
+                        body {
+                            background: #ffffff !important;
+                            padding: 0 !important;
+                            margin: 0 !important;
+                            font-family: 'Cairo', sans-serif !important;
+                        }
+
+                        ::-webkit-scrollbar {
+                            display: none !important;
+                        }
+
+                        /* ===== نسخ جميع أنماط الصفحة الأصلية ===== */
+                        ${styles}
+
+                        /* ===== أنماط خاصة بنافذة الطباعة ===== */
+                        .print-wrapper {
+                            max-width: 210mm !important;
+                            margin: 0 auto !important;
+                            background: #ffffff !important;
+                            padding: 12mm 15mm !important;
+                            min-height: 100vh !important;
+                            box-sizing: border-box !important;
+                        }
+
+                        .print-actions {
+                            display: none !important;
+                        }
+
+                        /* ===== التحكم في حجم اللوجو عند الطباعة ===== */
+                        .invoice-header .logo-section .logo-box {
+                            width: 80px !important;
+                            height: 80px !important;
+                            min-width: 80px !important;
+                            max-width: 80px !important;
+                            min-height: 80px !important;
+                            max-height: 80px !important;
+                            border: 2.5px solid var(--accent) !important;
+                            border-radius: 12px !important;
+                            overflow: hidden !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: center !important;
+                            background: #ffffff !important;
+                            padding: 5px !important;
+                            flex-shrink: 0 !important;
+                        }
+
+                        .invoice-header .logo-section .logo-box img {
+                            width: 100% !important;
+                            height: 100% !important;
+                            max-width: 100% !important;
+                            max-height: 100% !important;
+                            object-fit: contain !important;
+                            display: block !important;
+                            margin: 0 auto !important;
+                        }
+
+                        .invoice-header {
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: space-between !important;
+                            padding-bottom: 18px !important;
+                            border-bottom: 3px solid var(--ink) !important;
+                            margin-bottom: 18px !important;
+                            gap: 15px !important;
+                            flex-direction: row !important;
+                        }
+
+                        .invoice-header .logo-section {
+                            display: flex !important;
+                            align-items: center !important;
+                            gap: 15px !important;
+                        }
+
+                        .invoice-header .company-details h2 {
+                            font-size: 20px !important;
+                            font-weight: 900 !important;
+                            color: var(--ink) !important;
+                            line-height: 1.2 !important;
+                        }
+
+                        .invoice-header .company-details p {
+                            font-size: 11px !important;
+                            color: var(--ink-mute) !important;
+                            line-height: 1.4 !important;
+                        }
+
+                        .invoice-header .invoice-title {
+                            display: flex !important;
+                            flex-direction: column !important;
+                            align-items: center !important;
+                            justify-content: center !important;
+                            min-width: 100px !important;
+                            background: var(--surface-muted) !important;
+                            padding: 8px 12px !important;
+                            border-radius: 8px !important;
+                            border: 2px solid var(--accent) !important;
+                            flex-shrink: 0 !important;
+                        }
+
+                        .invoice-header .invoice-title .qr-code {
+                            width: 85px !important;
+                            height: 85px !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: center !important;
+                            background: #ffffff !important;
+                            border-radius: 6px !important;
+                            padding: 5px !important;
+                            border: 2px solid var(--line-strong) !important;
+                            margin-bottom: 4px !important;
+                        }
+
+                        .invoice-header .invoice-title .qr-code canvas,
+                        .invoice-header .invoice-title .qr-code img {
+                            width: 100% !important;
+                            height: 100% !important;
+                            max-width: 100% !important;
+                            max-height: 100% !important;
+                        }
+
+                        .invoice-header .invoice-title .qr-label {
+                            font-size: 8px !important;
+                            color: var(--ink-mute) !important;
+                            text-align: center !important;
+                            font-weight: 600 !important;
+                        }
+
+                        .invoice-header .invoice-title .qr-label strong {
+                            color: var(--ink) !important;
+                        }
+
+                        .info-grid {
+                            display: grid !important;
+                            grid-template-columns: 1fr 1fr 1fr 1fr 1fr !important;
+                            gap: 10px !important;
+                            margin-bottom: 16px !important;
+                            background: var(--surface-muted) !important;
+                            padding: 12px 16px !important;
+                            border-radius: 8px !important;
+                            border: 1px solid var(--line) !important;
+                        }
+
+                        .info-grid .item .label {
+                            font-size: 9px !important;
+                            color: var(--ink-mute) !important;
+                            font-weight: 700 !important;
+                        }
+
+                        .info-grid .item .value {
+                            font-size: 14px !important;
+                            font-weight: 700 !important;
+                            color: var(--ink) !important;
+                        }
+
+                        table {
+                            width: 100% !important;
+                            border-collapse: collapse !important;
+                            font-size: 12px !important;
+                            margin-bottom: 4px !important;
+                        }
+
+                        table th {
+                            background: var(--ink) !important;
+                            color: #ffffff !important;
+                            padding: 10px 12px !important;
+                            text-align: center !important;
+                            font-size: 10px !important;
+                            font-weight: 700 !important;
+                        }
+
+                        table td {
+                            padding: 10px 12px !important;
+                            border-bottom: 1px solid var(--line) !important;
+                            color: var(--ink-soft) !important;
+                            text-align: center !important;
+                            font-size: 11px !important;
+                        }
+
+                        .footer {
+                            border-top: 2px solid var(--line) !important;
+                            padding-top: 18px !important;
+                            margin-top: 18px !important;
+                            display: flex !important;
+                            justify-content: space-between !important;
+                            font-size: 11px !important;
+                            color: var(--ink-mute) !important;
+                            flex-direction: row !important;
+                            align-items: flex-start !important;
+                        }
+
+                        .footer .signature .line {
+                            width: 100px !important;
+                            border-bottom: 2px solid var(--ink) !important;
+                            margin-top: 6px !important;
+                        }
+
+                        .footer .signature p {
+                            font-size: 11px !important;
+                        }
+
+                        .footer .total-details {
+                            font-size: 12px !important;
+                        }
+
+                        .footer .total-details .total-amount {
+                            font-size: 16px !important;
+                            font-weight: 900 !important;
+                            color: var(--teal) !important;
+                        }
+
+                        .notes-section {
+                            margin-top: 16px !important;
+                            padding-top: 14px !important;
+                            padding: 16px 18px !important;
+                            border-top: 2px dashed var(--line-strong) !important;
+                            background: var(--surface-muted) !important;
+                            border-radius: 8px !important;
+                        }
+
+                        .notes-section .notes-title {
+                            font-size: 11px !important;
+                            font-weight: 800 !important;
+                            color: var(--accent-ink) !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            gap: 10px !important;
+                            margin-bottom: 10px !important;
+                        }
+
+                        .notes-section .notes-title i {
+                            font-size: 12px !important;
+                        }
+
+                        .notes-section .notes-content {
+                            font-size: 10px !important;
+                            color: var(--ink-soft) !important;
+                            line-height: 1.8 !important;
+                        }
+
+                        .notes-section .notes-content p {
+                            padding-right: 16px !important;
+                            margin-bottom: 4px !important;
+                            position: relative !important;
+                        }
+
+                        .notes-section .notes-content p::before {
+                            content: '•' !important;
+                            position: absolute !important;
+                            right: 0 !important;
+                            color: var(--accent) !important;
+                            font-weight: 700 !important;
+                        }
+
+                        .print-footer-notes {
+                            margin-top: 14px !important;
+                            padding-top: 12px !important;
+                            border-top: 2px solid var(--line-strong) !important;
+                            font-size: 9px !important;
+                            color: var(--ink-mute) !important;
+                            line-height: 1.8 !important;
+                        }
+
+                        .print-footer-notes .note-item {
+                            display: flex !important;
+                            align-items: flex-start !important;
+                            gap: 6px !important;
+                            margin-bottom: 2px !important;
+                        }
+
+                        .print-footer-notes .note-item i {
+                            color: var(--accent) !important;
+                            font-size: 6px !important;
+                            margin-top: 4px !important;
+                            flex-shrink: 0 !important;
+                        }
+
+                        .print-footer-notes strong {
+                            color: var(--ink-soft) !important;
+                        }
+
+                        .badge {
+                            display: inline-flex !important;
+                            align-items: center !important;
+                            gap: 4px !important;
+                            padding: 2px 10px !important;
+                            border-radius: 50px !important;
+                            font-size: 9px !important;
+                            font-weight: 700 !important;
+                            border: 1px solid transparent !important;
+                        }
+
+                        .badge i {
+                            font-size: 8px !important;
+                        }
+
+                        .badge-paid {
+                            background: var(--teal-soft) !important;
+                            color: var(--teal) !important;
+                        }
+
+                        .badge-balance {
+                            background: var(--rust-soft) !important;
+                            color: var(--rust) !important;
+                        }
+
+                        .badge-type {
+                            background: var(--surface-muted) !important;
+                            color: var(--ink-mute) !important;
+                            border-color: var(--line) !important;
+                        }
+
+                        .badge-future {
+                            background: var(--accent-soft) !important;
+                            color: var(--accent-ink) !important;
+                        }
+
+                        .notes-section,
+                        .print-footer-notes,
+                        .info-grid,
+                        .invoice-header .invoice-title,
+                        .invoice-header .logo-section .logo-box,
+                        .badge,
+                        .footer .total-details .total-amount {
+                            -webkit-print-color-adjust: exact !important;
+                            print-color-adjust: exact !important;
+                        }
+
+                        table tbody tr {
+                            page-break-inside: avoid !important;
+                            break-inside: avoid !important;
+                        }
+
+                        .notes-section {
+                            page-break-inside: avoid !important;
+                            break-inside: avoid !important;
+                        }
+
+                        .print-footer-notes {
+                            page-break-inside: avoid !important;
+                            break-inside: avoid !important;
+                        }
+
+                        .footer {
+                            page-break-inside: avoid !important;
+                            break-inside: avoid !important;
+                        }
+
+                        .print-wrapper {
+                            display: flex !important;
+                            flex-direction: column !important;
+                            min-height: 100vh !important;
+                        }
+
+                        .footer {
+                            margin-top: auto !important;
+                        }
+
+                        @page {
+                            size: A4;
+                            margin: 0;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="print-wrapper">${content}</div>
+                </body>
+                </html>
+            `);
+            doc.close();
+
+            // انتظار تحميل الصور (اللوجو والـ QR Code) قبل استدعاء الطباعة
+            setTimeout(function() {
+                try {
+                    iframe.contentWindow.focus();
+                    iframe.contentWindow.print();
+                } catch (e) {
+                    console.error('❌ خطأ أثناء تنفيذ الطباعة:', e);
+                    showToast('❌ خطأ', 'حدث خطأ أثناء تجهيز الطباعة', 'error');
+                }
+
+                // إزالة الـ iframe من الصفحة بعد انتهاء عملية الطباعة
+                setTimeout(function() {
+                    if (iframe && iframe.parentNode) {
+                        iframe.remove();
+                    }
+                }, 1000);
+            }, 600);
+
+            closePrintPreview();
+        }
+
+        /**
+         * ============================================================
+         * DOWNLOAD PDF - باستخدام html2pdf مع تحميل يدوي بالاسم الصحيح
          * ============================================================
          */
         function downloadPDF() {
@@ -4081,7 +4174,7 @@ function executePrintWithIframe() {
 
         /**
          * ============================================================
-         * GENERATE PDF FROM PREVIEW - إنشاء PDF من المعاينة
+         * GENERATE PDF FROM PREVIEW - إنشاء PDF باسم العميل تلقائياً
          * ============================================================
          */
         function generatePDFFromPreview() {
@@ -4093,6 +4186,18 @@ function executePrintWithIframe() {
 
             showToast('⏳ جاري التحميل', 'جاري إنشاء ملف PDF...', 'warning');
 
+            // ===== تجهيز اسم الملف باسم العميل =====
+            var rawClientName = clientName.value.trim() || 'فاتورة';
+            // إزالة الرموز الممنوعة في أسماء الملفات على أنظمة ويندوز وماك ولينكس
+            var safeClientName = rawClientName.replace(/[\\\/:*?"<>|]/g, '').trim();
+            if (!safeClientName) {
+                safeClientName = 'فاتورة';
+            }
+
+            var fileName = safeClientName + ' - ' + (invoiceNumber.value || 'invoice') + '.pdf';
+
+            console.log('📄 اسم الملف المطلوب حفظه:', fileName);
+
             var opt = {
                 margin: {
                     top: 12,
@@ -4100,7 +4205,7 @@ function executePrintWithIframe() {
                     left: 12,
                     right: 12
                 },
-                filename: 'فاتورة_' + (invoiceNumber.value || 'invoice') + '.pdf',
+                filename: fileName,
                 image: {
                     type: 'jpeg',
                     quality: 0.98
@@ -4125,11 +4230,24 @@ function executePrintWithIframe() {
                 }
             };
 
+            // ===== توليد الـ PDF كـ Blob ثم التحكم بالتحميل يدوياً =====
             html2pdf()
                 .set(opt)
                 .from(element)
-                .save()
-                .then(function() {
+                .outputPdf('blob')
+                .then(function(blob) {
+                    var blobUrl = URL.createObjectURL(blob);
+                    var link = document.createElement('a');
+                    link.href = blobUrl;
+                    link.download = fileName;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+
+                    setTimeout(function() {
+                        URL.revokeObjectURL(blobUrl);
+                    }, 3000);
+
                     showToast('✅ تم التحميل', 'تم تحميل ملف PDF بنجاح', 'success');
                     setTimeout(function() {
                         closePrintPreview();
@@ -4660,120 +4778,120 @@ function executePrintWithIframe() {
         });
 
         /**
- * ============================================================
- * SAVE TO SUPABASE - متوافق مع هيكل الجدول
- * ============================================================
- */
-async function saveInvoiceToSupabase(invoiceData) {
-    btnSaveInvoice.disabled = true;
-    btnSaveInvoice.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
+         * ============================================================
+         * SAVE TO SUPABASE - متوافق مع هيكل الجدول
+         * ============================================================
+         */
+        async function saveInvoiceToSupabase(invoiceData) {
+            btnSaveInvoice.disabled = true;
+            btnSaveInvoice.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
 
-    try {
-        var warnings = [];
-        var bookingsToSave = invoiceData.bookings.map(function(item, index) {
-            if (!item.property) {
-                warnings.push('الحجز ' + (index + 1) + ': نوع العقار فارغ');
-            }
-            if (!item.checkIn) {
-                warnings.push('الحجز ' + (index + 1) + ': تاريخ الدخول فارغ');
-            }
-
-            // ===== البيانات المتطابقة مع هيكل الجدول =====
-            var booking = {
-                invoice_number: invoiceData.number || null,
-                booking_number: invoiceData.book || null,
-                invoice_date: invoiceData.date || new Date().toISOString().split('T')[0],
-                check_in: item.checkIn || null,
-                check_out: item.checkOut || null,
-                client_name: invoiceData.client || null,
-                client_phone: invoiceData.phone || null,
-                property_type: item.property || null,
-                nights: parseInt(item.nights) || 0,
-                price_per_night: parseFloat(item.dailyPrice) || 0,
-                discount: parseFloat(invoiceData.discount) || 0,
-                paid: parseFloat(invoiceData.paid) || 0,
-                remaining: parseFloat(invoiceData.remaining) || 0,
-                total: parseFloat(item.total) || 0,
-                payment_status: parseFloat(invoiceData.remaining) <= 0 ? 'Fully Paid' : 'Balance Due',
-                stay_type: item.stayType || 'مبيت',
-                check_in_time: item.checkInTime || null,
-                check_out_time: item.checkOutTime || null,
-                time_note: item.timeNote || null,
-                notes: item.notes || null
-            };
-
-            // إزالة أي مفاتيح بقيمة undefined
-            Object.keys(booking).forEach(function(key) {
-                if (booking[key] === undefined) {
-                    delete booking[key];
-                }
-            });
-
-            return booking;
-        });
-
-        // ===== حفظ كل حجز على حدة مع معالجة الأخطاء =====
-        var savedCount = 0;
-        var errors = [];
-
-        for (var i = 0; i < bookingsToSave.length; i++) {
-            var booking = bookingsToSave[i];
-            
             try {
-                var response = await fetch(SUPABASE_URL + '/rest/v1/bookings', {
-                    method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
-                        'Content-Type': 'application/json',
-                        'Prefer': 'return=minimal'
-                    },
-                    body: JSON.stringify(booking)
+                var warnings = [];
+                var bookingsToSave = invoiceData.bookings.map(function(item, index) {
+                    if (!item.property) {
+                        warnings.push('الحجز ' + (index + 1) + ': نوع العقار فارغ');
+                    }
+                    if (!item.checkIn) {
+                        warnings.push('الحجز ' + (index + 1) + ': تاريخ الدخول فارغ');
+                    }
+
+                    // ===== البيانات المتطابقة مع هيكل الجدول =====
+                    var booking = {
+                        invoice_number: invoiceData.number || null,
+                        booking_number: invoiceData.book || null,
+                        invoice_date: invoiceData.date || new Date().toISOString().split('T')[0],
+                        check_in: item.checkIn || null,
+                        check_out: item.checkOut || null,
+                        client_name: invoiceData.client || null,
+                        client_phone: invoiceData.phone || null,
+                        property_type: item.property || null,
+                        nights: parseInt(item.nights) || 0,
+                        price_per_night: parseFloat(item.dailyPrice) || 0,
+                        discount: parseFloat(invoiceData.discount) || 0,
+                        paid: parseFloat(invoiceData.paid) || 0,
+                        remaining: parseFloat(invoiceData.remaining) || 0,
+                        total: parseFloat(item.total) || 0,
+                        payment_status: parseFloat(invoiceData.remaining) <= 0 ? 'Fully Paid' : 'Balance Due',
+                        stay_type: item.stayType || 'مبيت',
+                        check_in_time: item.checkInTime || null,
+                        check_out_time: item.checkOutTime || null,
+                        time_note: item.timeNote || null,
+                        notes: item.notes || null
+                    };
+
+                    // إزالة أي مفاتيح بقيمة undefined
+                    Object.keys(booking).forEach(function(key) {
+                        if (booking[key] === undefined) {
+                            delete booking[key];
+                        }
+                    });
+
+                    return booking;
                 });
 
-                if (response.ok) {
-                    savedCount++;
-                    console.log('✅ تم حفظ الحجز ' + (i + 1));
-                } else {
-                    var errorText = await response.text();
-                    console.error('❌ خطأ في الحجز ' + (i + 1) + ':', errorText);
-                    errors.push('الحجز ' + (i + 1) + ': ' + response.status + ' - ' + errorText);
+                // ===== حفظ كل حجز على حدة مع معالجة الأخطاء =====
+                var savedCount = 0;
+                var errors = [];
+
+                for (var i = 0; i < bookingsToSave.length; i++) {
+                    var booking = bookingsToSave[i];
+
+                    try {
+                        var response = await fetch(SUPABASE_URL + '/rest/v1/bookings', {
+                            method: 'POST',
+                            headers: {
+                                'apikey': SUPABASE_ANON_KEY,
+                                'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                                'Content-Type': 'application/json',
+                                'Prefer': 'return=minimal'
+                            },
+                            body: JSON.stringify(booking)
+                        });
+
+                        if (response.ok) {
+                            savedCount++;
+                            console.log('✅ تم حفظ الحجز ' + (i + 1));
+                        } else {
+                            var errorText = await response.text();
+                            console.error('❌ خطأ في الحجز ' + (i + 1) + ':', errorText);
+                            errors.push('الحجز ' + (i + 1) + ': ' + response.status + ' - ' + errorText);
+                        }
+                    } catch (e) {
+                        console.error('❌ خطأ في الحجز ' + (i + 1) + ':', e.message);
+                        errors.push('الحجز ' + (i + 1) + ': ' + e.message);
+                    }
                 }
-            } catch (e) {
-                console.error('❌ خطأ في الحجز ' + (i + 1) + ':', e.message);
-                errors.push('الحجز ' + (i + 1) + ': ' + e.message);
+
+                btnSaveInvoice.disabled = false;
+                btnSaveInvoice.innerHTML = '<i class="fas fa-save"></i> حفظ';
+
+                if (savedCount === 0) {
+                    showToast('❌ خطأ', 'فشل في حفظ جميع الحجوزات: ' + errors.join(' | '), 'error');
+                    return;
+                }
+
+                if (errors.length > 0) {
+                    showToast('⚠️ تم الحفظ جزئياً', 'تم حفظ ' + savedCount + ' من ' + bookingsToSave.length + ' حجوزات\n' + errors.join('\n'), 'warning');
+                } else {
+                    showToast('✅ تم الحفظ', 'تم حفظ الفاتورة بنجاح في Supabase!', 'success', [
+                        { label: 'معاينة', value: 'preview', class: 'btn-yes' },
+                        { label: 'لا', value: 'no', class: 'btn-no' }
+                    ]).then(function(result) {
+                        if (result === 'preview') {
+                            previewInvoice();
+                        }
+                        resetForm();
+                    });
+                }
+
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+                showToast('❌ خطأ', 'حدث خطأ في حفظ الفاتورة: ' + error.message, 'error');
+                btnSaveInvoice.disabled = false;
+                btnSaveInvoice.innerHTML = '<i class="fas fa-save"></i> حفظ';
             }
         }
-
-        btnSaveInvoice.disabled = false;
-        btnSaveInvoice.innerHTML = '<i class="fas fa-save"></i> حفظ';
-
-        if (savedCount === 0) {
-            showToast('❌ خطأ', 'فشل في حفظ جميع الحجوزات: ' + errors.join(' | '), 'error');
-            return;
-        }
-
-        if (errors.length > 0) {
-            showToast('⚠️ تم الحفظ جزئياً', 'تم حفظ ' + savedCount + ' من ' + bookingsToSave.length + ' حجوزات\n' + errors.join('\n'), 'warning');
-        } else {
-            showToast('✅ تم الحفظ', 'تم حفظ الفاتورة بنجاح في Supabase!', 'success', [
-                { label: 'معاينة', value: 'preview', class: 'btn-yes' },
-                { label: 'لا', value: 'no', class: 'btn-no' }
-            ]).then(function(result) {
-                if (result === 'preview') {
-                    previewInvoice();
-                }
-                resetForm();
-            });
-        }
-
-    } catch (error) {
-        console.error('❌ خطأ:', error);
-        showToast('❌ خطأ', 'حدث خطأ في حفظ الفاتورة: ' + error.message, 'error');
-        btnSaveInvoice.disabled = false;
-        btnSaveInvoice.innerHTML = '<i class="fas fa-save"></i> حفظ';
-    }
-}
 
         /**
          * ============================================================
