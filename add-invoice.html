@@ -3710,6 +3710,7 @@
  * ============================================================
  /**
 /**
+/**
  * ============================================================
  * EXECUTE PRINT - طباعة باستخدام iframe مخفي
  * ============================================================
@@ -3771,17 +3772,28 @@ function executePrintWithIframe() {
             <meta charset="UTF-8">
             <title></title>
             <style>
-                /* ===== منع ظهور أي عنوان ===== */
+                /* ===== إخفاء كل شيء قد يظهر ===== */
                 title { display: none !important; }
                 head { display: none !important; }
-                
-                /* ===== أنماط الطباعة ===== */
-                body {
+                html, body {
                     margin: 0;
                     padding: 0;
                     background: white;
                     direction: rtl;
                     font-family: 'Cairo', sans-serif;
+                    height: 100%;
+                }
+                
+                /* ===== إخفاء أي نص في شريط الحالة ===== */
+                body::before {
+                    content: '' !important;
+                    display: none !important;
+                }
+                
+                /* ===== منع ظهور أي نص ===== */
+                * {
+                    -webkit-print-color-adjust: exact !important;
+                    print-color-adjust: exact !important;
                 }
                 
                 .print-wrapper {
@@ -3979,7 +3991,6 @@ function executePrintWithIframe() {
                     font-weight: 700;
                 }
                 
-                /* ===== منع تكسر الصفحات ===== */
                 table tbody tr {
                     page-break-inside: avoid;
                     break-inside: avoid;
@@ -3995,7 +4006,6 @@ function executePrintWithIframe() {
                     break-inside: avoid;
                 }
                 
-                /* ===== طباعة الألوان ===== */
                 .notes-section,
                 .info-grid {
                     -webkit-print-color-adjust: exact !important;
@@ -4006,20 +4016,29 @@ function executePrintWithIframe() {
         <body>
             ${printContent.innerHTML}
             <script>
-                // ===== بدء الطباعة =====
+                // ===== إخفاء كل شيء =====
                 (function() {
-                    // إخفاء العنوان نهائياً
+                    // 1. إخفاء عنوان الصفحة
                     document.title = '';
+                    
+                    // 2. إزالة عنصر title
                     var titles = document.querySelectorAll('title');
                     titles.forEach(function(el) {
                         el.textContent = '';
                         el.style.display = 'none';
+                        el.remove();
                     });
                     
-                    // طباعة المحتوى
+                    // 3. إخفاء head بالكامل
+                    var head = document.querySelector('head');
+                    if (head) {
+                        head.style.display = 'none';
+                    }
+                    
+                    // 4. بدء الطباعة
                     window.print();
                     
-                    // إغلاق النافذة بعد الطباعة
+                    // 5. إغلاق النافذة بعد الطباعة
                     setTimeout(function() {
                         window.close();
                     }, 1000);
