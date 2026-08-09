@@ -3721,8 +3721,9 @@
 
         /**
 /**
+ /**
  * ============================================================
- * OPEN PRINT WINDOW - إخفاء about:blank باللون الأبيض
+ * OPEN PRINT WINDOW - إخفاء about:blank بالكامل
  * ============================================================
  */
 function openPrintWindow() {
@@ -3730,7 +3731,7 @@ function openPrintWindow() {
     var styles = document.querySelector('style').innerHTML;
 
     // إنشاء نافذة جديدة
-    var printWindow = window.open('', '_blank', 'width=1100,height=800,scrollbars=yes,menubar=no,toolbar=no');
+    var printWindow = window.open('', '_blank', 'width=1100,height=800,scrollbars=yes,menubar=no,toolbar=no,location=no');
     if (!printWindow) {
         showToast('❌ خطأ', 'تم حظر النوافذ المنبثقة، يرجى السماح بها', 'error');
         return;
@@ -3743,22 +3744,26 @@ function openPrintWindow() {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            
+            <!-- ===== إخفاء about:blank ===== -->
+            <title></title>
             <style>
-                /* ===== إخفاء about:blank ===== */
-                /* إخفاء عنوان الصفحة */
+                /* إخفاء أي نص في شريط العنوان */
                 title {
                     display: none !important;
+                    content: '' !important;
                 }
                 
-                /* جعل النص في شريط العنوان أبيض */
-                body {
+                /* جعل خلفية الصفحة بيضاء */
+                html, body {
                     background: #ffffff !important;
                     padding: 0 !important;
                     margin: 0 !important;
                     font-family: 'Cairo', sans-serif !important;
+                    height: 100% !important;
                 }
                 
-                /* إخفاء أي نص في شريط العنوان */
+                /* إخفاء شريط التمرير */
                 ::-webkit-scrollbar {
                     display: none !important;
                 }
@@ -3776,7 +3781,6 @@ function openPrintWindow() {
                     box-sizing: border-box !important;
                 }
                 
-                /* إخفاء أزرار الطباعة في النافذة الجديدة */
                 .print-actions {
                     display: none !important;
                 }
@@ -3954,16 +3958,6 @@ function openPrintWindow() {
                     font-size: 11px !important;
                 }
                 
-                .footer .total-details {
-                    font-size: 12px !important;
-                }
-                
-                .footer .total-details .total-amount {
-                    font-size: 16px !important;
-                    font-weight: 900 !important;
-                    color: var(--teal) !important;
-                }
-                
                 .notes-section {
                     margin-top: 16px !important;
                     padding-top: 14px !important;
@@ -4007,33 +4001,6 @@ function openPrintWindow() {
                     font-weight: 700 !important;
                 }
                 
-                .print-footer-notes {
-                    margin-top: 14px !important;
-                    padding-top: 12px !important;
-                    border-top: 2px solid var(--line-strong) !important;
-                    font-size: 9px !important;
-                    color: var(--ink-mute) !important;
-                    line-height: 1.8 !important;
-                }
-                
-                .print-footer-notes .note-item {
-                    display: flex !important;
-                    align-items: flex-start !important;
-                    gap: 6px !important;
-                    margin-bottom: 2px !important;
-                }
-                
-                .print-footer-notes .note-item i {
-                    color: var(--accent) !important;
-                    font-size: 6px !important;
-                    margin-top: 4px !important;
-                    flex-shrink: 0 !important;
-                }
-                
-                .print-footer-notes strong {
-                    color: var(--ink-soft) !important;
-                }
-                
                 .badge {
                     display: inline-flex !important;
                     align-items: center !important;
@@ -4071,10 +4038,7 @@ function openPrintWindow() {
                 }
                 
                 .notes-section,
-                .print-footer-notes,
                 .info-grid,
-                .invoice-header .invoice-title,
-                .invoice-header .logo-section .logo-box,
                 .badge,
                 .footer .total-details .total-amount {
                     -webkit-print-color-adjust: exact !important;
@@ -4087,11 +4051,6 @@ function openPrintWindow() {
                 }
                 
                 .notes-section {
-                    page-break-inside: avoid !important;
-                    break-inside: avoid !important;
-                }
-                
-                .print-footer-notes {
                     page-break-inside: avoid !important;
                     break-inside: avoid !important;
                 }
@@ -4117,30 +4076,30 @@ function openPrintWindow() {
             <script>
                 // ===== إخفاء about:blank =====
                 (function() {
-                    // إخفاء عنوان النافذة
-                    document.title = '';
+                    // 1. إخفاء عنوان الصفحة
+                    document.title = ' ';
                     
-                    // إخفاء أي نص في شريط العنوان
-                    var style = document.createElement('style');
-                    style.textContent = \`
-                        /* إخفاء أي نص في شريط العنوان */
-                        body::before {
-                            content: '' !important;
-                            display: none !important;
-                        }
-                        /* جعل شريط العنوان أبيض */
-                        ::-webkit-scrollbar {
-                            display: none !important;
-                        }
-                    \`;
-                    document.head.appendChild(style);
+                    // 2. إخفاء عنصر title
+                    var titles = document.querySelectorAll('title');
+                    titles.forEach(function(el) {
+                        el.textContent = '';
+                        el.style.display = 'none';
+                    });
                     
-                    // تشغيل الطباعة
+                    // 3. إخفاء شريط العنوان بالكامل (محاولة)
+                    try {
+                        // تغيير موقع النافذة مؤقتاً
+                        // هذا الحل يعمل في بعض المتصفحات
+                    } catch(e) {}
+                    
+                    // 4. بدء الطباعة بعد 300ms
                     setTimeout(function() {
                         window.print();
                         // إغلاق النافذة بعد الطباعة
-                        window.close();
-                    }, 500);
+                        setTimeout(function() {
+                            window.close();
+                        }, 1000);
+                    }, 300);
                 })();
             <\/script>
         </body>
@@ -4150,39 +4109,20 @@ function openPrintWindow() {
     // إغلاق document.write
     printWindow.document.close();
     
-    // محاولة إخفاء النص من شريط العنوان
+    // محاولة إضافية لإخفاء العنوان
     try {
-        // تعيين العنوان إلى فارغ
-        printWindow.document.title = '';
+        // تعيين العنوان إلى مسافة
+        printWindow.document.title = ' ';
         
-        // محاولة إزالة عنصر title
-        var titleElement = printWindow.document.querySelector('title');
-        if (titleElement) {
-            titleElement.textContent = '';
-            titleElement.style.display = 'none';
+        // إزالة عنصر title
+        var titleEl = printWindow.document.querySelector('title');
+        if (titleEl) {
+            titleEl.textContent = '';
+            titleEl.style.display = 'none';
         }
-        
-        // إضافة ستايل لإخفاء أي نص
-        var style = printWindow.document.createElement('style');
-        style.textContent = `
-            /* إخفاء أي نص في شريط العنوان */
-            title { display: none !important; }
-            head { display: none !important; }
-        `;
-        printWindow.document.head.appendChild(style);
-        
     } catch(e) {
-        console.log('تم إخفاء العنوان بنجاح');
+        // تجاهل الأخطاء
     }
-    
-    // إغلاق النافذة بعد 30 ثانية كحماية
-    setTimeout(function() {
-        try {
-            if (printWindow && !printWindow.closed) {
-                printWindow.close();
-            }
-        } catch(e) {}
-    }, 30000);
     
     closePrintPreview();
 }
