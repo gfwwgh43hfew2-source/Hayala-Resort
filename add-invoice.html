@@ -1837,17 +1837,17 @@
             .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box span {
                 font-size: calc(1.8rem * var(--scale-factor));
             }
-            .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-code {
-                width: calc(50px * var(--scale-factor));
-                height: calc(50px * var(--scale-factor));
-                padding: calc(2px * var(--scale-factor));
-                border: none !important;
-            }
             .print-preview-overlay .print-wrapper .invoice-header .company-details h2 {
                 font-size: calc(1.1rem * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .invoice-header .company-details p {
                 font-size: calc(0.55rem * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-code {
+                width: calc(50px * var(--scale-factor));
+                height: calc(50px * var(--scale-factor));
+                padding: calc(2px * var(--scale-factor));
+                border: none !important;
             }
             .print-preview-overlay .print-wrapper .info-grid {
                 grid-template-columns: 1fr 1fr;
@@ -2196,7 +2196,7 @@
 
         /* ============================================================
            PRINT MEDIA QUERY - التصميم المحسن بالكامل للطباعة
-           مع تكبير اللوجو 156px وتصغير QR Code 40% وإزالة الإطارات الذهبية
+           مع تكبير اللوجو 156px وتصغير QR Code 40% وإزالة الإطار الذهبي
            ============================================================ */
         @media print {
             /* إخفاء جميع عناصر التحكم في الطباعة */
@@ -2284,14 +2284,22 @@
                 print-color-adjust: exact !important;
             }
 
-            /* ===== تصغير QR Code بنسبة 40% وإزالة الإطار الذهبي ===== */
+            /* ===== تصغير QR Code إلى 72px وإزالة الإطار الذهبي ===== */
             .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-code {
                 width: 72px !important;
                 height: 72px !important;
-                padding: 4px !important;
-                border: none !important;
+                min-width: 72px !important;
+                max-width: 72px !important;
+                min-height: 72px !important;
+                max-height: 72px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
                 background: #ffffff !important;
                 border-radius: 8px !important;
+                padding: 4px !important;
+                border: none !important;
+                box-shadow: none !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
             }
@@ -2302,12 +2310,8 @@
                 height: 100% !important;
                 max-width: 100% !important;
                 max-height: 100% !important;
-            }
-
-            .print-preview-overlay .print-wrapper .invoice-header .invoice-title {
-                min-width: 90px !important;
-                padding: 6px 10px !important;
-                border-width: 2px !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
 
             /* ===== تكبير الـ Header ===== */
@@ -2330,6 +2334,16 @@
             .print-preview-overlay .print-wrapper .invoice-header .company-details p {
                 font-size: 11px !important;
                 line-height: 1.4 !important;
+            }
+
+            .print-preview-overlay .print-wrapper .invoice-header .invoice-title {
+                min-width: 90px !important;
+                padding: 6px 10px !important;
+                border-width: 2px !important;
+            }
+
+            .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-label {
+                font-size: 7px !important;
             }
 
             /* ===== تكبير شبكة المعلومات ===== */
@@ -3544,7 +3558,7 @@
 
         /**
          * ============================================================
-         * GENERATE QR CODE - حجم مصغر 72px (40% أصغر من 120px) وإزالة الإطار
+         * GENERATE QR CODE - حجم مصغر 72px (تصغير 40% من 120px)
          * ============================================================
          */
         function generateQRCode(invoiceNumber, client, total) {
@@ -3585,7 +3599,7 @@
                     correctLevel: QRCode.CorrectLevel.H
                 });
                 currentQRCode = qr;
-                console.log('✅ تم إنشاء QR Code مصغر (72px) بنجاح');
+                console.log('✅ تم إنشاء QR Code بنجاح (72px)');
             } catch (error) {
                 console.error('❌ خطأ في إنشاء QR Code:', error);
                 generateQRCodeExternal(invoiceNumber, client, total);
@@ -3624,14 +3638,14 @@
             img.onerror = function() {
                 qrContainer.innerHTML = `
                             <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;background:#f8f9fa;border-radius:4px;">
-                                <i class="fas fa-qrcode" style="font-size:1.5rem;color:var(--accent);"></i>
+                                <i class="fas fa-qrcode" style="font-size:1.2rem;color:var(--accent);"></i>
                                 <span style="font-size:0.4rem;color:var(--ink-mute);">${invoiceNumber || ''}</span>
                             </div>
                         `;
             };
 
             img.onload = function() {
-                console.log('✅ تم إنشاء QR Code مصغر بواسطة API خارجي');
+                console.log('✅ تم إنشاء QR Code بواسطة API خارجي (72px)');
             };
 
             qrContainer.appendChild(img);
@@ -3896,14 +3910,22 @@
                             print-color-adjust: exact !important;
                         }
 
-                        /* ===== تصغير QR Code بنسبة 40% وإزالة الإطار الذهبي ===== */
+                        /* ===== تصغير QR Code إلى 72px وإزالة الإطار الذهبي ===== */
                         .invoice-header .invoice-title .qr-code {
                             width: 72px !important;
                             height: 72px !important;
-                            padding: 4px !important;
-                            border: none !important;
+                            min-width: 72px !important;
+                            max-width: 72px !important;
+                            min-height: 72px !important;
+                            max-height: 72px !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: center !important;
                             background: #ffffff !important;
                             border-radius: 8px !important;
+                            padding: 4px !important;
+                            border: none !important;
+                            box-shadow: none !important;
                             -webkit-print-color-adjust: exact !important;
                             print-color-adjust: exact !important;
                         }
@@ -3914,12 +3936,8 @@
                             height: 100% !important;
                             max-width: 100% !important;
                             max-height: 100% !important;
-                        }
-
-                        .invoice-header .invoice-title {
-                            min-width: 90px !important;
-                            padding: 6px 10px !important;
-                            border-width: 2px !important;
+                            -webkit-print-color-adjust: exact !important;
+                            print-color-adjust: exact !important;
                         }
 
                         .invoice-header {
@@ -3950,6 +3968,30 @@
                             font-size: 11px !important;
                             color: var(--ink-mute) !important;
                             line-height: 1.4 !important;
+                        }
+
+                        .invoice-header .invoice-title {
+                            display: flex !important;
+                            flex-direction: column !important;
+                            align-items: center !important;
+                            justify-content: center !important;
+                            min-width: 90px !important;
+                            background: var(--surface-muted) !important;
+                            padding: 6px 10px !important;
+                            border-radius: 8px !important;
+                            border: 2px solid var(--accent) !important;
+                            flex-shrink: 0 !important;
+                        }
+
+                        .invoice-header .invoice-title .qr-label {
+                            font-size: 7px !important;
+                            color: var(--ink-mute) !important;
+                            text-align: center !important;
+                            font-weight: 600 !important;
+                        }
+
+                        .invoice-header .invoice-title .qr-label strong {
+                            color: var(--ink) !important;
                         }
 
                         .info-grid {
@@ -4215,7 +4257,6 @@
         /**
          * ============================================================
          * DOWNLOAD PDF - باستخدام html2pdf مع تحميل يدوي بالاسم الصحيح
-         * يتم حفظ الملف باسم العميل تلقائياً
          * ============================================================
          */
         function downloadPDF() {
@@ -4312,7 +4353,7 @@
                         URL.revokeObjectURL(blobUrl);
                     }, 3000);
 
-                    showToast('✅ تم التحميل', 'تم تحميل ملف PDF بنجاح باسم: ' + fileName, 'success');
+                    showToast('✅ تم التحميل', 'تم تحميل ملف PDF بنجاح', 'success');
                     setTimeout(function() {
                         closePrintPreview();
                     }, 1500);
@@ -4994,10 +5035,6 @@
             console.log('📊 Supabase URL:', SUPABASE_URL);
             console.log('👤 المستخدم:', user.name || 'غير معروف');
             console.log('✅ النظام جاهز للعمل مع Supabase');
-            console.log('📐 حجم اللوجو: 156px (تم تكبير 30%)');
-            console.log('📐 حجم QR Code: 72px (تم تصغير 40%)');
-            console.log('🖼️ تم إزالة الإطارات الذهبية حول اللوجو و QR Code');
-            console.log('📁 سيتم حفظ ملفات PDF باسم العميل تلقائياً');
         });
     </script>
 
