@@ -1524,7 +1524,7 @@
         }
 
         /* ============================================================
-           PRINT PREVIEW STYLES
+           PRINT PREVIEW STYLES - مع تكبير اللوجو 156px وإزالة الإطار الذهبي
            ============================================================ */
         .print-preview-overlay .print-wrapper .invoice-header {
             display: flex;
@@ -1541,16 +1541,22 @@
             gap: calc(16px * var(--scale-factor));
         }
         .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box {
-            width: calc(120px * var(--scale-factor));
-            height: calc(120px * var(--scale-factor));
-            border-radius: calc(12px * var(--scale-factor));
+            width: calc(156px * var(--scale-factor));
+            height: calc(156px * var(--scale-factor));
+            min-width: calc(156px * var(--scale-factor));
+            max-width: calc(156px * var(--scale-factor));
+            min-height: calc(156px * var(--scale-factor));
+            max-height: calc(156px * var(--scale-factor));
+            border-radius: calc(16px * var(--scale-factor));
             overflow: hidden;
             background: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            padding: calc(8px * var(--scale-factor));
+            padding: calc(10px * var(--scale-factor));
+            border: none !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
         }
         .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box img {
             max-width: 100%;
@@ -1558,6 +1564,11 @@
             width: auto;
             height: auto;
             object-fit: contain;
+        }
+        .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box span {
+            font-size: calc(2.8rem * var(--scale-factor));
+            font-weight: 900;
+            color: #121821;
         }
         .print-preview-overlay .print-wrapper .invoice-header .company-details h2 {
             font-size: calc(1.6rem * var(--scale-factor));
@@ -1723,7 +1734,7 @@
         }
 
         /* ============================================================
-           PRINT PREVIEW RESPONSIVE
+           PRINT PREVIEW RESPONSIVE - تكبير اللوجو على الشاشات الصغيرة
            ============================================================ */
         @media (max-width: 768px) {
             .print-preview-overlay .print-wrapper {
@@ -1735,6 +1746,19 @@
                 flex-direction: column;
                 text-align: center;
                 gap: calc(10px * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box {
+                width: calc(120px * var(--scale-factor));
+                height: calc(120px * var(--scale-factor));
+                min-width: calc(120px * var(--scale-factor));
+                max-width: calc(120px * var(--scale-factor));
+                min-height: calc(120px * var(--scale-factor));
+                max-height: calc(120px * var(--scale-factor));
+                border-radius: calc(14px * var(--scale-factor));
+                padding: calc(8px * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box span {
+                font-size: calc(2.2rem * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .invoice-header .invoice-title {
                 width: 100%;
@@ -1798,8 +1822,17 @@
                 border-radius: calc(8px * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box {
-                width: calc(80px * var(--scale-factor));
-                height: calc(80px * var(--scale-factor));
+                width: calc(90px * var(--scale-factor));
+                height: calc(90px * var(--scale-factor));
+                min-width: calc(90px * var(--scale-factor));
+                max-width: calc(90px * var(--scale-factor));
+                min-height: calc(90px * var(--scale-factor));
+                max-height: calc(90px * var(--scale-factor));
+                border-radius: calc(12px * var(--scale-factor));
+                padding: calc(6px * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box span {
+                font-size: calc(1.8rem * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .invoice-header .company-details h2 {
                 font-size: calc(1.1rem * var(--scale-factor));
@@ -2158,6 +2191,7 @@
 
         /* ============================================================
            PRINT MEDIA QUERY - التصميم المحسن بالكامل للطباعة
+           مع تكبير اللوجو 156px وإزالة الإطار الذهبي نهائياً
            ============================================================ */
         @media print {
             /* إخفاء جميع عناصر التحكم في الطباعة */
@@ -2203,21 +2237,21 @@
                 flex-wrap: wrap !important;
             }
 
-            /* ===== تكبير الشعار - إزالة الإطار الذهبي ===== */
+            /* ===== تكبير الشعار إلى 156px وإزالة الإطار الذهبي ===== */
             .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box {
-                width: 120px !important;
-                height: 120px !important;
-                min-width: 120px !important;
-                max-width: 120px !important;
-                min-height: 120px !important;
-                max-height: 120px !important;
-                border-radius: 12px !important;
+                width: 156px !important;
+                height: 156px !important;
+                min-width: 156px !important;
+                max-width: 156px !important;
+                min-height: 156px !important;
+                max-height: 156px !important;
+                border-radius: 16px !important;
                 overflow: hidden !important;
                 display: flex !important;
                 align-items: center !important;
                 justify-content: center !important;
                 background: #ffffff !important;
-                padding: 8px !important;
+                padding: 10px !important;
                 flex-shrink: 0 !important;
                 border: none !important;
                 box-shadow: none !important;
@@ -2233,6 +2267,14 @@
                 object-fit: contain !important;
                 display: block !important;
                 margin: 0 auto !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box span {
+                font-size: 2.8rem !important;
+                font-weight: 900 !important;
+                color: #121821 !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
             }
@@ -3609,7 +3651,7 @@
         <div class="invoice-header">
             <div class="logo-section">
                 <div class="logo-box">
-                    ${companyLogo ? `<img src="${companyLogo}" alt="منتجع حياله" />` : `<span style="font-size:1.8rem;font-weight:900;color:#121821;">ح</span>`}
+                    ${companyLogo ? `<img src="${companyLogo}" alt="منتجع حياله" />` : `<span style="font-size:2.8rem;font-weight:900;color:#121821;">ح</span>`}
                 </div>
                 <div class="company-details">
                     <h2>${companyName}</h2>
@@ -3798,21 +3840,21 @@
                             display: none !important;
                         }
 
-                        /* ===== التحكم في حجم اللوجو - تكبير 120px وإزالة الإطار الذهبي ===== */
+                        /* ===== التحكم في حجم اللوجو - تكبير 156px وإزالة الإطار الذهبي ===== */
                         .invoice-header .logo-section .logo-box {
-                            width: 120px !important;
-                            height: 120px !important;
-                            min-width: 120px !important;
-                            max-width: 120px !important;
-                            min-height: 120px !important;
-                            max-height: 120px !important;
-                            border-radius: 12px !important;
+                            width: 156px !important;
+                            height: 156px !important;
+                            min-width: 156px !important;
+                            max-width: 156px !important;
+                            min-height: 156px !important;
+                            max-height: 156px !important;
+                            border-radius: 16px !important;
                             overflow: hidden !important;
                             display: flex !important;
                             align-items: center !important;
                             justify-content: center !important;
                             background: #ffffff !important;
-                            padding: 8px !important;
+                            padding: 10px !important;
                             flex-shrink: 0 !important;
                             border: none !important;
                             box-shadow: none !important;
@@ -3828,6 +3870,14 @@
                             object-fit: contain !important;
                             display: block !important;
                             margin: 0 auto !important;
+                            -webkit-print-color-adjust: exact !important;
+                            print-color-adjust: exact !important;
+                        }
+
+                        .invoice-header .logo-section .logo-box span {
+                            font-size: 2.8rem !important;
+                            font-weight: 900 !important;
+                            color: #121821 !important;
                             -webkit-print-color-adjust: exact !important;
                             print-color-adjust: exact !important;
                         }
