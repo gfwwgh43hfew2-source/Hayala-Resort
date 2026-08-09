@@ -1541,8 +1541,8 @@
             gap: calc(16px * var(--scale-factor));
         }
         .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box {
-            width: calc(85px * var(--scale-factor));
-            height: calc(85px * var(--scale-factor));
+            width: calc(120px * var(--scale-factor));
+            height: calc(120px * var(--scale-factor));
             border-radius: calc(12px * var(--scale-factor));
             overflow: hidden;
             background: #ffffff;
@@ -1550,6 +1550,7 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+            padding: calc(8px * var(--scale-factor));
         }
         .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box img {
             max-width: 100%;
@@ -1797,8 +1798,8 @@
                 border-radius: calc(8px * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box {
-                width: calc(55px * var(--scale-factor));
-                height: calc(55px * var(--scale-factor));
+                width: calc(80px * var(--scale-factor));
+                height: calc(80px * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper .invoice-header .company-details h2 {
                 font-size: calc(1.1rem * var(--scale-factor));
@@ -2202,15 +2203,26 @@
                 flex-wrap: wrap !important;
             }
 
-            /* ===== تكبير الشعار ===== */
+            /* ===== تكبير الشعار - إزالة الإطار الذهبي ===== */
             .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box {
-                width: 80px !important;
-                height: 80px !important;
-                min-width: 80px !important;
-                max-width: 80px !important;
-                min-height: 80px !important;
-                max-height: 80px !important;
-                padding: 5px !important;
+                width: 120px !important;
+                height: 120px !important;
+                min-width: 120px !important;
+                max-width: 120px !important;
+                min-height: 120px !important;
+                max-height: 120px !important;
+                border-radius: 12px !important;
+                overflow: hidden !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                background: #ffffff !important;
+                padding: 8px !important;
+                flex-shrink: 0 !important;
+                border: none !important;
+                box-shadow: none !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
 
             .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box img {
@@ -2219,6 +2231,10 @@
                 max-width: 100% !important;
                 max-height: 100% !important;
                 object-fit: contain !important;
+                display: block !important;
+                margin: 0 auto !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
 
             /* ===== تكبير الـ Header ===== */
@@ -3782,21 +3798,26 @@
                             display: none !important;
                         }
 
-                        /* ===== التحكم في حجم اللوجو عند الطباعة ===== */
+                        /* ===== التحكم في حجم اللوجو - تكبير 120px وإزالة الإطار الذهبي ===== */
                         .invoice-header .logo-section .logo-box {
-                            width: 80px !important;
-                            height: 80px !important;
-                            min-width: 80px !important;
-                            max-width: 80px !important;
-                            min-height: 80px !important;
-                            max-height: 80px !important;
+                            width: 120px !important;
+                            height: 120px !important;
+                            min-width: 120px !important;
+                            max-width: 120px !important;
+                            min-height: 120px !important;
+                            max-height: 120px !important;
+                            border-radius: 12px !important;
                             overflow: hidden !important;
                             display: flex !important;
                             align-items: center !important;
                             justify-content: center !important;
                             background: #ffffff !important;
-                            padding: 5px !important;
+                            padding: 8px !important;
                             flex-shrink: 0 !important;
+                            border: none !important;
+                            box-shadow: none !important;
+                            -webkit-print-color-adjust: exact !important;
+                            print-color-adjust: exact !important;
                         }
 
                         .invoice-header .logo-section .logo-box img {
@@ -3807,6 +3828,8 @@
                             object-fit: contain !important;
                             display: block !important;
                             margin: 0 auto !important;
+                            -webkit-print-color-adjust: exact !important;
+                            print-color-adjust: exact !important;
                         }
 
                         .invoice-header {
