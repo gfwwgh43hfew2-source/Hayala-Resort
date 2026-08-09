@@ -3706,425 +3706,112 @@
          * EXECUTE PRINT - طباعة عبر نافذة المتصفح
          * ============================================================
          */
-        function executePrint() {
-            // التأكد من وجود محتوى للمعاينة
-            var overlay = document.getElementById('printPreviewOverlay');
-            if (!overlay.classList.contains('show')) {
-                previewInvoice();
-                setTimeout(function() {
-                    openPrintWindow();
-                }, 600);
-                return;
-            }
-            openPrintWindow();
-        }
-
-        /**
-/**
- /**
+       /**
  * ============================================================
- * OPEN PRINT WINDOW - إخفاء about:blank بالكامل
+ * EXECUTE PRINT - طباعة مباشرة من المعاينة بدون نافذة جديدة
  * ============================================================
  */
-function openPrintWindow() {
-    var content = document.getElementById('printPreviewContent').innerHTML;
-    var styles = document.querySelector('style').innerHTML;
+function executePrint() {
+    // التأكد من وجود محتوى للمعاينة
+    var overlay = document.getElementById('printPreviewOverlay');
+    if (!overlay.classList.contains('show')) {
+        previewInvoice();
+        setTimeout(function() {
+            executePrintDirect();
+        }, 600);
+        return;
+    }
+    executePrintDirect();
+}
 
-    // إنشاء نافذة جديدة
-    var printWindow = window.open('', '_blank', 'width=1100,height=800,scrollbars=yes,menubar=no,toolbar=no,location=no');
-    if (!printWindow) {
-        showToast('❌ خطأ', 'تم حظر النوافذ المنبثقة، يرجى السماح بها', 'error');
+/**
+ * ============================================================
+ * PRINT DIRECT - طباعة مباشرة بدون نافذة جديدة
+ * ============================================================
+ */
+function executePrintDirect() {
+    // الحصول على محتوى المعاينة
+    var printContent = document.getElementById('printPreviewContent');
+    if (!printContent) {
+        showToast('❌ خطأ', 'لم يتم العثور على محتوى للطباعة', 'error');
         return;
     }
 
-    // كتابة المحتوى مباشرة
-    printWindow.document.write(`
-        <!DOCTYPE html>
-        <html dir="rtl">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            
-            <!-- ===== إخفاء about:blank ===== -->
-            <title></title>
-            <style>
-                /* إخفاء أي نص في شريط العنوان */
-                title {
-                    display: none !important;
-                    content: '' !important;
-                }
-                
-                /* جعل خلفية الصفحة بيضاء */
-                html, body {
-                    background: #ffffff !important;
-                    padding: 0 !important;
-                    margin: 0 !important;
-                    font-family: 'Cairo', sans-serif !important;
-                    height: 100% !important;
-                }
-                
-                /* إخفاء شريط التمرير */
-                ::-webkit-scrollbar {
-                    display: none !important;
-                }
-                
-                /* ===== نسخ جميع الأنماط ===== */
-                ${styles}
-                
-                /* ===== أنماط خاصة بالطباعة ===== */
-                .print-wrapper {
-                    max-width: 210mm !important;
-                    margin: 0 auto !important;
-                    background: #ffffff !important;
-                    padding: 12mm 15mm !important;
-                    min-height: 100vh !important;
-                    box-sizing: border-box !important;
-                }
-                
-                .print-actions {
-                    display: none !important;
-                }
-                
-                /* ===== التحكم في حجم اللوجو عند الطباعة ===== */
-                .invoice-header .logo-section .logo-box {
-                    width: 80px !important;
-                    height: 80px !important;
-                    min-width: 80px !important;
-                    max-width: 80px !important;
-                    min-height: 80px !important;
-                    max-height: 80px !important;
-                    border: 2.5px solid var(--accent) !important;
-                    border-radius: 12px !important;
-                    overflow: hidden !important;
-                    display: flex !important;
-                    align-items: center !important;
-                    justify-content: center !important;
-                    background: #ffffff !important;
-                    padding: 5px !important;
-                    flex-shrink: 0 !important;
-                }
-                
-                .invoice-header .logo-section .logo-box img {
-                    width: 100% !important;
-                    height: 100% !important;
-                    max-width: 100% !important;
-                    max-height: 100% !important;
-                    object-fit: contain !important;
-                    display: block !important;
-                    margin: 0 auto !important;
-                }
-                
-                .invoice-header {
-                    display: flex !important;
-                    align-items: center !important;
-                    justify-content: space-between !important;
-                    padding-bottom: 18px !important;
-                    border-bottom: 3px solid var(--ink) !important;
-                    margin-bottom: 18px !important;
-                    gap: 15px !important;
-                    flex-direction: row !important;
-                }
-                
-                .invoice-header .logo-section {
-                    display: flex !important;
-                    align-items: center !important;
-                    gap: 15px !important;
-                }
-                
-                .invoice-header .company-details h2 {
-                    font-size: 20px !important;
-                    font-weight: 900 !important;
-                    color: var(--ink) !important;
-                    line-height: 1.2 !important;
-                }
-                
-                .invoice-header .company-details p {
-                    font-size: 11px !important;
-                    color: var(--ink-mute) !important;
-                    line-height: 1.4 !important;
-                }
-                
-                .invoice-header .invoice-title {
-                    display: flex !important;
-                    flex-direction: column !important;
-                    align-items: center !important;
-                    justify-content: center !important;
-                    min-width: 100px !important;
-                    background: var(--surface-muted) !important;
-                    padding: 8px 12px !important;
-                    border-radius: 8px !important;
-                    border: 2px solid var(--accent) !important;
-                    flex-shrink: 0 !important;
-                }
-                
-                .invoice-header .invoice-title .qr-code {
-                    width: 85px !important;
-                    height: 85px !important;
-                    display: flex !important;
-                    align-items: center !important;
-                    justify-content: center !important;
-                    background: #ffffff !important;
-                    border-radius: 6px !important;
-                    padding: 5px !important;
-                    border: 2px solid var(--line-strong) !important;
-                    margin-bottom: 4px !important;
-                }
-                
-                .invoice-header .invoice-title .qr-code canvas,
-                .invoice-header .invoice-title .qr-code img {
-                    width: 100% !important;
-                    height: 100% !important;
-                    max-width: 100% !important;
-                    max-height: 100% !important;
-                }
-                
-                .invoice-header .invoice-title .qr-label {
-                    font-size: 8px !important;
-                    color: var(--ink-mute) !important;
-                    text-align: center !important;
-                    font-weight: 600 !important;
-                }
-                
-                .invoice-header .invoice-title .qr-label strong {
-                    color: var(--ink) !important;
-                }
-                
-                .info-grid {
-                    display: grid !important;
-                    grid-template-columns: 1fr 1fr 1fr 1fr 1fr !important;
-                    gap: 10px !important;
-                    margin-bottom: 16px !important;
-                    background: var(--surface-muted) !important;
-                    padding: 12px 16px !important;
-                    border-radius: 8px !important;
-                    border: 1px solid var(--line) !important;
-                }
-                
-                .info-grid .item .label {
-                    font-size: 9px !important;
-                    color: var(--ink-mute) !important;
-                    font-weight: 700 !important;
-                }
-                
-                .info-grid .item .value {
-                    font-size: 14px !important;
-                    font-weight: 700 !important;
-                    color: var(--ink) !important;
-                }
-                
-                table {
-                    width: 100% !important;
-                    border-collapse: collapse !important;
-                    font-size: 12px !important;
-                    margin-bottom: 4px !important;
-                }
-                
-                table th {
-                    background: var(--ink) !important;
-                    color: #ffffff !important;
-                    padding: 10px 12px !important;
-                    text-align: center !important;
-                    font-size: 10px !important;
-                    font-weight: 700 !important;
-                }
-                
-                table td {
-                    padding: 10px 12px !important;
-                    border-bottom: 1px solid var(--line) !important;
-                    color: var(--ink-soft) !important;
-                    text-align: center !important;
-                    font-size: 11px !important;
-                }
-                
-                .footer {
-                    border-top: 2px solid var(--line) !important;
-                    padding-top: 18px !important;
-                    margin-top: 18px !important;
-                    display: flex !important;
-                    justify-content: space-between !important;
-                    font-size: 11px !important;
-                    color: var(--ink-mute) !important;
-                    flex-direction: row !important;
-                    align-items: flex-start !important;
-                }
-                
-                .footer .signature .line {
-                    width: 100px !important;
-                    border-bottom: 2px solid var(--ink) !important;
-                    margin-top: 6px !important;
-                }
-                
-                .footer .signature p {
-                    font-size: 11px !important;
-                }
-                
-                .notes-section {
-                    margin-top: 16px !important;
-                    padding-top: 14px !important;
-                    padding: 16px 18px !important;
-                    border-top: 2px dashed var(--line-strong) !important;
-                    background: var(--surface-muted) !important;
-                    border-radius: 8px !important;
-                }
-                
-                .notes-section .notes-title {
-                    font-size: 11px !important;
-                    font-weight: 800 !important;
-                    color: var(--accent-ink) !important;
-                    display: flex !important;
-                    align-items: center !important;
-                    gap: 10px !important;
-                    margin-bottom: 10px !important;
-                }
-                
-                .notes-section .notes-title i {
-                    font-size: 12px !important;
-                }
-                
-                .notes-section .notes-content {
-                    font-size: 10px !important;
-                    color: var(--ink-soft) !important;
-                    line-height: 1.8 !important;
-                }
-                
-                .notes-section .notes-content p {
-                    padding-right: 16px !important;
-                    margin-bottom: 4px !important;
-                    position: relative !important;
-                }
-                
-                .notes-section .notes-content p::before {
-                    content: '•' !important;
-                    position: absolute !important;
-                    right: 0 !important;
-                    color: var(--accent) !important;
-                    font-weight: 700 !important;
-                }
-                
-                .badge {
-                    display: inline-flex !important;
-                    align-items: center !important;
-                    gap: 4px !important;
-                    padding: 2px 10px !important;
-                    border-radius: 50px !important;
-                    font-size: 9px !important;
-                    font-weight: 700 !important;
-                    border: 1px solid transparent !important;
-                }
-                
-                .badge i {
-                    font-size: 8px !important;
-                }
-                
-                .badge-paid {
-                    background: var(--teal-soft) !important;
-                    color: var(--teal) !important;
-                }
-                
-                .badge-balance {
-                    background: var(--rust-soft) !important;
-                    color: var(--rust) !important;
-                }
-                
-                .badge-type {
-                    background: var(--surface-muted) !important;
-                    color: var(--ink-mute) !important;
-                    border-color: var(--line) !important;
-                }
-                
-                .badge-future {
-                    background: var(--accent-soft) !important;
-                    color: var(--accent-ink) !important;
-                }
-                
-                .notes-section,
-                .info-grid,
-                .badge,
-                .footer .total-details .total-amount {
-                    -webkit-print-color-adjust: exact !important;
-                    print-color-adjust: exact !important;
-                }
-                
-                table tbody tr {
-                    page-break-inside: avoid !important;
-                    break-inside: avoid !important;
-                }
-                
-                .notes-section {
-                    page-break-inside: avoid !important;
-                    break-inside: avoid !important;
-                }
-                
-                .footer {
-                    page-break-inside: avoid !important;
-                    break-inside: avoid !important;
-                }
-                
-                .print-wrapper {
-                    display: flex !important;
-                    flex-direction: column !important;
-                    min-height: 100vh !important;
-                }
-                
-                .footer {
-                    margin-top: auto !important;
-                }
-            </style>
-        </head>
-        <body>
-            <div class="print-wrapper">${content}</div>
-            <script>
-                // ===== إخفاء about:blank =====
-                (function() {
-                    // 1. إخفاء عنوان الصفحة
-                    document.title = ' ';
-                    
-                    // 2. إخفاء عنصر title
-                    var titles = document.querySelectorAll('title');
-                    titles.forEach(function(el) {
-                        el.textContent = '';
-                        el.style.display = 'none';
-                    });
-                    
-                    // 3. إخفاء شريط العنوان بالكامل (محاولة)
-                    try {
-                        // تغيير موقع النافذة مؤقتاً
-                        // هذا الحل يعمل في بعض المتصفحات
-                    } catch(e) {}
-                    
-                    // 4. بدء الطباعة بعد 300ms
-                    setTimeout(function() {
-                        window.print();
-                        // إغلاق النافذة بعد الطباعة
-                        setTimeout(function() {
-                            window.close();
-                        }, 1000);
-                    }, 300);
-                })();
-            <\/script>
-        </body>
-        </html>
-    `);
-
-    // إغلاق document.write
-    printWindow.document.close();
-    
-    // محاولة إضافية لإخفاء العنوان
-    try {
-        // تعيين العنوان إلى مسافة
-        printWindow.document.title = ' ';
-        
-        // إزالة عنصر title
-        var titleEl = printWindow.document.querySelector('title');
-        if (titleEl) {
-            titleEl.textContent = '';
-            titleEl.style.display = 'none';
-        }
-    } catch(e) {
-        // تجاهل الأخطاء
-    }
-    
+    // إغلاق المعاينة أولاً
     closePrintPreview();
+
+    // نسخ المحتوى إلى عنصر مؤقت للطباعة
+    var printContainer = document.createElement('div');
+    printContainer.innerHTML = printContent.innerHTML;
+    printContainer.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+        z-index: 999999;
+        overflow: auto;
+        padding: 40px;
+        box-sizing: border-box;
+        direction: rtl;
+    `;
+
+    // إضافة الأنماط المطلوبة للطباعة
+    var style = document.createElement('style');
+    style.textContent = `
+        body { margin: 0; padding: 0; background: white; direction: rtl; }
+        .print-wrapper { max-width: 210mm; margin: 0 auto; background: white; padding: 12mm 15mm; }
+        .invoice-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 18px; border-bottom: 3px solid #121821; margin-bottom: 18px; gap: 15px; }
+        .logo-section { display: flex; align-items: center; gap: 15px; }
+        .logo-box { width: 80px; height: 80px; border: 2.5px solid #dd9f2e; border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: white; padding: 5px; }
+        .logo-box img { width: 100%; height: 100%; object-fit: contain; }
+        .company-details h2 { font-size: 20px; font-weight: 900; color: #121821; margin: 0; }
+        .company-details p { font-size: 11px; color: #6d7883; margin: 2px 0; }
+        .invoice-title { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 100px; background: #f4f6f5; padding: 8px 12px; border-radius: 8px; border: 2px solid #dd9f2e; }
+        .qr-code { width: 85px; height: 85px; display: flex; align-items: center; justify-content: center; background: white; border-radius: 6px; padding: 5px; border: 2px solid #c7d0cc; margin-bottom: 4px; }
+        .qr-code canvas, .qr-code img { width: 100% !important; height: 100% !important; }
+        .qr-label { font-size: 8px; color: #6d7883; text-align: center; font-weight: 600; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px; background: #f4f6f5; padding: 12px 16px; border-radius: 8px; border: 1px solid #dde3e0; }
+        .info-grid .item .label { font-size: 9px; color: #6d7883; font-weight: 700; }
+        .info-grid .item .value { font-size: 14px; font-weight: 700; color: #121821; }
+        table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 4px; }
+        table th { background: #121821; color: white; padding: 10px 12px; text-align: center; font-size: 10px; font-weight: 700; }
+        table td { padding: 10px 12px; border-bottom: 1px solid #dde3e0; color: #2c3644; text-align: center; font-size: 11px; }
+        .footer { border-top: 2px solid #dde3e0; padding-top: 18px; margin-top: 18px; display: flex; justify-content: space-between; font-size: 11px; color: #6d7883; }
+        .signature .line { width: 100px; border-bottom: 2px solid #121821; margin-top: 6px; }
+        .notes-section { margin-top: 16px; padding: 16px 18px; border-top: 2px dashed #c7d0cc; background: #f4f6f5; border-radius: 8px; }
+        .notes-title { font-size: 11px; font-weight: 800; color: #7a5312; display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .notes-content { font-size: 10px; color: #2c3644; line-height: 1.8; }
+        .notes-content p { padding-right: 16px; margin-bottom: 4px; position: relative; }
+        .notes-content p::before { content: '•'; position: absolute; right: 0; color: #dd9f2e; font-weight: 700; }
+        /* ===== منع تكسر الصفحات ===== */
+        table tbody tr { page-break-inside: avoid; break-inside: avoid; }
+        .notes-section { page-break-inside: avoid; break-inside: avoid; }
+        .footer { page-break-inside: avoid; break-inside: avoid; }
+        /* ===== طباعة الألوان ===== */
+        .notes-section, .info-grid, .badge {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+    `;
+
+    // إضافة المحتوى إلى الصفحة
+    document.body.appendChild(printContainer);
+    document.body.appendChild(style);
+
+    // طباعة المحتوى
+    window.print();
+
+    // إزالة العناصر بعد الطباعة
+    setTimeout(function() {
+        if (printContainer.parentNode) {
+            printContainer.parentNode.removeChild(printContainer);
+        }
+        if (style.parentNode) {
+            style.parentNode.removeChild(style);
+        }
+    }, 500);
 }
         /**
          * ============================================================
