@@ -3708,6 +3708,8 @@
          */
        /**
  * ============================================================
+ /**
+ * ============================================================
  * EXECUTE PRINT - طباعة مباشرة من المعاينة بدون نافذة جديدة
  * ============================================================
  */
@@ -3739,6 +3741,12 @@ function executePrintDirect() {
 
     // إغلاق المعاينة أولاً
     closePrintPreview();
+
+    // حفظ العنوان الأصلي
+    var originalTitle = document.title;
+
+    // تغيير عنوان الصفحة مؤقتاً
+    document.title = ' ';
 
     // نسخ المحتوى إلى عنصر مؤقت للطباعة
     var printContainer = document.createElement('div');
@@ -3785,11 +3793,9 @@ function executePrintDirect() {
         .notes-content { font-size: 10px; color: #2c3644; line-height: 1.8; }
         .notes-content p { padding-right: 16px; margin-bottom: 4px; position: relative; }
         .notes-content p::before { content: '•'; position: absolute; right: 0; color: #dd9f2e; font-weight: 700; }
-        /* ===== منع تكسر الصفحات ===== */
         table tbody tr { page-break-inside: avoid; break-inside: avoid; }
         .notes-section { page-break-inside: avoid; break-inside: avoid; }
         .footer { page-break-inside: avoid; break-inside: avoid; }
-        /* ===== طباعة الألوان ===== */
         .notes-section, .info-grid, .badge {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
@@ -3801,17 +3807,20 @@ function executePrintDirect() {
     document.body.appendChild(style);
 
     // طباعة المحتوى
-    window.print();
-
-    // إزالة العناصر بعد الطباعة
     setTimeout(function() {
+        window.print();
+    }, 100);
+
+    // إزالة العناصر وإعادة العنوان بعد الطباعة
+    setTimeout(function() {
+        document.title = originalTitle;
         if (printContainer.parentNode) {
             printContainer.parentNode.removeChild(printContainer);
         }
         if (style.parentNode) {
             style.parentNode.removeChild(style);
         }
-    }, 500);
+    }, 2000);
 }
         /**
          * ============================================================
