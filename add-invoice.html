@@ -3709,8 +3709,9 @@
        /**
  * ============================================================
  /**
+/**
  * ============================================================
- * EXECUTE PRINT - طباعة مباشرة من المعاينة بدون نافذة جديدة
+ * EXECUTE PRINT - طباعة باستخدام iframe مخفي
  * ============================================================
  */
 function executePrint() {
@@ -3719,19 +3720,19 @@ function executePrint() {
     if (!overlay.classList.contains('show')) {
         previewInvoice();
         setTimeout(function() {
-            executePrintDirect();
+            executePrintWithIframe();
         }, 600);
         return;
     }
-    executePrintDirect();
+    executePrintWithIframe();
 }
 
 /**
  * ============================================================
- * PRINT DIRECT - طباعة مباشرة بدون نافذة جديدة
+ * PRINT WITH IFRAME - طباعة باستخدام iframe مخفي تماماً
  * ============================================================
  */
-function executePrintDirect() {
+function executePrintWithIframe() {
     // الحصول على محتوى المعاينة
     var printContent = document.getElementById('printPreviewContent');
     if (!printContent) {
@@ -3742,85 +3743,299 @@ function executePrintDirect() {
     // إغلاق المعاينة أولاً
     closePrintPreview();
 
-    // حفظ العنوان الأصلي
-    var originalTitle = document.title;
-
-    // تغيير عنوان الصفحة مؤقتاً
-    document.title = ' ';
-
-    // نسخ المحتوى إلى عنصر مؤقت للطباعة
-    var printContainer = document.createElement('div');
-    printContainer.innerHTML = printContent.innerHTML;
-    printContainer.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: white;
-        z-index: 999999;
-        overflow: auto;
-        padding: 40px;
-        box-sizing: border-box;
-        direction: rtl;
+    // إنشاء iframe مخفي تماماً
+    var iframe = document.createElement('iframe');
+    iframe.style.cssText = `
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+        width: 1px;
+        height: 1px;
+        border: none;
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
+        display: none;
     `;
+    document.body.appendChild(iframe);
 
-    // إضافة الأنماط المطلوبة للطباعة
-    var style = document.createElement('style');
-    style.textContent = `
-        body { margin: 0; padding: 0; background: white; direction: rtl; }
-        .print-wrapper { max-width: 210mm; margin: 0 auto; background: white; padding: 12mm 15mm; }
-        .invoice-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 18px; border-bottom: 3px solid #121821; margin-bottom: 18px; gap: 15px; }
-        .logo-section { display: flex; align-items: center; gap: 15px; }
-        .logo-box { width: 80px; height: 80px; border: 2.5px solid #dd9f2e; border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: white; padding: 5px; }
-        .logo-box img { width: 100%; height: 100%; object-fit: contain; }
-        .company-details h2 { font-size: 20px; font-weight: 900; color: #121821; margin: 0; }
-        .company-details p { font-size: 11px; color: #6d7883; margin: 2px 0; }
-        .invoice-title { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 100px; background: #f4f6f5; padding: 8px 12px; border-radius: 8px; border: 2px solid #dd9f2e; }
-        .qr-code { width: 85px; height: 85px; display: flex; align-items: center; justify-content: center; background: white; border-radius: 6px; padding: 5px; border: 2px solid #c7d0cc; margin-bottom: 4px; }
-        .qr-code canvas, .qr-code img { width: 100% !important; height: 100% !important; }
-        .qr-label { font-size: 8px; color: #6d7883; text-align: center; font-weight: 600; }
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px; background: #f4f6f5; padding: 12px 16px; border-radius: 8px; border: 1px solid #dde3e0; }
-        .info-grid .item .label { font-size: 9px; color: #6d7883; font-weight: 700; }
-        .info-grid .item .value { font-size: 14px; font-weight: 700; color: #121821; }
-        table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 4px; }
-        table th { background: #121821; color: white; padding: 10px 12px; text-align: center; font-size: 10px; font-weight: 700; }
-        table td { padding: 10px 12px; border-bottom: 1px solid #dde3e0; color: #2c3644; text-align: center; font-size: 11px; }
-        .footer { border-top: 2px solid #dde3e0; padding-top: 18px; margin-top: 18px; display: flex; justify-content: space-between; font-size: 11px; color: #6d7883; }
-        .signature .line { width: 100px; border-bottom: 2px solid #121821; margin-top: 6px; }
-        .notes-section { margin-top: 16px; padding: 16px 18px; border-top: 2px dashed #c7d0cc; background: #f4f6f5; border-radius: 8px; }
-        .notes-title { font-size: 11px; font-weight: 800; color: #7a5312; display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-        .notes-content { font-size: 10px; color: #2c3644; line-height: 1.8; }
-        .notes-content p { padding-right: 16px; margin-bottom: 4px; position: relative; }
-        .notes-content p::before { content: '•'; position: absolute; right: 0; color: #dd9f2e; font-weight: 700; }
-        table tbody tr { page-break-inside: avoid; break-inside: avoid; }
-        .notes-section { page-break-inside: avoid; break-inside: avoid; }
-        .footer { page-break-inside: avoid; break-inside: avoid; }
-        .notes-section, .info-grid, .badge {
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-        }
-    `;
+    // الحصول على محتوى الـ iframe
+    var iframeDoc = iframe.contentWindow.document;
+    
+    // كتابة المحتوى في الـ iframe
+    iframeDoc.open();
+    iframeDoc.write(`
+        <!DOCTYPE html>
+        <html dir="rtl">
+        <head>
+            <meta charset="UTF-8">
+            <title></title>
+            <style>
+                /* ===== منع ظهور أي عنوان ===== */
+                title { display: none !important; }
+                head { display: none !important; }
+                
+                /* ===== أنماط الطباعة ===== */
+                body {
+                    margin: 0;
+                    padding: 0;
+                    background: white;
+                    direction: rtl;
+                    font-family: 'Cairo', sans-serif;
+                }
+                
+                .print-wrapper {
+                    max-width: 210mm;
+                    margin: 0 auto;
+                    background: white;
+                    padding: 12mm 15mm;
+                    box-sizing: border-box;
+                }
+                
+                .invoice-header {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding-bottom: 18px;
+                    border-bottom: 3px solid #121821;
+                    margin-bottom: 18px;
+                    gap: 15px;
+                }
+                
+                .logo-section {
+                    display: flex;
+                    align-items: center;
+                    gap: 15px;
+                }
+                
+                .logo-box {
+                    width: 80px;
+                    height: 80px;
+                    border: 2.5px solid #dd9f2e;
+                    border-radius: 12px;
+                    overflow: hidden;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background: white;
+                    padding: 5px;
+                }
+                
+                .logo-box img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain;
+                }
+                
+                .company-details h2 {
+                    font-size: 20px;
+                    font-weight: 900;
+                    color: #121821;
+                    margin: 0;
+                }
+                
+                .company-details p {
+                    font-size: 11px;
+                    color: #6d7883;
+                    margin: 2px 0;
+                }
+                
+                .invoice-title {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    min-width: 100px;
+                    background: #f4f6f5;
+                    padding: 8px 12px;
+                    border-radius: 8px;
+                    border: 2px solid #dd9f2e;
+                }
+                
+                .qr-code {
+                    width: 85px;
+                    height: 85px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background: white;
+                    border-radius: 6px;
+                    padding: 5px;
+                    border: 2px solid #c7d0cc;
+                    margin-bottom: 4px;
+                }
+                
+                .qr-code canvas,
+                .qr-code img {
+                    width: 100% !important;
+                    height: 100% !important;
+                }
+                
+                .qr-label {
+                    font-size: 8px;
+                    color: #6d7883;
+                    text-align: center;
+                    font-weight: 600;
+                }
+                
+                .info-grid {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+                    gap: 10px;
+                    margin-bottom: 16px;
+                    background: #f4f6f5;
+                    padding: 12px 16px;
+                    border-radius: 8px;
+                    border: 1px solid #dde3e0;
+                }
+                
+                .info-grid .item .label {
+                    font-size: 9px;
+                    color: #6d7883;
+                    font-weight: 700;
+                }
+                
+                .info-grid .item .value {
+                    font-size: 14px;
+                    font-weight: 700;
+                    color: #121821;
+                }
+                
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    font-size: 12px;
+                    margin-bottom: 4px;
+                }
+                
+                table th {
+                    background: #121821;
+                    color: white;
+                    padding: 10px 12px;
+                    text-align: center;
+                    font-size: 10px;
+                    font-weight: 700;
+                }
+                
+                table td {
+                    padding: 10px 12px;
+                    border-bottom: 1px solid #dde3e0;
+                    color: #2c3644;
+                    text-align: center;
+                    font-size: 11px;
+                }
+                
+                .footer {
+                    border-top: 2px solid #dde3e0;
+                    padding-top: 18px;
+                    margin-top: 18px;
+                    display: flex;
+                    justify-content: space-between;
+                    font-size: 11px;
+                    color: #6d7883;
+                }
+                
+                .signature .line {
+                    width: 100px;
+                    border-bottom: 2px solid #121821;
+                    margin-top: 6px;
+                }
+                
+                .notes-section {
+                    margin-top: 16px;
+                    padding: 16px 18px;
+                    border-top: 2px dashed #c7d0cc;
+                    background: #f4f6f5;
+                    border-radius: 8px;
+                }
+                
+                .notes-title {
+                    font-size: 11px;
+                    font-weight: 800;
+                    color: #7a5312;
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    margin-bottom: 10px;
+                }
+                
+                .notes-content {
+                    font-size: 10px;
+                    color: #2c3644;
+                    line-height: 1.8;
+                }
+                
+                .notes-content p {
+                    padding-right: 16px;
+                    margin-bottom: 4px;
+                    position: relative;
+                }
+                
+                .notes-content p::before {
+                    content: '•';
+                    position: absolute;
+                    right: 0;
+                    color: #dd9f2e;
+                    font-weight: 700;
+                }
+                
+                /* ===== منع تكسر الصفحات ===== */
+                table tbody tr {
+                    page-break-inside: avoid;
+                    break-inside: avoid;
+                }
+                
+                .notes-section {
+                    page-break-inside: avoid;
+                    break-inside: avoid;
+                }
+                
+                .footer {
+                    page-break-inside: avoid;
+                    break-inside: avoid;
+                }
+                
+                /* ===== طباعة الألوان ===== */
+                .notes-section,
+                .info-grid {
+                    -webkit-print-color-adjust: exact !important;
+                    print-color-adjust: exact !important;
+                }
+            </style>
+        </head>
+        <body>
+            ${printContent.innerHTML}
+            <script>
+                // ===== بدء الطباعة =====
+                (function() {
+                    // إخفاء العنوان نهائياً
+                    document.title = '';
+                    var titles = document.querySelectorAll('title');
+                    titles.forEach(function(el) {
+                        el.textContent = '';
+                        el.style.display = 'none';
+                    });
+                    
+                    // طباعة المحتوى
+                    window.print();
+                    
+                    // إغلاق النافذة بعد الطباعة
+                    setTimeout(function() {
+                        window.close();
+                    }, 1000);
+                })();
+            <\/script>
+        </body>
+        </html>
+    `);
+    iframeDoc.close();
 
-    // إضافة المحتوى إلى الصفحة
-    document.body.appendChild(printContainer);
-    document.body.appendChild(style);
-
-    // طباعة المحتوى
+    // إزالة الـ iframe بعد الطباعة
     setTimeout(function() {
-        window.print();
-    }, 100);
-
-    // إزالة العناصر وإعادة العنوان بعد الطباعة
-    setTimeout(function() {
-        document.title = originalTitle;
-        if (printContainer.parentNode) {
-            printContainer.parentNode.removeChild(printContainer);
+        if (iframe.parentNode) {
+            iframe.parentNode.removeChild(iframe);
         }
-        if (style.parentNode) {
-            style.parentNode.removeChild(style);
-        }
-    }, 2000);
+    }, 3000);
 }
         /**
          * ============================================================
