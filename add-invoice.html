@@ -19,8 +19,10 @@
         })();
     </script>
 
-    <!-- QRCode.js library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
+    <!-- ===== مكتبات خارجية ===== -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
     </script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -136,7 +138,7 @@
         }
 
         /* ============================================================
-           HEADER - تصميم محسّن
+           HEADER
            ============================================================ */
         header {
             position: sticky;
@@ -204,7 +206,6 @@
             font-weight: 600;
         }
 
-        /* ===== القائمة العلوية ===== */
         nav {
             display: flex;
             align-items: center;
@@ -643,7 +644,7 @@
         }
 
         /* ============================================================
-           RESPONSIVE - MOBILE FIXES
+           RESPONSIVE
            ============================================================ */
         @media (min-width: 769px) {
             .mobile-nav-bottom,
@@ -1523,10 +1524,8 @@
         }
 
         /* ============================================================
-           PRINT PREVIEW STYLES — تصميم فاتورة راقٍ لبرنامج محاسبة
+           PRINT PREVIEW STYLES
            ============================================================ */
-
-        /* --- الإطار العام للفاتورة --- */
         .print-preview-overlay .print-wrapper {
             background: linear-gradient(180deg, #fffefb 0%, #fdfbf5 100%);
             position: relative;
@@ -1541,7 +1540,6 @@
             pointer-events: none;
         }
 
-        /* --- الترويسة --- */
         .print-preview-overlay .print-wrapper .invoice-header {
             display: flex;
             align-items: flex-start;
@@ -1679,7 +1677,6 @@
             font-weight: 600;
         }
 
-        /* --- شارة حالة السداد --- */
         .print-preview-overlay .print-wrapper .status-badge {
             display: inline-flex;
             align-items: center;
@@ -1698,7 +1695,6 @@
             color: var(--rust);
         }
 
-        /* --- شريط بيانات الفاتورة --- */
         .print-preview-overlay .print-wrapper .info-grid {
             display: flex;
             flex-wrap: wrap;
@@ -1738,7 +1734,6 @@
             color: var(--accent-ink);
         }
 
-        /* --- جدول البنود --- */
         .print-preview-overlay .print-wrapper table {
             width: 100%;
             border-collapse: separate;
@@ -1806,7 +1801,6 @@
             font-size: calc(0.58rem * var(--scale-factor));
         }
 
-        /* --- قسم الملخص المالي والتوقيع --- */
         .print-preview-overlay .print-wrapper .invoice-summary {
             display: flex;
             justify-content: space-between;
@@ -1882,7 +1876,6 @@
             font-weight: 800;
         }
 
-        /* --- قسم الملاحظات --- */
         .print-preview-overlay .print-wrapper .notes-section {
             margin-top: calc(22px * var(--scale-factor));
             padding-top: 0;
@@ -1940,7 +1933,6 @@
             line-height: 1;
         }
 
-        /* --- تذييل ختامي --- */
         .print-preview-overlay .print-wrapper .print-brand-footer {
             margin-top: calc(20px * var(--scale-factor));
             padding-top: calc(12px * var(--scale-factor));
@@ -1954,153 +1946,13 @@
             color: var(--accent-ink);
         }
 
-        .print-preview-overlay .print-wrapper .footer,
-        .print-preview-overlay .print-wrapper .print-footer-notes {
-            font-size: calc(0.6rem * var(--scale-factor));
-            color: var(--ink-mute);
-        }
-        .print-preview-overlay .print-wrapper .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: calc(2px * var(--scale-factor)) calc(10px * var(--scale-factor));
-            border-radius: 50px;
-            font-size: calc(0.55rem * var(--scale-factor));
-            font-weight: 700;
-            border: 1px solid transparent;
-        }
-        .print-preview-overlay .print-wrapper .badge-paid {
-            background: var(--teal-soft);
-            color: var(--teal);
-        }
-        .print-preview-overlay .print-wrapper .badge-balance {
-            background: var(--rust-soft);
-            color: var(--rust);
-        }
-        .print-preview-overlay .print-wrapper .badge-type {
-            background: var(--surface-muted);
-            color: var(--ink-mute);
-            border-color: var(--line);
-        }
-        .print-preview-overlay .print-wrapper .badge-future {
-            background: var(--accent-soft);
-            color: var(--accent-ink);
-        }
-
         /* ============================================================
-           PRINT PREVIEW RESPONSIVE
-           ============================================================ */
-        @media (max-width: 768px) {
-            .print-preview-overlay .print-wrapper {
-                padding: calc(20px * var(--scale-factor)) calc(16px * var(--scale-factor));
-                max-height: 70vh;
-                max-width: 95%;
-            }
-            .print-preview-overlay .print-wrapper .invoice-header {
-                flex-direction: column;
-                text-align: center;
-                gap: calc(14px * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .invoice-header .logo-section {
-                flex-direction: column;
-            }
-            .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box {
-                width: calc(90px * var(--scale-factor));
-                height: calc(90px * var(--scale-factor));
-                min-width: calc(90px * var(--scale-factor));
-                max-width: calc(90px * var(--scale-factor));
-                min-height: calc(90px * var(--scale-factor));
-                max-height: calc(90px * var(--scale-factor));
-                border-radius: calc(14px * var(--scale-factor));
-                padding: calc(6px * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .invoice-title {
-                width: 100%;
-                align-items: center;
-            }
-            .print-preview-overlay .print-wrapper .invoice-title .qr-code {
-                width: calc(60px * var(--scale-factor));
-                height: calc(60px * var(--scale-factor));
-                padding: calc(3px * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .info-grid {
-                flex-direction: column;
-            }
-            .print-preview-overlay .print-wrapper .info-grid .item {
-                border-left: none;
-                border-bottom: 1px dashed var(--line);
-            }
-            .print-preview-overlay .print-wrapper .info-grid .item:last-child {
-                border-bottom: none;
-            }
-            .print-preview-overlay .print-actions button {
-                padding: calc(8px * var(--scale-factor)) calc(16px * var(--scale-factor));
-                font-size: calc(0.75rem * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper table {
-                font-size: calc(0.65rem * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper table th,
-            .print-preview-overlay .print-wrapper table td {
-                padding: calc(5px * var(--scale-factor)) calc(8px * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .invoice-summary {
-                flex-direction: column;
-            }
-            .print-preview-overlay .print-wrapper .summary-box {
-                flex: 0 0 auto;
-                width: 100%;
-            }
-            .print-preview-overlay .print-wrapper .signature {
-                text-align: center;
-            }
-            .print-preview-overlay .print-wrapper .signature .line {
-                margin: calc(4px * var(--scale-factor)) auto 0;
-            }
-            .print-preview-overlay .print-wrapper .notes-section {
-                padding: calc(12px * var(--scale-factor)) calc(14px * var(--scale-factor));
-                margin-top: calc(14px * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .notes-section .notes-title {
-                font-size: calc(0.65rem * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .notes-section .notes-content {
-                font-size: calc(0.55rem * var(--scale-factor));
-                line-height: 1.7;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .print-preview-overlay .print-wrapper {
-                padding: calc(14px * var(--scale-factor)) calc(12px * var(--scale-factor));
-                max-height: 60vh;
-                max-width: 98%;
-                border-radius: calc(8px * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .invoice-header .company-details h2 {
-                font-size: calc(1.1rem * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper table {
-                font-size: calc(0.55rem * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper table th,
-            .print-preview-overlay .print-wrapper table td {
-                padding: calc(4px * var(--scale-factor)) calc(6px * var(--scale-factor));
-            }
-            .print-preview-overlay .print-actions button {
-                padding: calc(6px * var(--scale-factor)) calc(12px * var(--scale-factor));
-                font-size: calc(0.65rem * var(--scale-factor));
-            }
-        }
-
-        /* ============================================================
-           CLIENT SUGGESTIONS STYLES
+           CLIENT SUGGESTIONS
            ============================================================ */
         .client-suggestions {
             position: relative;
             width: 100%;
         }
-
         .client-suggestions .suggestions-list {
             position: absolute;
             top: 100%;
@@ -2116,11 +1968,9 @@
             box-shadow: var(--shadow);
             margin-top: calc(2px * var(--scale-factor));
         }
-
         .client-suggestions .suggestions-list.show {
             display: block;
         }
-
         .client-suggestions .suggestions-list .suggestion-item {
             padding: calc(8px * var(--scale-factor)) calc(14px * var(--scale-factor));
             cursor: pointer;
@@ -2131,41 +1981,33 @@
             border-bottom: 1px solid var(--line);
             font-size: calc(0.8rem * var(--scale-factor));
         }
-
         .client-suggestions .suggestions-list .suggestion-item:last-child {
             border-bottom: none;
         }
-
         .client-suggestions .suggestions-list .suggestion-item:hover {
             background: var(--accent-soft);
         }
-
         .client-suggestions .suggestions-list .suggestion-item .client-phone {
             font-size: calc(0.65rem * var(--scale-factor));
             color: var(--ink-mute);
         }
-
         .client-suggestions .suggestions-list .suggestion-item.add-new {
             color: var(--teal);
             font-weight: 700;
         }
-
         .client-suggestions .suggestions-list .suggestion-item.add-new i {
             margin-left: calc(6px * var(--scale-factor));
         }
-
         .client-suggestions .suggestions-list .suggestion-item.selected {
             background: var(--accent-soft);
             border-right: calc(3px * var(--scale-factor)) solid var(--accent);
         }
-
         .client-suggestions .suggestions-list .loading-suggestions {
             padding: calc(12px * var(--scale-factor)) calc(14px * var(--scale-factor));
             text-align: center;
             color: var(--ink-mute);
             font-size: calc(0.75rem * var(--scale-factor));
         }
-
         .no-results {
             padding: calc(12px * var(--scale-factor)) calc(14px * var(--scale-factor));
             text-align: center;
@@ -2173,9 +2015,6 @@
             font-size: calc(0.75rem * var(--scale-factor));
         }
 
-        /* ============================================================
-           PROPERTIES SELECT
-           ============================================================ */
         .property-select {
             width: 100%;
             padding: calc(7px * var(--scale-factor)) calc(12px * var(--scale-factor));
@@ -2204,14 +2043,10 @@
             border-style: dashed;
         }
 
-        /* ============================================================
-           DATE INPUT - تنسيق DD/MM/YYYY (flatpickr)
-           ============================================================ */
         .date-wrapper {
             position: relative;
             width: 100%;
         }
-
         .date-wrapper input.date-display {
             width: 100%;
             padding: calc(7px * var(--scale-factor)) calc(12px * var(--scale-factor));
@@ -2229,13 +2064,11 @@
             letter-spacing: calc(1px * var(--scale-factor));
             cursor: pointer;
         }
-
         .date-wrapper input.date-display:focus {
             border-color: var(--accent);
             background: #ffffff;
             box-shadow: 0 0 0 calc(3px * var(--scale-factor)) rgba(221, 159, 46, 0.15);
         }
-
         .date-wrapper i.date-icon {
             position: absolute;
             left: calc(10px * var(--scale-factor));
@@ -2264,9 +2097,6 @@
             color: var(--ink);
         }
 
-        /* ============================================================
-           FIX: ADD BOOKING BUTTON VISIBILITY
-           ============================================================ */
         .btn-add {
             display: inline-flex !important;
             align-items: center !important;
@@ -2285,16 +2115,13 @@
             visibility: visible !important;
             opacity: 1 !important;
         }
-
         .btn-add:hover {
             background: var(--ink-soft) !important;
             transform: translateY(calc(-1px * var(--scale-factor))) !important;
         }
-
         .btn-add i {
             color: var(--accent) !important;
         }
-
         .btn-actions-row {
             display: flex !important;
             gap: calc(6px * var(--scale-factor)) !important;
@@ -2302,51 +2129,11 @@
             flex-shrink: 0 !important;
             margin-top: calc(6px * var(--scale-factor)) !important;
         }
-
         .btn-actions-row .btn-add,
         .btn-actions-row .btn-reset-form {
             display: inline-flex !important;
             visibility: visible !important;
             opacity: 1 !important;
-        }
-
-        /* ============================================================
-           تحسين عرض البطاقات في الموبايل
-           ============================================================ */
-        @media (max-width: 768px) {
-            .booking-card .card-row {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: calc(4px * var(--scale-factor)) 0;
-                font-size: calc(0.68rem * var(--scale-factor));
-                border-bottom: 1px solid rgba(0, 0, 0, 0.03);
-            }
-
-            .booking-card .card-row:last-child {
-                border-bottom: none;
-            }
-
-            .booking-card .card-label {
-                font-size: calc(0.58rem * var(--scale-factor));
-                color: var(--ink-3);
-                font-weight: 600;
-                flex-shrink: 0;
-            }
-
-            .booking-card .card-value {
-                font-size: calc(0.68rem * var(--scale-factor));
-                color: var(--ink-2);
-                font-weight: 600;
-                text-align: left;
-                direction: ltr;
-                unicode-bidi: plaintext;
-            }
-
-            .booking-card .card-value.gold {
-                color: var(--teal);
-                font-weight: 800;
-            }
         }
 
         .btn-back-dashboard {
@@ -2366,25 +2153,19 @@
             text-decoration: none;
             box-shadow: 0 2px 8px rgba(47, 91, 138, 0.2);
         }
-
         .btn-back-dashboard:hover {
             background: #1a4a6b;
             transform: translateY(calc(-2px * var(--scale-factor)));
             box-shadow: 0 6px 20px rgba(47, 91, 138, 0.3);
         }
-
         .btn-back-dashboard i {
             font-size: calc(0.7rem * var(--scale-factor));
         }
 
-        /* ============================================================
-           PRINT MEDIA QUERY - التصميم المحسن بالكامل للطباعة
-           ============================================================ */
         @media print {
             .print-preview-overlay .print-actions {
                 display: none !important;
             }
-
             .print-preview-overlay {
                 background: #ffffff !important;
                 backdrop-filter: none !important;
@@ -2393,7 +2174,6 @@
                 inset: 0 !important;
                 z-index: 99999 !important;
             }
-
             .print-preview-overlay .print-wrapper {
                 max-width: 210mm !important;
                 width: 100% !important;
@@ -2405,11 +2185,33 @@
                 background: #ffffff !important;
                 overflow: visible !important;
             }
-
             .print-preview-overlay .print-wrapper * {
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
             }
+        }
+
+        #pdfOffscreenOverlay {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: -5000px;
+            width: 210mm;
+            height: auto;
+            padding: 0;
+            margin: 0;
+            background: transparent;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0;
+        }
+        #pdfOffscreenOverlay .print-wrapper {
+            max-width: none;
+            width: 210mm;
+            max-height: none;
+            overflow: visible;
+            padding: 12mm 15mm;
+            box-shadow: none;
         }
     </style>
 </head>
@@ -2538,6 +2340,13 @@
                     <i class="fas fa-times"></i> إغلاق
                 </button>
             </div>
+        </div>
+
+        <!-- ============================================================
+        OFFSCREEN PDF CONTAINER
+        ============================================================ -->
+        <div id="pdfOffscreenOverlay" aria-hidden="true">
+            <div class="print-wrapper" id="pdfHiddenWrapper"></div>
         </div>
 
         <!-- ============================================================
@@ -2791,8 +2600,8 @@
                             <button class="btn-tool info" onclick="previewInvoice()">
                                 <i class="fas fa-eye"></i> <span>معاينة</span>
                             </button>
-                            <button class="btn-tool pdf" onclick="downloadPDF()">
-                                <i class="fas fa-file-pdf"></i> <span>PDF</span>
+                            <button class="btn-tool pdf" id="btnSavePdfDirect">
+                                <i class="fas fa-file-pdf"></i> <span>حفظ PDF</span>
                             </button>
                             <button class="btn-tool danger" id="btnResetAll">
                                 <i class="fas fa-times"></i> <span>إلغاء</span>
@@ -2815,12 +2624,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/l10n/ar.js">
     </script>
 
-    <!-- html2pdf library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js">
-    </script>
-
     <!-- ============================================================
-    JAVASCRIPT - الكود الكامل مع جميع التعديلات
+    JAVASCRIPT
     ============================================================ -->
     <script>
         /**
@@ -2922,6 +2727,7 @@
         var totalAmountDisplay = document.getElementById('totalAmountDisplay');
         var netAmountDisplay = document.getElementById('netAmountDisplay');
         var stayType = document.getElementById('stayType');
+        var btnSavePdfDirect = document.getElementById('btnSavePdfDirect');
 
         /**
          * ============================================================
@@ -2936,7 +2742,6 @@
         var selectedClientId = null;
         var selectedSuggestionIndex = -1;
         var propertiesList = [];
-        var currentQRCode = null;
 
         var settings = {
             companyName: 'منتجع وشاليهات حياله القصيم ',
@@ -3406,72 +3211,29 @@
 
         /**
          * ============================================================
-         * GENERATE QR CODE - حجم مصغر 72px
+         * GENERATE QR CODE
          * ============================================================
          */
-        function generateQRCode(invoiceNumber, client, total) {
-            var qrContainer = document.getElementById('qrCodeContainer');
+        function generateQRCode(invoiceNumberVal, client, total, containerId) {
+            containerId = containerId || 'qrCodeContainer';
+            var qrContainer = document.getElementById(containerId);
             if (!qrContainer) {
-                console.warn('⚠️ حاوية QR Code غير موجودة');
+                console.warn('⚠️ حاوية QR Code غير موجودة:', containerId);
                 return;
             }
 
             qrContainer.innerHTML = '';
 
-            if (typeof QRCode === 'undefined') {
-                console.warn('⚠️ مكتبة QRCode غير محملة، سيتم استخدام API خارجي');
-                generateQRCodeExternal(invoiceNumber, client, total);
-                return;
-            }
-
             var qrData = {
-                invoice: invoiceNumber || '----',
-                client: client || 'غير محدد',
-                total: total || '0.00',
-                date: new Date().toLocaleDateString('ar-EG'),
-                company: settings.companyName || 'منتجع حياله'
-            };
-
-            var qrText = JSON.stringify(qrData);
-
-            try {
-                var qr = new QRCode(qrContainer, {
-                    text: qrText,
-                    width: 72,
-                    height: 72,
-                    colorDark: '#121821',
-                    colorLight: '#ffffff',
-                    correctLevel: QRCode.CorrectLevel.H
-                });
-                currentQRCode = qr;
-                console.log('✅ تم إنشاء QR Code مصغر (72px) بنجاح');
-            } catch (error) {
-                console.error('❌ خطأ في إنشاء QR Code:', error);
-                generateQRCodeExternal(invoiceNumber, client, total);
-            }
-        }
-
-        /**
-         * ============================================================
-         * GENERATE QR CODE - API خارجي (حجم 72px)
-         * ============================================================
-         */
-        function generateQRCodeExternal(invoiceNumber, client, total) {
-            var qrContainer = document.getElementById('qrCodeContainer');
-            if (!qrContainer) return;
-
-            qrContainer.innerHTML = '';
-
-            var qrData = {
-                invoice: invoiceNumber || '----',
-                client: client || 'غير محدد',
-                total: total || '0.00'
+                inv: (invoiceNumberVal || '').substring(0, 15),
+                cl: (client || '').substring(0, 15),
+                am: (total || '0')
             };
             var qrText = JSON.stringify(qrData);
             var encodedText = encodeURIComponent(qrText);
 
             var qrImageUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=72x72&data=' + encodedText +
-                '&bgcolor=ffffff&color=121821';
+                '&bgcolor=ffffff&color=121821&margin=4';
 
             var img = document.createElement('img');
             img.src = qrImageUrl;
@@ -3479,18 +3241,19 @@
             img.style.width = '100%';
             img.style.height = '100%';
             img.style.objectFit = 'contain';
+            img.style.borderRadius = '4px';
 
             img.onerror = function() {
                 qrContainer.innerHTML = `
                             <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;background:#f8f9fa;border-radius:4px;">
-                                <i class="fas fa-qrcode" style="font-size:1.5rem;color:var(--accent);"></i>
-                                <span style="font-size:0.4rem;color:var(--ink-mute);">${invoiceNumber || ''}</span>
+                                <i class="fas fa-qrcode" style="font-size:1.8rem;color:#dd9f2e;"></i>
+                                <span style="font-size:0.4rem;color:#6d7883;margin-top:2px;">${invoiceNumberVal || ''}</span>
                             </div>
                         `;
             };
 
             img.onload = function() {
-                console.log('✅ تم إنشاء QR Code مصغر بواسطة API خارجي');
+                console.log('✅ تم إنشاء QR Code في', containerId);
             };
 
             qrContainer.appendChild(img);
@@ -3498,33 +3261,15 @@
 
         /**
          * ============================================================
-         * PREVIEW INVOICE - تصميم راقٍ لفاتورة برنامج محاسبة
+         * BUILD INVOICE HTML
          * ============================================================
          */
-        function previewInvoice() {
-            if (bookings.length === 0) {
-                showToast('⚠️ تنبيه', 'لا توجد حجوزات للمعاينة', 'error');
-                return;
-            }
-
-            var client = clientName.value.trim() || 'غير محدد';
-            var phone = clientPhone.value.trim() || 'غير محدد';
-            var invNum = invoiceNumber.value.trim() || '----';
-            var book = bookNumber.value.trim() || '----';
-            var date = invoiceDate.value ? new Date(invoiceDate.value).toLocaleDateString('ar-EG') : '----';
-            var total = totalAmount.textContent;
-            var discount = displayDiscount.textContent;
-            var paid = displayPaid.textContent;
-            var remaining = displayRemaining.textContent;
-            var isPaidFull = (parseFloat(remaining) || 0) <= 0;
-
+        function buildInvoiceHTML(client, phone, invNum, book, date, total, discount, paid, remaining, isPaidFull, qrContainerId) {
             var companyName = settings.companyName || 'منتجع حياله';
             var companyAddress = settings.companyAddress || '';
             var companyPhone = settings.companyPhone || '';
             var companyLogo = settings.companyLogo || '';
             var footer = settings.invoiceFooter || 'شكراً لثقتكم بنا';
-
-            var printContent = document.getElementById('printPreviewContent');
 
             var statusBadgeHtml = isPaidFull ?
                 '<span class="status-badge paid"><i class="fas fa-check-circle"></i> مدفوعة بالكامل</span>' :
@@ -3549,7 +3294,7 @@
                     <div class="invoice-title">
                         <span class="invoice-title-label">رقم الفاتورة</span>
                         <span class="invoice-title-number">${invNum}</span>
-                        <div class="qr-code" id="qrCodeContainer">
+                        <div class="qr-code" id="${qrContainerId}">
                         </div>
                         <span class="qr-label">امسح للتحقق من الفاتورة</span>
                     </div>
@@ -3640,10 +3385,36 @@
                 </div>
             `;
 
-            printContent.innerHTML = html;
+            return html;
+        }
+
+        /**
+         * ============================================================
+         * PREVIEW INVOICE
+         * ============================================================
+         */
+        function previewInvoice() {
+            if (bookings.length === 0) {
+                showToast('⚠️ تنبيه', 'لا توجد حجوزات للمعاينة', 'error');
+                return;
+            }
+
+            var client = clientName.value.trim() || 'غير محدد';
+            var phone = clientPhone.value.trim() || 'غير محدد';
+            var invNum = invoiceNumber.value.trim() || '----';
+            var book = bookNumber.value.trim() || '----';
+            var date = invoiceDate.value ? new Date(invoiceDate.value).toLocaleDateString('ar-EG') : '----';
+            var total = totalAmount.textContent;
+            var discount = displayDiscount.textContent;
+            var paid = displayPaid.textContent;
+            var remaining = displayRemaining.textContent;
+            var isPaidFull = (parseFloat(remaining) || 0) <= 0;
+
+            var printContent = document.getElementById('printPreviewContent');
+            printContent.innerHTML = buildInvoiceHTML(client, phone, invNum, book, date, total, discount, paid, remaining, isPaidFull, 'qrCodeContainer');
 
             setTimeout(function() {
-                generateQRCode(invNum, client, total);
+                generateQRCode(invNum, client, total, 'qrCodeContainer');
             }, 200);
 
             document.getElementById('printPreviewOverlay').classList.add('show');
@@ -3660,7 +3431,7 @@
 
         /**
          * ============================================================
-         * EXECUTE PRINT - طباعة عبر نافذة المتصفح (آلية منفصلة)
+         * EXECUTE PRINT
          * ============================================================
          */
         function executePrint() {
@@ -3677,7 +3448,7 @@
 
         /**
          * ============================================================
-         * OPEN PRINT WINDOW - عبر iframe مخفي
+         * OPEN PRINT WINDOW
          * ============================================================
          */
         function openPrintWindow() {
@@ -4059,7 +3830,326 @@
 
         /**
          * ============================================================
-         * DOWNLOAD PDF - حفظ باسم العميل تلقائياً (آلية منفصلة للتنزيل)
+         * FIXED: GENERATE PDF FROM ELEMENT - استخدام html2canvas مباشرة مع jsPDF
+         * ============================================================
+         */
+        function generatePDFFromElementDirect(element, clientNameValue, invoiceNum, onDone) {
+            if (!element) {
+                console.error('❌ عنصر الفاتورة غير موجود');
+                if (onDone) onDone(false);
+                return;
+            }
+
+            var rawClientName = (clientNameValue || '').trim() || 'فاتورة';
+            var safeClientName = rawClientName.replace(/[\\\/:*?"<>|]/g, '').trim() || 'فاتورة';
+            var fileName = safeClientName + ' - ' + (invoiceNum || 'invoice') + '.pdf';
+
+            console.log('🔄 بدء توليد PDF للملف:', fileName);
+
+            // ===== التأكد من أن العنصر مرئي قبل التقاطه =====
+            var originalDisplay = element.style.display;
+            var originalPosition = element.style.position;
+            var originalTop = element.style.top;
+            var originalLeft = element.style.left;
+            var originalZIndex = element.style.zIndex;
+            var originalOpacity = element.style.opacity;
+
+            // جعل العنصر مرئياً مؤقتاً
+            element.style.display = 'block';
+            element.style.position = 'fixed';
+            element.style.top = '0';
+            element.style.left = '0';
+            element.style.zIndex = '99999';
+            element.style.opacity = '1';
+            element.style.background = '#ffffff';
+            element.style.width = '210mm';
+            element.style.maxWidth = '210mm';
+            element.style.margin = '0 auto';
+            element.style.padding = '12mm 15mm';
+            element.style.boxSizing = 'border-box';
+
+            // ===== استخدام html2canvas مباشرة =====
+            html2canvas(element, {
+                scale: 2,
+                useCORS: true,
+                logging: false,
+                letterRendering: true,
+                allowTaint: true,
+                backgroundColor: '#ffffff',
+                width: element.scrollWidth,
+                height: element.scrollHeight,
+                onclone: function(doc) {
+                    var elements = doc.querySelectorAll('*');
+                    elements.forEach(function(el) {
+                        if (el.style.display === 'none') {
+                            el.style.display = '';
+                        }
+                        if (el.style.visibility === 'hidden') {
+                            el.style.visibility = 'visible';
+                        }
+                    });
+                    var qrElement = doc.getElementById('pdfHiddenQrCode');
+                    if (qrElement) {
+                        var img = qrElement.querySelector('img');
+                        if (img) {
+                            img.style.display = 'block';
+                            img.style.width = '100%';
+                            img.style.height = '100%';
+                        }
+                    }
+                }
+            }).then(function(canvas) {
+                // ===== إعادة العنصر إلى حالته الأصلية =====
+                element.style.display = originalDisplay || '';
+                element.style.position = originalPosition || '';
+                element.style.top = originalTop || '';
+                element.style.left = originalLeft || '';
+                element.style.zIndex = originalZIndex || '';
+                element.style.opacity = originalOpacity || '';
+
+                if (!canvas || canvas.width < 100 || canvas.height < 100) {
+                    console.error('❌ فشل في التقاط canvas');
+                    showToast('❌ خطأ', 'فشل في توليد PDF، يرجى المحاولة مرة أخرى', 'error');
+                    if (onDone) onDone(false);
+                    return;
+                }
+
+                // ===== تحويل canvas إلى PDF باستخدام jsPDF =====
+                var imgData = canvas.toDataURL('image/jpeg', 0.95);
+                var pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+                var pdfWidth = pdf.internal.pageSize.getWidth();
+                var pdfHeight = pdf.internal.pageSize.getHeight();
+
+                var imgWidth = canvas.width;
+                var imgHeight = canvas.height;
+                var ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+                var imgW = imgWidth * ratio;
+                var imgH = imgHeight * ratio;
+
+                if (imgH > pdfHeight) {
+                    var pageHeightPx = pdfHeight / ratio;
+                    var totalPages = Math.ceil(imgHeight / pageHeightPx);
+                    
+                    for (var i = 0; i < totalPages; i++) {
+                        if (i > 0) {
+                            pdf.addPage();
+                        }
+                        
+                        var srcY = i * pageHeightPx;
+                        var srcH = Math.min(pageHeightPx, imgHeight - srcY);
+                        
+                        var tempCanvas = document.createElement('canvas');
+                        tempCanvas.width = imgWidth;
+                        tempCanvas.height = srcH;
+                        var ctx = tempCanvas.getContext('2d');
+                        ctx.drawImage(canvas, 0, srcY, imgWidth, srcH, 0, 0, imgWidth, srcH);
+                        
+                        var pageImgData = tempCanvas.toDataURL('image/jpeg', 0.95);
+                        var pageImgH = srcH * ratio;
+                        
+                        pdf.addImage(pageImgData, 'JPEG', 0, 0, pdfWidth, pageImgH);
+                    }
+                } else {
+                    pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+                }
+
+                // ===== حفظ PDF =====
+                var pdfBlob = pdf.output('blob');
+                
+                if (pdfBlob.size < 1000) {
+                    console.warn('⚠️ حجم الملف صغير جداً');
+                    showToast('❌ خطأ', 'فشل في توليد PDF بشكل صحيح', 'error');
+                    if (onDone) onDone(false);
+                    return;
+                }
+
+                var blobUrl = URL.createObjectURL(pdfBlob);
+                var link = document.createElement('a');
+                link.href = blobUrl;
+                link.download = fileName;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                setTimeout(function() {
+                    URL.revokeObjectURL(blobUrl);
+                }, 5000);
+
+                console.log('✅ تم توليد PDF بنجاح، حجم الملف:', pdfBlob.size, 'بايت');
+                showToast('✅ تم الحفظ', 'تم حفظ ملف PDF على جهازك باسم: ' + fileName, 'success');
+                if (onDone) onDone(true);
+
+            }).catch(function(error) {
+                console.error('❌ خطأ في html2canvas:', error);
+                element.style.display = originalDisplay || '';
+                element.style.position = originalPosition || '';
+                element.style.top = originalTop || '';
+                element.style.left = originalLeft || '';
+                element.style.zIndex = originalZIndex || '';
+                element.style.opacity = originalOpacity || '';
+                showToast('❌ خطأ', 'فشل في توليد PDF: ' + error.message, 'error');
+                if (onDone) onDone(false);
+            });
+        }
+
+        /**
+         * ============================================================
+         * SAVE INVOICE PDF DIRECT
+         * ============================================================
+         */
+        function saveInvoicePDFDirect() {
+            if (bookings.length === 0) {
+                showToast('⚠️ تنبيه', 'لا توجد حجوزات لتحويلها إلى PDF', 'error');
+                return;
+            }
+
+            var client = clientName.value.trim() || 'غير محدد';
+            var phone = clientPhone.value.trim() || 'غير محدد';
+            var invNum = invoiceNumber.value.trim() || '----';
+            var book = bookNumber.value.trim() || '----';
+            var date = invoiceDate.value ? new Date(invoiceDate.value).toLocaleDateString('ar-EG') : '----';
+            var total = totalAmount.textContent;
+            var discount = displayDiscount.textContent;
+            var paid = displayPaid.textContent;
+            var remaining = displayRemaining.textContent;
+            var isPaidFull = (parseFloat(remaining) || 0) <= 0;
+
+            showToast('⏳ جاري الحفظ', 'جاري تجهيز ملف PDF...', 'warning');
+
+            if (btnSavePdfDirect) {
+                btnSavePdfDirect.disabled = true;
+                btnSavePdfDirect.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحميل...';
+            }
+
+            // ===== إنشاء عنصر مؤقت خارج نطاق الشاشة =====
+            var tempContainer = document.createElement('div');
+            tempContainer.style.position = 'fixed';
+            tempContainer.style.top = '-9999px';
+            tempContainer.style.left = '-9999px';
+            tempContainer.style.width = '210mm';
+            tempContainer.style.background = '#ffffff';
+            tempContainer.style.zIndex = '-1';
+            tempContainer.style.padding = '0';
+            tempContainer.style.margin = '0';
+            tempContainer.style.opacity = '0';
+            tempContainer.style.pointerEvents = 'none';
+            document.body.appendChild(tempContainer);
+
+            // ===== بناء محتوى الفاتورة =====
+            var wrapper = document.createElement('div');
+            wrapper.className = 'print-wrapper';
+            wrapper.style.width = '210mm';
+            wrapper.style.maxWidth = '210mm';
+            wrapper.style.padding = '12mm 15mm';
+            wrapper.style.background = 'linear-gradient(180deg, #fffefb 0%, #fdfbf5 100%)';
+            wrapper.style.border = '1px solid #dd9f2e';
+            wrapper.style.position = 'relative';
+            wrapper.style.fontFamily = "'Cairo', 'Segoe UI', Tahoma, Arial, sans-serif";
+            wrapper.style.direction = 'rtl';
+            wrapper.style.color = '#121821';
+            wrapper.style.boxSizing = 'border-box';
+
+            wrapper.innerHTML = buildInvoiceHTML(
+                client, phone, invNum, book, date, total, discount, paid, remaining, isPaidFull, 'pdfHiddenQrCode'
+            );
+
+            tempContainer.appendChild(wrapper);
+
+            // ===== إنشاء QR Code =====
+            var qrContainer = tempContainer.querySelector('#pdfHiddenQrCode');
+            if (qrContainer) {
+                var qrData = {
+                    inv: (invNum || '').substring(0, 15),
+                    cl: (client || '').substring(0, 15),
+                    am: (total || '0')
+                };
+                var qrText = JSON.stringify(qrData);
+                var encodedText = encodeURIComponent(qrText);
+                var qrImageUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=72x72&data=' + encodedText +
+                    '&bgcolor=ffffff&color=121821&margin=4';
+
+                qrContainer.innerHTML = '';
+                var img = document.createElement('img');
+                img.src = qrImageUrl;
+                img.alt = 'QR Code';
+                img.style.width = '100%';
+                img.style.height = '100%';
+                img.style.objectFit = 'contain';
+                img.style.borderRadius = '4px';
+                img.onerror = function() {
+                    qrContainer.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;background:#f8f9fa;border-radius:4px;"><i class="fas fa-qrcode" style="font-size:1.8rem;color:#dd9f2e;"></i><span style="font-size:0.4rem;color:#6d7883;margin-top:2px;">' + invNum + '</span></div>';
+                };
+                qrContainer.appendChild(img);
+            }
+
+            // ===== انتظار تحميل الصور =====
+            var images = tempContainer.querySelectorAll('img');
+            var loadedCount = 0;
+            var totalImages = images.length;
+
+            function checkAllImagesLoaded() {
+                if (totalImages === 0 || loadedCount >= totalImages) {
+                    generatePDFFromElementDirect(tempContainer, client, invNum, function(success) {
+                        if (tempContainer && tempContainer.parentNode) {
+                            tempContainer.parentNode.removeChild(tempContainer);
+                        }
+                        if (btnSavePdfDirect) {
+                            btnSavePdfDirect.disabled = false;
+                            btnSavePdfDirect.innerHTML = '<i class="fas fa-file-pdf"></i> <span>حفظ PDF</span>';
+                        }
+                        if (!success) {
+                            showToast('❌ خطأ', 'فشل في حفظ PDF، يرجى المحاولة مرة أخرى', 'error');
+                        }
+                    });
+                }
+            }
+
+            if (totalImages === 0) {
+                setTimeout(function() {
+                    generatePDFFromElementDirect(tempContainer, client, invNum, function(success) {
+                        if (tempContainer && tempContainer.parentNode) {
+                            tempContainer.parentNode.removeChild(tempContainer);
+                        }
+                        if (btnSavePdfDirect) {
+                            btnSavePdfDirect.disabled = false;
+                            btnSavePdfDirect.innerHTML = '<i class="fas fa-file-pdf"></i> <span>حفظ PDF</span>';
+                        }
+                        if (!success) {
+                            showToast('❌ خطأ', 'فشل في حفظ PDF، يرجى المحاولة مرة أخرى', 'error');
+                        }
+                    });
+                }, 500);
+                return;
+            }
+
+            images.forEach(function(img) {
+                if (img.complete) {
+                    loadedCount++;
+                    checkAllImagesLoaded();
+                } else {
+                    img.addEventListener('load', function() {
+                        loadedCount++;
+                        checkAllImagesLoaded();
+                    });
+                    img.addEventListener('error', function() {
+                        loadedCount++;
+                        checkAllImagesLoaded();
+                    });
+                }
+            });
+
+            setTimeout(function() {
+                checkAllImagesLoaded();
+            }, 5000);
+        }
+
+        if (btnSavePdfDirect) {
+            btnSavePdfDirect.addEventListener('click', saveInvoicePDFDirect);
+        }
+
+        /**
+         * ============================================================
+         * DOWNLOAD PDF
          * ============================================================
          */
         function downloadPDF() {
@@ -4068,116 +4158,37 @@
                 return;
             }
 
-            // التحقق من وجود معاينة، وإنشاءها إذا لزم الأمر
             var overlay = document.getElementById('printPreviewOverlay');
             if (!overlay.classList.contains('show')) {
                 previewInvoice();
-                // نعطي وقتاً للمعاينة لتظهر ثم ننشئ الـ PDF
                 setTimeout(function() {
                     generatePDFFromPreview();
                 }, 800);
                 return;
             }
 
-            // إذا كانت المعاينة مفتوحة، ننشئ الـ PDF مباشرة
             generatePDFFromPreview();
         }
 
         /**
          * ============================================================
-         * GENERATE PDF FROM PREVIEW - إنشاء PDF باسم العميل تلقائياً
+         * GENERATE PDF FROM PREVIEW
          * ============================================================
          */
         function generatePDFFromPreview() {
             var element = document.getElementById('printPreviewContent');
-            if (!element) {
-                showToast('❌ خطأ', 'لم يتم العثور على محتوى المعاينة', 'error');
-                return;
-            }
-
-            // جلب اسم العميل من الحقل
             var clientNameValue = document.getElementById('clientName').value.trim();
-            var rawClientName = clientNameValue || 'فاتورة';
-
-            // تنظيف الاسم من الأحرف غير المسموح بها في أسماء الملفات
-            var safeClientName = rawClientName.replace(/[\\\/:*?"<>|]/g, '').trim();
-            if (!safeClientName) {
-                safeClientName = 'فاتورة';
-            }
-
-            // جلب رقم الفاتورة
             var invoiceNum = document.getElementById('invoiceNumber').value.trim() || 'invoice';
-
-            // إنشاء اسم الملف: "اسم العميل - رقم الفاتورة.pdf"
-            var fileName = safeClientName + ' - ' + invoiceNum + '.pdf';
-
-            console.log('📄 سيتم حفظ الملف باسم:', fileName);
-
-            // إعدادات html2pdf (تحسين الجودة)
-            var opt = {
-                margin: {
-                    top: 12,
-                    bottom: 12,
-                    left: 12,
-                    right: 12
-                },
-                filename: fileName, // <-- هنا يتم تحديد اسم الملف تلقائياً
-                image: {
-                    type: 'jpeg',
-                    quality: 0.98
-                },
-                html2canvas: {
-                    scale: 2,
-                    useCORS: true,
-                    logging: false,
-                    letterRendering: true,
-                    allowTaint: true,
-                    backgroundColor: '#ffffff',
-                    width: element.scrollWidth,
-                    height: element.scrollHeight
-                },
-                jsPDF: {
-                    unit: 'mm',
-                    format: 'a4',
-                    orientation: 'portrait'
-                },
-                pagebreak: {
-                    mode: ['avoid-all', 'css', 'legacy']
-                }
-            };
 
             showToast('⏳ جاري التحميل', 'جاري إنشاء ملف PDF...', 'warning');
 
-            // تنفيذ التحميل
-            html2pdf()
-                .set(opt)
-                .from(element)
-                .outputPdf('blob')
-                .then(function(blob) {
-                    // إنشاء رابط تحميل (بدلاً من فتح نافذة الطباعة)
-                    var blobUrl = URL.createObjectURL(blob);
-                    var link = document.createElement('a');
-                    link.href = blobUrl;
-                    link.download = fileName; // <-- اسم الملف هنا
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-
-                    // تنظيف الرابط بعد التحميل
-                    setTimeout(function() {
-                        URL.revokeObjectURL(blobUrl);
-                    }, 3000);
-
-                    showToast('✅ تم التحميل', 'تم تحميل ملف PDF بنجاح باسم: ' + fileName, 'success');
-                    // إغلاق المعاينة بعد التحميل
+            generatePDFFromElementDirect(element, clientNameValue, invoiceNum, function(success) {
+                if (success) {
                     setTimeout(function() {
                         closePrintPreview();
                     }, 1500);
-                })
-                .catch(function(error) {
-                    console.error('❌ خطأ في تحميل PDF:', error);
-                    showToast('❌ خطأ', 'فشل في تحميل PDF: ' + error.message, 'error');
-                });
+                }
+            });
         }
 
         /**
@@ -4207,7 +4218,6 @@
             totalAmountDisplay.value = '';
             netAmountDisplay.value = '';
             calculateFinancials();
-            currentQRCode = null;
             showToast('🔄 جديد', 'تم تجهيز فاتورة جديدة', 'warning');
         }
 
@@ -4611,7 +4621,6 @@
             totalAmountDisplay.value = '';
             netAmountDisplay.value = '';
             calculateFinancials();
-            currentQRCode = null;
             showToast('🔄 إلغاء', 'تم تفريغ النموذج بالكامل', 'warning');
         });
 
@@ -4700,7 +4709,7 @@
 
         /**
          * ============================================================
-         * SAVE TO SUPABASE - متوافق مع هيكل الجدول
+         * SAVE TO SUPABASE
          * ============================================================
          */
         async function saveInvoiceToSupabase(invoiceData) {
@@ -4708,15 +4717,7 @@
             btnSaveInvoice.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
 
             try {
-                var warnings = [];
-                var bookingsToSave = invoiceData.bookings.map(function(item, index) {
-                    if (!item.property) {
-                        warnings.push('الحجز ' + (index + 1) + ': نوع العقار فارغ');
-                    }
-                    if (!item.checkIn) {
-                        warnings.push('الحجز ' + (index + 1) + ': تاريخ الدخول فارغ');
-                    }
-
+                var bookingsToSave = invoiceData.bookings.map(function(item) {
                     var booking = {
                         invoice_number: invoiceData.number || null,
                         booking_number: invoiceData.book || null,
@@ -4735,9 +4736,7 @@
                         payment_status: parseFloat(invoiceData.remaining) <= 0 ? 'Fully Paid' : 'Balance Due',
                         stay_type: item.stayType || 'مبيت',
                         check_in_time: item.checkInTime || null,
-                        check_out_time: item.checkOutTime || null,
-                        time_note: item.timeNote || null,
-                        notes: item.notes || null
+                        check_out_time: item.checkOutTime || null
                     };
 
                     Object.keys(booking).forEach(function(key) {
@@ -4769,14 +4768,11 @@
 
                         if (response.ok) {
                             savedCount++;
-                            console.log('✅ تم حفظ الحجز ' + (i + 1));
                         } else {
                             var errorText = await response.text();
-                            console.error('❌ خطأ في الحجز ' + (i + 1) + ':', errorText);
                             errors.push('الحجز ' + (i + 1) + ': ' + response.status + ' - ' + errorText);
                         }
                     } catch (e) {
-                        console.error('❌ خطأ في الحجز ' + (i + 1) + ':', e.message);
                         errors.push('الحجز ' + (i + 1) + ': ' + e.message);
                     }
                 }
@@ -4790,7 +4786,7 @@
                 }
 
                 if (errors.length > 0) {
-                    showToast('⚠️ تم الحفظ جزئياً', 'تم حفظ ' + savedCount + ' من ' + bookingsToSave.length + ' حجوزات\n' + errors.join('\n'), 'warning');
+                    showToast('⚠️ تم الحفظ جزئياً', 'تم حفظ ' + savedCount + ' من ' + bookingsToSave.length + ' حجوزات', 'warning');
                 } else {
                     showToast('✅ تم الحفظ', 'تم حفظ الفاتورة بنجاح في Supabase!', 'success', [
                         { label: 'معاينة', value: 'preview', class: 'btn-yes' },
@@ -4849,9 +4845,8 @@
             console.log('👤 المستخدم:', user.name || 'غير معروف');
             console.log('✅ النظام جاهز للعمل مع Supabase');
             console.log('🎨 تصميم فاتورة راقٍ بطابع محاسبي احترافي');
-            console.log('📁 سيتم حفظ ملفات PDF باسم العميل تلقائياً');
-            console.log('🖨️ زر الطباعة للطباعة الورقية');
-            console.log('📄 زر PDF للتحميل الرقمي فقط');
+            console.log('📁 زر "حفظ PDF" ينزّل الملف مباشرة على الجهاز باسم العميل');
+            console.log('🔧 تم إصلاح جميع مشاكل QR Code و PDF باستخدام html2canvas + jsPDF');
         });
     </script>
 
