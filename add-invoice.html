@@ -23,13 +23,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
     </script>
 
-    <!-- jsPDF library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
-    </script>
-    <!-- html2canvas for PDF generation -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
-    </script>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Marcellus&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -65,6 +58,8 @@
             --header-height: 60px;
             --stripe-height: 4px;
             --mobile-nav-height: 56px;
+
+            /* ===== SCALE DOWN 10% ===== */
             --scale-factor: 0.9;
         }
 
@@ -1530,8 +1525,10 @@
         }
 
         /* ============================================================
-           PRINT PREVIEW STYLES
+           PRINT PREVIEW STYLES — تصميم فاتورة راقٍ لبرنامج محاسبة
            ============================================================ */
+
+        /* --- الإطار العام للفاتورة --- */
         .print-preview-overlay .print-wrapper {
             background: linear-gradient(180deg, #fffefb 0%, #fdfbf5 100%);
             position: relative;
@@ -1546,6 +1543,7 @@
             pointer-events: none;
         }
 
+        /* --- الترويسة --- */
         .print-preview-overlay .print-wrapper .invoice-header {
             display: flex;
             align-items: flex-start;
@@ -1683,6 +1681,7 @@
             font-weight: 600;
         }
 
+        /* --- شارة حالة السداد --- */
         .print-preview-overlay .print-wrapper .status-badge {
             display: inline-flex;
             align-items: center;
@@ -1701,6 +1700,7 @@
             color: var(--rust);
         }
 
+        /* --- شريط بيانات الفاتورة --- */
         .print-preview-overlay .print-wrapper .info-grid {
             display: flex;
             flex-wrap: wrap;
@@ -1740,6 +1740,7 @@
             color: var(--accent-ink);
         }
 
+        /* --- جدول البنود --- */
         .print-preview-overlay .print-wrapper table {
             width: 100%;
             border-collapse: separate;
@@ -1807,6 +1808,7 @@
             font-size: calc(0.58rem * var(--scale-factor));
         }
 
+        /* --- قسم الملخص المالي والتوقيع --- */
         .print-preview-overlay .print-wrapper .invoice-summary {
             display: flex;
             justify-content: space-between;
@@ -1882,6 +1884,7 @@
             font-weight: 800;
         }
 
+        /* --- قسم الملاحظات --- */
         .print-preview-overlay .print-wrapper .notes-section {
             margin-top: calc(22px * var(--scale-factor));
             padding-top: 0;
@@ -1939,6 +1942,7 @@
             line-height: 1;
         }
 
+        /* --- تذييل ختامي --- */
         .print-preview-overlay .print-wrapper .print-brand-footer {
             margin-top: calc(20px * var(--scale-factor));
             padding-top: calc(12px * var(--scale-factor));
@@ -1950,6 +1954,145 @@
         }
         .print-preview-overlay .print-wrapper .print-brand-footer strong {
             color: var(--accent-ink);
+        }
+
+        .print-preview-overlay .print-wrapper .footer,
+        .print-preview-overlay .print-wrapper .print-footer-notes {
+            font-size: calc(0.6rem * var(--scale-factor));
+            color: var(--ink-mute);
+        }
+        .print-preview-overlay .print-wrapper .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: calc(2px * var(--scale-factor)) calc(10px * var(--scale-factor));
+            border-radius: 50px;
+            font-size: calc(0.55rem * var(--scale-factor));
+            font-weight: 700;
+            border: 1px solid transparent;
+        }
+        .print-preview-overlay .print-wrapper .badge-paid {
+            background: var(--teal-soft);
+            color: var(--teal);
+        }
+        .print-preview-overlay .print-wrapper .badge-balance {
+            background: var(--rust-soft);
+            color: var(--rust);
+        }
+        .print-preview-overlay .print-wrapper .badge-type {
+            background: var(--surface-muted);
+            color: var(--ink-mute);
+            border-color: var(--line);
+        }
+        .print-preview-overlay .print-wrapper .badge-future {
+            background: var(--accent-soft);
+            color: var(--accent-ink);
+        }
+
+        /* ============================================================
+           PRINT PREVIEW RESPONSIVE
+           ============================================================ */
+        @media (max-width: 768px) {
+            .print-preview-overlay .print-wrapper {
+                padding: calc(20px * var(--scale-factor)) calc(16px * var(--scale-factor));
+                max-height: 70vh;
+                max-width: 95%;
+            }
+            .print-preview-overlay .print-wrapper .invoice-header {
+                flex-direction: column;
+                text-align: center;
+                gap: calc(14px * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .invoice-header .logo-section {
+                flex-direction: column;
+            }
+            .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box {
+                width: calc(90px * var(--scale-factor));
+                height: calc(90px * var(--scale-factor));
+                min-width: calc(90px * var(--scale-factor));
+                max-width: calc(90px * var(--scale-factor));
+                min-height: calc(90px * var(--scale-factor));
+                max-height: calc(90px * var(--scale-factor));
+                border-radius: calc(14px * var(--scale-factor));
+                padding: calc(6px * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .invoice-title {
+                width: 100%;
+                align-items: center;
+            }
+            .print-preview-overlay .print-wrapper .invoice-title .qr-code {
+                width: calc(60px * var(--scale-factor));
+                height: calc(60px * var(--scale-factor));
+                padding: calc(3px * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .info-grid {
+                flex-direction: column;
+            }
+            .print-preview-overlay .print-wrapper .info-grid .item {
+                border-left: none;
+                border-bottom: 1px dashed var(--line);
+            }
+            .print-preview-overlay .print-wrapper .info-grid .item:last-child {
+                border-bottom: none;
+            }
+            .print-preview-overlay .print-actions button {
+                padding: calc(8px * var(--scale-factor)) calc(16px * var(--scale-factor));
+                font-size: calc(0.75rem * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper table {
+                font-size: calc(0.65rem * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper table th,
+            .print-preview-overlay .print-wrapper table td {
+                padding: calc(5px * var(--scale-factor)) calc(8px * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .invoice-summary {
+                flex-direction: column;
+            }
+            .print-preview-overlay .print-wrapper .summary-box {
+                flex: 0 0 auto;
+                width: 100%;
+            }
+            .print-preview-overlay .print-wrapper .signature {
+                text-align: center;
+            }
+            .print-preview-overlay .print-wrapper .signature .line {
+                margin: calc(4px * var(--scale-factor)) auto 0;
+            }
+            .print-preview-overlay .print-wrapper .notes-section {
+                padding: calc(12px * var(--scale-factor)) calc(14px * var(--scale-factor));
+                margin-top: calc(14px * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .notes-section .notes-title {
+                font-size: calc(0.65rem * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .notes-section .notes-content {
+                font-size: calc(0.55rem * var(--scale-factor));
+                line-height: 1.7;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .print-preview-overlay .print-wrapper {
+                padding: calc(14px * var(--scale-factor)) calc(12px * var(--scale-factor));
+                max-height: 60vh;
+                max-width: 98%;
+                border-radius: calc(8px * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .invoice-header .company-details h2 {
+                font-size: calc(1.1rem * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper table {
+                font-size: calc(0.55rem * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper table th,
+            .print-preview-overlay .print-wrapper table td {
+                padding: calc(4px * var(--scale-factor)) calc(6px * var(--scale-factor));
+            }
+            .print-preview-overlay .print-actions button {
+                padding: calc(6px * var(--scale-factor)) calc(12px * var(--scale-factor));
+                font-size: calc(0.65rem * var(--scale-factor));
+            }
         }
 
         /* ============================================================
@@ -2064,7 +2207,7 @@
         }
 
         /* ============================================================
-           DATE INPUT
+           DATE INPUT - تنسيق DD/MM/YYYY (flatpickr)
            ============================================================ */
         .date-wrapper {
             position: relative;
@@ -2123,6 +2266,9 @@
             color: var(--ink);
         }
 
+        /* ============================================================
+           FIX: ADD BOOKING BUTTON VISIBILITY
+           ============================================================ */
         .btn-add {
             display: inline-flex !important;
             align-items: center !important;
@@ -2166,6 +2312,9 @@
             opacity: 1 !important;
         }
 
+        /* ============================================================
+           تحسين عرض البطاقات في الموبايل
+           ============================================================ */
         @media (max-width: 768px) {
             .booking-card .card-row {
                 display: flex;
@@ -2175,15 +2324,18 @@
                 font-size: calc(0.68rem * var(--scale-factor));
                 border-bottom: 1px solid rgba(0, 0, 0, 0.03);
             }
+
             .booking-card .card-row:last-child {
                 border-bottom: none;
             }
+
             .booking-card .card-label {
                 font-size: calc(0.58rem * var(--scale-factor));
                 color: var(--ink-3);
                 font-weight: 600;
                 flex-shrink: 0;
             }
+
             .booking-card .card-value {
                 font-size: calc(0.68rem * var(--scale-factor));
                 color: var(--ink-2);
@@ -2192,6 +2344,7 @@
                 direction: ltr;
                 unicode-bidi: plaintext;
             }
+
             .booking-card .card-value.gold {
                 color: var(--teal);
                 font-weight: 800;
@@ -2215,19 +2368,25 @@
             text-decoration: none;
             box-shadow: 0 2px 8px rgba(47, 91, 138, 0.2);
         }
+
         .btn-back-dashboard:hover {
             background: #1a4a6b;
             transform: translateY(calc(-2px * var(--scale-factor)));
             box-shadow: 0 6px 20px rgba(47, 91, 138, 0.3);
         }
+
         .btn-back-dashboard i {
             font-size: calc(0.7rem * var(--scale-factor));
         }
 
+        /* ============================================================
+           PRINT MEDIA QUERY - التصميم المحسن بالكامل للطباعة
+           ============================================================ */
         @media print {
             .print-preview-overlay .print-actions {
                 display: none !important;
             }
+
             .print-preview-overlay {
                 background: #ffffff !important;
                 backdrop-filter: none !important;
@@ -2236,6 +2395,7 @@
                 inset: 0 !important;
                 z-index: 99999 !important;
             }
+
             .print-preview-overlay .print-wrapper {
                 max-width: 210mm !important;
                 width: 100% !important;
@@ -2247,6 +2407,7 @@
                 background: #ffffff !important;
                 overflow: visible !important;
             }
+
             .print-preview-overlay .print-wrapper * {
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
@@ -2254,112 +2415,29 @@
         }
 
         /* ============================================================
-           PDF GENERATION CONTAINER
+           OFFSCREEN PDF WRAPPER - عنصر مخفي لتوليد PDF بدون معاينة
            ============================================================ */
-        #pdfTempContainer {
-            position: fixed;
-            top: -9999px;
-            left: -9999px;
-            width: 210mm;
-            min-height: 297mm;
-            padding: 10mm 12mm;
-            background: #ffffff;
-            z-index: -1;
-            opacity: 0;
-            pointer-events: none;
-            overflow: visible;
-            font-family: 'Cairo', 'Segoe UI', Arial, sans-serif;
-            direction: rtl;
-            box-sizing: border-box;
-        }
-
-        #pdfTempContainer .print-wrapper {
-            max-width: 180mm;
-            margin: 0 auto;
-            background: #ffffff;
-            padding: 0;
-            font-family: 'Cairo', Arial, sans-serif;
-            direction: rtl;
-            color: #121821;
-        }
-
-        /* ============================================================
-           INVOICE PREVIEW CONTAINER - للعرض فقط
-           ============================================================ */
-        #invoicePreviewContainer {
-            display: none;
+        #pdfOffscreenOverlay {
+            display: block;
             position: fixed;
             top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 9999;
-            overflow: auto;
-            padding: 20px;
+            left: -5000px;
+            width: 210mm;
+            height: auto;
+            padding: 0;
+            margin: 0;
+            background: transparent;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0;
         }
-
-        #invoicePreviewContainer.show {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #invoicePreviewContainer .preview-content {
-            background: #ffffff;
-            max-width: 210mm;
-            width: 100%;
+        #pdfOffscreenOverlay .print-wrapper {
+            max-width: none;
+            width: 210mm;
+            max-height: none;
+            overflow: visible;
             padding: 12mm 15mm;
-            border-radius: 8px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        #invoicePreviewContainer .preview-actions {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-
-        #invoicePreviewContainer .preview-actions button {
-            padding: 10px 28px;
-            border-radius: 50px;
-            border: none;
-            font-weight: 800;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: 0.25s;
-            font-family: var(--font-display);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        #invoicePreviewContainer .preview-actions .btn-print-preview {
-            background: var(--accent);
-            color: var(--accent-ink);
-        }
-        #invoicePreviewContainer .preview-actions .btn-print-preview:hover {
-            background: var(--accent-ink);
-            color: #fff;
-        }
-        #invoicePreviewContainer .preview-actions .btn-pdf-preview {
-            background: var(--blue);
-            color: #ffffff;
-        }
-        #invoicePreviewContainer .preview-actions .btn-pdf-preview:hover {
-            background: #1a4a6b;
-        }
-        #invoicePreviewContainer .preview-actions .btn-close-preview {
-            background: var(--rust-soft);
-            color: var(--rust);
-        }
-        #invoicePreviewContainer .preview-actions .btn-close-preview:hover {
-            background: var(--rust);
-            color: #fff;
+            box-shadow: none;
         }
     </style>
 </head>
@@ -2434,11 +2512,36 @@
         <!-- Mobile Navigation Bottom -->
         <nav class="mobile-nav-bottom" id="mobileNavBottom">
             <ul>
-                <li><a href="index.html"><i class="fas fa-home"></i><span>الرئيسية</span></a></li>
-                <li class="active"><a href="add-invoice.html"><i class="fas fa-file-invoice"></i><span>فاتورة</span></a></li>
-                <li><a href="bookings.html"><i class="fas fa-list"></i><span>الحجوزات</span></a></li>
-                <li><a href="clients.html"><i class="fas fa-users"></i><span>العملاء</span></a></li>
-                <li><a href="properties.html"><i class="fas fa-building"></i><span>العقارات</span></a></li>
+                <li>
+                    <a href="index.html">
+                        <i class="fas fa-home"></i>
+                        <span>الرئيسية</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="add-invoice.html">
+                        <i class="fas fa-file-invoice"></i>
+                        <span>فاتورة</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="bookings.html">
+                        <i class="fas fa-list"></i>
+                        <span>الحجوزات</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="clients.html">
+                        <i class="fas fa-users"></i>
+                        <span>العملاء</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="properties.html">
+                        <i class="fas fa-building"></i>
+                        <span>العقارات</span>
+                    </a>
+                </li>
             </ul>
         </nav>
 
@@ -2446,36 +2549,41 @@
         <div class="toast-container" id="toastContainer"></div>
 
         <!-- ============================================================
-        INVOICE PREVIEW CONTAINER
+        SYSTEM PRINT PREVIEW OVERLAY
         ============================================================ -->
-        <div id="invoicePreviewContainer">
-            <div class="preview-content" id="invoicePreviewContent">
+        <div class="print-preview-overlay" id="printPreviewOverlay">
+            <div class="print-wrapper" id="printPreviewContent">
                 <!-- سيتم تعبئته بواسطة JavaScript -->
             </div>
-            <div class="preview-actions">
-                <button class="btn-print-preview" onclick="printPreviewInvoice()">
+            <div class="print-actions">
+                <button class="btn-print" onclick="executePrint()">
                     <i class="fas fa-print"></i> طباعة
                 </button>
-                <button class="btn-pdf-preview" onclick="downloadPreviewPDF()">
-                    <i class="fas fa-file-pdf"></i> تحميل PDF
+                <button class="btn-pdf" onclick="downloadPDF()">
+                    <i class="fas fa-file-pdf"></i> PDF
                 </button>
-                <button class="btn-close-preview" onclick="closeInvoicePreview()">
+                <button class="btn-close-preview" onclick="closePrintPreview()">
                     <i class="fas fa-times"></i> إغلاق
                 </button>
             </div>
         </div>
 
         <!-- ============================================================
-        PDF TEMP CONTAINER
+        OFFSCREEN PDF CONTAINER — مخفي تماماً، لا يظهر للمستخدم أبداً
+        يُستخدم فقط لتوليد PDF مباشرة عند الضغط على "حفظ PDF"
         ============================================================ -->
-        <div id="pdfTempContainer" aria-hidden="true"></div>
+        <div id="pdfOffscreenOverlay" aria-hidden="true">
+            <div class="print-wrapper" id="pdfHiddenWrapper"></div>
+        </div>
 
         <!-- ============================================================
         MAIN CONTENT
         ============================================================ -->
         <div class="main-content">
 
-            <!-- RIGHT PANEL -->
+            <!-- ============================================================
+            RIGHT PANEL - INPUT FORM
+            ============================================================ -->
             <div class="right-panel">
                 <div class="form-card">
 
@@ -2497,6 +2605,7 @@
                         <span class="dot"></span> بيانات الفاتورة
                     </div>
 
+                    <!-- Invoice Numbers -->
                     <div class="form-row invoice-numbers">
                         <div class="form-group">
                             <label>رقم الفاتورة <span class="auto-badge">آلي</span></label>
@@ -2515,6 +2624,7 @@
                         </div>
                     </div>
 
+                    <!-- Client -->
                     <div class="form-row client-row">
                         <div class="form-group client-suggestions">
                             <label>اسم العميل <span class="required">*</span></label>
@@ -2532,6 +2642,7 @@
                         <span class="dot"></span> تفاصيل الحجز
                     </div>
 
+                    <!-- Booking Row -->
                     <div class="form-row booking-row">
                         <div class="form-group">
                             <label>نوع العقار <span class="required">*</span></label>
@@ -2545,6 +2656,7 @@
                         </div>
                     </div>
 
+                    <!-- Dates -->
                     <div class="form-row small-fields">
                         <div class="form-group">
                             <label>تاريخ الدخول <span class="required">*</span></label>
@@ -2576,6 +2688,7 @@
                         </div>
                     </div>
 
+                    <!-- Times -->
                     <div class="form-row small-fields">
                         <div class="form-group">
                             <label>وقت الدخول</label>
@@ -2592,6 +2705,7 @@
                         <span class="dot"></span> التفاصيل المالية
                     </div>
 
+                    <!-- Financial Row -->
                     <div class="form-row financial-row">
                         <div class="form-group">
                             <label>الخصم</label>
@@ -2624,6 +2738,7 @@
 
                     <div class="divider"></div>
 
+                    <!-- Action Buttons -->
                     <div class="btn-actions-row">
                         <button class="btn-add" id="btnAddBooking">
                             <i class="fas fa-plus"></i> إضافة حجز
@@ -2636,15 +2751,19 @@
                 </div>
             </div>
 
-            <!-- LEFT PANEL -->
+            <!-- ============================================================
+            LEFT PANEL - BOOKINGS TABLE
+            ============================================================ -->
             <div class="left-panel">
                 <div class="table-card">
 
+                    <!-- Section Title -->
                     <div class="section-title">
                         <span class="dot"></span> الحجوزات المضافة
                         <span class="count-badge" id="itemsCount">0 حجز</span>
                     </div>
 
+                    <!-- Items Table -->
                     <div class="items-table-wrapper">
                         <div class="table-scroll">
                             <table>
@@ -2673,8 +2792,10 @@
                         </div>
                     </div>
 
+                    <!-- Bottom Bar -->
                     <div class="bottom-bar">
 
+                        <!-- Totals Section -->
                         <div class="totals-section">
                             <div class="total-item">
                                 <div class="label">الإجمالي</div>
@@ -2694,6 +2815,7 @@
                             </div>
                         </div>
 
+                        <!-- Form Actions -->
                         <div class="form-actions">
                             <button class="btn-save" id="btnSaveInvoice">
                                 <i class="fas fa-save"></i> حفظ
@@ -2729,6 +2851,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/l10n/ar.js">
     </script>
 
+    <!-- html2pdf library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js">
+    </script>
+
     <!-- ============================================================
     JAVASCRIPT
     ============================================================ -->
@@ -2747,6 +2873,55 @@
          * ============================================================
          */
         var user = window.currentUser || JSON.parse(localStorage.getItem('user') || '{}');
+
+        /**
+         * ============================================================
+         * MOBILE NAVIGATION
+         * ============================================================
+         */
+        var navToggle = document.getElementById('navToggle');
+        var mobileMenu = document.getElementById('mobileMenu');
+        var mobileOverlay = document.getElementById('mobileOverlay');
+        var closeMenu = document.getElementById('closeMenu');
+
+        function openMenu() {
+            mobileMenu.classList.add('open');
+            mobileOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            navToggle.innerHTML = '<i class="fas fa-times"></i>';
+            navToggle.classList.add('open');
+        }
+
+        function closeMenuFn() {
+            mobileMenu.classList.remove('open');
+            mobileOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+            navToggle.innerHTML = '<i class="fas fa-bars"></i>';
+            navToggle.classList.remove('open');
+        }
+
+        navToggle.addEventListener('click', function() {
+            if (mobileMenu.classList.contains('open')) {
+                closeMenuFn();
+            } else {
+                openMenu();
+            }
+        });
+
+        closeMenu.addEventListener('click', closeMenuFn);
+        mobileOverlay.addEventListener('click', closeMenuFn);
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
+                closeMenuFn();
+            }
+        });
+
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768 && mobileMenu.classList.contains('open')) {
+                closeMenuFn();
+            }
+        });
 
         /**
          * ============================================================
@@ -2798,9 +2973,10 @@
         var selectedClientId = null;
         var selectedSuggestionIndex = -1;
         var propertiesList = [];
+        var currentQRCode = null;
 
         var settings = {
-            companyName: 'منتجع وشاليهات حياله القصيم',
+            companyName: 'منتجع وشاليهات حياله القصيم ',
             companyAddress: 'القصيم / بريدة - حي الخليج',
             companyPhone: '0509982400',
             companyEmail: 'info@hayala-resort.com',
@@ -2808,55 +2984,6 @@
             companyLogo: 'https://raw.githubusercontent.com/gfwwgh43hfew2-source/Hayala-Resort/main/ChatGPT%20Image%2030%20%D9%8A%D9%88%D9%84%D9%8A%D9%88%202026%D8%8C%2012_39_00%20%D9%85.png',
             invoiceFooter: 'شكراً لثقتكم بنا - منتجع حياله'
         };
-
-        /**
-         * ============================================================
-         * MOBILE NAVIGATION
-         * ============================================================
-         */
-        var navToggle = document.getElementById('navToggle');
-        var mobileMenu = document.getElementById('mobileMenu');
-        var mobileOverlay = document.getElementById('mobileOverlay');
-        var closeMenu = document.getElementById('closeMenu');
-
-        function openMenu() {
-            mobileMenu.classList.add('open');
-            mobileOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            navToggle.innerHTML = '<i class="fas fa-times"></i>';
-            navToggle.classList.add('open');
-        }
-
-        function closeMenuFn() {
-            mobileMenu.classList.remove('open');
-            mobileOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-            navToggle.innerHTML = '<i class="fas fa-bars"></i>';
-            navToggle.classList.remove('open');
-        }
-
-        navToggle.addEventListener('click', function() {
-            if (mobileMenu.classList.contains('open')) {
-                closeMenuFn();
-            } else {
-                openMenu();
-            }
-        });
-
-        closeMenu.addEventListener('click', closeMenuFn);
-        mobileOverlay.addEventListener('click', closeMenuFn);
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
-                closeMenuFn();
-            }
-        });
-
-        window.addEventListener('resize', function() {
-            if (window.innerWidth > 768 && mobileMenu.classList.contains('open')) {
-                closeMenuFn();
-            }
-        });
 
         /**
          * ============================================================
@@ -3316,10 +3443,11 @@
 
         /**
          * ============================================================
-         * GENERATE QR CODE
+         * GENERATE QR CODE - حجم مصغر 72px (مبسّط لتجنب overflow)
+         * containerId: معرّف العنصر المستهدف (يدعم أكثر من حاوية QR)
          * ============================================================
          */
-        function generateQRCode(invoiceNumberVal, containerId) {
+        function generateQRCode(invoiceNumberVal, client, total, containerId) {
             containerId = containerId || 'qrCodeContainer';
             var qrContainer = document.getElementById(containerId);
             if (!qrContainer) {
@@ -3329,11 +3457,15 @@
 
             qrContainer.innerHTML = '';
 
+            // استخدام بيانات مختصرة جداً لتجنب overflow
             var qrText = 'INV:' + (invoiceNumberVal || '----');
+
+            // التأكد من أن النص لا يتجاوز الحد المسموح (1440 حرف)
             if (qrText.length > 200) {
                 qrText = qrText.substring(0, 200);
             }
 
+            // محاولة استخدام المكتبة الداخلية أولاً
             try {
                 if (typeof QRCode !== 'undefined') {
                     var qr = new QRCode(qrContainer, {
@@ -3342,17 +3474,36 @@
                         height: 72,
                         colorDark: '#121821',
                         colorLight: '#ffffff',
-                        correctLevel: QRCode.CorrectLevel.M
+                        correctLevel: QRCode.CorrectLevel.M // استخدام مستوى متوسط لتقليل الحجم
                     });
-                    console.log('✅ تم إنشاء QR Code في', containerId);
+                    currentQRCode = qr;
+                    console.log('✅ تم إنشاء QR Code مصغر (72px) بنجاح في', containerId);
                     return;
                 }
             } catch (error) {
-                console.warn('⚠️ فشل إنشاء QR Code:', error.message);
+                console.warn('⚠️ فشل إنشاء QR Code داخلياً، استخدام API خارجي:', error.message);
             }
 
-            // استخدام API خارجي
+            // استخدام API خارجي كحل بديل
+            generateQRCodeExternal(invoiceNumberVal, client, total, containerId);
+        }
+
+        /**
+         * ============================================================
+         * GENERATE QR CODE - API خارجي (حجم 72px)
+         * ============================================================
+         */
+        function generateQRCodeExternal(invoiceNumberVal, client, total, containerId) {
+            containerId = containerId || 'qrCodeContainer';
+            var qrContainer = document.getElementById(containerId);
+            if (!qrContainer) return;
+
+            qrContainer.innerHTML = '';
+
+            // استخدام بيانات مختصرة جداً
+            var qrText = 'INV:' + (invoiceNumberVal || '----');
             var encodedText = encodeURIComponent(qrText);
+
             var qrImageUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=72x72&data=' + encodedText +
                 '&bgcolor=ffffff&color=121821&margin=4';
 
@@ -3366,10 +3517,14 @@
             img.onerror = function() {
                 qrContainer.innerHTML = `
                             <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;background:#f8f9fa;border-radius:4px;">
-                                <i class="fas fa-qrcode" style="font-size:1.5rem;color:#dd9f2e;"></i>
-                                <span style="font-size:0.4rem;color:#6d7883;">${invoiceNumberVal || ''}</span>
+                                <i class="fas fa-qrcode" style="font-size:1.5rem;color:var(--accent);"></i>
+                                <span style="font-size:0.4rem;color:var(--ink-mute);">${invoiceNumberVal || ''}</span>
                             </div>
                         `;
+            };
+
+            img.onload = function() {
+                console.log('✅ تم إنشاء QR Code مصغر بواسطة API خارجي في', containerId);
             };
 
             qrContainer.appendChild(img);
@@ -3377,7 +3532,9 @@
 
         /**
          * ============================================================
-         * BUILD INVOICE HTML
+         * BUILD INVOICE HTML — دالة موحّدة تبني قالب الفاتورة
+         * تُستخدم في المعاينة العادية وفي التوليد المخفي لـ PDF معاً
+         * qrContainerId: معرّف حاوية الـ QR الفريدة لكل استخدام
          * ============================================================
          */
         function buildInvoiceHTML(client, phone, invNum, book, date, total, discount, paid, remaining, isPaidFull, qrContainerId) {
@@ -3446,7 +3603,7 @@
                 html += `
                     <tr class="data-row">
                         <td>${index + 1}</td>
-                        <td style="text-align:right;font-weight:600;color:#121821;">${item.property}</td>
+                        <td style="text-align:right;font-weight:600;color:var(--ink);">${item.property}</td>
                         <td>${item.nights}</td>
                         <td>${item.dailyPrice.toFixed(2)}</td>
                         <td class="row-total">${item.total.toFixed(2)} ر.س</td>
@@ -3506,7 +3663,8 @@
 
         /**
          * ============================================================
-         * PREVIEW INVOICE
+         * PREVIEW INVOICE - تصميم راقٍ لفاتورة برنامج محاسبة
+         * (نفس البيانات تماماً — تستخدم buildInvoiceHTML المشتركة)
          * ============================================================
          */
         function previewInvoice() {
@@ -3526,85 +3684,454 @@
             var remaining = displayRemaining.textContent;
             var isPaidFull = (parseFloat(remaining) || 0) <= 0;
 
-            var previewContent = document.getElementById('invoicePreviewContent');
-            previewContent.innerHTML = buildInvoiceHTML(client, phone, invNum, book, date, total, discount, paid, remaining, isPaidFull, 'previewQrCode');
-
-            document.getElementById('invoicePreviewContainer').classList.add('show');
+            var printContent = document.getElementById('printPreviewContent');
+            printContent.innerHTML = buildInvoiceHTML(client, phone, invNum, book, date, total, discount, paid, remaining, isPaidFull, 'qrCodeContainer');
 
             setTimeout(function() {
-                generateQRCode(invNum, 'previewQrCode');
-            }, 300);
+                generateQRCode(invNum, client, total, 'qrCodeContainer');
+            }, 200);
+
+            document.getElementById('printPreviewOverlay').classList.add('show');
         }
 
         /**
          * ============================================================
-         * CLOSE INVOICE PREVIEW
+         * CLOSE PRINT PREVIEW
          * ============================================================
          */
-        function closeInvoicePreview() {
-            document.getElementById('invoicePreviewContainer').classList.remove('show');
+        function closePrintPreview() {
+            document.getElementById('printPreviewOverlay').classList.remove('show');
         }
 
         /**
          * ============================================================
-         * PRINT PREVIEW INVOICE
+         * EXECUTE PRINT - طباعة عبر نافذة المتصفح
          * ============================================================
          */
-        function printPreviewInvoice() {
-            var content = document.getElementById('invoicePreviewContent').innerHTML;
-            var printWindow = window.open('', '_blank', 'width=800,height=600');
-            if (!printWindow) {
-                showToast('❌ خطأ', 'الرجاء السماح بالنوافذ المنبثقة', 'error');
+        function executePrint() {
+            var overlay = document.getElementById('printPreviewOverlay');
+            if (!overlay.classList.contains('show')) {
+                previewInvoice();
+                setTimeout(function() {
+                    openPrintWindow();
+                }, 600);
                 return;
             }
-            printWindow.document.write(`
+            openPrintWindow();
+        }
+
+        /**
+         * ============================================================
+         * OPEN PRINT WINDOW - عبر iframe مخفي
+         * ============================================================
+         */
+        function openPrintWindow() {
+            var content = document.getElementById('printPreviewContent').innerHTML;
+
+            var oldFrame = document.getElementById('printFrame');
+            if (oldFrame) {
+                oldFrame.remove();
+            }
+
+            var iframe = document.createElement('iframe');
+            iframe.id = 'printFrame';
+            iframe.style.position = 'fixed';
+            iframe.style.right = '0';
+            iframe.style.bottom = '0';
+            iframe.style.width = '0';
+            iframe.style.height = '0';
+            iframe.style.border = '0';
+            iframe.style.visibility = 'hidden';
+            document.body.appendChild(iframe);
+
+            var doc = iframe.contentWindow.document;
+            doc.open();
+            doc.write(`
                 <!DOCTYPE html>
                 <html dir="rtl">
                 <head>
                     <meta charset="UTF-8">
-                    <title>فاتورة ${invoiceNumber.value || ''}</title>
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>فاتورة ${invoiceNumber.value || ''} - ${settings.companyName || 'منتجع حياله'}</title>
                     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Marcellus&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
                     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
                     <style>
-                        ${document.querySelector('style').innerHTML}
-                        body { background: #ffffff; padding: 20px; }
-                        .print-wrapper { max-width: 210mm; margin: 0 auto; }
-                        .print-preview-overlay .print-actions { display: none !important; }
+                        :root {
+                            --ink: #121821;
+                            --ink-soft: #2c3644;
+                            --ink-mute: #6d7883;
+                            --line: #dde3e0;
+                            --line-strong: #c7d0cc;
+                            --accent: #dd9f2e;
+                            --accent-ink: #7a5312;
+                            --accent-soft: #faead0;
+                            --teal: #1d7b6c;
+                            --teal-soft: #e2f2ee;
+                            --rust: #bf4f30;
+                            --rust-soft: #fbe8e1;
+                            --surface-muted: #f4f6f5;
+                            --font-display: 'Cairo', 'Segoe UI', Tahoma, Arial, sans-serif;
+                            --font-serif: 'Marcellus', 'Cairo', serif;
+                            --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+                        }
+                        * { box-sizing: border-box; }
+                        body {
+                            background: #ffffff !important;
+                            padding: 0 !important;
+                            margin: 0 !important;
+                            font-family: var(--font-display) !important;
+                            direction: rtl;
+                            color: var(--ink);
+                        }
+                        ::-webkit-scrollbar { display: none !important; }
+
+                        .print-wrapper {
+                            max-width: 210mm !important;
+                            margin: 0 auto !important;
+                            background: linear-gradient(180deg, #fffefb 0%, #fdfbf5 100%) !important;
+                            padding: 12mm 15mm !important;
+                            min-height: 100vh !important;
+                            box-sizing: border-box !important;
+                            border: 1px solid var(--accent);
+                            position: relative;
+                            display: flex;
+                            flex-direction: column;
+                        }
+
+                        .invoice-header {
+                            display: flex !important;
+                            align-items: flex-start !important;
+                            justify-content: space-between !important;
+                            flex-direction: row !important;
+                            padding-bottom: 18px !important;
+                            margin-bottom: 20px !important;
+                            gap: 15px !important;
+                            border-bottom: none !important;
+                            position: relative;
+                        }
+                        .invoice-header::after {
+                            content: '';
+                            position: absolute;
+                            left: 0; right: 0; bottom: 0;
+                            height: 3px;
+                            background: linear-gradient(90deg, var(--accent) 0%, var(--accent) 55%, transparent 100%);
+                        }
+                        .invoice-header .logo-section {
+                            display: flex !important;
+                            align-items: center !important;
+                            gap: 15px !important;
+                        }
+                        .invoice-header .logo-section .logo-box {
+                            width: 100px !important;
+                            height: 100px !important;
+                            min-width: 100px !important;
+                            border-radius: 16px !important;
+                            overflow: hidden !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: center !important;
+                            background: #ffffff !important;
+                            padding: 8px !important;
+                            border: 1px solid var(--line) !important;
+                            box-shadow: 0 6px 18px -8px rgba(18,24,33,0.18);
+                        }
+                        .invoice-header .logo-section .logo-box img {
+                            width: 100% !important;
+                            height: 100% !important;
+                            object-fit: contain !important;
+                            display: block !important;
+                            margin: 0 auto !important;
+                        }
+                        .invoice-header .company-details .eyebrow {
+                            display: inline-block;
+                            font-size: 9px !important;
+                            letter-spacing: 1.4px;
+                            color: var(--accent-ink) !important;
+                            font-weight: 800 !important;
+                            text-transform: uppercase;
+                            margin-bottom: 4px;
+                        }
+                        .invoice-header .company-details h2 {
+                            font-family: var(--font-serif) !important;
+                            font-size: 20px !important;
+                            font-weight: 700 !important;
+                            color: var(--ink) !important;
+                            margin-bottom: 7px !important;
+                        }
+                        .invoice-header .company-details .header-rule {
+                            width: 46px; height: 3px;
+                            background: var(--accent);
+                            border-radius: 3px;
+                            margin-bottom: 9px;
+                        }
+                        .invoice-header .company-details p {
+                            font-size: 10.5px !important;
+                            color: var(--ink-mute) !important;
+                            line-height: 1.7 !important;
+                        }
+                        .invoice-header .company-details p i { width: 13px; color: var(--accent-ink); text-align: center; }
+
+                        .invoice-title {
+                            display: flex !important;
+                            flex-direction: column !important;
+                            align-items: center !important;
+                            min-width: 140px !important;
+                            background: #ffffff !important;
+                            padding: 10px 16px !important;
+                            border-radius: 12px !important;
+                            border: 1px solid var(--accent) !important;
+                            gap: 7px !important;
+                        }
+                        .invoice-title .invoice-title-label {
+                            font-size: 9px !important;
+                            font-weight: 800 !important;
+                            letter-spacing: 1.2px;
+                            color: var(--accent-ink) !important;
+                            text-transform: uppercase;
+                            background: var(--accent-soft) !important;
+                            padding: 3px 12px !important;
+                            border-radius: 50px !important;
+                        }
+                        .invoice-title .invoice-title-number {
+                            font-family: var(--font-mono) !important;
+                            font-size: 12px !important;
+                            font-weight: 700 !important;
+                            color: var(--ink) !important;
+                        }
+                        .invoice-title .qr-code {
+                            width: 72px !important;
+                            height: 72px !important;
+                            padding: 4px !important;
+                            border: 1px dashed var(--line-strong) !important;
+                            background: #ffffff !important;
+                            border-radius: 8px !important;
+                        }
+                        .invoice-title .qr-code canvas,
+                        .invoice-title .qr-code img {
+                            width: 100% !important;
+                            height: 100% !important;
+                        }
+                        .invoice-title .qr-label {
+                            font-size: 8px !important;
+                            color: var(--ink-mute) !important;
+                            text-align: center !important;
+                        }
+
+                        .status-badge {
+                            display: inline-flex; align-items: center; gap: 5px;
+                            padding: 3px 12px; border-radius: 50px;
+                            font-size: 9px; font-weight: 800;
+                        }
+                        .status-badge.paid { background: var(--teal-soft) !important; color: var(--teal) !important; }
+                        .status-badge.due { background: var(--rust-soft) !important; color: var(--rust) !important; }
+
+                        .info-grid {
+                            display: flex !important;
+                            flex-wrap: wrap !important;
+                            margin-bottom: 16px !important;
+                            background: #ffffff !important;
+                            border-radius: 8px !important;
+                            border: 1px solid var(--line) !important;
+                            overflow: hidden !important;
+                        }
+                        .info-grid .item {
+                            flex: 1;
+                            min-width: 95px;
+                            padding: 10px 12px !important;
+                            border-left: 1px dashed var(--line) !important;
+                        }
+                        .info-grid .item:last-child { border-left: none !important; }
+                        .info-grid .item.highlight { background: var(--accent-soft) !important; }
+                        .info-grid .item .label {
+                            font-size: 8.5px !important; color: var(--ink-mute) !important; font-weight: 700 !important;
+                            letter-spacing: 0.4px; text-transform: uppercase; display: block; margin-bottom: 4px;
+                        }
+                        .info-grid .item .value { font-size: 13px !important; font-weight: 700 !important; color: var(--ink) !important; }
+                        .info-grid .item.highlight .value { color: var(--accent-ink) !important; }
+
+                        table {
+                            width: 100% !important;
+                            border-collapse: separate !important;
+                            border-spacing: 0 !important;
+                            font-size: 12px !important;
+                            margin-bottom: 4px !important;
+                            border-radius: 8px !important;
+                            overflow: hidden !important;
+                            border: 1px solid var(--line) !important;
+                        }
+                        table th {
+                            background: var(--ink) !important;
+                            color: #ffffff !important;
+                            padding: 10px 12px !important;
+                            text-align: center !important;
+                            font-size: 10px !important;
+                            font-weight: 700 !important;
+                            border-bottom: 2px solid var(--accent) !important;
+                        }
+                        table td {
+                            padding: 9px 12px !important;
+                            border-bottom: 1px solid var(--line) !important;
+                            color: var(--ink-soft) !important;
+                            text-align: center !important;
+                            font-size: 11px !important;
+                            background: #ffffff !important;
+                        }
+                        table tbody tr.data-row:nth-of-type(4n+1) td { background: #fbfaf6 !important; }
+                        table tbody tr:last-child td { border-bottom: none !important; }
+                        table .row-total { font-weight: 800 !important; color: var(--accent-ink) !important; font-family: var(--font-mono) !important; }
+                        table .stay-meta-row td {
+                            text-align: right !important;
+                            font-size: 9.5px !important;
+                            color: var(--ink-mute) !important;
+                            padding: 6px 14px !important;
+                            background: var(--surface-muted) !important;
+                            border-bottom: 1px solid var(--line) !important;
+                        }
+                        table .stay-meta-row .meta-piece { margin-left: 16px; display: inline-flex; align-items: center; gap: 5px; }
+                        table .stay-meta-row i.in { color: var(--teal) !important; }
+                        table .stay-meta-row i.out { color: var(--rust) !important; }
+                        table .stay-meta-row .stay-chip {
+                            background: var(--accent-soft) !important; color: var(--accent-ink) !important;
+                            padding: 1px 9px !important; border-radius: 4px !important; font-weight: 700 !important; font-size: 9px !important;
+                        }
+
+                        .invoice-summary {
+                            display: flex !important;
+                            justify-content: space-between !important;
+                            align-items: flex-start !important;
+                            flex-direction: row !important;
+                            gap: 20px !important;
+                            margin-top: 18px !important;
+                            padding-top: 14px !important;
+                            border-top: 1px dashed var(--line-strong) !important;
+                        }
+                        .summary-notes { flex: 1; min-width: 0; }
+                        .summary-notes .thanks { font-family: var(--font-serif) !important; font-size: 13px !important; color: var(--ink-soft) !important; margin-bottom: 16px !important; }
+                        .signature .sig-label { font-size: 10px !important; color: var(--ink-mute) !important; font-weight: 700 !important; margin-bottom: 22px !important; }
+                        .signature .line { width: 130px !important; border-bottom: 1.5px solid var(--line-strong) !important; }
+                        .signature .sig-caption { font-size: 9px !important; color: var(--ink-mute) !important; margin-top: 5px !important; }
+
+                        .summary-box {
+                            flex: 0 0 240px !important;
+                            border: 1px solid var(--accent) !important;
+                            border-radius: 8px !important;
+                            overflow: hidden !important;
+                            background: #ffffff !important;
+                        }
+                        .summary-row {
+                            display: flex !important; justify-content: space-between !important; align-items: center !important;
+                            padding: 7px 14px !important; font-size: 11px !important; color: var(--ink-soft) !important;
+                            border-bottom: 1px dashed var(--line) !important;
+                        }
+                        .summary-row span:last-child { font-family: var(--font-mono) !important; font-weight: 700 !important; color: var(--ink) !important; }
+                        .summary-row.discount span:last-child { color: var(--rust) !important; }
+                        .summary-row.net { background: var(--ink) !important; border-bottom: none !important; padding: 11px 14px !important; }
+                        .summary-row.net span:first-child { color: rgba(255,255,255,0.75) !important; font-weight: 700 !important; font-size: 10.5px !important; }
+                        .summary-row.net span:last-child { color: var(--accent) !important; font-size: 15px !important; font-weight: 800 !important; }
+
+                        .notes-section {
+                            margin-top: 18px !important;
+                            background: var(--surface-muted) !important;
+                            border-radius: 8px !important;
+                            border-top: none !important;
+                            border-right: 4px solid var(--accent) !important;
+                            padding: 14px 16px !important;
+                            page-break-inside: avoid !important;
+                        }
+                        .notes-section .notes-title {
+                            font-size: 11px !important; font-weight: 800 !important; color: var(--ink) !important;
+                            display: flex !important; align-items: center !important; gap: 8px !important; margin-bottom: 9px !important;
+                        }
+                        .notes-section .notes-title i { color: var(--accent-ink) !important; font-size: 12px !important; }
+                        .notes-section .notes-content {
+                            font-size: 9.5px !important; color: var(--ink-soft) !important; line-height: 1.8 !important;
+                            display: grid !important; gap: 4px !important; counter-reset: note-counter;
+                        }
+                        .notes-section .notes-content p {
+                            margin-bottom: 0 !important; position: relative !important; padding-right: 20px !important;
+                            counter-increment: note-counter;
+                        }
+                        .notes-section .notes-content p::before {
+                            content: counter(note-counter);
+                            position: absolute; right: 0; top: 0;
+                            width: 14px; height: 14px; background: var(--accent) !important; color: #fff !important;
+                            border-radius: 50%; font-size: 8px; font-weight: 800;
+                            display: flex; align-items: center; justify-content: center; line-height: 1;
+                        }
+
+                        .print-brand-footer {
+                            margin-top: 16px !important;
+                            padding-top: 10px !important;
+                            border-top: 1px solid var(--line) !important;
+                            text-align: center !important;
+                            font-size: 9px !important;
+                            color: var(--ink-mute) !important;
+                        }
+                        .print-brand-footer strong { color: var(--accent-ink) !important; }
+
+                        table tbody tr { page-break-inside: avoid !important; break-inside: avoid !important; }
+                        .invoice-summary { page-break-inside: avoid !important; break-inside: avoid !important; }
+
                         * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+                        @page { size: A4; margin: 0; }
                     </style>
                 </head>
                 <body>
                     <div class="print-wrapper">${content}</div>
-                    <script>
-                        window.onload = function() { window.print(); window.close(); };
-                    <\/script>
                 </body>
                 </html>
             `);
-            printWindow.document.close();
+            doc.close();
+
+            setTimeout(function() {
+                try {
+                    iframe.contentWindow.focus();
+                    iframe.contentWindow.print();
+                } catch (e) {
+                    console.error('❌ خطأ أثناء تنفيذ الطباعة:', e);
+                    showToast('❌ خطأ', 'حدث خطأ أثناء تجهيز الطباعة', 'error');
+                }
+                setTimeout(function() {
+                    if (iframe && iframe.parentNode) {
+                        iframe.remove();
+                    }
+                }, 1000);
+            }, 600);
+
+            closePrintPreview();
         }
 
         /**
          * ============================================================
-         * DOWNLOAD PREVIEW PDF
+         * GENERATE PDF FROM ELEMENT — دالة موحّدة لالتقاط أي عنصر وتحويله PDF
+         * وتنزيله فوراً باسم "اسم العميل - رقم الفاتورة.pdf"
          * ============================================================
          */
-        function downloadPreviewPDF() {
-            var clientNameValue = document.getElementById('clientName').value.trim() || 'فاتورة';
-            var invoiceNum = document.getElementById('invoiceNumber').value.trim() || 'invoice';
-            var element = document.getElementById('invoicePreviewContent');
+        function generatePDFFromElement(element, clientNameValue, invoiceNum, onDone) {
+            if (!element) {
+                showToast('❌ خطأ', 'لم يتم العثور على محتوى الفاتورة', 'error');
+                if (onDone) onDone(false);
+                return;
+            }
 
-            showToast('⏳ جاري التحميل', 'جاري إنشاء ملف PDF...', 'warning');
+            var rawClientName = (clientNameValue || '').trim() || 'فاتورة';
+            var safeClientName = rawClientName.replace(/[\\\/:*?"<>|]/g, '').trim() || 'فاتورة';
+            var fileName = safeClientName + ' - ' + (invoiceNum || 'invoice') + '.pdf';
 
             var opt = {
-                margin: [10, 10, 10, 10],
-                filename: clientNameValue + ' - ' + invoiceNum + '.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
+                margin: [12, 12, 12, 12],
+                filename: fileName,
+                image: {
+                    type: 'jpeg',
+                    quality: 0.98
+                },
                 html2canvas: {
                     scale: 2,
                     useCORS: true,
                     logging: false,
                     letterRendering: true,
+                    allowTaint: true,
                     backgroundColor: '#ffffff',
                     width: element.scrollWidth,
                     height: element.scrollHeight
@@ -3613,25 +4140,32 @@
                     unit: 'mm',
                     format: 'a4',
                     orientation: 'portrait'
+                },
+                pagebreak: {
+                    mode: ['avoid-all', 'css', 'legacy']
                 }
             };
 
             html2pdf()
                 .set(opt)
                 .from(element)
-                .save()
+                .save(fileName)
                 .then(function() {
-                    showToast('✅ تم الحفظ', 'تم حفظ ملف PDF على جهازك', 'success');
+                    showToast('✅ تم الحفظ', 'تم حفظ ملف PDF على جهازك باسم: ' + fileName, 'success');
+                    if (onDone) onDone(true);
                 })
                 .catch(function(error) {
-                    console.error('❌ خطأ:', error);
+                    console.error('❌ خطأ في حفظ PDF:', error);
                     showToast('❌ خطأ', 'فشل في حفظ PDF: ' + error.message, 'error');
+                    if (onDone) onDone(false);
                 });
         }
 
         /**
          * ============================================================
-         * SAVE INVOICE PDF DIRECT - باستخدام html2canvas مباشرة
+         * SAVE INVOICE PDF DIRECT — تنزيل تلقائي فوري بدون فتح المعاينة
+         * يبني الفاتورة في عنصر مؤقت داخل الصفحة (وليس خارج الشاشة)
+         * لضمان التقاط المحتوى بشكل صحيح بواسطة html2canvas
          * ============================================================
          */
         function saveInvoicePDFDirect() {
@@ -3658,95 +4192,334 @@
                 btnSavePdfDirect.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري...';
             }
 
-            // إنشاء عنصر مؤقت في الصفحة
-            var tempContainer = document.getElementById('pdfTempContainer');
-            tempContainer.innerHTML = '';
-            tempContainer.style.position = 'fixed';
-            tempContainer.style.top = '0';
-            tempContainer.style.left = '0';
-            tempContainer.style.width = '210mm';
-            tempContainer.style.minHeight = '297mm';
-            tempContainer.style.padding = '10mm 12mm';
-            tempContainer.style.background = '#ffffff';
-            tempContainer.style.zIndex = '99999';
-            tempContainer.style.opacity = '1';
-            tempContainer.style.pointerEvents = 'none';
-            tempContainer.style.overflow = 'visible';
+            // إنشاء عنصر مؤقت في الصفحة (وليس خارج الشاشة) لضمان التقاط المحتوى
+            var tempContainer = document.createElement('div');
+            tempContainer.id = 'tempPdfContainer';
+            tempContainer.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 210mm;
+                padding: 12mm 15mm;
+                background: #ffffff;
+                z-index: -1;
+                opacity: 0;
+                pointer-events: none;
+                overflow: visible;
+                font-family: 'Cairo', 'Segoe UI', Arial, sans-serif;
+                direction: rtl;
+                box-sizing: border-box;
+            `;
+            document.body.appendChild(tempContainer);
 
-            // بناء الفاتورة
-            var htmlContent = buildInvoiceHTML(client, phone, invNum, book, date, total, discount, paid, remaining, isPaidFull, 'pdfQrCode');
-            tempContainer.innerHTML = htmlContent;
+            // بناء HTML الفاتورة بشكل مبسط للطباعة
+            tempContainer.innerHTML = buildSimplifiedInvoiceHTML(
+                client, phone, invNum, book, date, total, discount, paid, remaining, isPaidFull, 'tempPdfQrCode'
+            );
 
-            // إنشاء QR Code
+            // إنشاء QR Code في الحاوية المؤقتة
             setTimeout(function() {
-                generateQRCode(invNum, 'pdfQrCode');
+                generateQRCode(invNum, client, total, 'tempPdfQrCode');
 
+                // انتظار تحميل QR والصورة
                 setTimeout(function() {
-                    // استخدام html2canvas مباشرة
-                    html2canvas(tempContainer, {
-                        scale: 2,
-                        useCORS: true,
-                        logging: false,
-                        letterRendering: true,
-                        backgroundColor: '#ffffff',
-                        width: tempContainer.scrollWidth,
-                        height: tempContainer.scrollHeight
-                    }).then(function(canvas) {
-                        var imgData = canvas.toDataURL('image/jpeg', 0.98);
-                        var { jsPDF } = window.jspdf;
-                        var pdf = new jsPDF('p', 'mm', 'a4');
-                        var pdfWidth = 210;
-                        var pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-                        var pageHeight = 297;
+                    // إزالة أي تأثيرات قد تعيق الـ PDF
+                    var wrapper = tempContainer.querySelector('.print-wrapper');
+                    if (wrapper) {
+                        wrapper.style.cssText += `
+                            background: #ffffff !important;
+                            border: none !important;
+                            box-shadow: none !important;
+                            margin: 0 auto !important;
+                            max-width: 210mm !important;
+                            padding: 10mm 12mm !important;
+                        `;
+                    }
 
-                        if (pdfHeight <= pageHeight) {
-                            pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
-                        } else {
-                            var heightLeft = pdfHeight;
-                            var position = 0;
-                            var page = 1;
+                    // التأكد من أن جميع الصور محملة
+                    var images = tempContainer.querySelectorAll('img');
+                    var imagesLoaded = 0;
+                    var totalImages = images.length;
 
-                            while (heightLeft > 0) {
-                                if (page > 1) {
-                                    pdf.addPage();
+                    if (totalImages === 0) {
+                        // لا توجد صور، نبدأ التوليد مباشرة
+                        startPDFGeneration();
+                    } else {
+                        images.forEach(function(img) {
+                            if (img.complete) {
+                                imagesLoaded++;
+                                if (imagesLoaded === totalImages) {
+                                    startPDFGeneration();
                                 }
-                                var yPos = position;
-                                var pageHeightRatio = pageHeight / pdfHeight;
-                                var imgHeight = Math.min(pageHeight, heightLeft);
-                                pdf.addImage(imgData, 'JPEG', 0, yPos * pageHeightRatio * -1, pdfWidth, pdfHeight);
-                                heightLeft -= pageHeight;
-                                position += pageHeight;
-                                page++;
+                            } else {
+                                img.onload = function() {
+                                    imagesLoaded++;
+                                    if (imagesLoaded === totalImages) {
+                                        startPDFGeneration();
+                                    }
+                                };
+                                img.onerror = function() {
+                                    imagesLoaded++;
+                                    if (imagesLoaded === totalImages) {
+                                        startPDFGeneration();
+                                    }
+                                };
                             }
-                        }
+                        });
+                    }
 
-                        var fileName = (client || 'فاتورة') + ' - ' + invNum + '.pdf';
-                        pdf.save(fileName);
+                    function startPDFGeneration() {
+                        var opt = {
+                            margin: [10, 10, 10, 10],
+                            filename: (client || 'فاتورة') + ' - ' + invNum + '.pdf',
+                            image: {
+                                type: 'jpeg',
+                                quality: 0.98
+                            },
+                            html2canvas: {
+                                scale: 2,
+                                useCORS: true,
+                                logging: false,
+                                letterRendering: true,
+                                backgroundColor: '#ffffff',
+                                width: tempContainer.scrollWidth,
+                                height: tempContainer.scrollHeight,
+                                onclone: function(doc) {
+                                    // التأكد من أن جميع العناصر مرئية
+                                    var elements = doc.querySelectorAll('*');
+                                    elements.forEach(function(el) {
+                                        if (el.style && el.style.visibility === 'hidden') {
+                                            el.style.visibility = 'visible';
+                                        }
+                                        if (el.style && el.style.display === 'none') {
+                                            el.style.display = '';
+                                        }
+                                    });
+                                }
+                            },
+                            jsPDF: {
+                                unit: 'mm',
+                                format: 'a4',
+                                orientation: 'portrait'
+                            },
+                            pagebreak: {
+                                mode: ['avoid-all', 'css', 'legacy']
+                            }
+                        };
 
-                        showToast('✅ تم الحفظ', 'تم حفظ ملف PDF على جهازك', 'success');
-                        tempContainer.innerHTML = '';
-                        tempContainer.style.opacity = '0';
-                        tempContainer.style.pointerEvents = 'none';
-                        if (btnSavePdfDirect) {
-                            btnSavePdfDirect.disabled = false;
-                            btnSavePdfDirect.innerHTML = '<i class="fas fa-file-pdf"></i> <span>حفظ PDF</span>';
-                        }
-                    }).catch(function(error) {
-                        console.error('❌ خطأ في html2canvas:', error);
-                        showToast('❌ خطأ', 'فشل في حفظ PDF: ' + error.message, 'error');
-                        tempContainer.innerHTML = '';
-                        tempContainer.style.opacity = '0';
-                        if (btnSavePdfDirect) {
-                            btnSavePdfDirect.disabled = false;
-                            btnSavePdfDirect.innerHTML = '<i class="fas fa-file-pdf"></i> <span>حفظ PDF</span>';
-                        }
-                    });
-                }, 600);
-            }, 400);
+                        html2pdf()
+                            .set(opt)
+                            .from(tempContainer)
+                            .save()
+                            .then(function() {
+                                showToast('✅ تم الحفظ', 'تم حفظ ملف PDF على جهازك باسم: ' + (client || 'فاتورة') + ' - ' + invNum + '.pdf', 'success');
+                                document.body.removeChild(tempContainer);
+                                if (btnSavePdfDirect) {
+                                    btnSavePdfDirect.disabled = false;
+                                    btnSavePdfDirect.innerHTML = '<i class="fas fa-file-pdf"></i> <span>حفظ PDF</span>';
+                                }
+                            })
+                            .catch(function(error) {
+                                console.error('❌ خطأ في حفظ PDF:', error);
+                                showToast('❌ خطأ', 'فشل في حفظ PDF: ' + error.message, 'error');
+                                document.body.removeChild(tempContainer);
+                                if (btnSavePdfDirect) {
+                                    btnSavePdfDirect.disabled = false;
+                                    btnSavePdfDirect.innerHTML = '<i class="fas fa-file-pdf"></i> <span>حفظ PDF</span>';
+                                }
+                            });
+                    }
+                }, 500);
+            }, 300);
         }
 
-        if (btnSavePdfDirect) {
-            btnSavePdfDirect.addEventListener('click', saveInvoicePDFDirect);
+        /**
+         * ============================================================
+         * BUILD SIMPLIFIED INVOICE HTML — نسخة مبسطة للطباعة
+         * تستخدم تنسيقات CSS مضمونة التوافق مع html2canvas
+         * ============================================================
+         */
+        function buildSimplifiedInvoiceHTML(client, phone, invNum, book, date, total, discount, paid, remaining, isPaidFull, qrContainerId) {
+            var companyName = settings.companyName || 'منتجع حياله';
+            var companyAddress = settings.companyAddress || '';
+            var companyPhone = settings.companyPhone || '';
+            var companyLogo = settings.companyLogo || '';
+            var footer = settings.invoiceFooter || 'شكراً لثقتكم بنا';
+
+            var statusText = isPaidFull ? '✅ مدفوعة بالكامل' : '⚠️ يوجد مبلغ مستحق';
+            var statusColor = isPaidFull ? '#1d7b6c' : '#bf4f30';
+
+            var bookingsHtml = '';
+            bookings.forEach(function(item, index) {
+                var checkInDateFormatted = item.checkIn ? new Date(item.checkIn).toLocaleDateString('ar-EG') : 'غير محدد';
+                var checkInTimeFormatted = item.checkInTime || 'غير محدد';
+                var checkOutDateFormatted = item.checkOut ? new Date(item.checkOut).toLocaleDateString('ar-EG') : 'غير محدد';
+                var checkOutTimeFormatted = item.checkOutTime || 'غير محدد';
+
+                bookingsHtml += `
+                    <tr style="border-bottom:1px solid #dde3e0;">
+                        <td style="padding:8px 10px;text-align:center;font-size:11px;">${index + 1}</td>
+                        <td style="padding:8px 10px;text-align:right;font-size:11px;font-weight:600;color:#121821;">${item.property}</td>
+                        <td style="padding:8px 10px;text-align:center;font-size:11px;">${item.nights}</td>
+                        <td style="padding:8px 10px;text-align:center;font-size:11px;">${item.dailyPrice.toFixed(2)}</td>
+                        <td style="padding:8px 10px;text-align:center;font-size:11px;font-weight:700;color:#7a5312;">${item.total.toFixed(2)} ر.س</td>
+                    </tr>
+                    <tr style="border-bottom:1px solid #dde3e0;">
+                        <td colspan="5" style="padding:4px 14px;text-align:right;font-size:9px;color:#6d7883;background:#f4f6f5;">
+                            <span>🛏️ الدخول: ${checkInDateFormatted} - ${checkInTimeFormatted}</span>
+                            <span style="margin-right:15px;">🚪 الخروج: ${checkOutDateFormatted} - ${checkOutTimeFormatted}</span>
+                            ${item.stayType ? `<span style="margin-right:15px;background:#faead0;padding:1px 8px;border-radius:4px;color:#7a5312;font-size:9px;">${item.stayType}</span>` : ''}
+                        </td>
+                    </tr>
+                `;
+            });
+
+            return `
+                <div class="print-wrapper" style="max-width:180mm;margin:0 auto;background:#ffffff;padding:10mm 12mm;font-family:'Cairo',Arial,sans-serif;direction:rtl;color:#121821;border:1px solid #dd9f2e;border-radius:8px;">
+                    
+                    <!-- الرأس -->
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #dd9f2e;padding-bottom:15px;margin-bottom:15px;flex-wrap:wrap;gap:10px;">
+                        <div style="display:flex;align-items:center;gap:12px;">
+                            <div style="width:70px;height:70px;border-radius:12px;background:#121821;display:flex;align-items:center;justify-content:center;color:#dd9f2e;font-size:28px;font-weight:900;flex-shrink:0;">
+                                ح
+                            </div>
+                            <div>
+                                <h1 style="font-size:20px;margin:0;color:#121821;font-weight:700;">${companyName}</h1>
+                                <div style="width:40px;height:3px;background:#dd9f2e;margin:4px 0 6px;"></div>
+                                <p style="font-size:10px;color:#6d7883;margin:0;line-height:1.6;">${companyAddress}</p>
+                                <p style="font-size:10px;color:#6d7883;margin:0;line-height:1.6;">📞 ${companyPhone}</p>
+                            </div>
+                        </div>
+                        <div style="text-align:center;background:#ffffff;padding:10px 18px;border:2px solid #dd9f2e;border-radius:10px;min-width:130px;">
+                            <div style="font-size:10px;font-weight:700;color:#7a5312;letter-spacing:1px;">رقم الفاتورة</div>
+                            <div style="font-size:14px;font-weight:700;font-family:'JetBrains Mono',monospace;color:#121821;">${invNum}</div>
+                            <div style="width:60px;height:60px;margin:6px auto;border:1px dashed #c7d0cc;padding:4px;border-radius:6px;display:flex;align-items:center;justify-content:center;" id="${qrContainerId}"></div>
+                            <div style="font-size:7px;color:#6d7883;">امسح للتحقق</div>
+                        </div>
+                    </div>
+
+                    <!-- معلومات العميل -->
+                    <div style="display:flex;flex-wrap:wrap;gap:8px;background:#f8f9fa;border-radius:8px;padding:10px 14px;margin-bottom:15px;border:1px solid #dde3e0;">
+                        <div style="flex:1;min-width:70px;"><div style="font-size:8px;color:#6d7883;font-weight:700;">الرقم الدفتري</div><div style="font-weight:700;font-size:12px;">${book}</div></div>
+                        <div style="flex:1;min-width:70px;"><div style="font-size:8px;color:#6d7883;font-weight:700;">التاريخ</div><div style="font-weight:700;font-size:12px;">${date}</div></div>
+                        <div style="flex:2;min-width:100px;background:#faead0;padding:4px 10px;border-radius:6px;"><div style="font-size:8px;color:#7a5312;font-weight:700;">العميل</div><div style="font-weight:700;font-size:12px;">${client}</div></div>
+                        <div style="flex:1;min-width:70px;"><div style="font-size:8px;color:#6d7883;font-weight:700;">الجوال</div><div style="font-weight:700;font-size:12px;">${phone}</div></div>
+                        <div style="flex:1;min-width:70px;"><div style="font-size:8px;color:#6d7883;font-weight:700;">الحالة</div><div style="font-weight:700;font-size:12px;color:${statusColor};">${statusText}</div></div>
+                    </div>
+
+                    <!-- جدول الحجوزات -->
+                    <table style="width:100%;border-collapse:collapse;font-size:11px;margin-bottom:12px;border:1px solid #dde3e0;border-radius:8px;overflow:hidden;">
+                        <thead>
+                            <tr style="background:#121821;color:#ffffff;">
+                                <th style="padding:8px 10px;text-align:center;width:30px;font-size:10px;">#</th>
+                                <th style="padding:8px 10px;text-align:right;font-size:10px;">نوع العقار</th>
+                                <th style="padding:8px 10px;text-align:center;font-size:10px;">عدد الأيام</th>
+                                <th style="padding:8px 10px;text-align:center;font-size:10px;">السعر اليومي</th>
+                                <th style="padding:8px 10px;text-align:center;font-size:10px;">الإجمالي</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${bookingsHtml}
+                        </tbody>
+                    </table>
+
+                    <!-- الملخص المالي -->
+                    <div style="display:flex;justify-content:space-between;gap:20px;margin-top:15px;padding-top:12px;border-top:2px dashed #c7d0cc;flex-wrap:wrap;">
+                        <div style="flex:1;min-width:150px;">
+                            <p style="font-family:serif;font-size:13px;color:#2c3644;margin:0 0 15px;">"${footer}"</p>
+                            <div style="margin-top:20px;">
+                                <p style="font-size:10px;color:#6d7883;font-weight:700;margin:0 0 20px;">توقيع واستلام العميل</p>
+                                <div style="width:120px;border-bottom:2px solid #c7d0cc;"></div>
+                                <p style="font-size:8px;color:#6d7883;margin:4px 0 0;">الاسم والتوقيع</p>
+                            </div>
+                        </div>
+                        <div style="min-width:180px;border:2px solid #dd9f2e;border-radius:8px;overflow:hidden;flex:0 0 auto;">
+                            <div style="display:flex;justify-content:space-between;padding:6px 14px;border-bottom:1px dashed #dde3e0;font-size:11px;background:#ffffff;">
+                                <span style="color:#2c3644;">الإجمالي</span>
+                                <span style="font-weight:700;color:#121821;">${total} ر.س</span>
+                            </div>
+                            <div style="display:flex;justify-content:space-between;padding:6px 14px;border-bottom:1px dashed #dde3e0;font-size:11px;background:#ffffff;">
+                                <span style="color:#2c3644;">الخصم</span>
+                                <span style="font-weight:700;color:#bf4f30;">- ${discount} ر.س</span>
+                            </div>
+                            <div style="display:flex;justify-content:space-between;padding:6px 14px;border-bottom:1px dashed #dde3e0;font-size:11px;background:#ffffff;">
+                                <span style="color:#2c3644;">المدفوع</span>
+                                <span style="font-weight:700;color:#121821;">${paid} ر.س</span>
+                            </div>
+                            <div style="display:flex;justify-content:space-between;padding:10px 14px;background:#121821;color:#ffffff;font-size:13px;">
+                                <span style="color:rgba(255,255,255,0.75);font-weight:700;">المتبقي المستحق</span>
+                                <span style="color:#dd9f2e;font-weight:800;">${remaining} ر.س</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- الملاحظات -->
+                    <div style="margin-top:15px;background:#f4f6f5;border-radius:8px;border-right:4px solid #dd9f2e;padding:12px 16px;font-size:9px;color:#2c3644;line-height:1.8;">
+                        <div style="font-weight:800;font-size:11px;display:flex;align-items:center;gap:6px;margin-bottom:6px;color:#121821;">
+                            📋 شروط وملاحظات هامة
+                        </div>
+                        <ol style="margin:0;padding-right:20px;list-style-type:decimal;font-size:9px;color:#2c3644;">
+                            <li>لا نأخذ تأمين ولا نعمل تشييك بعد الخروج (أمانة المسلم تكفي)</li>
+                            <li>تفهم المرافقون طابع المكان كمزرعة شعبية ليست كالفنادق</li>
+                            <li>في حال بقاء أي أغراض دون مراجعة، يحق للإدارة التصرف بها</li>
+                            <li>يرجى التأكد من قراءة التفاصيل بدقة</li>
+                            <li>الإدارة غير مسؤولة عن فقدان المقتنيات الشخصية</li>
+                            <li>يمنع إحداث أي تلف، ويحمل المستأجر قيمة الأضرار</li>
+                        </ol>
+                    </div>
+
+                    <!-- تذييل -->
+                    <div style="margin-top:12px;padding-top:8px;border-top:1px solid #dde3e0;text-align:center;font-size:8px;color:#6d7883;">
+                        <strong style="color:#7a5312;">${companyName}</strong> — تم إصدار هذه الفاتورة إلكترونياً عبر نظام إدارة الحجوزات
+                    </div>
+                </div>
+            `;
+        }
+
+        /**
+         * ============================================================
+         * DOWNLOAD PDF (من داخل نافذة المعاينة) — يُستخدم فقط عندما
+         * تكون نافذة المعاينة مفتوحة بالفعل (زر PDF داخل print-preview-overlay)
+         * ============================================================
+         */
+        function downloadPDF() {
+            if (bookings.length === 0) {
+                showToast('⚠️ تنبيه', 'لا توجد حجوزات لتحويلها إلى PDF', 'error');
+                return;
+            }
+
+            var overlay = document.getElementById('printPreviewOverlay');
+            if (!overlay.classList.contains('show')) {
+                previewInvoice();
+                setTimeout(function() {
+                    generatePDFFromPreview();
+                }, 800);
+                return;
+            }
+
+            generatePDFFromPreview();
+        }
+
+        /**
+         * ============================================================
+         * GENERATE PDF FROM PREVIEW — يستخدم العنصر الظاهر في نافذة
+         * المعاينة (يُستدعى فقط من زر PDF داخل النافذة نفسها)
+         * ============================================================
+         */
+        function generatePDFFromPreview() {
+            var element = document.getElementById('printPreviewContent');
+            var clientNameValue = document.getElementById('clientName').value.trim();
+            var invoiceNum = document.getElementById('invoiceNumber').value.trim() || 'invoice';
+
+            showToast('⏳ جاري التحميل', 'جاري إنشاء ملف PDF...', 'warning');
+
+            generatePDFFromElement(element, clientNameValue, invoiceNum, function(success) {
+                if (success) {
+                    setTimeout(function() {
+                        closePrintPreview();
+                    }, 1500);
+                }
+            });
         }
 
         /**
@@ -3776,6 +4549,7 @@
             totalAmountDisplay.value = '';
             netAmountDisplay.value = '';
             calculateFinancials();
+            currentQRCode = null;
             showToast('🔄 جديد', 'تم تجهيز فاتورة جديدة', 'warning');
         }
 
@@ -3885,7 +4659,7 @@
                 document.getElementById('clientPhone').value = phone;
             }
 
-            clientNameInput.style.borderColor = '#1d7b6c';
+            clientNameInput.style.borderColor = 'var(--teal)';
             setTimeout(function() {
                 clientNameInput.style.borderColor = '';
             }, 2000);
@@ -4179,6 +4953,7 @@
             totalAmountDisplay.value = '';
             netAmountDisplay.value = '';
             calculateFinancials();
+            currentQRCode = null;
             showToast('🔄 إلغاء', 'تم تفريغ النموذج بالكامل', 'warning');
         });
 
@@ -4267,7 +5042,7 @@
 
         /**
          * ============================================================
-         * SAVE TO SUPABASE
+         * SAVE TO SUPABASE - متوافق مع هيكل الجدول
          * ============================================================
          */
         async function saveInvoiceToSupabase(invoiceData) {
@@ -4275,7 +5050,15 @@
             btnSaveInvoice.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
 
             try {
-                var bookingsToSave = invoiceData.bookings.map(function(item) {
+                var warnings = [];
+                var bookingsToSave = invoiceData.bookings.map(function(item, index) {
+                    if (!item.property) {
+                        warnings.push('الحجز ' + (index + 1) + ': نوع العقار فارغ');
+                    }
+                    if (!item.checkIn) {
+                        warnings.push('الحجز ' + (index + 1) + ': تاريخ الدخول فارغ');
+                    }
+
                     var booking = {
                         invoice_number: invoiceData.number || null,
                         booking_number: invoiceData.book || null,
@@ -4294,7 +5077,9 @@
                         payment_status: parseFloat(invoiceData.remaining) <= 0 ? 'Fully Paid' : 'Balance Due',
                         stay_type: item.stayType || 'مبيت',
                         check_in_time: item.checkInTime || null,
-                        check_out_time: item.checkOutTime || null
+                        check_out_time: item.checkOutTime || null,
+                        time_note: item.timeNote || null,
+                        notes: item.notes || null
                     };
 
                     Object.keys(booking).forEach(function(key) {
@@ -4330,7 +5115,7 @@
                         } else {
                             var errorText = await response.text();
                             console.error('❌ خطأ في الحجز ' + (i + 1) + ':', errorText);
-                            errors.push('الحجز ' + (i + 1) + ': ' + response.status);
+                            errors.push('الحجز ' + (i + 1) + ': ' + response.status + ' - ' + errorText);
                         }
                     } catch (e) {
                         console.error('❌ خطأ في الحجز ' + (i + 1) + ':', e.message);
@@ -4347,7 +5132,7 @@
                 }
 
                 if (errors.length > 0) {
-                    showToast('⚠️ تم الحفظ جزئياً', 'تم حفظ ' + savedCount + ' من ' + bookingsToSave.length + ' حجوزات', 'warning');
+                    showToast('⚠️ تم الحفظ جزئياً', 'تم حفظ ' + savedCount + ' من ' + bookingsToSave.length + ' حجوزات\n' + errors.join('\n'), 'warning');
                 } else {
                     showToast('✅ تم الحفظ', 'تم حفظ الفاتورة بنجاح في Supabase!', 'success', [
                         { label: 'معاينة', value: 'preview', class: 'btn-yes' },
@@ -4405,7 +5190,8 @@
             console.log('📊 Supabase URL:', SUPABASE_URL);
             console.log('👤 المستخدم:', user.name || 'غير معروف');
             console.log('✅ النظام جاهز للعمل مع Supabase');
-            console.log('📁 زر "حفظ PDF" ينزّل الملف مباشرة على الجهاز');
+            console.log('🎨 تصميم فاتورة راقٍ بطابع محاسبي احترافي');
+            console.log('📁 زر "حفظ PDF" ينزّل الملف مباشرة على الجهاز باسم العميل، بدون فتح أي معاينة');
         });
     </script>
 
