@@ -25,7 +25,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Marcellus&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
     
     <style>
         /* ============================================================
@@ -53,6 +53,7 @@
             --shadow: 0 14px 34px -16px rgba(18,24,33,0.28);
             --shadow-sm: 0 3px 10px -4px rgba(18,24,33,0.18);
             --font-display: 'Cairo', 'Segoe UI', Tahoma, Arial, sans-serif;
+            --font-serif: 'Marcellus', 'Cairo', serif;
             --font-mono: 'JetBrains Mono', ui-monospace, monospace;
             --header-height: 60px;
             --stripe-height: 4px;
@@ -1454,7 +1455,7 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(10, 12, 16, 0.78);
             backdrop-filter: blur(8px);
             z-index: 99999;
             justify-content: center;
@@ -1524,16 +1525,44 @@
         }
 
         /* ============================================================
-           PRINT PREVIEW STYLES
+           PRINT PREVIEW STYLES — تصميم فاتورة راقٍ لبرنامج محاسبة
            ============================================================ */
+
+        /* --- الإطار العام للفاتورة --- */
+        .print-preview-overlay .print-wrapper {
+            background: linear-gradient(180deg, #fffefb 0%, #fdfbf5 100%);
+            position: relative;
+            border: 1px solid var(--accent);
+        }
+        .print-preview-overlay .print-wrapper::before {
+            content: '';
+            position: absolute;
+            inset: calc(10px * var(--scale-factor));
+            border: 1px solid rgba(221, 159, 46, 0.35);
+            border-radius: calc(6px * var(--scale-factor));
+            pointer-events: none;
+        }
+
+        /* --- الترويسة --- */
         .print-preview-overlay .print-wrapper .invoice-header {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: space-between;
             padding-bottom: calc(20px * var(--scale-factor));
-            border-bottom: calc(3px * var(--scale-factor)) solid var(--ink);
-            margin-bottom: calc(20px * var(--scale-factor));
+            margin-bottom: calc(22px * var(--scale-factor));
             gap: calc(20px * var(--scale-factor));
+            border-bottom: none;
+            position: relative;
+        }
+        .print-preview-overlay .print-wrapper .invoice-header::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: calc(3px * var(--scale-factor));
+            background: linear-gradient(90deg, var(--accent) 0%, var(--accent) 55%, transparent 100%);
+            border-radius: 3px;
         }
         .print-preview-overlay .print-wrapper .invoice-header .logo-section {
             display: flex;
@@ -1541,12 +1570,12 @@
             gap: calc(16px * var(--scale-factor));
         }
         .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box {
-            width: calc(156px * var(--scale-factor));
-            height: calc(156px * var(--scale-factor));
-            min-width: calc(156px * var(--scale-factor));
-            max-width: calc(156px * var(--scale-factor));
-            min-height: calc(156px * var(--scale-factor));
-            max-height: calc(156px * var(--scale-factor));
+            width: calc(110px * var(--scale-factor));
+            height: calc(110px * var(--scale-factor));
+            min-width: calc(110px * var(--scale-factor));
+            max-width: calc(110px * var(--scale-factor));
+            min-height: calc(110px * var(--scale-factor));
+            max-height: calc(110px * var(--scale-factor));
             border-radius: calc(16px * var(--scale-factor));
             overflow: hidden;
             background: #ffffff;
@@ -1554,9 +1583,9 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            padding: calc(10px * var(--scale-factor));
-            border: none !important;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            padding: calc(8px * var(--scale-factor));
+            border: 1px solid var(--line);
+            box-shadow: 0 6px 18px -8px rgba(18, 24, 33, 0.18);
         }
         .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box img {
             max-width: 100%;
@@ -1565,27 +1594,71 @@
             height: auto;
             object-fit: contain;
         }
+        .print-preview-overlay .print-wrapper .invoice-header .company-details .eyebrow {
+            display: inline-block;
+            font-size: calc(0.55rem * var(--scale-factor));
+            letter-spacing: calc(1.4px * var(--scale-factor));
+            color: var(--accent-ink);
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: calc(4px * var(--scale-factor));
+        }
         .print-preview-overlay .print-wrapper .invoice-header .company-details h2 {
-            font-size: calc(1.6rem * var(--scale-factor));
-            font-weight: 900;
+            font-family: var(--font-serif);
+            font-size: calc(1.55rem * var(--scale-factor));
+            font-weight: 700;
             color: var(--ink);
+            letter-spacing: 0.2px;
+            margin-bottom: calc(7px * var(--scale-factor));
+        }
+        .print-preview-overlay .print-wrapper .invoice-header .company-details .header-rule {
+            width: calc(46px * var(--scale-factor));
+            height: calc(3px * var(--scale-factor));
+            background: var(--accent);
+            border-radius: 3px;
+            margin-bottom: calc(9px * var(--scale-factor));
         }
         .print-preview-overlay .print-wrapper .invoice-header .company-details p {
             font-size: calc(0.7rem * var(--scale-factor));
             color: var(--ink-mute);
+            line-height: 1.7;
+        }
+        .print-preview-overlay .print-wrapper .invoice-header .company-details p i {
+            width: calc(14px * var(--scale-factor));
+            color: var(--accent-ink);
+            text-align: center;
         }
         .print-preview-overlay .print-wrapper .invoice-header .invoice-title {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            min-width: calc(100px * var(--scale-factor));
-            background: var(--surface-muted);
-            padding: calc(8px * var(--scale-factor)) calc(14px * var(--scale-factor));
-            border-radius: calc(10px * var(--scale-factor));
-            border: 2px solid var(--accent);
+            justify-content: flex-start;
+            min-width: calc(150px * var(--scale-factor));
+            background: #ffffff;
+            padding: calc(12px * var(--scale-factor)) calc(18px * var(--scale-factor));
+            border-radius: calc(12px * var(--scale-factor));
+            border: 1px solid var(--accent);
+            box-shadow: 0 8px 20px -10px rgba(221, 159, 46, 0.35);
+            gap: calc(8px * var(--scale-factor));
         }
-        .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-code {
+        .print-preview-overlay .print-wrapper .invoice-title .invoice-title-label {
+            font-size: calc(0.55rem * var(--scale-factor));
+            font-weight: 800;
+            letter-spacing: calc(1.2px * var(--scale-factor));
+            color: var(--accent-ink);
+            text-transform: uppercase;
+            background: var(--accent-soft);
+            padding: calc(3px * var(--scale-factor)) calc(12px * var(--scale-factor));
+            border-radius: 50px;
+        }
+        .print-preview-overlay .print-wrapper .invoice-title .invoice-title-number {
+            font-family: var(--font-mono);
+            font-size: calc(0.78rem * var(--scale-factor));
+            font-weight: 700;
+            color: var(--ink);
+            letter-spacing: 0.3px;
+        }
+        .print-preview-overlay .print-wrapper .invoice-title .qr-code {
             width: calc(72px * var(--scale-factor));
             height: calc(72px * var(--scale-factor));
             display: flex;
@@ -1594,138 +1667,326 @@
             background: #ffffff;
             border-radius: calc(8px * var(--scale-factor));
             padding: calc(4px * var(--scale-factor));
-            border: none !important;
-            margin-bottom: calc(4px * var(--scale-factor));
+            border: 1px dashed var(--line-strong);
         }
-        .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-code canvas,
-        .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-code img {
+        .print-preview-overlay .print-wrapper .invoice-title .qr-code canvas,
+        .print-preview-overlay .print-wrapper .invoice-title .qr-code img {
             width: 100% !important;
             height: 100% !important;
         }
-        .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-label {
-            font-size: calc(0.5rem * var(--scale-factor));
+        .print-preview-overlay .print-wrapper .invoice-title .qr-label {
+            font-size: calc(0.48rem * var(--scale-factor));
             color: var(--ink-mute);
             text-align: center;
             font-weight: 600;
         }
-        .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-label strong {
-            color: var(--ink);
+
+        /* --- شارة حالة السداد --- */
+        .print-preview-overlay .print-wrapper .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: calc(6px * var(--scale-factor));
+            padding: calc(3px * var(--scale-factor)) calc(13px * var(--scale-factor));
+            border-radius: 50px;
+            font-size: calc(0.55rem * var(--scale-factor));
+            font-weight: 800;
         }
+        .print-preview-overlay .print-wrapper .status-badge.paid {
+            background: var(--teal-soft);
+            color: var(--teal);
+        }
+        .print-preview-overlay .print-wrapper .status-badge.due {
+            background: var(--rust-soft);
+            color: var(--rust);
+        }
+
+        /* --- شريط بيانات الفاتورة --- */
         .print-preview-overlay .print-wrapper .info-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-            gap: calc(10px * var(--scale-factor));
-            margin-bottom: calc(18px * var(--scale-factor));
-            background: var(--surface-muted);
-            padding: calc(12px * var(--scale-factor)) calc(16px * var(--scale-factor));
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: calc(20px * var(--scale-factor));
+            background: #ffffff;
             border-radius: calc(var(--radius-sm) * var(--scale-factor));
             border: 1px solid var(--line);
+            overflow: hidden;
+        }
+        .print-preview-overlay .print-wrapper .info-grid .item {
+            flex: 1;
+            min-width: calc(100px * var(--scale-factor));
+            padding: calc(10px * var(--scale-factor)) calc(14px * var(--scale-factor));
+            border-left: 1px dashed var(--line);
+        }
+        .print-preview-overlay .print-wrapper .info-grid .item:last-child {
+            border-left: none;
+        }
+        .print-preview-overlay .print-wrapper .info-grid .item.highlight {
+            background: var(--accent-soft);
         }
         .print-preview-overlay .print-wrapper .info-grid .item .label {
-            font-size: calc(0.55rem * var(--scale-factor));
+            font-size: calc(0.52rem * var(--scale-factor));
             color: var(--ink-mute);
             font-weight: 700;
+            letter-spacing: calc(0.4px * var(--scale-factor));
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: calc(4px * var(--scale-factor));
         }
         .print-preview-overlay .print-wrapper .info-grid .item .value {
             font-size: calc(0.85rem * var(--scale-factor));
             font-weight: 700;
             color: var(--ink);
         }
+        .print-preview-overlay .print-wrapper .info-grid .item.highlight .value {
+            color: var(--accent-ink);
+        }
+
+        /* --- جدول البنود --- */
         .print-preview-overlay .print-wrapper table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
             font-size: calc(0.85rem * var(--scale-factor));
+            border-radius: calc(var(--radius-sm) * var(--scale-factor));
+            overflow: hidden;
+            border: 1px solid var(--line);
         }
         .print-preview-overlay .print-wrapper table th {
             background: var(--ink);
             color: #ffffff;
-            padding: calc(8px * var(--scale-factor)) calc(12px * var(--scale-factor));
+            padding: calc(10px * var(--scale-factor)) calc(12px * var(--scale-factor));
             text-align: center;
-            font-size: calc(0.65rem * var(--scale-factor));
+            font-size: calc(0.62rem * var(--scale-factor));
             font-weight: 700;
+            letter-spacing: calc(0.4px * var(--scale-factor));
+            border-bottom: calc(2px * var(--scale-factor)) solid var(--accent);
         }
         .print-preview-overlay .print-wrapper table td {
-            padding: calc(8px * var(--scale-factor)) calc(12px * var(--scale-factor));
+            padding: calc(9px * var(--scale-factor)) calc(12px * var(--scale-factor));
             border-bottom: 1px solid var(--line);
             color: var(--ink-soft);
             text-align: center;
             font-size: calc(0.8rem * var(--scale-factor));
+            background: #ffffff;
         }
-        .print-preview-overlay .print-wrapper .footer {
-            border-top: 1px solid var(--line);
-            padding-top: calc(16px * var(--scale-factor));
-            margin-top: calc(16px * var(--scale-factor));
-            display: flex;
-            justify-content: space-between;
-            font-size: calc(0.7rem * var(--scale-factor));
-            color: var(--ink-mute);
+        .print-preview-overlay .print-wrapper table tbody tr.data-row:nth-of-type(4n+1) td {
+            background: #fbfaf6;
         }
-        .print-preview-overlay .print-wrapper .footer .signature .line {
-            width: calc(120px * var(--scale-factor));
-            border-bottom: calc(2px * var(--scale-factor)) solid var(--ink);
-            margin-top: calc(4px * var(--scale-factor));
+        .print-preview-overlay .print-wrapper table tbody tr:last-child td {
+            border-bottom: none;
         }
-        .print-preview-overlay .print-wrapper .notes-section {
-            margin-top: calc(20px * var(--scale-factor));
-            padding-top: calc(16px * var(--scale-factor));
-            border-top: calc(2px * var(--scale-factor)) dashed var(--line-strong);
-            background: var(--surface-muted);
-            border-radius: calc(var(--radius-sm) * var(--scale-factor));
-            padding: calc(16px * var(--scale-factor)) calc(18px * var(--scale-factor));
-        }
-        .print-preview-overlay .print-wrapper .notes-section .notes-title {
-            font-size: calc(0.75rem * var(--scale-factor));
+        .print-preview-overlay .print-wrapper table .row-total {
             font-weight: 800;
             color: var(--accent-ink);
+            font-family: var(--font-mono);
+        }
+        .print-preview-overlay .print-wrapper table .stay-meta-row td {
+            text-align: right;
+            font-size: calc(0.62rem * var(--scale-factor));
+            color: var(--ink-mute);
+            padding: calc(6px * var(--scale-factor)) calc(14px * var(--scale-factor));
+            background: var(--surface-muted) !important;
+            border-bottom: 1px solid var(--line);
+        }
+        .print-preview-overlay .print-wrapper table .stay-meta-row .meta-piece {
+            margin-left: calc(16px * var(--scale-factor));
+            display: inline-flex;
+            align-items: center;
+            gap: calc(5px * var(--scale-factor));
+        }
+        .print-preview-overlay .print-wrapper table .stay-meta-row i.in {
+            color: var(--teal);
+        }
+        .print-preview-overlay .print-wrapper table .stay-meta-row i.out {
+            color: var(--rust);
+        }
+        .print-preview-overlay .print-wrapper table .stay-meta-row .stay-chip {
+            background: var(--accent-soft);
+            color: var(--accent-ink);
+            padding: calc(1px * var(--scale-factor)) calc(9px * var(--scale-factor));
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: calc(0.58rem * var(--scale-factor));
+        }
+
+        /* --- قسم الملخص المالي والتوقيع --- */
+        .print-preview-overlay .print-wrapper .invoice-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: calc(24px * var(--scale-factor));
+            margin-top: calc(22px * var(--scale-factor));
+            padding-top: calc(18px * var(--scale-factor));
+            border-top: 1px dashed var(--line-strong);
+        }
+        .print-preview-overlay .print-wrapper .summary-notes {
+            flex: 1;
+            min-width: 0;
+        }
+        .print-preview-overlay .print-wrapper .summary-notes .thanks {
+            font-family: var(--font-serif);
+            font-size: calc(0.85rem * var(--scale-factor));
+            color: var(--ink-soft);
+            margin-bottom: calc(18px * var(--scale-factor));
+        }
+        .print-preview-overlay .print-wrapper .signature .sig-label {
+            font-size: calc(0.68rem * var(--scale-factor));
+            color: var(--ink-mute);
+            font-weight: 700;
+            margin-bottom: calc(24px * var(--scale-factor));
+        }
+        .print-preview-overlay .print-wrapper .signature .line {
+            width: calc(140px * var(--scale-factor));
+            border-bottom: calc(1.5px * var(--scale-factor)) solid var(--line-strong);
+        }
+        .print-preview-overlay .print-wrapper .signature .sig-caption {
+            font-size: calc(0.6rem * var(--scale-factor));
+            color: var(--ink-mute);
+            margin-top: calc(6px * var(--scale-factor));
+        }
+
+        .print-preview-overlay .print-wrapper .summary-box {
+            flex: 0 0 calc(260px * var(--scale-factor));
+            border: 1px solid var(--accent);
+            border-radius: calc(var(--radius-sm) * var(--scale-factor));
+            overflow: hidden;
+            background: #ffffff;
+        }
+        .print-preview-overlay .print-wrapper .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: calc(8px * var(--scale-factor)) calc(16px * var(--scale-factor));
+            font-size: calc(0.75rem * var(--scale-factor));
+            color: var(--ink-soft);
+            border-bottom: 1px dashed var(--line);
+        }
+        .print-preview-overlay .print-wrapper .summary-row span:last-child {
+            font-family: var(--font-mono);
+            font-weight: 700;
+            color: var(--ink);
+        }
+        .print-preview-overlay .print-wrapper .summary-row.discount span:last-child {
+            color: var(--rust);
+        }
+        .print-preview-overlay .print-wrapper .summary-row.net {
+            background: var(--ink);
+            border-bottom: none;
+            padding: calc(12px * var(--scale-factor)) calc(16px * var(--scale-factor));
+        }
+        .print-preview-overlay .print-wrapper .summary-row.net span:first-child {
+            color: rgba(255,255,255,0.75);
+            font-weight: 700;
+            font-size: calc(0.72rem * var(--scale-factor));
+        }
+        .print-preview-overlay .print-wrapper .summary-row.net span:last-child {
+            color: var(--accent);
+            font-size: calc(1rem * var(--scale-factor));
+            font-weight: 800;
+        }
+
+        /* --- قسم الملاحظات --- */
+        .print-preview-overlay .print-wrapper .notes-section {
+            margin-top: calc(22px * var(--scale-factor));
+            padding-top: 0;
+            border-top: none;
+            background: var(--surface-muted);
+            border-radius: calc(var(--radius-sm) * var(--scale-factor));
+            border-right: calc(4px * var(--scale-factor)) solid var(--accent);
+            padding: calc(15px * var(--scale-factor)) calc(18px * var(--scale-factor));
+        }
+        .print-preview-overlay .print-wrapper .notes-section .notes-title {
+            font-size: calc(0.72rem * var(--scale-factor));
+            font-weight: 800;
+            color: var(--ink);
             display: flex;
             align-items: center;
             gap: calc(8px * var(--scale-factor));
-            margin-bottom: calc(8px * var(--scale-factor));
+            margin-bottom: calc(10px * var(--scale-factor));
         }
         .print-preview-overlay .print-wrapper .notes-section .notes-title i {
-            color: var(--accent);
+            color: var(--accent-ink);
             font-size: calc(0.8rem * var(--scale-factor));
         }
         .print-preview-overlay .print-wrapper .notes-section .notes-content {
-            font-size: calc(0.65rem * var(--scale-factor));
+            font-size: calc(0.63rem * var(--scale-factor));
             color: var(--ink-soft);
-            line-height: 1.8;
-            padding-right: calc(4px * var(--scale-factor));
+            line-height: 1.85;
+            padding-right: 0;
+            display: grid;
+            gap: calc(5px * var(--scale-factor));
         }
         .print-preview-overlay .print-wrapper .notes-section .notes-content p {
-            margin-bottom: calc(4px * var(--scale-factor));
+            margin-bottom: 0;
             position: relative;
-            padding-right: calc(18px * var(--scale-factor));
+            padding-right: calc(22px * var(--scale-factor));
+            counter-increment: note-counter;
+        }
+        .print-preview-overlay .print-wrapper .notes-section .notes-content {
+            counter-reset: note-counter;
         }
         .print-preview-overlay .print-wrapper .notes-section .notes-content p::before {
-            content: '•';
+            content: counter(note-counter);
             position: absolute;
             right: 0;
-            color: var(--accent);
-            font-weight: 700;
+            top: 0;
+            width: calc(15px * var(--scale-factor));
+            height: calc(15px * var(--scale-factor));
+            background: var(--accent);
+            color: #ffffff;
+            border-radius: 50%;
+            font-size: calc(0.5rem * var(--scale-factor));
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
         }
-        .print-preview-overlay .print-wrapper .print-footer-notes {
-            margin-top: calc(18px * var(--scale-factor));
-            padding-top: calc(14px * var(--scale-factor));
-            border-top: 2px solid var(--line-strong);
+
+        /* --- تذييل ختامي --- */
+        .print-preview-overlay .print-wrapper .print-brand-footer {
+            margin-top: calc(20px * var(--scale-factor));
+            padding-top: calc(12px * var(--scale-factor));
+            border-top: 1px solid var(--line);
+            text-align: center;
             font-size: calc(0.6rem * var(--scale-factor));
             color: var(--ink-mute);
-            line-height: 1.9;
+            letter-spacing: calc(0.3px * var(--scale-factor));
         }
-        .print-preview-overlay .print-wrapper .print-footer-notes strong {
-            color: var(--ink-soft);
+        .print-preview-overlay .print-wrapper .print-brand-footer strong {
+            color: var(--accent-ink);
         }
-        .print-preview-overlay .print-wrapper .print-footer-notes .note-item {
-            display: flex;
-            align-items: flex-start;
-            gap: calc(8px * var(--scale-factor));
-            margin-bottom: calc(3px * var(--scale-factor));
+
+        .print-preview-overlay .print-wrapper .footer,
+        .print-preview-overlay .print-wrapper .print-footer-notes {
+            font-size: calc(0.6rem * var(--scale-factor));
+            color: var(--ink-mute);
         }
-        .print-preview-overlay .print-wrapper .print-footer-notes .note-item i {
-            color: var(--accent);
-            font-size: calc(0.5rem * var(--scale-factor));
-            margin-top: calc(5px * var(--scale-factor));
-            flex-shrink: 0;
+        .print-preview-overlay .print-wrapper .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: calc(2px * var(--scale-factor)) calc(10px * var(--scale-factor));
+            border-radius: 50px;
+            font-size: calc(0.55rem * var(--scale-factor));
+            font-weight: 700;
+            border: 1px solid transparent;
+        }
+        .print-preview-overlay .print-wrapper .badge-paid {
+            background: var(--teal-soft);
+            color: var(--teal);
+        }
+        .print-preview-overlay .print-wrapper .badge-balance {
+            background: var(--rust-soft);
+            color: var(--rust);
+        }
+        .print-preview-overlay .print-wrapper .badge-type {
+            background: var(--surface-muted);
+            color: var(--ink-mute);
+            border-color: var(--line);
+        }
+        .print-preview-overlay .print-wrapper .badge-future {
+            background: var(--accent-soft);
+            color: var(--accent-ink);
         }
 
         /* ============================================================
@@ -1740,34 +2001,39 @@
             .print-preview-overlay .print-wrapper .invoice-header {
                 flex-direction: column;
                 text-align: center;
-                gap: calc(10px * var(--scale-factor));
+                gap: calc(14px * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .invoice-header .logo-section {
+                flex-direction: column;
             }
             .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box {
-                width: calc(120px * var(--scale-factor));
-                height: calc(120px * var(--scale-factor));
-                min-width: calc(120px * var(--scale-factor));
-                max-width: calc(120px * var(--scale-factor));
-                min-height: calc(120px * var(--scale-factor));
-                max-height: calc(120px * var(--scale-factor));
+                width: calc(90px * var(--scale-factor));
+                height: calc(90px * var(--scale-factor));
+                min-width: calc(90px * var(--scale-factor));
+                max-width: calc(90px * var(--scale-factor));
+                min-height: calc(90px * var(--scale-factor));
+                max-height: calc(90px * var(--scale-factor));
                 border-radius: calc(14px * var(--scale-factor));
-                padding: calc(8px * var(--scale-factor));
+                padding: calc(6px * var(--scale-factor));
             }
-            .print-preview-overlay .print-wrapper .invoice-header .invoice-title {
+            .print-preview-overlay .print-wrapper .invoice-title {
                 width: 100%;
-                border-right: none;
-                border-top: 2px solid var(--accent);
-                padding: calc(8px * var(--scale-factor)) calc(14px * var(--scale-factor));
+                align-items: center;
             }
-            .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-code {
+            .print-preview-overlay .print-wrapper .invoice-title .qr-code {
                 width: calc(60px * var(--scale-factor));
                 height: calc(60px * var(--scale-factor));
                 padding: calc(3px * var(--scale-factor));
-                border: none !important;
             }
             .print-preview-overlay .print-wrapper .info-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: calc(6px * var(--scale-factor));
-                padding: calc(8px * var(--scale-factor)) calc(10px * var(--scale-factor));
+                flex-direction: column;
+            }
+            .print-preview-overlay .print-wrapper .info-grid .item {
+                border-left: none;
+                border-bottom: 1px dashed var(--line);
+            }
+            .print-preview-overlay .print-wrapper .info-grid .item:last-child {
+                border-bottom: none;
             }
             .print-preview-overlay .print-actions button {
                 padding: calc(8px * var(--scale-factor)) calc(16px * var(--scale-factor));
@@ -1780,13 +2046,17 @@
             .print-preview-overlay .print-wrapper table td {
                 padding: calc(5px * var(--scale-factor)) calc(8px * var(--scale-factor));
             }
-            .print-preview-overlay .print-wrapper .footer {
+            .print-preview-overlay .print-wrapper .invoice-summary {
                 flex-direction: column;
-                gap: calc(10px * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .summary-box {
+                flex: 0 0 auto;
+                width: 100%;
+            }
+            .print-preview-overlay .print-wrapper .signature {
                 text-align: center;
             }
-            .print-preview-overlay .print-wrapper .footer .signature .line {
-                width: calc(90px * var(--scale-factor));
+            .print-preview-overlay .print-wrapper .signature .line {
                 margin: calc(4px * var(--scale-factor)) auto 0;
             }
             .print-preview-overlay .print-wrapper .notes-section {
@@ -1800,12 +2070,6 @@
                 font-size: calc(0.55rem * var(--scale-factor));
                 line-height: 1.7;
             }
-            .print-preview-overlay .print-wrapper .notes-section .notes-content p {
-                padding-right: calc(16px * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .print-footer-notes {
-                font-size: calc(0.5rem * var(--scale-factor));
-            }
         }
 
         @media (max-width: 480px) {
@@ -1815,38 +2079,8 @@
                 max-width: 98%;
                 border-radius: calc(8px * var(--scale-factor));
             }
-            .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box {
-                width: calc(90px * var(--scale-factor));
-                height: calc(90px * var(--scale-factor));
-                min-width: calc(90px * var(--scale-factor));
-                max-width: calc(90px * var(--scale-factor));
-                min-height: calc(90px * var(--scale-factor));
-                max-height: calc(90px * var(--scale-factor));
-                border-radius: calc(12px * var(--scale-factor));
-                padding: calc(6px * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-code {
-                width: calc(50px * var(--scale-factor));
-                height: calc(50px * var(--scale-factor));
-                padding: calc(2px * var(--scale-factor));
-                border: none !important;
-            }
             .print-preview-overlay .print-wrapper .invoice-header .company-details h2 {
                 font-size: calc(1.1rem * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .invoice-header .company-details p {
-                font-size: calc(0.55rem * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .info-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: calc(4px * var(--scale-factor));
-                padding: calc(6px * var(--scale-factor)) calc(8px * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .info-grid .item .value {
-                font-size: calc(0.7rem * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .info-grid .item .label {
-                font-size: calc(0.5rem * var(--scale-factor));
             }
             .print-preview-overlay .print-wrapper table {
                 font-size: calc(0.55rem * var(--scale-factor));
@@ -1858,43 +2092,6 @@
             .print-preview-overlay .print-actions button {
                 padding: calc(6px * var(--scale-factor)) calc(12px * var(--scale-factor));
                 font-size: calc(0.65rem * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .footer {
-                flex-direction: column;
-                gap: calc(8px * var(--scale-factor));
-                text-align: center;
-                font-size: calc(0.55rem * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .footer .signature .line {
-                width: calc(70px * var(--scale-factor));
-                margin: calc(4px * var(--scale-factor)) auto 0;
-            }
-            .print-preview-overlay .print-wrapper .footer .signature p {
-                font-size: calc(0.55rem * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .notes-section {
-                padding: calc(10px * var(--scale-factor)) calc(12px * var(--scale-factor));
-                margin-top: calc(12px * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .notes-section .notes-title {
-                font-size: calc(0.6rem * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .notes-section .notes-content {
-                font-size: calc(0.5rem * var(--scale-factor));
-                line-height: 1.6;
-            }
-            .print-preview-overlay .print-wrapper .notes-section .notes-content p {
-                padding-right: calc(14px * var(--scale-factor));
-                margin-bottom: calc(3px * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .print-footer-notes {
-                font-size: calc(0.45rem * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .print-footer-notes .note-item {
-                gap: calc(5px * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-label {
-                font-size: calc(0.45rem * var(--scale-factor));
             }
         }
 
@@ -2212,303 +2409,6 @@
             }
 
             .print-preview-overlay .print-wrapper * {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-
-            .print-preview-overlay .print-wrapper .invoice-footer {
-                margin-top: 15px !important;
-                padding-top: 10px !important;
-                border-top: 2px solid var(--ink) !important;
-                display: flex !important;
-                justify-content: space-between !important;
-                align-items: center !important;
-                flex-wrap: wrap !important;
-            }
-
-            /* ===== تكبير الشعار وإزالة الإطار الذهبي ===== */
-            .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box {
-                width: 156px !important;
-                height: 156px !important;
-                min-width: 156px !important;
-                max-width: 156px !important;
-                min-height: 156px !important;
-                max-height: 156px !important;
-                border-radius: 16px !important;
-                overflow: hidden !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                background: #ffffff !important;
-                padding: 10px !important;
-                flex-shrink: 0 !important;
-                border: none !important;
-                box-shadow: none !important;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-
-            .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box img {
-                width: 100% !important;
-                height: 100% !important;
-                max-width: 100% !important;
-                max-height: 100% !important;
-                object-fit: contain !important;
-                display: block !important;
-                margin: 0 auto !important;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-
-            /* ===== تصغير QR Code وإزالة الإطار الذهبي ===== */
-            .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-code {
-                width: 72px !important;
-                height: 72px !important;
-                padding: 4px !important;
-                border: none !important;
-                background: #ffffff !important;
-                border-radius: 8px !important;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-
-            .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-code canvas,
-            .print-preview-overlay .print-wrapper .invoice-header .invoice-title .qr-code img {
-                width: 100% !important;
-                height: 100% !important;
-                max-width: 100% !important;
-                max-height: 100% !important;
-            }
-
-            .print-preview-overlay .print-wrapper .invoice-header .invoice-title {
-                min-width: 90px !important;
-                padding: 6px 10px !important;
-                border-width: 2px !important;
-            }
-
-            .print-preview-overlay .print-wrapper .invoice-header {
-                padding-bottom: 18px !important;
-                margin-bottom: 18px !important;
-                border-bottom-width: 3px !important;
-                gap: 15px !important;
-            }
-
-            .print-preview-overlay .print-wrapper .invoice-header .logo-section {
-                gap: 15px !important;
-            }
-
-            .print-preview-overlay .print-wrapper .invoice-header .company-details h2 {
-                font-size: 20px !important;
-                font-weight: 900 !important;
-            }
-
-            .print-preview-overlay .print-wrapper .invoice-header .company-details p {
-                font-size: 11px !important;
-                line-height: 1.4 !important;
-            }
-
-            .print-preview-overlay .print-wrapper .info-grid {
-                display: grid !important;
-                grid-template-columns: 1fr 1fr 1fr 1fr 1fr !important;
-                gap: 10px !important;
-                margin-bottom: 16px !important;
-                padding: 12px 16px !important;
-                border-radius: 8px !important;
-                border-width: 1px !important;
-            }
-
-            .print-preview-overlay .print-wrapper .info-grid .item .label {
-                font-size: 9px !important;
-                font-weight: 700 !important;
-            }
-
-            .print-preview-overlay .print-wrapper .info-grid .item .value {
-                font-size: 14px !important;
-                font-weight: 700 !important;
-            }
-
-            .print-preview-overlay .print-wrapper table {
-                width: 100% !important;
-                border-collapse: collapse !important;
-                font-size: 12px !important;
-            }
-
-            .print-preview-overlay .print-wrapper table th {
-                padding: 10px 12px !important;
-                font-size: 10px !important;
-                font-weight: 700 !important;
-            }
-
-            .print-preview-overlay .print-wrapper table td {
-                padding: 10px 12px !important;
-                font-size: 11px !important;
-                border-bottom-width: 1px !important;
-            }
-
-            .print-preview-overlay .print-wrapper .footer {
-                padding-top: 18px !important;
-                margin-top: 18px !important;
-                font-size: 11px !important;
-                border-top-width: 2px !important;
-            }
-
-            .print-preview-overlay .print-wrapper .footer .signature .line {
-                width: 100px !important;
-                border-bottom-width: 2px !important;
-                margin-top: 6px !important;
-            }
-
-            .print-preview-overlay .print-wrapper .footer .signature p {
-                font-size: 11px !important;
-            }
-
-            .print-preview-overlay .print-wrapper .footer .total-details {
-                font-size: 12px !important;
-            }
-
-            .print-preview-overlay .print-wrapper .footer .total-details .total-amount {
-                font-size: 16px !important;
-                font-weight: 900 !important;
-                color: var(--teal) !important;
-            }
-
-            .print-preview-overlay .print-wrapper .notes-section {
-                margin-top: 16px !important;
-                padding-top: 14px !important;
-                padding: 16px 18px !important;
-                border-top-width: 2px !important;
-                border-radius: 8px !important;
-            }
-
-            .print-preview-overlay .print-wrapper .notes-section .notes-title {
-                font-size: 11px !important;
-                font-weight: 800 !important;
-                gap: 10px !important;
-                margin-bottom: 10px !important;
-            }
-
-            .print-preview-overlay .print-wrapper .notes-section .notes-title i {
-                font-size: 12px !important;
-            }
-
-            .print-preview-overlay .print-wrapper .notes-section .notes-content {
-                font-size: 10px !important;
-                line-height: 1.8 !important;
-            }
-
-            .print-preview-overlay .print-wrapper .notes-section .notes-content p {
-                padding-right: 16px !important;
-                margin-bottom: 4px !important;
-            }
-
-            .print-preview-overlay .print-wrapper .print-footer-notes {
-                margin-top: 14px !important;
-                padding-top: 12px !important;
-                border-top-width: 2px !important;
-                font-size: 9px !important;
-                line-height: 1.8 !important;
-            }
-
-            .print-preview-overlay .print-wrapper .print-footer-notes .note-item {
-                gap: 6px !important;
-                margin-bottom: 2px !important;
-            }
-
-            .print-preview-overlay .print-wrapper .print-footer-notes .note-item i {
-                font-size: 6px !important;
-                margin-top: 4px !important;
-            }
-
-            .print-preview-overlay .print-wrapper .invoice-header {
-                display: flex !important;
-                align-items: center !important;
-                justify-content: space-between !important;
-                flex-direction: row !important;
-            }
-
-            .print-preview-overlay .print-wrapper .footer {
-                display: flex !important;
-                justify-content: space-between !important;
-                align-items: flex-start !important;
-                flex-direction: row !important;
-            }
-
-            .print-preview-overlay .print-wrapper table tbody tr {
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
-            }
-
-            .print-preview-overlay .print-wrapper .notes-section {
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
-            }
-
-            .print-preview-overlay .print-wrapper .print-footer-notes {
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
-            }
-
-            .print-preview-overlay .print-wrapper {
-                display: flex !important;
-                flex-direction: column !important;
-                min-height: 100% !important;
-            }
-
-            .print-preview-overlay .print-wrapper .footer {
-                margin-top: auto !important;
-            }
-
-            .print-preview-overlay .print-wrapper .badge {
-                display: inline-flex !important;
-                align-items: center !important;
-                gap: 4px !important;
-                padding: 2px 10px !important;
-                border-radius: 50px !important;
-                font-size: 9px !important;
-                font-weight: 700 !important;
-                border: 1px solid transparent !important;
-            }
-
-            .print-preview-overlay .print-wrapper .badge i {
-                font-size: 8px !important;
-            }
-
-            .print-preview-overlay .print-wrapper .badge-paid {
-                background: var(--teal-soft) !important;
-                color: var(--teal) !important;
-            }
-
-            .print-preview-overlay .print-wrapper .badge-balance {
-                background: var(--rust-soft) !important;
-                color: var(--rust) !important;
-            }
-
-            .print-preview-overlay .print-wrapper .badge-type {
-                background: var(--surface-muted) !important;
-                color: var(--ink-mute) !important;
-                border-color: var(--line) !important;
-            }
-
-            .print-preview-overlay .print-wrapper .badge-future {
-                background: var(--accent-soft) !important;
-                color: var(--accent-ink) !important;
-            }
-
-            .print-preview-overlay .print-wrapper::-webkit-scrollbar {
-                display: none !important;
-            }
-
-            .print-preview-overlay .print-wrapper {
-                scrollbar-width: none !important;
-            }
-
-            .print-preview-overlay .print-wrapper .notes-section,
-            .print-preview-overlay .print-wrapper .print-footer-notes,
-            .print-preview-overlay .print-wrapper .info-grid,
-            .print-preview-overlay .print-wrapper .invoice-header .invoice-title,
-            .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box,
-            .print-preview-overlay .print-wrapper .badge,
-            .print-preview-overlay .print-wrapper .footer .total-details .total-amount {
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
             }
@@ -3508,7 +3408,7 @@
 
         /**
          * ============================================================
-         * GENERATE QR CODE - حجم مصغر 72px (40% أصغر من 120px) وإزالة الإطار
+         * GENERATE QR CODE - حجم مصغر 72px
          * ============================================================
          */
         function generateQRCode(invoiceNumber, client, total) {
@@ -3518,17 +3418,14 @@
                 return;
             }
 
-            // تنظيف الحاوية
             qrContainer.innerHTML = '';
 
-            // التحقق من وجود مكتبة QRCode
             if (typeof QRCode === 'undefined') {
                 console.warn('⚠️ مكتبة QRCode غير محملة، سيتم استخدام API خارجي');
                 generateQRCodeExternal(invoiceNumber, client, total);
                 return;
             }
 
-            // إنشاء محتوى QR Code
             var qrData = {
                 invoice: invoiceNumber || '----',
                 client: client || 'غير محدد',
@@ -3603,7 +3500,8 @@
 
         /**
          * ============================================================
-         * PREVIEW INVOICE - عرض الفاتورة مع تاريخ ووقت الدخول والخروج
+         * PREVIEW INVOICE - تصميم راقٍ لفاتورة برنامج محاسبة
+         * (نفس البيانات تماماً — تصميم عرض جديد فقط)
          * ============================================================
          */
         function previewInvoice() {
@@ -3621,6 +3519,7 @@
             var discount = displayDiscount.textContent;
             var paid = displayPaid.textContent;
             var remaining = displayRemaining.textContent;
+            var isPaidFull = (parseFloat(remaining) || 0) <= 0;
 
             var companyName = settings.companyName || 'منتجع حياله';
             var companyAddress = settings.companyAddress || '';
@@ -3630,42 +3529,50 @@
 
             var printContent = document.getElementById('printPreviewContent');
 
+            var statusBadgeHtml = isPaidFull ?
+                '<span class="status-badge paid"><i class="fas fa-check-circle"></i> مدفوعة بالكامل</span>' :
+                '<span class="status-badge due"><i class="fas fa-exclamation-circle"></i> يوجد مبلغ مستحق</span>';
+
             var html = `
                 <div class="invoice-header">
                     <div class="logo-section">
                         <div class="logo-box">
-                            ${companyLogo ? `<img src="${companyLogo}" alt="منتجع حياله" />` : `<span style="font-size:2.8rem;font-weight:900;color:#121821;">ح</span>`}
+                            ${companyLogo ? `<img src="${companyLogo}" alt="منتجع حياله" />` : `<span style="font-size:2.4rem;font-weight:900;color:#121821;">ح</span>`}
                         </div>
                         <div class="company-details">
+                            <span class="eyebrow">فاتورة مبيعات رسمية</span>
                             <h2>${companyName}</h2>
-                            <p>${companyAddress}</p>
-                            <p style="font-size:0.55rem;color:#6d7883;">📞 ${companyPhone}</p>
+                            <div class="header-rule"></div>
+                            <p>
+                                <i class="fas fa-map-marker-alt"></i> ${companyAddress}<br/>
+                                <i class="fas fa-phone-alt"></i> ${companyPhone}
+                            </p>
                         </div>
                     </div>
                     <div class="invoice-title">
+                        <span class="invoice-title-label">رقم الفاتورة</span>
+                        <span class="invoice-title-number">${invNum}</span>
                         <div class="qr-code" id="qrCodeContainer">
                         </div>
-                        <div class="qr-label">
-                            <strong>فاتورة: ${invNum}</strong>
-                        </div>
+                        <span class="qr-label">امسح للتحقق من الفاتورة</span>
                     </div>
                 </div>
 
                 <div class="info-grid">
-                    <div class="item"><span class="label">رقم الفاتورة</span><div class="value">${invNum}</div></div>
                     <div class="item"><span class="label">الرقم الدفتري</span><div class="value">${book}</div></div>
-                    <div class="item"><span class="label">التاريخ</span><div class="value">${date}</div></div>
-                    <div class="item"><span class="label">الجوال</span><div class="value">${phone}</div></div>
-                    <div class="item"><span class="label">العميل</span><div class="value">${client}</div></div>
+                    <div class="item"><span class="label">تاريخ الإصدار</span><div class="value">${date}</div></div>
+                    <div class="item highlight"><span class="label">اسم العميل</span><div class="value">${client}</div></div>
+                    <div class="item"><span class="label">رقم الجوال</span><div class="value">${phone}</div></div>
+                    <div class="item"><span class="label">حالة الفاتورة</span><div class="value">${statusBadgeHtml}</div></div>
                 </div>
 
                 <table>
                     <thead>
                         <tr>
-                            <th style="width:25px;">#</th>
-                            <th style="text-align:right;">نوع العقار</th>
-                            <th>عدد الأيام</th>
-                            <th>السعر اليومي</th>
+                            <th style="width:30px;">#</th>
+                            <th style="text-align:right;">وصف الخدمة / العقار</th>
+                            <th>عدد الليالي</th>
+                            <th>سعر الليلة</th>
                             <th>الإجمالي</th>
                         </tr>
                     </thead>
@@ -3677,23 +3584,20 @@
                 var checkInTimeFormatted = item.checkInTime ? item.checkInTime : 'غير محدد';
                 var checkOutDateFormatted = item.checkOut ? new Date(item.checkOut).toLocaleDateString('ar-EG') : 'غير محدد';
                 var checkOutTimeFormatted = item.checkOutTime ? item.checkOutTime : 'غير محدد';
-                
+
                 html += `
-                    <tr>
+                    <tr class="data-row">
                         <td>${index + 1}</td>
-                        <td style="text-align:right;">${item.property}</td>
+                        <td style="text-align:right;font-weight:600;color:var(--ink);">${item.property}</td>
                         <td>${item.nights}</td>
                         <td>${item.dailyPrice.toFixed(2)}</td>
-                        <td style="font-weight:700;color:var(--teal);">${item.total.toFixed(2)}</td>
+                        <td class="row-total">${item.total.toFixed(2)} ر.س</td>
                     </tr>
-                    <tr style="background:var(--surface-muted);">
-                        <td colspan="5" style="text-align:right;font-size:0.6rem;color:var(--ink-mute);padding:4px 12px;border-bottom:1px solid var(--line);">
-                            <i class="fas fa-calendar-check" style="margin-left:6px;color:var(--teal);"></i>
-                            <strong>تاريخ ووقت الدخول:</strong> ${checkInDateFormatted} - ${checkInTimeFormatted}
-                            <span style="margin-right:16px;"></span>
-                            <i class="fas fa-calendar-times" style="margin-left:6px;color:var(--rust);"></i>
-                            <strong>تاريخ ووقت الخروج:</strong> ${checkOutDateFormatted} - ${checkOutTimeFormatted}
-                            ${item.stayType ? `<span style="margin-right:16px;background:var(--accent-soft);padding:1px 10px;border-radius:4px;font-weight:600;color:var(--accent-ink);font-size:0.55rem;">${item.stayType}</span>` : ''}
+                    <tr class="stay-meta-row">
+                        <td colspan="5">
+                            <span class="meta-piece"><i class="fas fa-sign-in-alt in"></i> <strong>الدخول:</strong> ${checkInDateFormatted} - ${checkInTimeFormatted}</span>
+                            <span class="meta-piece"><i class="fas fa-sign-out-alt out"></i> <strong>الخروج:</strong> ${checkOutDateFormatted} - ${checkOutTimeFormatted}</span>
+                            ${item.stayType ? `<span class="stay-chip">${item.stayType}</span>` : ''}
                         </td>
                     </tr>
                 `;
@@ -3703,35 +3607,39 @@
                     </tbody>
                 </table>
 
-                <div class="footer">
-                    <div>
-                        <div style="display:flex;gap:20px;flex-wrap:wrap;margin-bottom:6px;">
-                            <span><strong>الإجمالي:</strong> ${total} ر.س</span>
-                            <span><strong>الخصم:</strong> ${discount} ر.س</span>
-                            <span><strong>المدفوع:</strong> ${paid} ر.س</span>
-                            <span style="color:var(--teal);"><strong>المتبقي:</strong> ${remaining} ر.س</span>
+                <div class="invoice-summary">
+                    <div class="summary-notes">
+                        <p class="thanks">"${footer}"</p>
+                        <div class="signature">
+                            <p class="sig-label">توقيع واستلام العميل</p>
+                            <div class="line"></div>
+                            <p class="sig-caption">الاسم والتوقيع</p>
                         </div>
-                        <p style="font-size:0.55rem;color:#8a9aaa;">${footer}</p>
                     </div>
-                    <div class="signature">
-                        <p>توقيع المستلم</p>
-                        <div class="line"></div>
-                        <p style="font-size:0.5rem;color:#8a9aaa;">شكراً لثقتكم بنا</p>
+                    <div class="summary-box">
+                        <div class="summary-row"><span>الإجمالي</span><span>${total} ر.س</span></div>
+                        <div class="summary-row discount"><span>الخصم</span><span>- ${discount} ر.س</span></div>
+                        <div class="summary-row"><span>المدفوع</span><span>${paid} ر.س</span></div>
+                        <div class="summary-row net"><span>المتبقي المستحق</span><span>${remaining} ر.س</span></div>
                     </div>
                 </div>
 
                 <div class="notes-section">
                     <div class="notes-title">
-                        <i class="fas fa-sticky-note"></i> ملاحظات
+                        <i class="fas fa-sticky-note"></i> شروط وملاحظات هامة
                     </div>
                     <div class="notes-content">
-                        <p>1. لا نأخذ تأمين ولا نعمل تشييك بعد الخروج (أمانة المسلم تكفي)</p>
-                        <p>2. تفهم المرافقون طابع المكان كمزرعة شعبية ليست كالفنادق مثلاً</p>
-                        <p>3. في حال بقاء أي أغراض (غير مثمنة) دون مراجعة مباشرة من المستأجر يحق لإدارة المنتجع التصرف بها وفق ما تراه</p>
-                        <p>4. يرجى التأكد من قراءة التفاصيل بدقة (يمكنكم طلب فيديوهات إضافية للمكان)</p>
-                        <p>5. إدارة المنتجع غير مسؤولة عن فقدان أو تلف المقنيات الشخصية، لذا توصي بالتأكد من عدم نسيان أي أغراض قبل المغادرة</p>
-                        <p>6. يمنع إحداث أي تلف أو تخريب في مرافق المنتجع أو محتوياته، ويحمل المستأجر قيمة أي أضرار تنتج عن الاستخدام غير المعتدل</p>
+                        <p>لا نأخذ تأمين ولا نعمل تشييك بعد الخروج (أمانة المسلم تكفي)</p>
+                        <p>تفهم المرافقون طابع المكان كمزرعة شعبية ليست كالفنادق مثلاً</p>
+                        <p>في حال بقاء أي أغراض (غير مثمنة) دون مراجعة مباشرة من المستأجر يحق لإدارة المنتجع التصرف بها وفق ما تراه</p>
+                        <p>يرجى التأكد من قراءة التفاصيل بدقة (يمكنكم طلب فيديوهات إضافية للمكان)</p>
+                        <p>إدارة المنتجع غير مسؤولة عن فقدان أو تلف المقتنيات الشخصية، لذا توصي بالتأكد من عدم نسيان أي أغراض قبل المغادرة</p>
+                        <p>يمنع إحداث أي تلف أو تخريب في مرافق المنتجع أو محتوياته، ويحمل المستأجر قيمة أي أضرار تنتج عن الاستخدام غير المعتدل</p>
                     </div>
+                </div>
+
+                <div class="print-brand-footer">
+                    <strong>${companyName}</strong> — تم إصدار هذه الفاتورة إلكترونياً عبر نظام إدارة الحجوزات
                 </div>
             `;
 
@@ -3777,7 +3685,6 @@
          */
         function openPrintWindow() {
             var content = document.getElementById('printPreviewContent').innerHTML;
-            var styles = document.querySelector('style').innerHTML;
 
             var oldFrame = document.getElementById('printFrame');
             if (oldFrame) {
@@ -3804,135 +3711,211 @@
                     <meta charset="UTF-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <title>فاتورة ${invoiceNumber.value || ''} - ${settings.companyName || 'منتجع حياله'}</title>
+                    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Marcellus&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
                     <style>
+                        :root {
+                            --ink: #121821;
+                            --ink-soft: #2c3644;
+                            --ink-mute: #6d7883;
+                            --line: #dde3e0;
+                            --line-strong: #c7d0cc;
+                            --accent: #dd9f2e;
+                            --accent-ink: #7a5312;
+                            --accent-soft: #faead0;
+                            --teal: #1d7b6c;
+                            --teal-soft: #e2f2ee;
+                            --rust: #bf4f30;
+                            --rust-soft: #fbe8e1;
+                            --surface-muted: #f4f6f5;
+                            --font-display: 'Cairo', 'Segoe UI', Tahoma, Arial, sans-serif;
+                            --font-serif: 'Marcellus', 'Cairo', serif;
+                            --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+                        }
+                        * { box-sizing: border-box; }
                         body {
                             background: #ffffff !important;
                             padding: 0 !important;
                             margin: 0 !important;
-                            font-family: 'Cairo', sans-serif !important;
+                            font-family: var(--font-display) !important;
+                            direction: rtl;
+                            color: var(--ink);
                         }
                         ::-webkit-scrollbar { display: none !important; }
-                        ${styles}
+
                         .print-wrapper {
                             max-width: 210mm !important;
                             margin: 0 auto !important;
-                            background: #ffffff !important;
+                            background: linear-gradient(180deg, #fffefb 0%, #fdfbf5 100%) !important;
                             padding: 12mm 15mm !important;
                             min-height: 100vh !important;
                             box-sizing: border-box !important;
+                            border: 1px solid var(--accent);
+                            position: relative;
+                            display: flex;
+                            flex-direction: column;
                         }
-                        .print-actions { display: none !important; }
-                        .invoice-header .logo-section .logo-box {
-                            width: 156px !important;
-                            height: 156px !important;
-                            min-width: 156px !important;
-                            max-width: 156px !important;
-                            min-height: 156px !important;
-                            max-height: 156px !important;
-                            border-radius: 16px !important;
-                            overflow: hidden !important;
-                            display: flex !important;
-                            align-items: center !important;
-                            justify-content: center !important;
-                            background: #ffffff !important;
-                            padding: 10px !important;
-                            flex-shrink: 0 !important;
-                            border: none !important;
-                            box-shadow: none !important;
-                            -webkit-print-color-adjust: exact !important;
-                            print-color-adjust: exact !important;
-                        }
-                        .invoice-header .logo-section .logo-box img {
-                            width: 100% !important;
-                            height: 100% !important;
-                            max-width: 100% !important;
-                            max-height: 100% !important;
-                            object-fit: contain !important;
-                            display: block !important;
-                            margin: 0 auto !important;
-                            -webkit-print-color-adjust: exact !important;
-                            print-color-adjust: exact !important;
-                        }
-                        .invoice-header .logo-section .logo-box span {
-                            font-size: 2.8rem !important;
-                            font-weight: 900 !important;
-                            color: #121821 !important;
-                            -webkit-print-color-adjust: exact !important;
-                            print-color-adjust: exact !important;
-                        }
-                        .invoice-header .invoice-title .qr-code {
-                            width: 72px !important;
-                            height: 72px !important;
-                            padding: 4px !important;
-                            border: none !important;
-                            background: #ffffff !important;
-                            border-radius: 8px !important;
-                            -webkit-print-color-adjust: exact !important;
-                            print-color-adjust: exact !important;
-                        }
-                        .invoice-header .invoice-title .qr-code canvas,
-                        .invoice-header .invoice-title .qr-code img {
-                            width: 100% !important;
-                            height: 100% !important;
-                            max-width: 100% !important;
-                            max-height: 100% !important;
-                        }
-                        .invoice-header .invoice-title {
-                            min-width: 90px !important;
-                            padding: 6px 10px !important;
-                            border-width: 2px !important;
-                        }
+
                         .invoice-header {
                             display: flex !important;
-                            align-items: center !important;
+                            align-items: flex-start !important;
                             justify-content: space-between !important;
-                            padding-bottom: 18px !important;
-                            border-bottom: 3px solid var(--ink) !important;
-                            margin-bottom: 18px !important;
-                            gap: 15px !important;
                             flex-direction: row !important;
+                            padding-bottom: 18px !important;
+                            margin-bottom: 20px !important;
+                            gap: 15px !important;
+                            border-bottom: none !important;
+                            position: relative;
+                        }
+                        .invoice-header::after {
+                            content: '';
+                            position: absolute;
+                            left: 0; right: 0; bottom: 0;
+                            height: 3px;
+                            background: linear-gradient(90deg, var(--accent) 0%, var(--accent) 55%, transparent 100%);
                         }
                         .invoice-header .logo-section {
                             display: flex !important;
                             align-items: center !important;
                             gap: 15px !important;
                         }
+                        .invoice-header .logo-section .logo-box {
+                            width: 100px !important;
+                            height: 100px !important;
+                            min-width: 100px !important;
+                            border-radius: 16px !important;
+                            overflow: hidden !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: center !important;
+                            background: #ffffff !important;
+                            padding: 8px !important;
+                            border: 1px solid var(--line) !important;
+                            box-shadow: 0 6px 18px -8px rgba(18,24,33,0.18);
+                        }
+                        .invoice-header .logo-section .logo-box img {
+                            width: 100% !important;
+                            height: 100% !important;
+                            object-fit: contain !important;
+                            display: block !important;
+                            margin: 0 auto !important;
+                        }
+                        .invoice-header .company-details .eyebrow {
+                            display: inline-block;
+                            font-size: 9px !important;
+                            letter-spacing: 1.4px;
+                            color: var(--accent-ink) !important;
+                            font-weight: 800 !important;
+                            text-transform: uppercase;
+                            margin-bottom: 4px;
+                        }
                         .invoice-header .company-details h2 {
+                            font-family: var(--font-serif) !important;
                             font-size: 20px !important;
-                            font-weight: 900 !important;
+                            font-weight: 700 !important;
                             color: var(--ink) !important;
-                            line-height: 1.2 !important;
+                            margin-bottom: 7px !important;
+                        }
+                        .invoice-header .company-details .header-rule {
+                            width: 46px; height: 3px;
+                            background: var(--accent);
+                            border-radius: 3px;
+                            margin-bottom: 9px;
                         }
                         .invoice-header .company-details p {
-                            font-size: 11px !important;
+                            font-size: 10.5px !important;
                             color: var(--ink-mute) !important;
-                            line-height: 1.4 !important;
+                            line-height: 1.7 !important;
                         }
-                        .info-grid {
-                            display: grid !important;
-                            grid-template-columns: 1fr 1fr 1fr 1fr 1fr !important;
-                            gap: 10px !important;
-                            margin-bottom: 16px !important;
-                            background: var(--surface-muted) !important;
-                            padding: 12px 16px !important;
-                            border-radius: 8px !important;
-                            border: 1px solid var(--line) !important;
+                        .invoice-header .company-details p i { width: 13px; color: var(--accent-ink); text-align: center; }
+
+                        .invoice-title {
+                            display: flex !important;
+                            flex-direction: column !important;
+                            align-items: center !important;
+                            min-width: 140px !important;
+                            background: #ffffff !important;
+                            padding: 10px 16px !important;
+                            border-radius: 12px !important;
+                            border: 1px solid var(--accent) !important;
+                            gap: 7px !important;
                         }
-                        .info-grid .item .label {
+                        .invoice-title .invoice-title-label {
                             font-size: 9px !important;
-                            color: var(--ink-mute) !important;
-                            font-weight: 700 !important;
+                            font-weight: 800 !important;
+                            letter-spacing: 1.2px;
+                            color: var(--accent-ink) !important;
+                            text-transform: uppercase;
+                            background: var(--accent-soft) !important;
+                            padding: 3px 12px !important;
+                            border-radius: 50px !important;
                         }
-                        .info-grid .item .value {
-                            font-size: 14px !important;
+                        .invoice-title .invoice-title-number {
+                            font-family: var(--font-mono) !important;
+                            font-size: 12px !important;
                             font-weight: 700 !important;
                             color: var(--ink) !important;
                         }
+                        .invoice-title .qr-code {
+                            width: 72px !important;
+                            height: 72px !important;
+                            padding: 4px !important;
+                            border: 1px dashed var(--line-strong) !important;
+                            background: #ffffff !important;
+                            border-radius: 8px !important;
+                        }
+                        .invoice-title .qr-code canvas,
+                        .invoice-title .qr-code img {
+                            width: 100% !important;
+                            height: 100% !important;
+                        }
+                        .invoice-title .qr-label {
+                            font-size: 8px !important;
+                            color: var(--ink-mute) !important;
+                            text-align: center !important;
+                        }
+
+                        .status-badge {
+                            display: inline-flex; align-items: center; gap: 5px;
+                            padding: 3px 12px; border-radius: 50px;
+                            font-size: 9px; font-weight: 800;
+                        }
+                        .status-badge.paid { background: var(--teal-soft) !important; color: var(--teal) !important; }
+                        .status-badge.due { background: var(--rust-soft) !important; color: var(--rust) !important; }
+
+                        .info-grid {
+                            display: flex !important;
+                            flex-wrap: wrap !important;
+                            margin-bottom: 16px !important;
+                            background: #ffffff !important;
+                            border-radius: 8px !important;
+                            border: 1px solid var(--line) !important;
+                            overflow: hidden !important;
+                        }
+                        .info-grid .item {
+                            flex: 1;
+                            min-width: 95px;
+                            padding: 10px 12px !important;
+                            border-left: 1px dashed var(--line) !important;
+                        }
+                        .info-grid .item:last-child { border-left: none !important; }
+                        .info-grid .item.highlight { background: var(--accent-soft) !important; }
+                        .info-grid .item .label {
+                            font-size: 8.5px !important; color: var(--ink-mute) !important; font-weight: 700 !important;
+                            letter-spacing: 0.4px; text-transform: uppercase; display: block; margin-bottom: 4px;
+                        }
+                        .info-grid .item .value { font-size: 13px !important; font-weight: 700 !important; color: var(--ink) !important; }
+                        .info-grid .item.highlight .value { color: var(--accent-ink) !important; }
+
                         table {
                             width: 100% !important;
-                            border-collapse: collapse !important;
+                            border-collapse: separate !important;
+                            border-spacing: 0 !important;
                             font-size: 12px !important;
                             margin-bottom: 4px !important;
+                            border-radius: 8px !important;
+                            overflow: hidden !important;
+                            border: 1px solid var(--line) !important;
                         }
                         table th {
                             background: var(--ink) !important;
@@ -3941,139 +3924,115 @@
                             text-align: center !important;
                             font-size: 10px !important;
                             font-weight: 700 !important;
+                            border-bottom: 2px solid var(--accent) !important;
                         }
                         table td {
-                            padding: 10px 12px !important;
+                            padding: 9px 12px !important;
                             border-bottom: 1px solid var(--line) !important;
                             color: var(--ink-soft) !important;
                             text-align: center !important;
                             font-size: 11px !important;
+                            background: #ffffff !important;
                         }
-                        .footer {
-                            border-top: 2px solid var(--line) !important;
-                            padding-top: 18px !important;
-                            margin-top: 18px !important;
+                        table tbody tr.data-row:nth-of-type(4n+1) td { background: #fbfaf6 !important; }
+                        table tbody tr:last-child td { border-bottom: none !important; }
+                        table .row-total { font-weight: 800 !important; color: var(--accent-ink) !important; font-family: var(--font-mono) !important; }
+                        table .stay-meta-row td {
+                            text-align: right !important;
+                            font-size: 9.5px !important;
+                            color: var(--ink-mute) !important;
+                            padding: 6px 14px !important;
+                            background: var(--surface-muted) !important;
+                            border-bottom: 1px solid var(--line) !important;
+                        }
+                        table .stay-meta-row .meta-piece { margin-left: 16px; display: inline-flex; align-items: center; gap: 5px; }
+                        table .stay-meta-row i.in { color: var(--teal) !important; }
+                        table .stay-meta-row i.out { color: var(--rust) !important; }
+                        table .stay-meta-row .stay-chip {
+                            background: var(--accent-soft) !important; color: var(--accent-ink) !important;
+                            padding: 1px 9px !important; border-radius: 4px !important; font-weight: 700 !important; font-size: 9px !important;
+                        }
+
+                        .invoice-summary {
                             display: flex !important;
                             justify-content: space-between !important;
-                            font-size: 11px !important;
-                            color: var(--ink-mute) !important;
-                            flex-direction: row !important;
                             align-items: flex-start !important;
-                        }
-                        .footer .signature .line {
-                            width: 100px !important;
-                            border-bottom: 2px solid var(--ink) !important;
-                            margin-top: 6px !important;
-                        }
-                        .footer .signature p {
-                            font-size: 11px !important;
-                        }
-                        .footer .total-details {
-                            font-size: 12px !important;
-                        }
-                        .footer .total-details .total-amount {
-                            font-size: 16px !important;
-                            font-weight: 900 !important;
-                            color: var(--teal) !important;
-                        }
-                        .notes-section {
-                            margin-top: 16px !important;
+                            flex-direction: row !important;
+                            gap: 20px !important;
+                            margin-top: 18px !important;
                             padding-top: 14px !important;
-                            padding: 16px 18px !important;
-                            border-top: 2px dashed var(--line-strong) !important;
+                            border-top: 1px dashed var(--line-strong) !important;
+                        }
+                        .summary-notes { flex: 1; min-width: 0; }
+                        .summary-notes .thanks { font-family: var(--font-serif) !important; font-size: 13px !important; color: var(--ink-soft) !important; margin-bottom: 16px !important; }
+                        .signature .sig-label { font-size: 10px !important; color: var(--ink-mute) !important; font-weight: 700 !important; margin-bottom: 22px !important; }
+                        .signature .line { width: 130px !important; border-bottom: 1.5px solid var(--line-strong) !important; }
+                        .signature .sig-caption { font-size: 9px !important; color: var(--ink-mute) !important; margin-top: 5px !important; }
+
+                        .summary-box {
+                            flex: 0 0 240px !important;
+                            border: 1px solid var(--accent) !important;
+                            border-radius: 8px !important;
+                            overflow: hidden !important;
+                            background: #ffffff !important;
+                        }
+                        .summary-row {
+                            display: flex !important; justify-content: space-between !important; align-items: center !important;
+                            padding: 7px 14px !important; font-size: 11px !important; color: var(--ink-soft) !important;
+                            border-bottom: 1px dashed var(--line) !important;
+                        }
+                        .summary-row span:last-child { font-family: var(--font-mono) !important; font-weight: 700 !important; color: var(--ink) !important; }
+                        .summary-row.discount span:last-child { color: var(--rust) !important; }
+                        .summary-row.net { background: var(--ink) !important; border-bottom: none !important; padding: 11px 14px !important; }
+                        .summary-row.net span:first-child { color: rgba(255,255,255,0.75) !important; font-weight: 700 !important; font-size: 10.5px !important; }
+                        .summary-row.net span:last-child { color: var(--accent) !important; font-size: 15px !important; font-weight: 800 !important; }
+
+                        .notes-section {
+                            margin-top: 18px !important;
                             background: var(--surface-muted) !important;
                             border-radius: 8px !important;
+                            border-top: none !important;
+                            border-right: 4px solid var(--accent) !important;
+                            padding: 14px 16px !important;
+                            page-break-inside: avoid !important;
                         }
                         .notes-section .notes-title {
-                            font-size: 11px !important;
-                            font-weight: 800 !important;
-                            color: var(--accent-ink) !important;
-                            display: flex !important;
-                            align-items: center !important;
-                            gap: 10px !important;
-                            margin-bottom: 10px !important;
+                            font-size: 11px !important; font-weight: 800 !important; color: var(--ink) !important;
+                            display: flex !important; align-items: center !important; gap: 8px !important; margin-bottom: 9px !important;
                         }
-                        .notes-section .notes-title i {
-                            font-size: 12px !important;
-                        }
+                        .notes-section .notes-title i { color: var(--accent-ink) !important; font-size: 12px !important; }
                         .notes-section .notes-content {
-                            font-size: 10px !important;
-                            color: var(--ink-soft) !important;
-                            line-height: 1.8 !important;
+                            font-size: 9.5px !important; color: var(--ink-soft) !important; line-height: 1.8 !important;
+                            display: grid !important; gap: 4px !important; counter-reset: note-counter;
                         }
                         .notes-section .notes-content p {
-                            padding-right: 16px !important;
-                            margin-bottom: 4px !important;
-                            position: relative !important;
+                            margin-bottom: 0 !important; position: relative !important; padding-right: 20px !important;
+                            counter-increment: note-counter;
                         }
                         .notes-section .notes-content p::before {
-                            content: '•' !important;
-                            position: absolute !important;
-                            right: 0 !important;
-                            color: var(--accent) !important;
-                            font-weight: 700 !important;
+                            content: counter(note-counter);
+                            position: absolute; right: 0; top: 0;
+                            width: 14px; height: 14px; background: var(--accent) !important; color: #fff !important;
+                            border-radius: 50%; font-size: 8px; font-weight: 800;
+                            display: flex; align-items: center; justify-content: center; line-height: 1;
                         }
-                        .print-footer-notes {
-                            margin-top: 14px !important;
-                            padding-top: 12px !important;
-                            border-top: 2px solid var(--line-strong) !important;
+
+                        .print-brand-footer {
+                            margin-top: 16px !important;
+                            padding-top: 10px !important;
+                            border-top: 1px solid var(--line) !important;
+                            text-align: center !important;
                             font-size: 9px !important;
                             color: var(--ink-mute) !important;
-                            line-height: 1.8 !important;
                         }
-                        .print-footer-notes .note-item {
-                            display: flex !important;
-                            align-items: flex-start !important;
-                            gap: 6px !important;
-                            margin-bottom: 2px !important;
-                        }
-                        .print-footer-notes .note-item i {
-                            color: var(--accent) !important;
-                            font-size: 6px !important;
-                            margin-top: 4px !important;
-                            flex-shrink: 0 !important;
-                        }
-                        .print-footer-notes strong {
-                            color: var(--ink-soft) !important;
-                        }
-                        .notes-section,
-                        .print-footer-notes,
-                        .info-grid,
-                        .invoice-header .invoice-title,
-                        .invoice-header .logo-section .logo-box,
-                        .badge,
-                        .footer .total-details .total-amount {
-                            -webkit-print-color-adjust: exact !important;
-                            print-color-adjust: exact !important;
-                        }
-                        table tbody tr {
-                            page-break-inside: avoid !important;
-                            break-inside: avoid !important;
-                        }
-                        .notes-section {
-                            page-break-inside: avoid !important;
-                            break-inside: avoid !important;
-                        }
-                        .print-footer-notes {
-                            page-break-inside: avoid !important;
-                            break-inside: avoid !important;
-                        }
-                        .footer {
-                            page-break-inside: avoid !important;
-                            break-inside: avoid !important;
-                        }
-                        .print-wrapper {
-                            display: flex !important;
-                            flex-direction: column !important;
-                            min-height: 100vh !important;
-                        }
-                        .footer {
-                            margin-top: auto !important;
-                        }
-                        @page {
-                            size: A4;
-                            margin: 0;
-                        }
+                        .print-brand-footer strong { color: var(--accent-ink) !important; }
+
+                        table tbody tr { page-break-inside: avoid !important; break-inside: avoid !important; }
+                        .invoice-summary { page-break-inside: avoid !important; break-inside: avoid !important; }
+
+                        * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+                        @page { size: A4; margin: 0; }
                     </style>
                 </head>
                 <body>
@@ -4138,17 +4097,14 @@
 
             showToast('⏳ جاري التحميل', 'جاري إنشاء ملف PDF...', 'warning');
 
-            // ===== الحصول على اسم العميل من الحقل مباشرة =====
             var clientNameValue = document.getElementById('clientName').value.trim();
             var rawClientName = clientNameValue || 'فاتورة';
-            
-            // إزالة الرموز الممنوعة في أسماء الملفات
+
             var safeClientName = rawClientName.replace(/[\\\/:*?"<>|]/g, '').trim();
             if (!safeClientName) {
                 safeClientName = 'فاتورة';
             }
 
-            // ===== الحصول على رقم الفاتورة =====
             var invoiceNum = document.getElementById('invoiceNumber').value.trim() || 'invoice';
 
             var fileName = safeClientName + ' - ' + invoiceNum + '.pdf';
@@ -4883,11 +4839,8 @@
             console.log('📊 Supabase URL:', SUPABASE_URL);
             console.log('👤 المستخدم:', user.name || 'غير معروف');
             console.log('✅ النظام جاهز للعمل مع Supabase');
-            console.log('📐 حجم اللوجو: 156px (تم تكبير 30%)');
-            console.log('📐 حجم QR Code: 72px (تم تصغير 40%)');
-            console.log('🖼️ تم إزالة الإطارات الذهبية حول اللوجو و QR Code');
+            console.log('🎨 تصميم فاتورة راقٍ بطابع محاسبي احترافي');
             console.log('📁 سيتم حفظ ملفات PDF باسم العميل تلقائياً');
-            console.log('🕐 سيتم عرض تاريخ ووقت الدخول والخروج في الفاتورة');
         });
     </script>
 
