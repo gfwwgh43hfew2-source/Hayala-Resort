@@ -6,6 +6,7 @@
     <title>تسجيل الدخول - منتجع حياله</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         /* ==========================================================
            RESET & BASE
@@ -763,7 +764,14 @@
          * ============================================================
          */
         var SUPABASE_URL = 'https://zwuvcblrrrriuylajvba.supabase.co';
-        var SUPABASE_ANON_KEY = 'sb_publishable_YFqwTEs-W_kprUgt4bgpCQ_tf5vVeFa';
+        var SUPABASE_ANON_KEY = 'sb_publishable_YFqwTEs-W_kprUgt4bgpCQ_tf5vVeFa'; // مفتاح عام آمن للعرض، وليس سري
+        var supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // لو المستخدم عنده جلسة سارية بالفعل، حوّله على طول للداشبورد
+        (async function checkExistingSession() {
+            var { data } = await supabaseClient.auth.getSession();
+            if (data.session) window.location.href = 'index.html';
+        })();
 
         /**
          * ============================================================
@@ -863,64 +871,51 @@
             loadingSpinner.style.display = 'flex';
             hideMessage();
 
-            // ===== التحقق من وجود المستخدم في Supabase =====
-            fetch(SUPABASE_URL + '/rest/v1/users?select=email,password,name,role,status&email=eq.' + encodeURIComponent(email), {
-                headers: {
-                    'apikey': SUPABASE_ANON_KEY,
-                    'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
-                }
-            })
-            .then(function(response) {
-                if (!response.ok) {
-                    throw new Error('فشل في الاتصال بقاعدة البيانات');
-                }
-                return response.json();
-            })
-            .then(function(data) {
-                if (!data || data.length === 0) {
-                    showMessage('البريد الإلكتروني غير مسجل', 'error');
-                    return;
-                }
+            // ===== تسجيل الدخول عن طريق Supabase Auth الحقيقي =====
+            // الباسورد بيترسل مشفّر (HTTPS) ويتفحص جوه Supabase نفسها،
+            // ومفيش أي تخزين أو مقارنة نص صريح في المتصفح تاني
+            supabaseClient.auth.signInWithPassword({ email: email, password: password })
+                .then(async function(result) {
+                    if (result.error) {
+                        // رسائل Supabase موحّدة لأي بيانات دخول غلط (إيميل أو باسورد)
+                        // عشان محدش يقدر يعرف هل الإيميل مسجل ولا لأ
+                        showMessage('البريد الإلكتروني أو كلمة المرور غير صحيحة', 'error');
+                        return;
+                    }
 
-                var user = data[0];
+                    // ===== التحقق من حالة الحساب (profiles.status) =====
+                    var { data: profile, error: profileError } = await supabaseClient
+                        .from('profiles')
+                        .select('status, name, role')
+                        .eq('id', result.data.user.id)
+                        .single();
 
-                // ===== التحقق من حالة المستخدم =====
-                if (user.status === 'inactive' || user.status === 'suspended') {
-                    showMessage('الحساب غير مفعل، يرجى التواصل مع الدعم', 'error');
-                    return;
-                }
+                    if (profileError || !profile) {
+                        showMessage('تعذّر تحميل بيانات الحساب', 'error');
+                        await supabaseClient.auth.signOut();
+                        return;
+                    }
 
-                // ===== التحقق من كلمة المرور =====
-                if (user.password !== password) {
-                    showMessage('كلمة المرور غير صحيحة', 'error');
-                    return;
-                }
+                    if (profile.status === 'inactive' || profile.status === 'suspended') {
+                        showMessage('الحساب غير مفعل، يرجى التواصل مع الدعم', 'error');
+                        await supabaseClient.auth.signOut();
+                        return;
+                    }
 
-                // ===== تسجيل الدخول ناجح =====
-                var userData = {
-                    id: user.id,
-                    email: user.email,
-                    name: user.name,
-                    role: user.role,
-                    status: user.status
-                };
+                    showMessage('✅ تم تسجيل الدخول بنجاح! جاري التحويل...', 'success');
 
-                localStorage.setItem('user', JSON.stringify(userData));
-
-                showMessage('✅ تم تسجيل الدخول بنجاح! جاري التحويل...', 'success');
-
-                setTimeout(function() {
-                    window.location.href = 'index.html';
-                }, 1500);
-            })
-            .catch(function(error) {
-                console.error('❌ خطأ:', error);
-                showMessage('حدث خطأ في الاتصال بالخادم', 'error');
-            })
-            .finally(function() {
-                loginBtn.style.display = 'flex';
-                loadingSpinner.style.display = 'none';
-            });
+                    setTimeout(function() {
+                        window.location.href = 'index.html';
+                    }, 1200);
+                })
+                .catch(function(error) {
+                    console.error('❌ خطأ:', error);
+                    showMessage('حدث خطأ في الاتصال بالخادم', 'error');
+                })
+                .finally(function() {
+                    loginBtn.style.display = 'flex';
+                    loadingSpinner.style.display = 'none';
+                });
         });
 
         /**
@@ -961,12 +956,7 @@
          * رسالة الترحيب في Console
          * ============================================================
          */
-        console.log('🏕️ منتجع حياله - تسجيل الدخول (Supabase)');
-        console.log('📊 Supabase URL:', SUPABASE_URL);
-        console.log('📌 المستخدمين المتاحين:');
-        console.log('   admin@hayala.com / admin123 (مدير النظام)');
-        console.log('   user@hayala.com / user123 (مستخدم عادي)');
-        console.log('✅ النظام جاهز للعمل');
+        console.log('🏕️ منتجع حياله - تسجيل الدخول (Supabase Auth)');
     </script>
 
 </body>
