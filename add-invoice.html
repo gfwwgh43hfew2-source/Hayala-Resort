@@ -58,8 +58,6 @@
             --header-height: 60px;
             --stripe-height: 4px;
             --mobile-nav-height: 56px;
-
-            /* ===== SCALE DOWN 10% ===== */
             --scale-factor: 0.9;
         }
 
@@ -1628,7 +1626,7 @@
             color: var(--accent-ink);
             text-align: center;
         }
-        .print-preview-overlay .print-wrapper .invoice-title {
+        .print-preview-overlay .print-wrapper .invoice-header .invoice-title {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -2413,36 +2411,6 @@
                 print-color-adjust: exact !important;
             }
         }
-
-        /* ============================================================
-           PDF GENERATION CONTAINER - عنصر ظاهر مؤقتاً لتوليد PDF
-           ============================================================ */
-        #pdfTempContainer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 210mm;
-            min-height: 297mm;
-            padding: 10mm 12mm;
-            background: #ffffff;
-            z-index: -1;
-            opacity: 0;
-            pointer-events: none;
-            overflow: visible;
-            font-family: 'Cairo', 'Segoe UI', Arial, sans-serif;
-            direction: rtl;
-            box-sizing: border-box;
-        }
-        
-        #pdfTempContainer .print-wrapper {
-            max-width: 180mm;
-            margin: 0 auto;
-            background: #ffffff;
-            padding: 0;
-            font-family: 'Cairo', Arial, sans-serif;
-            direction: rtl;
-            color: #121821;
-        }
     </style>
 </head>
 <body>
@@ -2571,11 +2539,6 @@
                 </button>
             </div>
         </div>
-
-        <!-- ============================================================
-        PDF TEMP CONTAINER — يستخدم لتوليد PDF مباشرة
-        ============================================================ -->
-        <div id="pdfTempContainer" aria-hidden="true"></div>
 
         <!-- ============================================================
         MAIN CONTENT
@@ -2828,8 +2791,8 @@
                             <button class="btn-tool info" onclick="previewInvoice()">
                                 <i class="fas fa-eye"></i> <span>معاينة</span>
                             </button>
-                            <button class="btn-tool pdf" id="btnSavePdfDirect">
-                                <i class="fas fa-file-pdf"></i> <span>حفظ PDF</span>
+                            <button class="btn-tool pdf" onclick="downloadPDF()">
+                                <i class="fas fa-file-pdf"></i> <span>PDF</span>
                             </button>
                             <button class="btn-tool danger" id="btnResetAll">
                                 <i class="fas fa-times"></i> <span>إلغاء</span>
@@ -2857,7 +2820,7 @@
     </script>
 
     <!-- ============================================================
-    JAVASCRIPT
+    JAVASCRIPT - الكود الكامل مع جميع التعديلات
     ============================================================ -->
     <script>
         /**
@@ -2959,7 +2922,6 @@
         var totalAmountDisplay = document.getElementById('totalAmountDisplay');
         var netAmountDisplay = document.getElementById('netAmountDisplay');
         var stayType = document.getElementById('stayType');
-        var btnSavePdfDirect = document.getElementById('btnSavePdfDirect');
 
         /**
          * ============================================================
@@ -2977,7 +2939,7 @@
         var currentQRCode = null;
 
         var settings = {
-            companyName: 'منتجع وشاليهات حياله القصيم',
+            companyName: 'منتجع وشاليهات حياله القصيم ',
             companyAddress: 'القصيم / بريدة - حي الخليج',
             companyPhone: '0509982400',
             companyEmail: 'info@hayala-resort.com',
@@ -3444,49 +3406,49 @@
 
         /**
          * ============================================================
-         * GENERATE QR CODE - حجم مصغر 72px (مبسّط لتجنب overflow)
-         * containerId: معرّف العنصر المستهدف (يدعم أكثر من حاوية QR)
+         * GENERATE QR CODE - حجم مصغر 72px
          * ============================================================
          */
-        function generateQRCode(invoiceNumberVal, client, total, containerId) {
-            containerId = containerId || 'qrCodeContainer';
-            var qrContainer = document.getElementById(containerId);
+        function generateQRCode(invoiceNumber, client, total) {
+            var qrContainer = document.getElementById('qrCodeContainer');
             if (!qrContainer) {
-                console.warn('⚠️ حاوية QR Code غير موجودة:', containerId);
+                console.warn('⚠️ حاوية QR Code غير موجودة');
                 return;
             }
 
             qrContainer.innerHTML = '';
 
-            // استخدام بيانات مختصرة جداً لتجنب overflow
-            var qrText = 'INV:' + (invoiceNumberVal || '----');
-
-            // التأكد من أن النص لا يتجاوز الحد المسموح (1440 حرف)
-            if (qrText.length > 200) {
-                qrText = qrText.substring(0, 200);
+            if (typeof QRCode === 'undefined') {
+                console.warn('⚠️ مكتبة QRCode غير محملة، سيتم استخدام API خارجي');
+                generateQRCodeExternal(invoiceNumber, client, total);
+                return;
             }
 
-            // محاولة استخدام المكتبة الداخلية أولاً
+            var qrData = {
+                invoice: invoiceNumber || '----',
+                client: client || 'غير محدد',
+                total: total || '0.00',
+                date: new Date().toLocaleDateString('ar-EG'),
+                company: settings.companyName || 'منتجع حياله'
+            };
+
+            var qrText = JSON.stringify(qrData);
+
             try {
-                if (typeof QRCode !== 'undefined') {
-                    var qr = new QRCode(qrContainer, {
-                        text: qrText,
-                        width: 72,
-                        height: 72,
-                        colorDark: '#121821',
-                        colorLight: '#ffffff',
-                        correctLevel: QRCode.CorrectLevel.M
-                    });
-                    currentQRCode = qr;
-                    console.log('✅ تم إنشاء QR Code مصغر (72px) بنجاح في', containerId);
-                    return;
-                }
+                var qr = new QRCode(qrContainer, {
+                    text: qrText,
+                    width: 72,
+                    height: 72,
+                    colorDark: '#121821',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                currentQRCode = qr;
+                console.log('✅ تم إنشاء QR Code مصغر (72px) بنجاح');
             } catch (error) {
-                console.warn('⚠️ فشل إنشاء QR Code داخلياً، استخدام API خارجي:', error.message);
+                console.error('❌ خطأ في إنشاء QR Code:', error);
+                generateQRCodeExternal(invoiceNumber, client, total);
             }
-
-            // استخدام API خارجي كحل بديل
-            generateQRCodeExternal(invoiceNumberVal, client, total, containerId);
         }
 
         /**
@@ -3494,19 +3456,22 @@
          * GENERATE QR CODE - API خارجي (حجم 72px)
          * ============================================================
          */
-        function generateQRCodeExternal(invoiceNumberVal, client, total, containerId) {
-            containerId = containerId || 'qrCodeContainer';
-            var qrContainer = document.getElementById(containerId);
+        function generateQRCodeExternal(invoiceNumber, client, total) {
+            var qrContainer = document.getElementById('qrCodeContainer');
             if (!qrContainer) return;
 
             qrContainer.innerHTML = '';
 
-            // استخدام بيانات مختصرة جداً
-            var qrText = 'INV:' + (invoiceNumberVal || '----');
+            var qrData = {
+                invoice: invoiceNumber || '----',
+                client: client || 'غير محدد',
+                total: total || '0.00'
+            };
+            var qrText = JSON.stringify(qrData);
             var encodedText = encodeURIComponent(qrText);
 
             var qrImageUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=72x72&data=' + encodedText +
-                '&bgcolor=ffffff&color=121821&margin=4';
+                '&bgcolor=ffffff&color=121821';
 
             var img = document.createElement('img');
             img.src = qrImageUrl;
@@ -3518,14 +3483,14 @@
             img.onerror = function() {
                 qrContainer.innerHTML = `
                             <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;background:#f8f9fa;border-radius:4px;">
-                                <i class="fas fa-qrcode" style="font-size:1.5rem;color:#dd9f2e;"></i>
-                                <span style="font-size:0.4rem;color:#6d7883;">${invoiceNumberVal || ''}</span>
+                                <i class="fas fa-qrcode" style="font-size:1.5rem;color:var(--accent);"></i>
+                                <span style="font-size:0.4rem;color:var(--ink-mute);">${invoiceNumber || ''}</span>
                             </div>
                         `;
             };
 
             img.onload = function() {
-                console.log('✅ تم إنشاء QR Code مصغر بواسطة API خارجي في', containerId);
+                console.log('✅ تم إنشاء QR Code مصغر بواسطة API خارجي');
             };
 
             qrContainer.appendChild(img);
@@ -3533,15 +3498,33 @@
 
         /**
          * ============================================================
-         * BUILD INVOICE HTML — دالة موحّدة تبني قالب الفاتورة
+         * PREVIEW INVOICE - تصميم راقٍ لفاتورة برنامج محاسبة
          * ============================================================
          */
-        function buildInvoiceHTML(client, phone, invNum, book, date, total, discount, paid, remaining, isPaidFull, qrContainerId) {
+        function previewInvoice() {
+            if (bookings.length === 0) {
+                showToast('⚠️ تنبيه', 'لا توجد حجوزات للمعاينة', 'error');
+                return;
+            }
+
+            var client = clientName.value.trim() || 'غير محدد';
+            var phone = clientPhone.value.trim() || 'غير محدد';
+            var invNum = invoiceNumber.value.trim() || '----';
+            var book = bookNumber.value.trim() || '----';
+            var date = invoiceDate.value ? new Date(invoiceDate.value).toLocaleDateString('ar-EG') : '----';
+            var total = totalAmount.textContent;
+            var discount = displayDiscount.textContent;
+            var paid = displayPaid.textContent;
+            var remaining = displayRemaining.textContent;
+            var isPaidFull = (parseFloat(remaining) || 0) <= 0;
+
             var companyName = settings.companyName || 'منتجع حياله';
             var companyAddress = settings.companyAddress || '';
             var companyPhone = settings.companyPhone || '';
             var companyLogo = settings.companyLogo || '';
             var footer = settings.invoiceFooter || 'شكراً لثقتكم بنا';
+
+            var printContent = document.getElementById('printPreviewContent');
 
             var statusBadgeHtml = isPaidFull ?
                 '<span class="status-badge paid"><i class="fas fa-check-circle"></i> مدفوعة بالكامل</span>' :
@@ -3566,7 +3549,7 @@
                     <div class="invoice-title">
                         <span class="invoice-title-label">رقم الفاتورة</span>
                         <span class="invoice-title-number">${invNum}</span>
-                        <div class="qr-code" id="${qrContainerId}">
+                        <div class="qr-code" id="qrCodeContainer">
                         </div>
                         <span class="qr-label">امسح للتحقق من الفاتورة</span>
                     </div>
@@ -3602,7 +3585,7 @@
                 html += `
                     <tr class="data-row">
                         <td>${index + 1}</td>
-                        <td style="text-align:right;font-weight:600;color:#121821;">${item.property}</td>
+                        <td style="text-align:right;font-weight:600;color:var(--ink);">${item.property}</td>
                         <td>${item.nights}</td>
                         <td>${item.dailyPrice.toFixed(2)}</td>
                         <td class="row-total">${item.total.toFixed(2)} ر.س</td>
@@ -3657,179 +3640,10 @@
                 </div>
             `;
 
-            return html;
-        }
-
-        /**
-         * ============================================================
-         * BUILD SIMPLIFIED INVOICE HTML — نسخة مبسطة للطباعة
-         * تستخدم تنسيقات CSS مضمونة التوافق مع html2canvas
-         * ============================================================
-         */
-        function buildSimplifiedInvoiceHTML(client, phone, invNum, book, date, total, discount, paid, remaining, isPaidFull, qrContainerId) {
-            var companyName = settings.companyName || 'منتجع حياله';
-            var companyAddress = settings.companyAddress || '';
-            var companyPhone = settings.companyPhone || '';
-            var companyLogo = settings.companyLogo || '';
-            var footer = settings.invoiceFooter || 'شكراً لثقتكم بنا';
-
-            var statusText = isPaidFull ? '✅ مدفوعة بالكامل' : '⚠️ يوجد مبلغ مستحق';
-            var statusColor = isPaidFull ? '#1d7b6c' : '#bf4f30';
-
-            var bookingsHtml = '';
-            bookings.forEach(function(item, index) {
-                var checkInDateFormatted = item.checkIn ? new Date(item.checkIn).toLocaleDateString('ar-EG') : 'غير محدد';
-                var checkInTimeFormatted = item.checkInTime || 'غير محدد';
-                var checkOutDateFormatted = item.checkOut ? new Date(item.checkOut).toLocaleDateString('ar-EG') : 'غير محدد';
-                var checkOutTimeFormatted = item.checkOutTime || 'غير محدد';
-
-                bookingsHtml += `
-                    <tr style="border-bottom:1px solid #dde3e0;">
-                        <td style="padding:8px 10px;text-align:center;font-size:11px;">${index + 1}</td>
-                        <td style="padding:8px 10px;text-align:right;font-size:11px;font-weight:600;color:#121821;">${item.property}</td>
-                        <td style="padding:8px 10px;text-align:center;font-size:11px;">${item.nights}</td>
-                        <td style="padding:8px 10px;text-align:center;font-size:11px;">${item.dailyPrice.toFixed(2)}</td>
-                        <td style="padding:8px 10px;text-align:center;font-size:11px;font-weight:700;color:#7a5312;">${item.total.toFixed(2)} ر.س</td>
-                    </tr>
-                    <tr style="border-bottom:1px solid #dde3e0;">
-                        <td colspan="5" style="padding:4px 14px;text-align:right;font-size:9px;color:#6d7883;background:#f4f6f5;">
-                            <span>🛏️ الدخول: ${checkInDateFormatted} - ${checkInTimeFormatted}</span>
-                            <span style="margin-right:15px;">🚪 الخروج: ${checkOutDateFormatted} - ${checkOutTimeFormatted}</span>
-                            ${item.stayType ? `<span style="margin-right:15px;background:#faead0;padding:1px 8px;border-radius:4px;color:#7a5312;font-size:9px;">${item.stayType}</span>` : ''}
-                        </td>
-                    </tr>
-                `;
-            });
-
-            return `
-                <div class="print-wrapper" style="max-width:180mm;margin:0 auto;background:#ffffff;padding:10mm 12mm;font-family:'Cairo',Arial,sans-serif;direction:rtl;color:#121821;border:1px solid #dd9f2e;border-radius:8px;">
-                    
-                    <!-- الرأس -->
-                    <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #dd9f2e;padding-bottom:15px;margin-bottom:15px;flex-wrap:wrap;gap:10px;">
-                        <div style="display:flex;align-items:center;gap:12px;">
-                            <div style="width:70px;height:70px;border-radius:12px;background:#121821;display:flex;align-items:center;justify-content:center;color:#dd9f2e;font-size:28px;font-weight:900;flex-shrink:0;">
-                                ح
-                            </div>
-                            <div>
-                                <h1 style="font-size:20px;margin:0;color:#121821;font-weight:700;">${companyName}</h1>
-                                <div style="width:40px;height:3px;background:#dd9f2e;margin:4px 0 6px;"></div>
-                                <p style="font-size:10px;color:#6d7883;margin:0;line-height:1.6;">${companyAddress}</p>
-                                <p style="font-size:10px;color:#6d7883;margin:0;line-height:1.6;">📞 ${companyPhone}</p>
-                            </div>
-                        </div>
-                        <div style="text-align:center;background:#ffffff;padding:10px 18px;border:2px solid #dd9f2e;border-radius:10px;min-width:130px;">
-                            <div style="font-size:10px;font-weight:700;color:#7a5312;letter-spacing:1px;">رقم الفاتورة</div>
-                            <div style="font-size:14px;font-weight:700;font-family:'JetBrains Mono',monospace;color:#121821;">${invNum}</div>
-                            <div style="width:60px;height:60px;margin:6px auto;border:1px dashed #c7d0cc;padding:4px;border-radius:6px;display:flex;align-items:center;justify-content:center;" id="${qrContainerId}"></div>
-                            <div style="font-size:7px;color:#6d7883;">امسح للتحقق</div>
-                        </div>
-                    </div>
-
-                    <!-- معلومات العميل -->
-                    <div style="display:flex;flex-wrap:wrap;gap:8px;background:#f8f9fa;border-radius:8px;padding:10px 14px;margin-bottom:15px;border:1px solid #dde3e0;">
-                        <div style="flex:1;min-width:70px;"><div style="font-size:8px;color:#6d7883;font-weight:700;">الرقم الدفتري</div><div style="font-weight:700;font-size:12px;">${book}</div></div>
-                        <div style="flex:1;min-width:70px;"><div style="font-size:8px;color:#6d7883;font-weight:700;">التاريخ</div><div style="font-weight:700;font-size:12px;">${date}</div></div>
-                        <div style="flex:2;min-width:100px;background:#faead0;padding:4px 10px;border-radius:6px;"><div style="font-size:8px;color:#7a5312;font-weight:700;">العميل</div><div style="font-weight:700;font-size:12px;">${client}</div></div>
-                        <div style="flex:1;min-width:70px;"><div style="font-size:8px;color:#6d7883;font-weight:700;">الجوال</div><div style="font-weight:700;font-size:12px;">${phone}</div></div>
-                        <div style="flex:1;min-width:70px;"><div style="font-size:8px;color:#6d7883;font-weight:700;">الحالة</div><div style="font-weight:700;font-size:12px;color:${statusColor};">${statusText}</div></div>
-                    </div>
-
-                    <!-- جدول الحجوزات -->
-                    <table style="width:100%;border-collapse:collapse;font-size:11px;margin-bottom:12px;border:1px solid #dde3e0;border-radius:8px;overflow:hidden;">
-                        <thead>
-                            <tr style="background:#121821;color:#ffffff;">
-                                <th style="padding:8px 10px;text-align:center;width:30px;font-size:10px;">#</th>
-                                <th style="padding:8px 10px;text-align:right;font-size:10px;">نوع العقار</th>
-                                <th style="padding:8px 10px;text-align:center;font-size:10px;">عدد الأيام</th>
-                                <th style="padding:8px 10px;text-align:center;font-size:10px;">السعر اليومي</th>
-                                <th style="padding:8px 10px;text-align:center;font-size:10px;">الإجمالي</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${bookingsHtml}
-                        </tbody>
-                    </table>
-
-                    <!-- الملخص المالي -->
-                    <div style="display:flex;justify-content:space-between;gap:20px;margin-top:15px;padding-top:12px;border-top:2px dashed #c7d0cc;flex-wrap:wrap;">
-                        <div style="flex:1;min-width:150px;">
-                            <p style="font-family:serif;font-size:13px;color:#2c3644;margin:0 0 15px;">"${footer}"</p>
-                            <div style="margin-top:20px;">
-                                <p style="font-size:10px;color:#6d7883;font-weight:700;margin:0 0 20px;">توقيع واستلام العميل</p>
-                                <div style="width:120px;border-bottom:2px solid #c7d0cc;"></div>
-                                <p style="font-size:8px;color:#6d7883;margin:4px 0 0;">الاسم والتوقيع</p>
-                            </div>
-                        </div>
-                        <div style="min-width:180px;border:2px solid #dd9f2e;border-radius:8px;overflow:hidden;flex:0 0 auto;">
-                            <div style="display:flex;justify-content:space-between;padding:6px 14px;border-bottom:1px dashed #dde3e0;font-size:11px;background:#ffffff;">
-                                <span style="color:#2c3644;">الإجمالي</span>
-                                <span style="font-weight:700;color:#121821;">${total} ر.س</span>
-                            </div>
-                            <div style="display:flex;justify-content:space-between;padding:6px 14px;border-bottom:1px dashed #dde3e0;font-size:11px;background:#ffffff;">
-                                <span style="color:#2c3644;">الخصم</span>
-                                <span style="font-weight:700;color:#bf4f30;">- ${discount} ر.س</span>
-                            </div>
-                            <div style="display:flex;justify-content:space-between;padding:6px 14px;border-bottom:1px dashed #dde3e0;font-size:11px;background:#ffffff;">
-                                <span style="color:#2c3644;">المدفوع</span>
-                                <span style="font-weight:700;color:#121821;">${paid} ر.س</span>
-                            </div>
-                            <div style="display:flex;justify-content:space-between;padding:10px 14px;background:#121821;color:#ffffff;font-size:13px;">
-                                <span style="color:rgba(255,255,255,0.75);font-weight:700;">المتبقي المستحق</span>
-                                <span style="color:#dd9f2e;font-weight:800;">${remaining} ر.س</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- الملاحظات -->
-                    <div style="margin-top:15px;background:#f4f6f5;border-radius:8px;border-right:4px solid #dd9f2e;padding:12px 16px;font-size:9px;color:#2c3644;line-height:1.8;">
-                        <div style="font-weight:800;font-size:11px;display:flex;align-items:center;gap:6px;margin-bottom:6px;color:#121821;">
-                            📋 شروط وملاحظات هامة
-                        </div>
-                        <ol style="margin:0;padding-right:20px;list-style-type:decimal;font-size:9px;color:#2c3644;">
-                            <li>لا نأخذ تأمين ولا نعمل تشييك بعد الخروج (أمانة المسلم تكفي)</li>
-                            <li>تفهم المرافقون طابع المكان كمزرعة شعبية ليست كالفنادق</li>
-                            <li>في حال بقاء أي أغراض دون مراجعة، يحق للإدارة التصرف بها</li>
-                            <li>يرجى التأكد من قراءة التفاصيل بدقة</li>
-                            <li>الإدارة غير مسؤولة عن فقدان المقتنيات الشخصية</li>
-                            <li>يمنع إحداث أي تلف، ويحمل المستأجر قيمة الأضرار</li>
-                        </ol>
-                    </div>
-
-                    <!-- تذييل -->
-                    <div style="margin-top:12px;padding-top:8px;border-top:1px solid #dde3e0;text-align:center;font-size:8px;color:#6d7883;">
-                        <strong style="color:#7a5312;">${companyName}</strong> — تم إصدار هذه الفاتورة إلكترونياً عبر نظام إدارة الحجوزات
-                    </div>
-                </div>
-            `;
-        }
-
-        /**
-         * ============================================================
-         * PREVIEW INVOICE
-         * ============================================================
-         */
-        function previewInvoice() {
-            if (bookings.length === 0) {
-                showToast('⚠️ تنبيه', 'لا توجد حجوزات للمعاينة', 'error');
-                return;
-            }
-
-            var client = clientName.value.trim() || 'غير محدد';
-            var phone = clientPhone.value.trim() || 'غير محدد';
-            var invNum = invoiceNumber.value.trim() || '----';
-            var book = bookNumber.value.trim() || '----';
-            var date = invoiceDate.value ? new Date(invoiceDate.value).toLocaleDateString('ar-EG') : '----';
-            var total = totalAmount.textContent;
-            var discount = displayDiscount.textContent;
-            var paid = displayPaid.textContent;
-            var remaining = displayRemaining.textContent;
-            var isPaidFull = (parseFloat(remaining) || 0) <= 0;
-
-            var printContent = document.getElementById('printPreviewContent');
-            printContent.innerHTML = buildInvoiceHTML(client, phone, invNum, book, date, total, discount, paid, remaining, isPaidFull, 'qrCodeContainer');
+            printContent.innerHTML = html;
 
             setTimeout(function() {
-                generateQRCode(invNum, client, total, 'qrCodeContainer');
+                generateQRCode(invNum, client, total);
             }, 200);
 
             document.getElementById('printPreviewOverlay').classList.add('show');
@@ -3846,7 +3660,7 @@
 
         /**
          * ============================================================
-         * EXECUTE PRINT
+         * EXECUTE PRINT - طباعة عبر نافذة المتصفح (آلية منفصلة)
          * ============================================================
          */
         function executePrint() {
@@ -3863,7 +3677,7 @@
 
         /**
          * ============================================================
-         * OPEN PRINT WINDOW
+         * OPEN PRINT WINDOW - عبر iframe مخفي
          * ============================================================
          */
         function openPrintWindow() {
@@ -4245,23 +4059,69 @@
 
         /**
          * ============================================================
-         * GENERATE PDF FROM ELEMENT — دالة موحّدة لالتقاط أي عنصر وتحويله PDF
+         * DOWNLOAD PDF - حفظ باسم العميل تلقائياً (آلية منفصلة للتنزيل)
          * ============================================================
          */
-        function generatePDFFromElement(element, clientNameValue, invoiceNum, onDone) {
-            if (!element) {
-                showToast('❌ خطأ', 'لم يتم العثور على محتوى الفاتورة', 'error');
-                if (onDone) onDone(false);
+        function downloadPDF() {
+            if (bookings.length === 0) {
+                showToast('⚠️ تنبيه', 'لا توجد حجوزات لتحويلها إلى PDF', 'error');
                 return;
             }
 
-            var rawClientName = (clientNameValue || '').trim() || 'فاتورة';
-            var safeClientName = rawClientName.replace(/[\\\/:*?"<>|]/g, '').trim() || 'فاتورة';
-            var fileName = safeClientName + ' - ' + (invoiceNum || 'invoice') + '.pdf';
+            // التحقق من وجود معاينة، وإنشاءها إذا لزم الأمر
+            var overlay = document.getElementById('printPreviewOverlay');
+            if (!overlay.classList.contains('show')) {
+                previewInvoice();
+                // نعطي وقتاً للمعاينة لتظهر ثم ننشئ الـ PDF
+                setTimeout(function() {
+                    generatePDFFromPreview();
+                }, 800);
+                return;
+            }
 
+            // إذا كانت المعاينة مفتوحة، ننشئ الـ PDF مباشرة
+            generatePDFFromPreview();
+        }
+
+        /**
+         * ============================================================
+         * GENERATE PDF FROM PREVIEW - إنشاء PDF باسم العميل تلقائياً
+         * ============================================================
+         */
+        function generatePDFFromPreview() {
+            var element = document.getElementById('printPreviewContent');
+            if (!element) {
+                showToast('❌ خطأ', 'لم يتم العثور على محتوى المعاينة', 'error');
+                return;
+            }
+
+            // جلب اسم العميل من الحقل
+            var clientNameValue = document.getElementById('clientName').value.trim();
+            var rawClientName = clientNameValue || 'فاتورة';
+
+            // تنظيف الاسم من الأحرف غير المسموح بها في أسماء الملفات
+            var safeClientName = rawClientName.replace(/[\\\/:*?"<>|]/g, '').trim();
+            if (!safeClientName) {
+                safeClientName = 'فاتورة';
+            }
+
+            // جلب رقم الفاتورة
+            var invoiceNum = document.getElementById('invoiceNumber').value.trim() || 'invoice';
+
+            // إنشاء اسم الملف: "اسم العميل - رقم الفاتورة.pdf"
+            var fileName = safeClientName + ' - ' + invoiceNum + '.pdf';
+
+            console.log('📄 سيتم حفظ الملف باسم:', fileName);
+
+            // إعدادات html2pdf (تحسين الجودة)
             var opt = {
-                margin: [10, 10, 10, 10],
-                filename: fileName,
+                margin: {
+                    top: 12,
+                    bottom: 12,
+                    left: 12,
+                    right: 12
+                },
+                filename: fileName, // <-- هنا يتم تحديد اسم الملف تلقائياً
                 image: {
                     type: 'jpeg',
                     quality: 0.98
@@ -4286,195 +4146,38 @@
                 }
             };
 
+            showToast('⏳ جاري التحميل', 'جاري إنشاء ملف PDF...', 'warning');
+
+            // تنفيذ التحميل
             html2pdf()
                 .set(opt)
                 .from(element)
-                .save(fileName)
-                .then(function() {
-                    showToast('✅ تم الحفظ', 'تم حفظ ملف PDF على جهازك باسم: ' + fileName, 'success');
-                    if (onDone) onDone(true);
-                })
-                .catch(function(error) {
-                    console.error('❌ خطأ في حفظ PDF:', error);
-                    showToast('❌ خطأ', 'فشل في حفظ PDF: ' + error.message, 'error');
-                    if (onDone) onDone(false);
-                });
-        }
+                .outputPdf('blob')
+                .then(function(blob) {
+                    // إنشاء رابط تحميل (بدلاً من فتح نافذة الطباعة)
+                    var blobUrl = URL.createObjectURL(blob);
+                    var link = document.createElement('a');
+                    link.href = blobUrl;
+                    link.download = fileName; // <-- اسم الملف هنا
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
 
-        /**
-         * ============================================================
-         * SAVE INVOICE PDF DIRECT — تنزيل تلقائي فوري بدون فتح المعاينة
-         * ============================================================
-         */
-        function saveInvoicePDFDirect() {
-            if (bookings.length === 0) {
-                showToast('⚠️ تنبيه', 'لا توجد حجوزات لتحويلها إلى PDF', 'error');
-                return;
-            }
+                    // تنظيف الرابط بعد التحميل
+                    setTimeout(function() {
+                        URL.revokeObjectURL(blobUrl);
+                    }, 3000);
 
-            var client = clientName.value.trim() || 'غير محدد';
-            var phone = clientPhone.value.trim() || 'غير محدد';
-            var invNum = invoiceNumber.value.trim() || '----';
-            var book = bookNumber.value.trim() || '----';
-            var date = invoiceDate.value ? new Date(invoiceDate.value).toLocaleDateString('ar-EG') : '----';
-            var total = totalAmount.textContent;
-            var discount = displayDiscount.textContent;
-            var paid = displayPaid.textContent;
-            var remaining = displayRemaining.textContent;
-            var isPaidFull = (parseFloat(remaining) || 0) <= 0;
-
-            showToast('⏳ جاري الحفظ', 'جاري تجهيز ملف PDF...', 'warning');
-
-            if (btnSavePdfDirect) {
-                btnSavePdfDirect.disabled = true;
-                btnSavePdfDirect.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري...';
-            }
-
-            var tempContainer = document.getElementById('pdfTempContainer');
-            tempContainer.innerHTML = '';
-
-            // بناء HTML الفاتورة بشكل مبسط للطباعة
-            var simplifiedHTML = buildSimplifiedInvoiceHTML(
-                client, phone, invNum, book, date, total, discount, paid, remaining, isPaidFull, 'tempPdfQrCode'
-            );
-            
-            tempContainer.innerHTML = simplifiedHTML;
-
-            // إنشاء QR Code في الحاوية المؤقتة
-            setTimeout(function() {
-                generateQRCode(invNum, client, total, 'tempPdfQrCode');
-
-                setTimeout(function() {
-                    // التأكد من أن جميع الصور محملة
-                    var images = tempContainer.querySelectorAll('img');
-                    var imagesLoaded = 0;
-                    var totalImages = images.length;
-
-                    if (totalImages === 0) {
-                        startPDFGeneration();
-                    } else {
-                        images.forEach(function(img) {
-                            if (img.complete) {
-                                imagesLoaded++;
-                                if (imagesLoaded === totalImages) {
-                                    startPDFGeneration();
-                                }
-                            } else {
-                                img.onload = function() {
-                                    imagesLoaded++;
-                                    if (imagesLoaded === totalImages) {
-                                        startPDFGeneration();
-                                    }
-                                };
-                                img.onerror = function() {
-                                    imagesLoaded++;
-                                    if (imagesLoaded === totalImages) {
-                                        startPDFGeneration();
-                                    }
-                                };
-                            }
-                        });
-                    }
-
-                    function startPDFGeneration() {
-                        var opt = {
-                            margin: [10, 10, 10, 10],
-                            filename: (client || 'فاتورة') + ' - ' + invNum + '.pdf',
-                            image: {
-                                type: 'jpeg',
-                                quality: 0.98
-                            },
-                            html2canvas: {
-                                scale: 2,
-                                useCORS: true,
-                                logging: false,
-                                letterRendering: true,
-                                backgroundColor: '#ffffff',
-                                width: tempContainer.scrollWidth,
-                                height: tempContainer.scrollHeight
-                            },
-                            jsPDF: {
-                                unit: 'mm',
-                                format: 'a4',
-                                orientation: 'portrait'
-                            },
-                            pagebreak: {
-                                mode: ['avoid-all', 'css', 'legacy']
-                            }
-                        };
-
-                        html2pdf()
-                            .set(opt)
-                            .from(tempContainer)
-                            .save()
-                            .then(function() {
-                                showToast('✅ تم الحفظ', 'تم حفظ ملف PDF على جهازك', 'success');
-                                tempContainer.innerHTML = '';
-                                if (btnSavePdfDirect) {
-                                    btnSavePdfDirect.disabled = false;
-                                    btnSavePdfDirect.innerHTML = '<i class="fas fa-file-pdf"></i> <span>حفظ PDF</span>';
-                                }
-                            })
-                            .catch(function(error) {
-                                console.error('❌ خطأ في حفظ PDF:', error);
-                                showToast('❌ خطأ', 'فشل في حفظ PDF: ' + error.message, 'error');
-                                tempContainer.innerHTML = '';
-                                if (btnSavePdfDirect) {
-                                    btnSavePdfDirect.disabled = false;
-                                    btnSavePdfDirect.innerHTML = '<i class="fas fa-file-pdf"></i> <span>حفظ PDF</span>';
-                                }
-                            });
-                    }
-                }, 500);
-            }, 300);
-        }
-
-        if (btnSavePdfDirect) {
-            btnSavePdfDirect.addEventListener('click', saveInvoicePDFDirect);
-        }
-
-        /**
-         * ============================================================
-         * DOWNLOAD PDF (من داخل نافذة المعاينة)
-         * ============================================================
-         */
-        function downloadPDF() {
-            if (bookings.length === 0) {
-                showToast('⚠️ تنبيه', 'لا توجد حجوزات لتحويلها إلى PDF', 'error');
-                return;
-            }
-
-            var overlay = document.getElementById('printPreviewOverlay');
-            if (!overlay.classList.contains('show')) {
-                previewInvoice();
-                setTimeout(function() {
-                    generatePDFFromPreview();
-                }, 800);
-                return;
-            }
-
-            generatePDFFromPreview();
-        }
-
-        /**
-         * ============================================================
-         * GENERATE PDF FROM PREVIEW
-         * ============================================================
-         */
-        function generatePDFFromPreview() {
-            var element = document.getElementById('printPreviewContent');
-            var clientNameValue = document.getElementById('clientName').value.trim();
-            var invoiceNum = document.getElementById('invoiceNumber').value.trim() || 'invoice';
-
-            showToast('⏳ جاري التحميل', 'جاري إنشاء ملف PDF...', 'warning');
-
-            generatePDFFromElement(element, clientNameValue, invoiceNum, function(success) {
-                if (success) {
+                    showToast('✅ تم التحميل', 'تم تحميل ملف PDF بنجاح باسم: ' + fileName, 'success');
+                    // إغلاق المعاينة بعد التحميل
                     setTimeout(function() {
                         closePrintPreview();
                     }, 1500);
-                }
-            });
+                })
+                .catch(function(error) {
+                    console.error('❌ خطأ في تحميل PDF:', error);
+                    showToast('❌ خطأ', 'فشل في تحميل PDF: ' + error.message, 'error');
+                });
         }
 
         /**
@@ -4614,7 +4317,7 @@
                 document.getElementById('clientPhone').value = phone;
             }
 
-            clientNameInput.style.borderColor = '#1d7b6c';
+            clientNameInput.style.borderColor = 'var(--teal)';
             setTimeout(function() {
                 clientNameInput.style.borderColor = '';
             }, 2000);
@@ -4997,7 +4700,7 @@
 
         /**
          * ============================================================
-         * SAVE TO SUPABASE
+         * SAVE TO SUPABASE - متوافق مع هيكل الجدول
          * ============================================================
          */
         async function saveInvoiceToSupabase(invoiceData) {
@@ -5146,7 +4849,9 @@
             console.log('👤 المستخدم:', user.name || 'غير معروف');
             console.log('✅ النظام جاهز للعمل مع Supabase');
             console.log('🎨 تصميم فاتورة راقٍ بطابع محاسبي احترافي');
-            console.log('📁 زر "حفظ PDF" ينزّل الملف مباشرة على الجهاز باسم العميل، بدون فتح أي معاينة');
+            console.log('📁 سيتم حفظ ملفات PDF باسم العميل تلقائياً');
+            console.log('🖨️ زر الطباعة للطباعة الورقية');
+            console.log('📄 زر PDF للتحميل الرقمي فقط');
         });
     </script>
 
