@@ -5,16 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
 
     <!-- ============================================================
-    منع الوصول من البداية - التحقق من تسجيل الدخول
+    منع الوصول من البداية - التحقق من تسجيل الدخول عبر Supabase Auth
     ============================================================ -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+    </script>
     <script>
-        (function checkAuth() {
-            var user = JSON.parse(localStorage.getItem('user') || '{}');
-            if (!user || !user.email) {
+        /**
+         * ============================================================
+         * SUPABASE CONFIGURATION
+         * ============================================================
+         */
+        var SUPABASE_URL = 'https://zwuvcblrrrriuylajvba.supabase.co';
+        var SUPABASE_ANON_KEY = 'sb_publishable_YFqwTEs-W_kprUgt4bgpCQ_tf5vVeFa';
+        var supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        /**
+         * ============================================================
+         * التحقق من تسجيل الدخول عبر Supabase Auth
+         * ============================================================
+         */
+        (async function checkAuth() {
+            try {
+                console.log('🔍 التحقق من الجلسة في client-accounts.html...');
+
+                var { data: { session }, error } = await supabaseClient.auth.getSession();
+
+                if (error || !session) {
+                    console.warn('⚠️ لا توجد جلسة نشطة، جاري التحويل إلى تسجيل الدخول');
+                    window.location.replace('login.html');
+                    return;
+                }
+
+                console.log('✅ توجد جلسة للمستخدم:', session.user.email);
+
+                // جلب بيانات البروفايل
+                var { data: profile, error: profileError } = await supabaseClient
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', session.user.id)
+                    .single();
+
+                if (profileError || !profile) {
+                    console.warn('⚠️ تعذّر جلب بيانات البروفايل');
+                    await supabaseClient.auth.signOut();
+                    window.location.replace('login.html');
+                    return;
+                }
+
+                console.log('✅ تم جلب البروفايل بنجاح:', profile.name);
+
+                // تخزين بيانات المستخدم
+                window.currentUser = {
+                    id: session.user.id,
+                    email: session.user.email,
+                    name: profile.name || session.user.email,
+                    role: profile.role || 'user'
+                };
+
+                console.log('👤 المستخدم الحالي:', window.currentUser);
+
+            } catch (error) {
+                console.error('❌ خطأ في التحقق من الجلسة:', error);
                 window.location.replace('login.html');
-                return;
             }
-            window.currentUser = user;
         })();
     </script>
 
@@ -1166,27 +1219,36 @@
     </div>
 
     <!-- ============================================================
-    JAVASCRIPT
+    JAVASCRIPT - مبني على Supabase Auth
     ============================================================ -->
     <script>
         /**
          * ============================================================
-         * التحقق من تسجيل الدخول
+         * 1. استخدام المتغير العام من التحقق الأولي
          * ============================================================
          */
-        var user = window.currentUser || JSON.parse(localStorage.getItem('user') || '{}');
+        var user = window.currentUser || {};
+
+        // إذا لم يكن هناك مستخدم، نعيد التوجيه
+        if (!user || !user.email) {
+            window.location.replace('login.html');
+        }
+
+        console.log('👤 مستخدم نشط:', user.name || user.email);
+        console.log('🔑 الدور:', user.role || 'user');
 
         /**
          * ============================================================
-         * SUPABASE CONFIGURATION
+         * 2. إعدادات SUPABASE
          * ============================================================
          */
         var SUPABASE_URL = 'https://zwuvcblrrrriuylajvba.supabase.co';
         var SUPABASE_ANON_KEY = 'sb_publishable_YFqwTEs-W_kprUgt4bgpCQ_tf5vVeFa';
+        var supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         /**
          * ============================================================
-         * SIDEBAR TOGGLE — نفس آلية index.html و bookings.html و abuzeid.html
+         * 3. SIDEBAR TOGGLE
          * ============================================================
          */
         var navToggle = document.getElementById('navToggle');
@@ -1250,7 +1312,7 @@
 
         /**
          * ============================================================
-         * المتغيرات العامة
+         * 4. المتغيرات العامة
          * ============================================================
          */
         var allClientAccounts = [];
@@ -1260,7 +1322,7 @@
 
         /**
          * ============================================================
-         * TOAST SYSTEM
+         * 5. TOAST SYSTEM
          * ============================================================
          */
         function showToast(title, message, type) {
@@ -1302,7 +1364,7 @@
 
         /**
          * ============================================================
-         * جلب البيانات من Supabase
+         * 6. جلب البيانات من Supabase
          * ============================================================
          */
         async function loadData() {
@@ -1433,7 +1495,7 @@
 
         /**
          * ============================================================
-         * عرض المؤشرات (KPI)
+         * 7. عرض المؤشرات (KPI)
          * ============================================================
          */
         function updateKpis(accounts) {
@@ -1474,7 +1536,7 @@
 
         /**
          * ============================================================
-         * عرض الجدول
+         * 8. عرض الجدول
          * ============================================================
          */
         function displayData(data) {
@@ -1558,7 +1620,7 @@
 
         /**
          * ============================================================
-         * البحث والفلترة
+         * 9. البحث والفلترة
          * ============================================================
          */
         function filterTable() {
@@ -1581,7 +1643,7 @@
 
         /**
          * ============================================================
-         * فتح نموذج تسجيل الدفعة المضمن
+         * 10. فتح نموذج تسجيل الدفعة المضمن
          * ============================================================
          */
         function openPaymentForm(clientName, remainingAmount) {
@@ -1654,7 +1716,7 @@
 
         /**
          * ============================================================
-         * إغلاق نموذج تسجيل الدفعة
+         * 11. إغلاق نموذج تسجيل الدفعة
          * ============================================================
          */
         function closePaymentForm() {
@@ -1667,7 +1729,7 @@
 
         /**
          * ============================================================
-         * حفظ الدفعة من النموذج المضمن
+         * 12. حفظ الدفعة من النموذج المضمن
          * ============================================================
          */
         async function saveInlinePayment(event) {
@@ -1752,7 +1814,7 @@
 
         /**
          * ============================================================
-         * تحميل الصفحة
+         * 13. تحميل الصفحة
          * ============================================================
          */
         document.addEventListener('DOMContentLoaded', function() {
@@ -1764,12 +1826,13 @@
 
         /**
          * ============================================================
-         * رسالة الترحيب في Console
+         * 14. رسالة الترحيب في Console
          * ============================================================
          */
-        console.log('👤 صفحة حسابات العملاء - منتجع حياله');
+        console.log('👤 صفحة حسابات العملاء - منتجع حياله (Supabase Auth)');
         console.log('📊 Supabase URL:', SUPABASE_URL);
         console.log('👤 المستخدم:', user.name || 'غير معروف');
+        console.log('🔑 الدور:', user.role || 'user');
         console.log('✅ جاهزة للعمل');
         console.log('📌 ملاحظة: تم تعديل حساب "إجمالي الفواتير" ليعكس قيمة total (بدون خصم)');
     </script>
