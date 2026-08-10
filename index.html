@@ -1205,6 +1205,8 @@
         var SUPABASE_ANON_KEY = 'sb_publishable_YFqwTEs-W_kprUgt4bgpCQ_tf5vVeFa';
         var supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+        console.log('🚀 بدء تشغيل لوحة التحكم (index.html)');
+
         /**
          * ============================================================
          * SUPABASE AUTH - التحقق من الجلسة
@@ -1212,28 +1214,95 @@
          */
         (async function checkAuth() {
             try {
+                console.log('🔍 التحقق من الجلسة في index.html...');
+                
                 var { data: { session }, error } = await supabaseClient.auth.getSession();
                 
-                if (error || !session) {
+                console.log('📋 نتيجة التحقق:', { 
+                    session: session ? 'موجودة ✅' : 'غير موجودة ❌', 
+                    error: error 
+                });
+                
+                if (error) {
+                    console.error('❌ خطأ في جلب الجلسة:', error);
+                    window.location.href = 'login.html';
+                    return;
+                }
+                
+                if (!session) {
                     console.warn('⚠️ لا توجد جلسة نشطة، جاري التحويل إلى تسجيل الدخول');
                     window.location.href = 'login.html';
                     return;
                 }
 
-                // جلب بيانات البروفايل
+                console.log('✅ توجد جلسة للمستخدم:', session.user.email);
+                console.log('🆔 معرف المستخدم:', session.user.id);
+
+                // ===== محاولة جلب البروفايل =====
+                console.log('🔄 جاري جلب بيانات البروفايل...');
+                
                 var { data: profile, error: profileError } = await supabaseClient
                     .from('profiles')
-                    .select('name, role')
+                    .select('*')
                     .eq('id', session.user.id)
                     .single();
 
-                if (profileError || !profile) {
-                    console.warn('⚠️ تعذّر جلب بيانات البروفايل');
-                    window.location.href = 'login.html';
+                console.log('📋 نتيجة جلب البروفايل:', { 
+                    profile: profile, 
+                    error: profileError 
+                });
+
+                if (profileError) {
+                    console.error('❌ خطأ في جلب البروفايل:', profileError);
+                    console.log('📋 تفاصيل الخطأ:', {
+                        code: profileError.code,
+                        message: profileError.message,
+                        details: profileError.details,
+                        hint: profileError.hint
+                    });
+                    
+                    // عرض رسالة خطأ للمستخدم
+                    document.body.innerHTML = `
+                        <div style="text-align: center; padding: 50px; direction: rtl; font-family: 'Cairo', sans-serif; background: #f0ede8; min-height: 100vh;">
+                            <div style="max-width: 500px; margin: 0 auto; background: #fff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
+                                <h2 style="color: #d4a020;">⚠️ تعذّر تحميل بيانات الحساب</h2>
+                                <p style="color: #5a4f45; margin: 20px 0;">${profileError.message}</p>
+                                <button onclick="logoutUser()" style="padding: 14px 40px; background: #f5c842; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #1a1714;">
+                                    <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+                                </button>
+                            </div>
+                        </div>
+                    `;
                     return;
                 }
 
-                // تحديث الواجهة - الاسم في الهيدر
+                if (!profile) {
+                    console.warn('⚠️ لا يوجد بروفايل للمستخدم!');
+                    document.body.innerHTML = `
+                        <div style="text-align: center; padding: 50px; direction: rtl; font-family: 'Cairo', sans-serif; background: #f0ede8; min-height: 100vh;">
+                            <div style="max-width: 500px; margin: 0 auto; background: #fff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
+                                <h2 style="color: #d4a020;">⚠️ حساب غير مكتمل</h2>
+                                <p style="color: #5a4f45; margin: 20px 0;">لا يوجد بروفايل لهذا الحساب. يرجى التواصل مع الدعم الفني.</p>
+                                <button onclick="logoutUser()" style="padding: 14px 40px; background: #f5c842; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #1a1714;">
+                                    <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                console.log('✅ تم جلب البروفايل بنجاح!');
+                console.log('📊 بيانات البروفايل:', {
+                    id: profile.id,
+                    email: profile.email,
+                    name: profile.name,
+                    role: profile.role,
+                    status: profile.status,
+                    phone: profile.phone
+                });
+
+                // ===== تحديث الواجهة =====
                 var profileName = document.getElementById('profileName');
                 var profileAvatar = document.getElementById('profileAvatar');
                 var sidebarName = document.getElementById('sidebarName');
@@ -1260,7 +1329,7 @@
                     sidebarRole.textContent = roleArabic;
                 }
 
-                // تخزين بيانات المستخدم في متغير عام
+                // تخزين بيانات المستخدم
                 window.currentUser = {
                     id: session.user.id,
                     email: session.user.email,
@@ -1268,11 +1337,28 @@
                     role: profile.role
                 };
 
-                console.log('✅ تم التحقق من الجلسة بنجاح:', displayName);
+                console.log('✅ تم تحديث الواجهة بنجاح');
+                console.log('👤 المستخدم الحالي:', window.currentUser);
 
             } catch (error) {
-                console.error('❌ خطأ في التحقق من الجلسة:', error);
-                window.location.href = 'login.html';
+                console.error('❌ خطأ غير متوقع:', error);
+                console.log('📋 تفاصيل الخطأ غير المتوقع:', {
+                    name: error.name,
+                    message: error.message,
+                    stack: error.stack
+                });
+                
+                document.body.innerHTML = `
+                    <div style="text-align: center; padding: 50px; direction: rtl; font-family: 'Cairo', sans-serif; background: #f0ede8; min-height: 100vh;">
+                        <div style="max-width: 500px; margin: 0 auto; background: #fff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
+                            <h2 style="color: #d4a020;">⚠️ خطأ في النظام</h2>
+                            <p style="color: #5a4f45; margin: 20px 0;">${error.message || 'حدث خطأ غير متوقع'}</p>
+                            <button onclick="logoutUser()" style="padding: 14px 40px; background: #f5c842; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #1a1714;">
+                                <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+                            </button>
+                        </div>
+                    </div>
+                `;
             }
         })();
 
@@ -1284,7 +1370,9 @@
         async function logoutUser() {
             if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
                 try {
+                    console.log('🚪 جاري تسجيل الخروج...');
                     await supabaseClient.auth.signOut();
+                    console.log('✅ تم تسجيل الخروج بنجاح');
                     window.location.href = 'login.html';
                 } catch (error) {
                     console.error('❌ خطأ في تسجيل الخروج:', error);
