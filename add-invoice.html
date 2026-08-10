@@ -22,7 +22,7 @@
 
         /**
          * ============================================================
-         * التحقق من تسجيل الدخول عبر Supabase Auth
+         * التحقق من تسجيل الدخول عبر Supabase Auth - بدون Redirect فوري
          * ============================================================
          */
         (async function checkAuth() {
@@ -31,9 +31,24 @@
 
                 var { data: { session }, error } = await supabaseClient.auth.getSession();
 
-                if (error || !session) {
-                    console.warn('⚠️ لا توجد جلسة نشطة، جاري التحويل إلى تسجيل الدخول');
-                    window.location.replace('login.html');
+                console.log('📋 نتيجة الجلسة:', {
+                    session: session ? 'موجودة ✅' : 'غير موجودة ❌',
+                    error: error
+                });
+
+                if (error) {
+                    console.error('❌ خطأ في جلب الجلسة:', error);
+                    showAuthError('خطأ في التحقق من الجلسة: ' + error.message);
+                    return;
+                }
+
+                if (!session) {
+                    console.warn('⚠️ لا توجد جلسة نشطة');
+                    showAuthError('⚠️ يرجى تسجيل الدخول أولاً. سيتم تحويلك خلال 3 ثوان...');
+                    // نأجل الـ Redirect عشان نشوف الـ Console
+                    setTimeout(function() {
+                        window.location.replace('login.html');
+                    }, 3000);
                     return;
                 }
 
@@ -46,10 +61,20 @@
                     .eq('id', session.user.id)
                     .single();
 
-                if (profileError || !profile) {
-                    console.warn('⚠️ تعذّر جلب بيانات البروفايل');
-                    await supabaseClient.auth.signOut();
-                    window.location.replace('login.html');
+                console.log('📋 نتيجة جلب البروفايل:', {
+                    profile: profile,
+                    error: profileError
+                });
+
+                if (profileError) {
+                    console.error('❌ خطأ في جلب البروفايل:', profileError);
+                    showAuthError('خطأ في تحميل بيانات الحساب: ' + profileError.message);
+                    return;
+                }
+
+                if (!profile) {
+                    console.warn('⚠️ لا يوجد بروفايل للمستخدم');
+                    showAuthError('⚠️ لا يوجد بروفايل لهذا الحساب');
                     return;
                 }
 
@@ -65,11 +90,101 @@
 
                 console.log('👤 المستخدم الحالي:', window.currentUser);
 
+                // إخفاء رسالة الخطأ إذا ظهرت
+                hideAuthError();
+
+                // متابعة تحميل الصفحة
+                initializePage();
+
             } catch (error) {
-                console.error('❌ خطأ في التحقق من الجلسة:', error);
-                window.location.replace('login.html');
+                console.error('❌ خطأ غير متوقع:', error);
+                showAuthError('حدث خطأ غير متوقع: ' + error.message);
             }
         })();
+
+        /**
+         * ============================================================
+         * دوال عرض رسائل الخطأ في الصفحة
+         * ============================================================
+         */
+        function showAuthError(message) {
+            var existing = document.getElementById('authErrorContainer');
+            if (existing) {
+                existing.remove();
+            }
+
+            var container = document.createElement('div');
+            container.id = 'authErrorContainer';
+            container.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(18, 24, 33, 0.85);
+                    backdrop-filter: blur(8px);
+                    z-index: 99999;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 20px;
+                    flex-direction: column;
+                    direction: rtl;
+                    font-family: 'Cairo', sans-serif;
+                `;
+
+            container.innerHTML = `
+                    <div style="
+                        background: #ffffff;
+                        border-radius: 16px;
+                        padding: 40px 48px;
+                        max-width: 480px;
+                        width: 100%;
+                        text-align: center;
+                        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+                        border-top: 6px solid #dd9f2e;
+                    ">
+                        <div style="font-size: 3rem; margin-bottom: 16px;">⚠️</div>
+                        <h2 style="color: #121821; font-size: 1.3rem; margin-bottom: 12px;">تعذّر الوصول</h2>
+                        <p style="color: #5a4f45; font-size: 0.95rem; margin-bottom: 8px; line-height: 1.7;">${message}</p>
+                        <p style="color: #9a8f83; font-size: 0.75rem; margin-top: 16px; border-top: 1px solid #dde3e0; padding-top: 16px;">
+                            <i class="fas fa-clock"></i> سيتم التحويل تلقائياً خلال 3 ثوانٍ...
+                        </p>
+                        <button onclick="window.location.replace('login.html')" style="
+                            margin-top: 20px;
+                            padding: 12px 32px;
+                            background: #121821;
+                            color: #ffffff;
+                            border: none;
+                            border-radius: 10px;
+                            font-size: 0.9rem;
+                            font-weight: 700;
+                            cursor: pointer;
+                            font-family: 'Cairo', sans-serif;
+                            transition: all 0.2s ease;
+                        ">تسجيل الدخول</button>
+                    </div>
+                `;
+
+            document.body.appendChild(container);
+        }
+
+        function hideAuthError() {
+            var existing = document.getElementById('authErrorContainer');
+            if (existing) {
+                existing.remove();
+            }
+        }
+
+        /**
+         * ============================================================
+         * تهيئة الصفحة بعد التحقق
+         * ============================================================
+         */
+        function initializePage() {
+            console.log('🚀 بدء تهيئة الصفحة...');
+            // جميع الدوال الأصلية موجودة في الأسفل
+        }
     </script>
 
     <!-- QRCode.js library -->
@@ -5259,6 +5374,15 @@
             console.log('🎨 تصميم فاتورة راقٍ بطابع محاسبي احترافي');
             console.log('📁 زر "حفظ PDF" ينزّل الملف مباشرة على الجهاز باسم العميل، بدون فتح أي معاينة');
         });
+    </script>
+
+    <!-- ===== التحقق من وجود user بعد التهيئة ===== -->
+    <script>
+        if (!window.currentUser || !window.currentUser.email) {
+            console.warn('⚠️ انتظر التحقق من الجلسة...');
+        } else {
+            console.log('✅ المستخدم جاهز:', window.currentUser.name);
+        }
     </script>
 
 </body>
