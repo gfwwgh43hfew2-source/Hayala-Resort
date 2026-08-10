@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+نفس المشكله انا بقترح عمل اليه لتنزيل الفاتوره pdfعلى الجهاز منفصله عن موضوع الطباعه بما يضمن حفظها باسم العميل الخاص بها فما رأيك   <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8" />
@@ -1525,8 +1525,10 @@
         }
 
         /* ============================================================
-           PRINT PREVIEW STYLES
+           PRINT PREVIEW STYLES — تصميم فاتورة راقٍ لبرنامج محاسبة
            ============================================================ */
+
+        /* --- الإطار العام للفاتورة --- */
         .print-preview-overlay .print-wrapper {
             background: linear-gradient(180deg, #fffefb 0%, #fdfbf5 100%);
             position: relative;
@@ -1541,6 +1543,7 @@
             pointer-events: none;
         }
 
+        /* --- الترويسة --- */
         .print-preview-overlay .print-wrapper .invoice-header {
             display: flex;
             align-items: flex-start;
@@ -1655,37 +1658,22 @@
             color: var(--ink);
             letter-spacing: 0.3px;
         }
-
-        /* ===== إصلاح حاوية QR Code ===== */
         .print-preview-overlay .print-wrapper .invoice-title .qr-code {
-            width: 72px !important;
-            height: 72px !important;
-            min-width: 72px !important;
-            max-width: 72px !important;
-            min-height: 72px !important;
-            max-height: 72px !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            background: #ffffff !important;
-            border-radius: 8px !important;
-            padding: 4px !important;
-            border: 1px dashed var(--line-strong) !important;
-            overflow: hidden !important;
-            flex-shrink: 0 !important;
-            margin: 0 auto !important;
+            width: calc(72px * var(--scale-factor));
+            height: calc(72px * var(--scale-factor));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            border-radius: calc(8px * var(--scale-factor));
+            padding: calc(4px * var(--scale-factor));
+            border: 1px dashed var(--line-strong);
         }
-
         .print-preview-overlay .print-wrapper .invoice-title .qr-code canvas,
         .print-preview-overlay .print-wrapper .invoice-title .qr-code img {
-            width: 64px !important;
-            height: 64px !important;
-            max-width: 64px !important;
-            max-height: 64px !important;
-            display: block !important;
-            margin: 0 auto !important;
+            width: 100% !important;
+            height: 100% !important;
         }
-
         .print-preview-overlay .print-wrapper .invoice-title .qr-label {
             font-size: calc(0.48rem * var(--scale-factor));
             color: var(--ink-mute);
@@ -1693,6 +1681,7 @@
             font-weight: 600;
         }
 
+        /* --- شارة حالة السداد --- */
         .print-preview-overlay .print-wrapper .status-badge {
             display: inline-flex;
             align-items: center;
@@ -1711,6 +1700,7 @@
             color: var(--rust);
         }
 
+        /* --- شريط بيانات الفاتورة --- */
         .print-preview-overlay .print-wrapper .info-grid {
             display: flex;
             flex-wrap: wrap;
@@ -1750,6 +1740,7 @@
             color: var(--accent-ink);
         }
 
+        /* --- جدول البنود --- */
         .print-preview-overlay .print-wrapper table {
             width: 100%;
             border-collapse: separate;
@@ -1817,6 +1808,7 @@
             font-size: calc(0.58rem * var(--scale-factor));
         }
 
+        /* --- قسم الملخص المالي والتوقيع --- */
         .print-preview-overlay .print-wrapper .invoice-summary {
             display: flex;
             justify-content: space-between;
@@ -1892,6 +1884,7 @@
             font-weight: 800;
         }
 
+        /* --- قسم الملاحظات --- */
         .print-preview-overlay .print-wrapper .notes-section {
             margin-top: calc(22px * var(--scale-factor));
             padding-top: 0;
@@ -1949,6 +1942,7 @@
             line-height: 1;
         }
 
+        /* --- تذييل ختامي --- */
         .print-preview-overlay .print-wrapper .print-brand-footer {
             margin-top: calc(20px * var(--scale-factor));
             padding-top: calc(12px * var(--scale-factor));
@@ -1960,6 +1954,145 @@
         }
         .print-preview-overlay .print-wrapper .print-brand-footer strong {
             color: var(--accent-ink);
+        }
+
+        .print-preview-overlay .print-wrapper .footer,
+        .print-preview-overlay .print-wrapper .print-footer-notes {
+            font-size: calc(0.6rem * var(--scale-factor));
+            color: var(--ink-mute);
+        }
+        .print-preview-overlay .print-wrapper .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: calc(2px * var(--scale-factor)) calc(10px * var(--scale-factor));
+            border-radius: 50px;
+            font-size: calc(0.55rem * var(--scale-factor));
+            font-weight: 700;
+            border: 1px solid transparent;
+        }
+        .print-preview-overlay .print-wrapper .badge-paid {
+            background: var(--teal-soft);
+            color: var(--teal);
+        }
+        .print-preview-overlay .print-wrapper .badge-balance {
+            background: var(--rust-soft);
+            color: var(--rust);
+        }
+        .print-preview-overlay .print-wrapper .badge-type {
+            background: var(--surface-muted);
+            color: var(--ink-mute);
+            border-color: var(--line);
+        }
+        .print-preview-overlay .print-wrapper .badge-future {
+            background: var(--accent-soft);
+            color: var(--accent-ink);
+        }
+
+        /* ============================================================
+           PRINT PREVIEW RESPONSIVE
+           ============================================================ */
+        @media (max-width: 768px) {
+            .print-preview-overlay .print-wrapper {
+                padding: calc(20px * var(--scale-factor)) calc(16px * var(--scale-factor));
+                max-height: 70vh;
+                max-width: 95%;
+            }
+            .print-preview-overlay .print-wrapper .invoice-header {
+                flex-direction: column;
+                text-align: center;
+                gap: calc(14px * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .invoice-header .logo-section {
+                flex-direction: column;
+            }
+            .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box {
+                width: calc(90px * var(--scale-factor));
+                height: calc(90px * var(--scale-factor));
+                min-width: calc(90px * var(--scale-factor));
+                max-width: calc(90px * var(--scale-factor));
+                min-height: calc(90px * var(--scale-factor));
+                max-height: calc(90px * var(--scale-factor));
+                border-radius: calc(14px * var(--scale-factor));
+                padding: calc(6px * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .invoice-title {
+                width: 100%;
+                align-items: center;
+            }
+            .print-preview-overlay .print-wrapper .invoice-title .qr-code {
+                width: calc(60px * var(--scale-factor));
+                height: calc(60px * var(--scale-factor));
+                padding: calc(3px * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .info-grid {
+                flex-direction: column;
+            }
+            .print-preview-overlay .print-wrapper .info-grid .item {
+                border-left: none;
+                border-bottom: 1px dashed var(--line);
+            }
+            .print-preview-overlay .print-wrapper .info-grid .item:last-child {
+                border-bottom: none;
+            }
+            .print-preview-overlay .print-actions button {
+                padding: calc(8px * var(--scale-factor)) calc(16px * var(--scale-factor));
+                font-size: calc(0.75rem * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper table {
+                font-size: calc(0.65rem * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper table th,
+            .print-preview-overlay .print-wrapper table td {
+                padding: calc(5px * var(--scale-factor)) calc(8px * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .invoice-summary {
+                flex-direction: column;
+            }
+            .print-preview-overlay .print-wrapper .summary-box {
+                flex: 0 0 auto;
+                width: 100%;
+            }
+            .print-preview-overlay .print-wrapper .signature {
+                text-align: center;
+            }
+            .print-preview-overlay .print-wrapper .signature .line {
+                margin: calc(4px * var(--scale-factor)) auto 0;
+            }
+            .print-preview-overlay .print-wrapper .notes-section {
+                padding: calc(12px * var(--scale-factor)) calc(14px * var(--scale-factor));
+                margin-top: calc(14px * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .notes-section .notes-title {
+                font-size: calc(0.65rem * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .notes-section .notes-content {
+                font-size: calc(0.55rem * var(--scale-factor));
+                line-height: 1.7;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .print-preview-overlay .print-wrapper {
+                padding: calc(14px * var(--scale-factor)) calc(12px * var(--scale-factor));
+                max-height: 60vh;
+                max-width: 98%;
+                border-radius: calc(8px * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .invoice-header .company-details h2 {
+                font-size: calc(1.1rem * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper table {
+                font-size: calc(0.55rem * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper table th,
+            .print-preview-overlay .print-wrapper table td {
+                padding: calc(4px * var(--scale-factor)) calc(6px * var(--scale-factor));
+            }
+            .print-preview-overlay .print-actions button {
+                padding: calc(6px * var(--scale-factor)) calc(12px * var(--scale-factor));
+                font-size: calc(0.65rem * var(--scale-factor));
+            }
         }
 
         /* ============================================================
@@ -2074,7 +2207,7 @@
         }
 
         /* ============================================================
-           DATE INPUT
+           DATE INPUT - تنسيق DD/MM/YYYY (flatpickr)
            ============================================================ */
         .date-wrapper {
             position: relative;
@@ -2133,6 +2266,9 @@
             color: var(--ink);
         }
 
+        /* ============================================================
+           FIX: ADD BOOKING BUTTON VISIBILITY
+           ============================================================ */
         .btn-add {
             display: inline-flex !important;
             align-items: center !important;
@@ -2176,6 +2312,45 @@
             opacity: 1 !important;
         }
 
+        /* ============================================================
+           تحسين عرض البطاقات في الموبايل
+           ============================================================ */
+        @media (max-width: 768px) {
+            .booking-card .card-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: calc(4px * var(--scale-factor)) 0;
+                font-size: calc(0.68rem * var(--scale-factor));
+                border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+            }
+
+            .booking-card .card-row:last-child {
+                border-bottom: none;
+            }
+
+            .booking-card .card-label {
+                font-size: calc(0.58rem * var(--scale-factor));
+                color: var(--ink-3);
+                font-weight: 600;
+                flex-shrink: 0;
+            }
+
+            .booking-card .card-value {
+                font-size: calc(0.68rem * var(--scale-factor));
+                color: var(--ink-2);
+                font-weight: 600;
+                text-align: left;
+                direction: ltr;
+                unicode-bidi: plaintext;
+            }
+
+            .booking-card .card-value.gold {
+                color: var(--teal);
+                font-weight: 800;
+            }
+        }
+
         .btn-back-dashboard {
             display: inline-flex;
             align-items: center;
@@ -2204,6 +2379,9 @@
             font-size: calc(0.7rem * var(--scale-factor));
         }
 
+        /* ============================================================
+           PRINT MEDIA QUERY - التصميم المحسن بالكامل للطباعة
+           ============================================================ */
         @media print {
             .print-preview-overlay .print-actions {
                 display: none !important;
@@ -2356,7 +2534,7 @@
                     <i class="fas fa-print"></i> طباعة
                 </button>
                 <button class="btn-pdf" onclick="downloadPDF()">
-                    <i class="fas fa-file-pdf"></i> حفظ PDF
+                    <i class="fas fa-file-pdf"></i> PDF
                 </button>
                 <button class="btn-close-preview" onclick="closePrintPreview()">
                     <i class="fas fa-times"></i> إغلاق
@@ -2616,7 +2794,7 @@
                                 <i class="fas fa-eye"></i> <span>معاينة</span>
                             </button>
                             <button class="btn-tool pdf" onclick="downloadPDF()">
-                                <i class="fas fa-file-pdf"></i> <span>حفظ PDF</span>
+                                <i class="fas fa-file-pdf"></i> <span>PDF</span>
                             </button>
                             <button class="btn-tool danger" id="btnResetAll">
                                 <i class="fas fa-times"></i> <span>إلغاء</span>
@@ -3230,7 +3408,7 @@
 
         /**
          * ============================================================
-         * GENERATE QR CODE - إصدار محسّن
+         * GENERATE QR CODE - حجم مصغر 72px
          * ============================================================
          */
         function generateQRCode(invoiceNumber, client, total) {
@@ -3242,59 +3420,88 @@
 
             qrContainer.innerHTML = '';
 
-            // استخدام بيانات مختصرة جداً لتجنب تجاوز السعة
-            var qrText = 'INV:' + (invoiceNumber || '----') + '|' + (client || '').substring(0, 20) + '|' + (total || '0');
-
-            if (qrText.length > 100) {
-                qrText = qrText.substring(0, 100);
+            if (typeof QRCode === 'undefined') {
+                console.warn('⚠️ مكتبة QRCode غير محملة، سيتم استخدام API خارجي');
+                generateQRCodeExternal(invoiceNumber, client, total);
+                return;
             }
 
-            console.log('📱 نص QR Code:', qrText);
+            var qrData = {
+                invoice: invoiceNumber || '----',
+                client: client || 'غير محدد',
+                total: total || '0.00',
+                date: new Date().toLocaleDateString('ar-EG'),
+                company: settings.companyName || 'منتجع حياله'
+            };
 
-            if (typeof QRCode !== 'undefined') {
-                try {
-                    var qr = new QRCode(qrContainer, {
-                        text: qrText,
-                        width: 64,
-                        height: 64,
-                        colorDark: '#121821',
-                        colorLight: '#ffffff',
-                        correctLevel: QRCode.CorrectLevel.H
-                    });
-                    currentQRCode = qr;
-                    console.log('✅ تم إنشاء QR Code بنجاح');
-                    return;
-                } catch (error) {
-                    console.warn('⚠️ فشل إنشاء QR Code:', error.message);
-                }
+            var qrText = JSON.stringify(qrData);
+
+            try {
+                var qr = new QRCode(qrContainer, {
+                    text: qrText,
+                    width: 72,
+                    height: 72,
+                    colorDark: '#121821',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                currentQRCode = qr;
+                console.log('✅ تم إنشاء QR Code مصغر (72px) بنجاح');
+            } catch (error) {
+                console.error('❌ خطأ في إنشاء QR Code:', error);
+                generateQRCodeExternal(invoiceNumber, client, total);
             }
+        }
 
-            // استخدام API خارجي
+        /**
+         * ============================================================
+         * GENERATE QR CODE - API خارجي (حجم 72px)
+         * ============================================================
+         */
+        function generateQRCodeExternal(invoiceNumber, client, total) {
+            var qrContainer = document.getElementById('qrCodeContainer');
+            if (!qrContainer) return;
+
+            qrContainer.innerHTML = '';
+
+            var qrData = {
+                invoice: invoiceNumber || '----',
+                client: client || 'غير محدد',
+                total: total || '0.00'
+            };
+            var qrText = JSON.stringify(qrData);
             var encodedText = encodeURIComponent(qrText);
-            var qrImageUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=64x64&data=' + encodedText +
+
+            var qrImageUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=72x72&data=' + encodedText +
                 '&bgcolor=ffffff&color=121821';
 
             var img = document.createElement('img');
             img.src = qrImageUrl;
             img.alt = 'QR Code';
-            img.style.width = '64px';
-            img.style.height = '64px';
+            img.style.width = '100%';
+            img.style.height = '100%';
             img.style.objectFit = 'contain';
-            img.style.display = 'block';
-            img.style.margin = '0 auto';
+
             img.onerror = function() {
-                qrContainer.innerHTML =
-                `<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:#f8f9fa;border-radius:4px;font-size:9px;color:var(--ink-mute);text-align:center;padding:4px;word-break:break-all;">${invoiceNumber || 'QR'}</div>`;
+                qrContainer.innerHTML = `
+                            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;background:#f8f9fa;border-radius:4px;">
+                                <i class="fas fa-qrcode" style="font-size:1.5rem;color:var(--accent);"></i>
+                                <span style="font-size:0.4rem;color:var(--ink-mute);">${invoiceNumber || ''}</span>
+                            </div>
+                        `;
             };
+
             img.onload = function() {
-                console.log('✅ تم إنشاء QR Code بواسطة API خارجي');
+                console.log('✅ تم إنشاء QR Code مصغر بواسطة API خارجي');
             };
+
             qrContainer.appendChild(img);
         }
 
         /**
          * ============================================================
-         * PREVIEW INVOICE
+         * PREVIEW INVOICE - تصميم راقٍ لفاتورة برنامج محاسبة
+         * (نفس البيانات تماماً — تصميم عرض جديد فقط)
          * ============================================================
          */
         function previewInvoice() {
@@ -3440,7 +3647,7 @@
 
             setTimeout(function() {
                 generateQRCode(invNum, client, total);
-            }, 300);
+            }, 200);
 
             document.getElementById('printPreviewOverlay').classList.add('show');
         }
@@ -3456,7 +3663,7 @@
 
         /**
          * ============================================================
-         * EXECUTE PRINT
+         * EXECUTE PRINT - طباعة عبر نافذة المتصفح
          * ============================================================
          */
         function executePrint() {
@@ -3473,7 +3680,7 @@
 
         /**
          * ============================================================
-         * OPEN PRINT WINDOW
+         * OPEN PRINT WINDOW - عبر iframe مخفي
          * ============================================================
          */
         function openPrintWindow() {
@@ -3652,29 +3859,15 @@
                         .invoice-title .qr-code {
                             width: 72px !important;
                             height: 72px !important;
-                            min-width: 72px !important;
-                            max-width: 72px !important;
-                            min-height: 72px !important;
-                            max-height: 72px !important;
-                            display: flex !important;
-                            align-items: center !important;
-                            justify-content: center !important;
-                            background: #ffffff !important;
-                            border-radius: 8px !important;
                             padding: 4px !important;
                             border: 1px dashed var(--line-strong) !important;
-                            overflow: hidden !important;
-                            flex-shrink: 0 !important;
-                            margin: 0 auto !important;
+                            background: #ffffff !important;
+                            border-radius: 8px !important;
                         }
                         .invoice-title .qr-code canvas,
                         .invoice-title .qr-code img {
-                            width: 64px !important;
-                            height: 64px !important;
-                            max-width: 64px !important;
-                            max-height: 64px !important;
-                            display: block !important;
-                            margin: 0 auto !important;
+                            width: 100% !important;
+                            height: 100% !important;
                         }
                         .invoice-title .qr-label {
                             font-size: 8px !important;
@@ -3919,7 +4112,12 @@
             console.log('📄 اسم الملف المطلوب حفظه:', fileName);
 
             var opt = {
-                margin: 8,
+                margin: {
+                    top: 12,
+                    bottom: 12,
+                    left: 12,
+                    right: 12
+                },
                 filename: fileName,
                 image: {
                     type: 'jpeg',
@@ -3931,12 +4129,17 @@
                     logging: false,
                     letterRendering: true,
                     allowTaint: true,
-                    backgroundColor: '#ffffff'
+                    backgroundColor: '#ffffff',
+                    width: element.scrollWidth,
+                    height: element.scrollHeight
                 },
                 jsPDF: {
                     unit: 'mm',
                     format: 'a4',
                     orientation: 'portrait'
+                },
+                pagebreak: {
+                    mode: ['avoid-all', 'css', 'legacy']
                 }
             };
 
@@ -4488,7 +4691,7 @@
 
         /**
          * ============================================================
-         * SAVE TO SUPABASE
+         * SAVE TO SUPABASE - متوافق مع هيكل الجدول
          * ============================================================
          */
         async function saveInvoiceToSupabase(invoiceData) {
