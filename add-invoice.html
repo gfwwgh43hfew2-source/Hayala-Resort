@@ -3445,6 +3445,14 @@
          * ============================================================
          * GENERATE QR CODE - حجم مصغر 72px
          * containerId: معرّف العنصر المستهدف (يدعم أكثر من حاوية QR)
+         *
+         * ملاحظة إصلاح: تمت إضافة typeNumber: 0 (اكتشاف تلقائي لأصغر
+         * إصدار QR كافٍ للبيانات) وتغيير correctLevel من H إلى M
+         * لتفادي خطأ "code length overflow" الذي كان يظهر عند تجاوز
+         * نص الـ JSON (رقم الفاتورة + اسم العميل + الإجمالي + التاريخ +
+         * اسم الشركة) لسعة الإصدار الافتراضي (typeNumber 4) مع تصحيح
+         * الأخطاء العالي (H). الحد الأقصى مرفوع الآن تلقائياً بدل أن
+         * يفشل ويعتمد فقط على fallback الـ API الخارجي.
          * ============================================================
          */
         function generateQRCode(invoiceNumberVal, client, total, containerId) {
@@ -3478,9 +3486,10 @@
                     text: qrText,
                     width: 72,
                     height: 72,
+                    typeNumber: 0,
                     colorDark: '#121821',
                     colorLight: '#ffffff',
-                    correctLevel: QRCode.CorrectLevel.H
+                    correctLevel: QRCode.CorrectLevel.M
                 });
                 currentQRCode = qr;
                 console.log('✅ تم إنشاء QR Code مصغر (72px) بنجاح في', containerId);
@@ -4112,6 +4121,11 @@
          * ============================================================
          * GENERATE PDF FROM ELEMENT — دالة موحّدة لالتقاط أي عنصر وتحويله PDF
          * وتنزيله فوراً باسم "اسم العميل - رقم الفاتورة.pdf"
+         *
+         * ملاحظة إصلاح: تم تغيير margin من كائن (object) إلى مصفوفة
+         * (array) بصيغة [top, left, bottom, right] لأن html2pdf.js /
+         * jsPDF لا يقبلان margin ككائن، وكان هذا هو السبب المباشر لخطأ
+         * "Invalid margin array" الذي كان يمنع حفظ ملف PDF نهائياً.
          * ============================================================
          */
         function generatePDFFromElement(element, clientNameValue, invoiceNum, onDone) {
@@ -4126,12 +4140,7 @@
             var fileName = safeClientName + ' - ' + (invoiceNum || 'invoice') + '.pdf';
 
             var opt = {
-                margin: {
-                    top: 12,
-                    bottom: 12,
-                    left: 12,
-                    right: 12
-                },
+                margin: [12, 12, 12, 12],
                 filename: fileName,
                 image: {
                     type: 'jpeg',
