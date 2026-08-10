@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8" />
@@ -1659,21 +1659,34 @@
             letter-spacing: 0.3px;
         }
         .print-preview-overlay .print-wrapper .invoice-title .qr-code {
-            width: calc(72px * var(--scale-factor));
-            height: calc(72px * var(--scale-factor));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #ffffff;
-            border-radius: calc(8px * var(--scale-factor));
-            padding: calc(4px * var(--scale-factor));
-            border: 1px dashed var(--line-strong);
+            width: 72px !important;
+            height: 72px !important;
+            min-width: 72px !important;
+            max-width: 72px !important;
+            min-height: 72px !important;
+            max-height: 72px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            background: #ffffff !important;
+            border-radius: 8px !important;
+            padding: 4px !important;
+            border: 1px dashed var(--line-strong) !important;
+            overflow: hidden !important;
+            flex-shrink: 0 !important;
+            margin: 0 auto !important;
         }
+
         .print-preview-overlay .print-wrapper .invoice-title .qr-code canvas,
         .print-preview-overlay .print-wrapper .invoice-title .qr-code img {
-            width: 100% !important;
-            height: 100% !important;
+            width: 64px !important;
+            height: 64px !important;
+            max-width: 64px !important;
+            max-height: 64px !important;
+            display: block !important;
+            margin: 0 auto !important;
         }
+
         .print-preview-overlay .print-wrapper .invoice-title .qr-label {
             font-size: calc(0.48rem * var(--scale-factor));
             color: var(--ink-mute);
@@ -2021,9 +2034,20 @@
                 align-items: center;
             }
             .print-preview-overlay .print-wrapper .invoice-title .qr-code {
-                width: calc(60px * var(--scale-factor));
-                height: calc(60px * var(--scale-factor));
-                padding: calc(3px * var(--scale-factor));
+                width: 60px !important;
+                height: 60px !important;
+                min-width: 60px !important;
+                max-width: 60px !important;
+                min-height: 60px !important;
+                max-height: 60px !important;
+                padding: 3px !important;
+            }
+            .print-preview-overlay .print-wrapper .invoice-title .qr-code canvas,
+            .print-preview-overlay .print-wrapper .invoice-title .qr-code img {
+                width: 54px !important;
+                height: 54px !important;
+                max-width: 54px !important;
+                max-height: 54px !important;
             }
             .print-preview-overlay .print-wrapper .info-grid {
                 flex-direction: column;
@@ -2092,6 +2116,22 @@
             .print-preview-overlay .print-actions button {
                 padding: calc(6px * var(--scale-factor)) calc(12px * var(--scale-factor));
                 font-size: calc(0.65rem * var(--scale-factor));
+            }
+            .print-preview-overlay .print-wrapper .invoice-title .qr-code {
+                width: 54px !important;
+                height: 54px !important;
+                min-width: 54px !important;
+                max-width: 54px !important;
+                min-height: 54px !important;
+                max-height: 54px !important;
+                padding: 2px !important;
+            }
+            .print-preview-overlay .print-wrapper .invoice-title .qr-code canvas,
+            .print-preview-overlay .print-wrapper .invoice-title .qr-code img {
+                width: 48px !important;
+                height: 48px !important;
+                max-width: 48px !important;
+                max-height: 48px !important;
             }
         }
 
@@ -2534,7 +2574,7 @@
                     <i class="fas fa-print"></i> طباعة
                 </button>
                 <button class="btn-pdf" onclick="downloadPDF()">
-                    <i class="fas fa-file-pdf"></i> PDF
+                    <i class="fas fa-file-pdf"></i> حفظ PDF
                 </button>
                 <button class="btn-close-preview" onclick="closePrintPreview()">
                     <i class="fas fa-times"></i> إغلاق
@@ -2794,7 +2834,7 @@
                                 <i class="fas fa-eye"></i> <span>معاينة</span>
                             </button>
                             <button class="btn-tool pdf" onclick="downloadPDF()">
-                                <i class="fas fa-file-pdf"></i> <span>PDF</span>
+                                <i class="fas fa-file-pdf"></i> <span>حفظ PDF</span>
                             </button>
                             <button class="btn-tool danger" id="btnResetAll">
                                 <i class="fas fa-times"></i> <span>إلغاء</span>
@@ -3408,7 +3448,7 @@
 
         /**
          * ============================================================
-         * GENERATE QR CODE - حجم مصغر 72px
+         * GENERATE QR CODE - إصدار محسّن للتثبيت داخل المربع
          * ============================================================
          */
         function generateQRCode(invoiceNumber, client, total) {
@@ -3420,59 +3460,47 @@
 
             qrContainer.innerHTML = '';
 
-            if (typeof QRCode === 'undefined') {
-                console.warn('⚠️ مكتبة QRCode غير محملة، سيتم استخدام API خارجي');
-                generateQRCodeExternal(invoiceNumber, client, total);
-                return;
+            // استخدام بيانات مختصرة جداً لتجنب تجاوز السعة
+            var qrText = 'INV:' + (invoiceNumber || '----') + '|' + (client || '').substring(0, 20) + '|' + (total || '0');
+
+            if (qrText.length > 100) {
+                qrText = qrText.substring(0, 100);
             }
 
-            var qrData = {
-                invoice: invoiceNumber || '----',
-                client: client || 'غير محدد',
-                total: total || '0.00',
-                date: new Date().toLocaleDateString('ar-EG'),
-                company: settings.companyName || 'منتجع حياله'
-            };
+            console.log('📱 نص QR Code:', qrText);
 
-            var qrText = JSON.stringify(qrData);
-
-            try {
-                var qr = new QRCode(qrContainer, {
-                    text: qrText,
-                    width: 72,
-                    height: 72,
-                    colorDark: '#121821',
-                    colorLight: '#ffffff',
-                    correctLevel: QRCode.CorrectLevel.H
-                });
-                currentQRCode = qr;
-                console.log('✅ تم إنشاء QR Code مصغر (72px) بنجاح');
-            } catch (error) {
-                console.error('❌ خطأ في إنشاء QR Code:', error);
-                generateQRCodeExternal(invoiceNumber, client, total);
+            if (typeof QRCode !== 'undefined') {
+                try {
+                    var qr = new QRCode(qrContainer, {
+                        text: qrText,
+                        width: 64,
+                        height: 64,
+                        colorDark: '#121821',
+                        colorLight: '#ffffff',
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                    currentQRCode = qr;
+                    console.log('✅ تم إنشاء QR Code بنجاح');
+                    
+                    // ضبط canvas ليكون داخل المربع بشكل صحيح
+                    var canvas = qrContainer.querySelector('canvas');
+                    if (canvas) {
+                        canvas.style.width = '100%';
+                        canvas.style.height = '100%';
+                        canvas.style.maxWidth = '64px';
+                        canvas.style.maxHeight = '64px';
+                        canvas.style.display = 'block';
+                        canvas.style.margin = '0 auto';
+                    }
+                    return;
+                } catch (error) {
+                    console.warn('⚠️ فشل إنشاء QR Code:', error.message);
+                }
             }
-        }
 
-        /**
-         * ============================================================
-         * GENERATE QR CODE - API خارجي (حجم 72px)
-         * ============================================================
-         */
-        function generateQRCodeExternal(invoiceNumber, client, total) {
-            var qrContainer = document.getElementById('qrCodeContainer');
-            if (!qrContainer) return;
-
-            qrContainer.innerHTML = '';
-
-            var qrData = {
-                invoice: invoiceNumber || '----',
-                client: client || 'غير محدد',
-                total: total || '0.00'
-            };
-            var qrText = JSON.stringify(qrData);
+            // استخدام API خارجي
             var encodedText = encodeURIComponent(qrText);
-
-            var qrImageUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=72x72&data=' + encodedText +
+            var qrImageUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=64x64&data=' + encodedText +
                 '&bgcolor=ffffff&color=121821';
 
             var img = document.createElement('img');
@@ -3480,28 +3508,24 @@
             img.alt = 'QR Code';
             img.style.width = '100%';
             img.style.height = '100%';
+            img.style.maxWidth = '64px';
+            img.style.maxHeight = '64px';
             img.style.objectFit = 'contain';
-
+            img.style.display = 'block';
+            img.style.margin = '0 auto';
             img.onerror = function() {
-                qrContainer.innerHTML = `
-                            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;background:#f8f9fa;border-radius:4px;">
-                                <i class="fas fa-qrcode" style="font-size:1.5rem;color:var(--accent);"></i>
-                                <span style="font-size:0.4rem;color:var(--ink-mute);">${invoiceNumber || ''}</span>
-                            </div>
-                        `;
+                qrContainer.innerHTML =
+                `<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:#f8f9fa;border-radius:4px;font-size:9px;color:var(--ink-mute);text-align:center;padding:4px;word-break:break-all;">${invoiceNumber || 'QR'}</div>`;
             };
-
             img.onload = function() {
-                console.log('✅ تم إنشاء QR Code مصغر بواسطة API خارجي');
+                console.log('✅ تم إنشاء QR Code بواسطة API خارجي');
             };
-
             qrContainer.appendChild(img);
         }
 
         /**
          * ============================================================
          * PREVIEW INVOICE - تصميم راقٍ لفاتورة برنامج محاسبة
-         * (نفس البيانات تماماً — تصميم عرض جديد فقط)
          * ============================================================
          */
         function previewInvoice() {
@@ -3647,7 +3671,7 @@
 
             setTimeout(function() {
                 generateQRCode(invNum, client, total);
-            }, 200);
+            }, 300);
 
             document.getElementById('printPreviewOverlay').classList.add('show');
         }
@@ -3859,15 +3883,29 @@
                         .invoice-title .qr-code {
                             width: 72px !important;
                             height: 72px !important;
-                            padding: 4px !important;
-                            border: 1px dashed var(--line-strong) !important;
+                            min-width: 72px !important;
+                            max-width: 72px !important;
+                            min-height: 72px !important;
+                            max-height: 72px !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: center !important;
                             background: #ffffff !important;
                             border-radius: 8px !important;
+                            padding: 4px !important;
+                            border: 1px dashed var(--line-strong) !important;
+                            overflow: hidden !important;
+                            flex-shrink: 0 !important;
+                            margin: 0 auto !important;
                         }
                         .invoice-title .qr-code canvas,
                         .invoice-title .qr-code img {
-                            width: 100% !important;
-                            height: 100% !important;
+                            width: 64px !important;
+                            height: 64px !important;
+                            max-width: 64px !important;
+                            max-height: 64px !important;
+                            display: block !important;
+                            margin: 0 auto !important;
                         }
                         .invoice-title .qr-label {
                             font-size: 8px !important;
@@ -4112,12 +4150,7 @@
             console.log('📄 اسم الملف المطلوب حفظه:', fileName);
 
             var opt = {
-                margin: {
-                    top: 12,
-                    bottom: 12,
-                    left: 12,
-                    right: 12
-                },
+                margin: 8,
                 filename: fileName,
                 image: {
                     type: 'jpeg',
@@ -4129,17 +4162,12 @@
                     logging: false,
                     letterRendering: true,
                     allowTaint: true,
-                    backgroundColor: '#ffffff',
-                    width: element.scrollWidth,
-                    height: element.scrollHeight
+                    backgroundColor: '#ffffff'
                 },
                 jsPDF: {
                     unit: 'mm',
                     format: 'a4',
                     orientation: 'portrait'
-                },
-                pagebreak: {
-                    mode: ['avoid-all', 'css', 'legacy']
                 }
             };
 
