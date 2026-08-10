@@ -3441,7 +3441,7 @@
 
         /**
          * ============================================================
-         * FIXED: GENERATE QR CODE - تجنب overflow بطول النص
+         * FIXED: GENERATE QR CODE - استخدام API خارجي فقط لتجنب overflow نهائياً
          * ============================================================
          */
         function generateQRCode(invoiceNumberVal, client, total, containerId) {
@@ -3454,62 +3454,18 @@
 
             qrContainer.innerHTML = '';
 
-            // ===== الحل: تقليل طول النص بشكل كبير =====
-            // نستخدم نصاً مختصراً جداً لتجنب overflow
-            var qrText = 'INV:' + (invoiceNumberVal || '----') + '|' + 
-                         'CL:' + (client || '').substring(0, 15) + '|' + 
-                         'AM:' + (total || '0');
-
-            // إذا كان النص لا يزال طويلاً، نقصره أكثر
-            if (qrText.length > 80) {
-                qrText = qrText.substring(0, 80);
-            }
-
-            // محاولة استخدام المكتبة الداخلية
-            if (typeof QRCode !== 'undefined') {
-                try {
-                    var qr = new QRCode(qrContainer, {
-                        text: qrText,
-                        width: 72,
-                        height: 72,
-                        colorDark: '#121821',
-                        colorLight: '#ffffff',
-                        correctLevel: QRCode.CorrectLevel.M  // استخدام مستوى أقل لتقليل الحجم
-                    });
-                    currentQRCode = qr;
-                    console.log('✅ تم إنشاء QR Code بنجاح في', containerId);
-                    return;
-                } catch (error) {
-                    console.warn('⚠️ فشل إنشاء QR Code داخلياً، استخدام API خارجي:', error.message);
-                }
-            }
-
-            // ===== استخدام API خارجي كحل بديل =====
-            generateQRCodeExternal(invoiceNumberVal, client, total, containerId);
-        }
-
-        /**
-         * ============================================================
-         * GENERATE QR CODE - API خارجي (حجم 72px)
-         * ============================================================
-         */
-        function generateQRCodeExternal(invoiceNumberVal, client, total, containerId) {
-            containerId = containerId || 'qrCodeContainer';
-            var qrContainer = document.getElementById(containerId);
-            if (!qrContainer) return;
-
-            qrContainer.innerHTML = '';
-
+            // ===== استخدام API خارجي فقط لتجنب أي مشاكل في overflow =====
+            // نقوم بتقليل البيانات إلى الحد الأدنى المطلوب
             var qrData = {
-                invoice: invoiceNumberVal || '----',
-                client: client || 'غير محدد',
-                total: total || '0.00'
+                inv: (invoiceNumberVal || '').substring(0, 20),
+                cl: (client || '').substring(0, 20),
+                am: (total || '0')
             };
             var qrText = JSON.stringify(qrData);
             var encodedText = encodeURIComponent(qrText);
 
             var qrImageUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=72x72&data=' + encodedText +
-                '&bgcolor=ffffff&color=121821';
+                '&bgcolor=ffffff&color=121821&margin=4';
 
             var img = document.createElement('img');
             img.src = qrImageUrl;
@@ -3517,18 +3473,21 @@
             img.style.width = '100%';
             img.style.height = '100%';
             img.style.objectFit = 'contain';
+            img.style.borderRadius = '4px';
 
             img.onerror = function() {
+                // في حالة فشل تحميل الصورة، نعرض رمز بديل
                 qrContainer.innerHTML = `
                             <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;background:#f8f9fa;border-radius:4px;">
-                                <i class="fas fa-qrcode" style="font-size:1.5rem;color:var(--accent);"></i>
-                                <span style="font-size:0.4rem;color:var(--ink-mute);">${invoiceNumberVal || ''}</span>
+                                <i class="fas fa-qrcode" style="font-size:1.8rem;color:var(--accent);"></i>
+                                <span style="font-size:0.4rem;color:var(--ink-mute);margin-top:2px;">${invoiceNumberVal || ''}</span>
                             </div>
                         `;
+                console.warn('⚠️ فشل تحميل QR Code من API الخارجي');
             };
 
             img.onload = function() {
-                console.log('✅ تم إنشاء QR Code مصغر بواسطة API خارجي في', containerId);
+                console.log('✅ تم إنشاء QR Code بنجاح باستخدام API خارجي في', containerId);
             };
 
             qrContainer.appendChild(img);
@@ -5003,7 +4962,7 @@
             console.log('✅ النظام جاهز للعمل مع Supabase');
             console.log('🎨 تصميم فاتورة راقٍ بطابع محاسبي احترافي');
             console.log('📁 زر "حفظ PDF" ينزّل الملف مباشرة على الجهاز باسم العميل، بدون فتح أي معاينة');
-            console.log('🔧 تم إصلاح مشاكل QR Code و PDF بنجاح');
+            console.log('🔧 تم إصلاح مشاكل QR Code باستخدام API خارجي نهائياً');
         });
     </script>
 
