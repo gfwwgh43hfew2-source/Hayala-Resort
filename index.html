@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
         /* ==========================================================
@@ -972,10 +973,10 @@
 
         <div class="footer">
             <div class="user">
-                <div class="avatar">أ</div>
+                <div class="avatar" id="sidebarAvatar">أ</div>
                 <div class="info">
-                    <div class="name">مدير النظام</div>
-                    <div class="role">منتجع حياله</div>
+                    <div class="name" id="sidebarName">مدير النظام</div>
+                    <div class="role" id="sidebarRole">منتجع حياله</div>
                 </div>
                 <a href="#" class="logout" title="تسجيل الخروج" onclick="logoutUser()"><i class="fas fa-sign-out-alt"></i></a>
             </div>
@@ -1202,28 +1203,93 @@
          */
         var SUPABASE_URL = 'https://zwuvcblrrrriuylajvba.supabase.co';
         var SUPABASE_ANON_KEY = 'sb_publishable_YFqwTEs-W_kprUgt4bgpCQ_tf5vVeFa';
+        var supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         /**
          * ============================================================
-         * التحقق من تسجيل الدخول
+         * SUPABASE AUTH - التحقق من الجلسة
          * ============================================================
          */
-        var user = JSON.parse(localStorage.getItem('user') || '{}');
-        if (!user || !user.email) {
-            window.location.href = 'login.html';
-        }
+        (async function checkAuth() {
+            try {
+                var { data: { session }, error } = await supabaseClient.auth.getSession();
+                
+                if (error || !session) {
+                    console.warn('⚠️ لا توجد جلسة نشطة، جاري التحويل إلى تسجيل الدخول');
+                    window.location.href = 'login.html';
+                    return;
+                }
 
-        var profileName = document.getElementById('profileName');
-        var profileAvatar = document.getElementById('profileAvatar');
-        if (user && user.name) {
-            profileName.innerHTML = user.name + '<small>' + (user.role === 'admin' ? 'مدير النظام' : 'مستخدم') + '</small>';
-            profileAvatar.textContent = user.name.charAt(0) || 'أ';
-        }
+                // جلب بيانات البروفايل
+                var { data: profile, error: profileError } = await supabaseClient
+                    .from('profiles')
+                    .select('name, role')
+                    .eq('id', session.user.id)
+                    .single();
 
-        function logoutUser() {
-            if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
-                localStorage.removeItem('user');
+                if (profileError || !profile) {
+                    console.warn('⚠️ تعذّر جلب بيانات البروفايل');
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                // تحديث الواجهة - الاسم في الهيدر
+                var profileName = document.getElementById('profileName');
+                var profileAvatar = document.getElementById('profileAvatar');
+                var sidebarName = document.getElementById('sidebarName');
+                var sidebarAvatar = document.getElementById('sidebarAvatar');
+                var sidebarRole = document.getElementById('sidebarRole');
+                
+                var displayName = profile.name || session.user.email || 'مستخدم';
+                var roleText = profile.role === 'admin' ? 'مدير النظام' : 'مستخدم';
+                var roleArabic = profile.role === 'admin' ? 'مدير النظام' : 'مستخدم';
+                
+                if (profileName) {
+                    profileName.innerHTML = displayName + '<small>' + roleText + '</small>';
+                }
+                if (profileAvatar) {
+                    profileAvatar.textContent = displayName.charAt(0) || 'أ';
+                }
+                if (sidebarName) {
+                    sidebarName.textContent = displayName;
+                }
+                if (sidebarAvatar) {
+                    sidebarAvatar.textContent = displayName.charAt(0) || 'أ';
+                }
+                if (sidebarRole) {
+                    sidebarRole.textContent = roleArabic;
+                }
+
+                // تخزين بيانات المستخدم في متغير عام
+                window.currentUser = {
+                    id: session.user.id,
+                    email: session.user.email,
+                    name: displayName,
+                    role: profile.role
+                };
+
+                console.log('✅ تم التحقق من الجلسة بنجاح:', displayName);
+
+            } catch (error) {
+                console.error('❌ خطأ في التحقق من الجلسة:', error);
                 window.location.href = 'login.html';
+            }
+        })();
+
+        /**
+         * ============================================================
+         * دالة تسجيل الخروج
+         * ============================================================
+         */
+        async function logoutUser() {
+            if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
+                try {
+                    await supabaseClient.auth.signOut();
+                    window.location.href = 'login.html';
+                } catch (error) {
+                    console.error('❌ خطأ في تسجيل الخروج:', error);
+                    window.location.href = 'login.html';
+                }
             }
         }
 
