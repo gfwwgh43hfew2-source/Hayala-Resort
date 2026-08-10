@@ -3396,6 +3396,7 @@
 
                     propertiesList = await response.json();
                     console.log('🏠 تم جلب العقارات:', propertiesList.length);
+                    console.log('📋 بيانات العقارات:', propertiesList);
 
                     var select = document.getElementById('propertyType');
                     select.innerHTML = '<option value="">اختر العقار</option>';
@@ -4770,6 +4771,7 @@
 
                     clientsList = await response.json();
                     console.log('👤 تم جلب العملاء:', clientsList.length);
+                    console.log('📋 بيانات العملاء:', clientsList);
                 } catch (error) {
                     console.error('❌ خطأ في جلب العملاء:', error);
                     clientsList = [];
@@ -5382,8 +5384,6 @@
              * ============================================================
              */
             document.addEventListener('DOMContentLoaded', function() {
-                loadClientsForSuggestions();
-                loadProperties();
                 console.log('🏕️ منتجع حياله - فاتورة المبيعات (Supabase Auth)');
                 console.log('📌 Ctrl+F للبحث عن فاتورة');
                 console.log('📌 Ctrl+P لمعاينة الطباعة');
@@ -5394,6 +5394,13 @@
                 console.log('✅ النظام جاهز للعمل مع Supabase Auth');
                 console.log('🎨 تصميم فاتورة راقٍ بطابع محاسبي احترافي');
                 console.log('📁 زر "حفظ PDF" ينزّل الملف مباشرة على الجهاز باسم العميل، بدون فتح أي معاينة');
+                
+                // ===== تحميل العملاء والعقارات مع تأخير بسيط =====
+                setTimeout(function() {
+                    loadClientsForSuggestions();
+                    loadProperties();
+                    console.log('🔄 تم تحميل العملاء والعقارات');
+                }, 300);
             });
         })(); // نهاية IIFE initApp
     </script>
