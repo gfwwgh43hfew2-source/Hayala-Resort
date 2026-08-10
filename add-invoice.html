@@ -4959,6 +4959,10 @@
 
         btnSearchInvoice.addEventListener('click', searchInvoice);
 
+        if (btnSavePdfDirect) {
+            btnSavePdfDirect.addEventListener('click', saveInvoicePDFDirect);
+        }
+
         searchInvoiceInput.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
