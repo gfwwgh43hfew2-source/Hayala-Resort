@@ -771,21 +771,47 @@
         console.log('📡 Supabase URL:', SUPABASE_URL);
         console.log('🔑 Supabase Key:', SUPABASE_ANON_KEY.substring(0, 20) + '...');
  
-        // لو المستخدم عنده جلسة سارية بالفعل، حوّله على طول للداشبورد
+        // ============================================================
+        // التحقق من الجلسة - مع التحقق من وجود البروفايل
+        // ============================================================
         (async function checkExistingSession() {
             console.log('🔍 التحقق من وجود جلسة سابقة...');
-            var { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
             
-            if (sessionError) {
-                console.log('❌ خطأ في التحقق من الجلسة:', sessionError);
-            }
-            
-            if (sessionData && sessionData.session) {
-                console.log('✅ توجد جلسة سابقة للمستخدم:', sessionData.session.user.email);
-                console.log('🔄 جاري التحويل إلى لوحة التحكم...');
-                window.location.href = 'index.html';
-            } else {
-                console.log('ℹ️ لا توجد جلسة سابقة، المستخدم غير مسجل الدخول');
+            try {
+                var { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
+                
+                if (sessionError) {
+                    console.log('❌ خطأ في التحقق من الجلسة:', sessionError);
+                    return;
+                }
+                
+                if (sessionData && sessionData.session) {
+                    console.log('✅ توجد جلسة سابقة للمستخدم:', sessionData.session.user.email);
+                    
+                    // ===== نتحقق من وجود البروفايل قبل التحويل =====
+                    console.log('🔄 التحقق من وجود البروفايل قبل التحويل...');
+                    
+                    var { data: profile, error: profileError } = await supabaseClient
+                        .from('profiles')
+                        .select('id')
+                        .eq('id', sessionData.session.user.id)
+                        .single();
+                    
+                    if (profileError || !profile) {
+                        console.warn('⚠️ لا يوجد بروفايل للمستخدم، سيتم تسجيل الخروج');
+                        await supabaseClient.auth.signOut();
+                        console.log('🚪 تم تسجيل الخروج، البقاء في صفحة تسجيل الدخول');
+                        return;
+                    }
+                    
+                    console.log('✅ البروفايل موجود، جاري التحويل إلى لوحة التحكم...');
+                    window.location.href = 'index.html';
+                } else {
+                    console.log('ℹ️ لا توجد جلسة سابقة، المستخدم غير مسجل الدخول');
+                }
+            } catch (error) {
+                console.error('❌ خطأ في التحقق من الجلسة:', error);
+                // نبقى في صفحة تسجيل الدخول
             }
         })();
  
@@ -925,7 +951,7 @@
  
                     var { data: profile, error: profileError } = await supabaseClient
                         .from('profiles')
-                        .select('*')  // نجيب كل البيانات عشان نشوف كل العمود
+                        .select('*')
                         .eq('id', result.data.user.id)
                         .single();
  
@@ -942,7 +968,6 @@
                             hint: profileError.hint
                         });
                         
-                        // عرض رسالة خطأ مفصلة
                         var errorMsg = 'تعذّر تحميل بيانات الحساب';
                         if (profileError.message) {
                             errorMsg += ' - ' + profileError.message;
