@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8" />
@@ -2413,6 +2413,32 @@
                 print-color-adjust: exact !important;
             }
         }
+
+        /* ============================================================
+           OFFSCREEN PDF WRAPPER - عنصر مخفي لتوليد PDF بدون معاينة
+           ============================================================ */
+        #pdfOffscreenOverlay {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: -5000px;
+            width: 210mm;
+            height: auto;
+            padding: 0;
+            margin: 0;
+            background: transparent;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0;
+        }
+        #pdfOffscreenOverlay .print-wrapper {
+            max-width: none;
+            width: 210mm;
+            max-height: none;
+            overflow: visible;
+            padding: 12mm 15mm;
+            box-shadow: none;
+        }
     </style>
 </head>
 <body>
@@ -2540,6 +2566,14 @@
                     <i class="fas fa-times"></i> إغلاق
                 </button>
             </div>
+        </div>
+
+        <!-- ============================================================
+        OFFSCREEN PDF CONTAINER — مخفي تماماً، لا يظهر للمستخدم أبداً
+        يُستخدم فقط لتوليد PDF مباشرة عند الضغط على "حفظ PDF"
+        ============================================================ -->
+        <div id="pdfOffscreenOverlay" aria-hidden="true">
+            <div class="print-wrapper" id="pdfHiddenWrapper"></div>
         </div>
 
         <!-- ============================================================
@@ -2793,8 +2827,8 @@
                             <button class="btn-tool info" onclick="previewInvoice()">
                                 <i class="fas fa-eye"></i> <span>معاينة</span>
                             </button>
-                            <button class="btn-tool pdf" onclick="downloadPDF()">
-                                <i class="fas fa-file-pdf"></i> <span>PDF</span>
+                            <button class="btn-tool pdf" id="btnSavePdfDirect">
+                                <i class="fas fa-file-pdf"></i> <span>حفظ PDF</span>
                             </button>
                             <button class="btn-tool danger" id="btnResetAll">
                                 <i class="fas fa-times"></i> <span>إلغاء</span>
@@ -2924,6 +2958,7 @@
         var totalAmountDisplay = document.getElementById('totalAmountDisplay');
         var netAmountDisplay = document.getElementById('netAmountDisplay');
         var stayType = document.getElementById('stayType');
+        var btnSavePdfDirect = document.getElementById('btnSavePdfDirect');
 
         /**
          * ============================================================
@@ -3409,12 +3444,14 @@
         /**
          * ============================================================
          * GENERATE QR CODE - حجم مصغر 72px
+         * containerId: معرّف العنصر المستهدف (يدعم أكثر من حاوية QR)
          * ============================================================
          */
-        function generateQRCode(invoiceNumber, client, total) {
-            var qrContainer = document.getElementById('qrCodeContainer');
+        function generateQRCode(invoiceNumberVal, client, total, containerId) {
+            containerId = containerId || 'qrCodeContainer';
+            var qrContainer = document.getElementById(containerId);
             if (!qrContainer) {
-                console.warn('⚠️ حاوية QR Code غير موجودة');
+                console.warn('⚠️ حاوية QR Code غير موجودة:', containerId);
                 return;
             }
 
@@ -3422,12 +3459,12 @@
 
             if (typeof QRCode === 'undefined') {
                 console.warn('⚠️ مكتبة QRCode غير محملة، سيتم استخدام API خارجي');
-                generateQRCodeExternal(invoiceNumber, client, total);
+                generateQRCodeExternal(invoiceNumberVal, client, total, containerId);
                 return;
             }
 
             var qrData = {
-                invoice: invoiceNumber || '----',
+                invoice: invoiceNumberVal || '----',
                 client: client || 'غير محدد',
                 total: total || '0.00',
                 date: new Date().toLocaleDateString('ar-EG'),
@@ -3446,10 +3483,10 @@
                     correctLevel: QRCode.CorrectLevel.H
                 });
                 currentQRCode = qr;
-                console.log('✅ تم إنشاء QR Code مصغر (72px) بنجاح');
+                console.log('✅ تم إنشاء QR Code مصغر (72px) بنجاح في', containerId);
             } catch (error) {
                 console.error('❌ خطأ في إنشاء QR Code:', error);
-                generateQRCodeExternal(invoiceNumber, client, total);
+                generateQRCodeExternal(invoiceNumberVal, client, total, containerId);
             }
         }
 
@@ -3458,14 +3495,15 @@
          * GENERATE QR CODE - API خارجي (حجم 72px)
          * ============================================================
          */
-        function generateQRCodeExternal(invoiceNumber, client, total) {
-            var qrContainer = document.getElementById('qrCodeContainer');
+        function generateQRCodeExternal(invoiceNumberVal, client, total, containerId) {
+            containerId = containerId || 'qrCodeContainer';
+            var qrContainer = document.getElementById(containerId);
             if (!qrContainer) return;
 
             qrContainer.innerHTML = '';
 
             var qrData = {
-                invoice: invoiceNumber || '----',
+                invoice: invoiceNumberVal || '----',
                 client: client || 'غير محدد',
                 total: total || '0.00'
             };
@@ -3486,13 +3524,13 @@
                 qrContainer.innerHTML = `
                             <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;background:#f8f9fa;border-radius:4px;">
                                 <i class="fas fa-qrcode" style="font-size:1.5rem;color:var(--accent);"></i>
-                                <span style="font-size:0.4rem;color:var(--ink-mute);">${invoiceNumber || ''}</span>
+                                <span style="font-size:0.4rem;color:var(--ink-mute);">${invoiceNumberVal || ''}</span>
                             </div>
                         `;
             };
 
             img.onload = function() {
-                console.log('✅ تم إنشاء QR Code مصغر بواسطة API خارجي');
+                console.log('✅ تم إنشاء QR Code مصغر بواسطة API خارجي في', containerId);
             };
 
             qrContainer.appendChild(img);
@@ -3500,34 +3538,17 @@
 
         /**
          * ============================================================
-         * PREVIEW INVOICE - تصميم راقٍ لفاتورة برنامج محاسبة
-         * (نفس البيانات تماماً — تصميم عرض جديد فقط)
+         * BUILD INVOICE HTML — دالة موحّدة تبني قالب الفاتورة
+         * تُستخدم في المعاينة العادية وفي التوليد المخفي لـ PDF معاً
+         * qrContainerId: معرّف حاوية الـ QR الفريدة لكل استخدام
          * ============================================================
          */
-        function previewInvoice() {
-            if (bookings.length === 0) {
-                showToast('⚠️ تنبيه', 'لا توجد حجوزات للمعاينة', 'error');
-                return;
-            }
-
-            var client = clientName.value.trim() || 'غير محدد';
-            var phone = clientPhone.value.trim() || 'غير محدد';
-            var invNum = invoiceNumber.value.trim() || '----';
-            var book = bookNumber.value.trim() || '----';
-            var date = invoiceDate.value ? new Date(invoiceDate.value).toLocaleDateString('ar-EG') : '----';
-            var total = totalAmount.textContent;
-            var discount = displayDiscount.textContent;
-            var paid = displayPaid.textContent;
-            var remaining = displayRemaining.textContent;
-            var isPaidFull = (parseFloat(remaining) || 0) <= 0;
-
+        function buildInvoiceHTML(client, phone, invNum, book, date, total, discount, paid, remaining, isPaidFull, qrContainerId) {
             var companyName = settings.companyName || 'منتجع حياله';
             var companyAddress = settings.companyAddress || '';
             var companyPhone = settings.companyPhone || '';
             var companyLogo = settings.companyLogo || '';
             var footer = settings.invoiceFooter || 'شكراً لثقتكم بنا';
-
-            var printContent = document.getElementById('printPreviewContent');
 
             var statusBadgeHtml = isPaidFull ?
                 '<span class="status-badge paid"><i class="fas fa-check-circle"></i> مدفوعة بالكامل</span>' :
@@ -3552,7 +3573,7 @@
                     <div class="invoice-title">
                         <span class="invoice-title-label">رقم الفاتورة</span>
                         <span class="invoice-title-number">${invNum}</span>
-                        <div class="qr-code" id="qrCodeContainer">
+                        <div class="qr-code" id="${qrContainerId}">
                         </div>
                         <span class="qr-label">امسح للتحقق من الفاتورة</span>
                     </div>
@@ -3643,10 +3664,37 @@
                 </div>
             `;
 
-            printContent.innerHTML = html;
+            return html;
+        }
+
+        /**
+         * ============================================================
+         * PREVIEW INVOICE - تصميم راقٍ لفاتورة برنامج محاسبة
+         * (نفس البيانات تماماً — تستخدم buildInvoiceHTML المشتركة)
+         * ============================================================
+         */
+        function previewInvoice() {
+            if (bookings.length === 0) {
+                showToast('⚠️ تنبيه', 'لا توجد حجوزات للمعاينة', 'error');
+                return;
+            }
+
+            var client = clientName.value.trim() || 'غير محدد';
+            var phone = clientPhone.value.trim() || 'غير محدد';
+            var invNum = invoiceNumber.value.trim() || '----';
+            var book = bookNumber.value.trim() || '----';
+            var date = invoiceDate.value ? new Date(invoiceDate.value).toLocaleDateString('ar-EG') : '----';
+            var total = totalAmount.textContent;
+            var discount = displayDiscount.textContent;
+            var paid = displayPaid.textContent;
+            var remaining = displayRemaining.textContent;
+            var isPaidFull = (parseFloat(remaining) || 0) <= 0;
+
+            var printContent = document.getElementById('printPreviewContent');
+            printContent.innerHTML = buildInvoiceHTML(client, phone, invNum, book, date, total, discount, paid, remaining, isPaidFull, 'qrCodeContainer');
 
             setTimeout(function() {
-                generateQRCode(invNum, client, total);
+                generateQRCode(invNum, client, total, 'qrCodeContainer');
             }, 200);
 
             document.getElementById('printPreviewOverlay').classList.add('show');
@@ -4062,54 +4110,20 @@
 
         /**
          * ============================================================
-         * DOWNLOAD PDF - حفظ باسم العميل تلقائياً
+         * GENERATE PDF FROM ELEMENT — دالة موحّدة لالتقاط أي عنصر وتحويله PDF
+         * وتنزيله فوراً باسم "اسم العميل - رقم الفاتورة.pdf"
          * ============================================================
          */
-        function downloadPDF() {
-            if (bookings.length === 0) {
-                showToast('⚠️ تنبيه', 'لا توجد حجوزات لتحويلها إلى PDF', 'error');
-                return;
-            }
-
-            var overlay = document.getElementById('printPreviewOverlay');
-            if (!overlay.classList.contains('show')) {
-                previewInvoice();
-                setTimeout(function() {
-                    generatePDFFromPreview();
-                }, 800);
-                return;
-            }
-
-            generatePDFFromPreview();
-        }
-
-        /**
-         * ============================================================
-         * GENERATE PDF FROM PREVIEW - إنشاء PDF باسم العميل تلقائياً
-         * ============================================================
-         */
-        function generatePDFFromPreview() {
-            var element = document.getElementById('printPreviewContent');
+        function generatePDFFromElement(element, clientNameValue, invoiceNum, onDone) {
             if (!element) {
-                showToast('❌ خطأ', 'لم يتم العثور على محتوى المعاينة', 'error');
+                showToast('❌ خطأ', 'لم يتم العثور على محتوى الفاتورة', 'error');
+                if (onDone) onDone(false);
                 return;
             }
 
-            showToast('⏳ جاري التحميل', 'جاري إنشاء ملف PDF...', 'warning');
-
-            var clientNameValue = document.getElementById('clientName').value.trim();
-            var rawClientName = clientNameValue || 'فاتورة';
-
-            var safeClientName = rawClientName.replace(/[\\\/:*?"<>|]/g, '').trim();
-            if (!safeClientName) {
-                safeClientName = 'فاتورة';
-            }
-
-            var invoiceNum = document.getElementById('invoiceNumber').value.trim() || 'invoice';
-
-            var fileName = safeClientName + ' - ' + invoiceNum + '.pdf';
-
-            console.log('📄 اسم الملف المطلوب حفظه:', fileName);
+            var rawClientName = (clientNameValue || '').trim() || 'فاتورة';
+            var safeClientName = rawClientName.replace(/[\\\/:*?"<>|]/g, '').trim() || 'فاتورة';
+            var fileName = safeClientName + ' - ' + (invoiceNum || 'invoice') + '.pdf';
 
             var opt = {
                 margin: {
@@ -4160,15 +4174,114 @@
                         URL.revokeObjectURL(blobUrl);
                     }, 3000);
 
-                    showToast('✅ تم التحميل', 'تم تحميل ملف PDF بنجاح باسم: ' + fileName, 'success');
+                    showToast('✅ تم الحفظ', 'تم حفظ ملف PDF على جهازك باسم: ' + fileName, 'success');
+                    if (onDone) onDone(true);
+                })
+                .catch(function(error) {
+                    console.error('❌ خطأ في حفظ PDF:', error);
+                    showToast('❌ خطأ', 'فشل في حفظ PDF: ' + error.message, 'error');
+                    if (onDone) onDone(false);
+                });
+        }
+
+        /**
+         * ============================================================
+         * SAVE INVOICE PDF DIRECT — تنزيل تلقائي فوري بدون فتح المعاينة
+         * يبني الفاتورة في عنصر مخفي تماماً (#pdfHiddenWrapper) خارج نطاق
+         * الشاشة، يولّد QR الخاص بها، ثم يحوّلها PDF وينزّلها مباشرة على
+         * الجهاز باسم العميل — من غير أي نافذة معاينة تظهر للمستخدم.
+         * ============================================================
+         */
+        function saveInvoicePDFDirect() {
+            if (bookings.length === 0) {
+                showToast('⚠️ تنبيه', 'لا توجد حجوزات لتحويلها إلى PDF', 'error');
+                return;
+            }
+
+            var client = clientName.value.trim() || 'غير محدد';
+            var phone = clientPhone.value.trim() || 'غير محدد';
+            var invNum = invoiceNumber.value.trim() || '----';
+            var book = bookNumber.value.trim() || '----';
+            var date = invoiceDate.value ? new Date(invoiceDate.value).toLocaleDateString('ar-EG') : '----';
+            var total = totalAmount.textContent;
+            var discount = displayDiscount.textContent;
+            var paid = displayPaid.textContent;
+            var remaining = displayRemaining.textContent;
+            var isPaidFull = (parseFloat(remaining) || 0) <= 0;
+
+            showToast('⏳ جاري الحفظ', 'جاري تجهيز ملف PDF...', 'warning');
+
+            if (btnSavePdfDirect) {
+                btnSavePdfDirect.disabled = true;
+            }
+
+            var hiddenWrapper = document.getElementById('pdfHiddenWrapper');
+            hiddenWrapper.innerHTML = buildInvoiceHTML(
+                client, phone, invNum, book, date, total, discount, paid, remaining, isPaidFull, 'pdfHiddenQrCode'
+            );
+
+            generateQRCode(invNum, client, total, 'pdfHiddenQrCode');
+
+            // مهلة صغيرة لضمان تحميل الشعار وصورة الـ QR قبل التقاط الصورة
+            setTimeout(function() {
+                generatePDFFromElement(hiddenWrapper, client, invNum, function() {
+                    hiddenWrapper.innerHTML = '';
+                    if (btnSavePdfDirect) {
+                        btnSavePdfDirect.disabled = false;
+                    }
+                });
+            }, 500);
+        }
+
+        if (btnSavePdfDirect) {
+            btnSavePdfDirect.addEventListener('click', saveInvoicePDFDirect);
+        }
+
+        /**
+         * ============================================================
+         * DOWNLOAD PDF (من داخل نافذة المعاينة) — نفس السلوك القديم،
+         * يُستخدم فقط عندما تكون نافذة المعاينة مفتوحة بالفعل بقصد
+         * المستخدم (زر PDF داخل print-preview-overlay)
+         * ============================================================
+         */
+        function downloadPDF() {
+            if (bookings.length === 0) {
+                showToast('⚠️ تنبيه', 'لا توجد حجوزات لتحويلها إلى PDF', 'error');
+                return;
+            }
+
+            var overlay = document.getElementById('printPreviewOverlay');
+            if (!overlay.classList.contains('show')) {
+                previewInvoice();
+                setTimeout(function() {
+                    generatePDFFromPreview();
+                }, 800);
+                return;
+            }
+
+            generatePDFFromPreview();
+        }
+
+        /**
+         * ============================================================
+         * GENERATE PDF FROM PREVIEW — يستخدم العنصر الظاهر في نافذة
+         * المعاينة (يُستدعى فقط من زر PDF داخل النافذة نفسها)
+         * ============================================================
+         */
+        function generatePDFFromPreview() {
+            var element = document.getElementById('printPreviewContent');
+            var clientNameValue = document.getElementById('clientName').value.trim();
+            var invoiceNum = document.getElementById('invoiceNumber').value.trim() || 'invoice';
+
+            showToast('⏳ جاري التحميل', 'جاري إنشاء ملف PDF...', 'warning');
+
+            generatePDFFromElement(element, clientNameValue, invoiceNum, function(success) {
+                if (success) {
                     setTimeout(function() {
                         closePrintPreview();
                     }, 1500);
-                })
-                .catch(function(error) {
-                    console.error('❌ خطأ في تحميل PDF:', error);
-                    showToast('❌ خطأ', 'فشل في تحميل PDF: ' + error.message, 'error');
-                });
+                }
+            });
         }
 
         /**
@@ -4840,7 +4953,7 @@
             console.log('👤 المستخدم:', user.name || 'غير معروف');
             console.log('✅ النظام جاهز للعمل مع Supabase');
             console.log('🎨 تصميم فاتورة راقٍ بطابع محاسبي احترافي');
-            console.log('📁 سيتم حفظ ملفات PDF باسم العميل تلقائياً');
+            console.log('📁 زر "حفظ PDF" ينزّل الملف مباشرة على الجهاز باسم العميل، بدون فتح أي معاينة');
         });
     </script>
 
