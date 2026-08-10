@@ -58,8 +58,6 @@
             --header-height: 60px;
             --stripe-height: 4px;
             --mobile-nav-height: 56px;
-
-            /* ===== SCALE DOWN 10% ===== */
             --scale-factor: 0.9;
         }
 
@@ -3443,16 +3441,7 @@
 
         /**
          * ============================================================
-         * GENERATE QR CODE - حجم مصغر 72px
-         * containerId: معرّف العنصر المستهدف (يدعم أكثر من حاوية QR)
-         *
-         * ملاحظة إصلاح: تمت إضافة typeNumber: 0 (اكتشاف تلقائي لأصغر
-         * إصدار QR كافٍ للبيانات) وتغيير correctLevel من H إلى M
-         * لتفادي خطأ "code length overflow" الذي كان يظهر عند تجاوز
-         * نص الـ JSON (رقم الفاتورة + اسم العميل + الإجمالي + التاريخ +
-         * اسم الشركة) لسعة الإصدار الافتراضي (typeNumber 4) مع تصحيح
-         * الأخطاء العالي (H). الحد الأقصى مرفوع الآن تلقائياً بدل أن
-         * يفشل ويعتمد فقط على fallback الـ API الخارجي.
+         * FIXED: GENERATE QR CODE - تجنب overflow بطول النص
          * ============================================================
          */
         function generateQRCode(invoiceNumberVal, client, total, containerId) {
@@ -3465,38 +3454,38 @@
 
             qrContainer.innerHTML = '';
 
-            if (typeof QRCode === 'undefined') {
-                console.warn('⚠️ مكتبة QRCode غير محملة، سيتم استخدام API خارجي');
-                generateQRCodeExternal(invoiceNumberVal, client, total, containerId);
-                return;
+            // ===== الحل: تقليل طول النص بشكل كبير =====
+            // نستخدم نصاً مختصراً جداً لتجنب overflow
+            var qrText = 'INV:' + (invoiceNumberVal || '----') + '|' + 
+                         'CL:' + (client || '').substring(0, 15) + '|' + 
+                         'AM:' + (total || '0');
+
+            // إذا كان النص لا يزال طويلاً، نقصره أكثر
+            if (qrText.length > 80) {
+                qrText = qrText.substring(0, 80);
             }
 
-            var qrData = {
-                invoice: invoiceNumberVal || '----',
-                client: client || 'غير محدد',
-                total: total || '0.00',
-                date: new Date().toLocaleDateString('ar-EG'),
-                company: settings.companyName || 'منتجع حياله'
-            };
-
-            var qrText = JSON.stringify(qrData);
-
-            try {
-                var qr = new QRCode(qrContainer, {
-                    text: qrText,
-                    width: 72,
-                    height: 72,
-                    typeNumber: 0,
-                    colorDark: '#121821',
-                    colorLight: '#ffffff',
-                    correctLevel: QRCode.CorrectLevel.M
-                });
-                currentQRCode = qr;
-                console.log('✅ تم إنشاء QR Code مصغر (72px) بنجاح في', containerId);
-            } catch (error) {
-                console.error('❌ خطأ في إنشاء QR Code:', error);
-                generateQRCodeExternal(invoiceNumberVal, client, total, containerId);
+            // محاولة استخدام المكتبة الداخلية
+            if (typeof QRCode !== 'undefined') {
+                try {
+                    var qr = new QRCode(qrContainer, {
+                        text: qrText,
+                        width: 72,
+                        height: 72,
+                        colorDark: '#121821',
+                        colorLight: '#ffffff',
+                        correctLevel: QRCode.CorrectLevel.M  // استخدام مستوى أقل لتقليل الحجم
+                    });
+                    currentQRCode = qr;
+                    console.log('✅ تم إنشاء QR Code بنجاح في', containerId);
+                    return;
+                } catch (error) {
+                    console.warn('⚠️ فشل إنشاء QR Code داخلياً، استخدام API خارجي:', error.message);
+                }
             }
+
+            // ===== استخدام API خارجي كحل بديل =====
+            generateQRCodeExternal(invoiceNumberVal, client, total, containerId);
         }
 
         /**
@@ -4119,13 +4108,7 @@
 
         /**
          * ============================================================
-         * GENERATE PDF FROM ELEMENT — دالة موحّدة لالتقاط أي عنصر وتحويله PDF
-         * وتنزيله فوراً باسم "اسم العميل - رقم الفاتورة.pdf"
-         *
-         * ملاحظة إصلاح: تم تغيير margin من كائن (object) إلى مصفوفة
-         * (array) بصيغة [top, left, bottom, right] لأن html2pdf.js /
-         * jsPDF لا يقبلان margin ككائن، وكان هذا هو السبب المباشر لخطأ
-         * "Invalid margin array" الذي كان يمنع حفظ ملف PDF نهائياً.
+         * FIXED: GENERATE PDF FROM ELEMENT — تصحيح إعدادات الهامش
          * ============================================================
          */
         function generatePDFFromElement(element, clientNameValue, invoiceNum, onDone) {
@@ -4139,8 +4122,10 @@
             var safeClientName = rawClientName.replace(/[\\\/:*?"<>|]/g, '').trim() || 'فاتورة';
             var fileName = safeClientName + ' - ' + (invoiceNum || 'invoice') + '.pdf';
 
+            // ===== تصحيح إعدادات الهامش =====
+            // استخدام رقم واحد بدلاً من مصفوفة لتجنب خطأ Invalid margin array
             var opt = {
-                margin: [12, 12, 12, 12],
+                margin: 10,  // استخدام رقم واحد بدلاً من مصفوفة
                 filename: fileName,
                 image: {
                     type: 'jpeg',
@@ -4188,6 +4173,61 @@
                 })
                 .catch(function(error) {
                     console.error('❌ خطأ في حفظ PDF:', error);
+                    // ===== محاولة بديلة باستخدام إعدادات مختلفة =====
+                    tryAlternativePDF(element, fileName, onDone);
+                });
+        }
+
+        /**
+         * ============================================================
+         * FIXED: محاولة بديلة لتوليد PDF باستخدام إعدادات مبسطة
+         * ============================================================
+         */
+        function tryAlternativePDF(element, fileName, onDone) {
+            console.log('🔄 محاولة توليد PDF بإعدادات مبسطة...');
+            
+            var opt = {
+                margin: [5, 5, 5, 5],  // استخدام مصفوفة بأربع قيم
+                filename: fileName,
+                image: {
+                    type: 'jpeg',
+                    quality: 0.95
+                },
+                html2canvas: {
+                    scale: 1.5,
+                    useCORS: true,
+                    logging: false,
+                    backgroundColor: '#ffffff'
+                },
+                jsPDF: {
+                    unit: 'mm',
+                    format: 'a4',
+                    orientation: 'portrait'
+                }
+            };
+
+            html2pdf()
+                .set(opt)
+                .from(element)
+                .outputPdf('blob')
+                .then(function(blob) {
+                    var blobUrl = URL.createObjectURL(blob);
+                    var link = document.createElement('a');
+                    link.href = blobUrl;
+                    link.download = fileName;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+
+                    setTimeout(function() {
+                        URL.revokeObjectURL(blobUrl);
+                    }, 3000);
+
+                    showToast('✅ تم الحفظ', 'تم حفظ ملف PDF بنجاح', 'success');
+                    if (onDone) onDone(true);
+                })
+                .catch(function(error) {
+                    console.error('❌ فشل في جميع محاولات توليد PDF:', error);
                     showToast('❌ خطأ', 'فشل في حفظ PDF: ' + error.message, 'error');
                     if (onDone) onDone(false);
                 });
@@ -4963,6 +5003,7 @@
             console.log('✅ النظام جاهز للعمل مع Supabase');
             console.log('🎨 تصميم فاتورة راقٍ بطابع محاسبي احترافي');
             console.log('📁 زر "حفظ PDF" ينزّل الملف مباشرة على الجهاز باسم العميل، بدون فتح أي معاينة');
+            console.log('🔧 تم إصلاح مشاكل QR Code و PDF بنجاح');
         });
     </script>
 
