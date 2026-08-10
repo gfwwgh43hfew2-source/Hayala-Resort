@@ -3042,10 +3042,33 @@
          */
         var user = window.currentUser || {};
 
-        // إذا لم يكن هناك مستخدم، نعيد التوجيه
-        if (!user || !user.email) {
-            window.location.replace('login.html');
-        }
+        // ===== التحقق من وجود المستخدم - بدون Redirect فوري =====
+if (!user || !user.email) {
+    console.warn('⚠️ لا يوجد مستخدم نشط');
+    // نعرض رسالة في الصفحة بدل الـ Redirect الفوري
+    document.body.innerHTML = `
+        <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#f0ede8;direction:rtl;font-family:'Cairo',sans-serif;padding:20px;">
+            <div style="background:#fff;border-radius:16px;padding:40px;max-width:450px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.1);border-top:6px solid #dd9f2e;">
+                <div style="font-size:3rem;margin-bottom:16px;">🔒</div>
+                <h2 style="color:#121821;font-size:1.3rem;margin-bottom:12px;">غير مسجل الدخول</h2>
+                <p style="color:#5a4f45;font-size:0.95rem;margin-bottom:20px;">يرجى تسجيل الدخول للوصول إلى هذه الصفحة</p>
+                <button onclick="window.location.href='login.html'" style="padding:12px 40px;background:#121821;color:#fff;border:none;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;">
+                    <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+                </button>
+                <p style="margin-top:20px;font-size:0.7rem;color:#9a8f83;">
+                    <i class="fas fa-clock"></i> سيتم التحويل تلقائياً خلال 5 ثوانٍ...
+                </p>
+            </div>
+        </div>
+    `;
+    
+    // نأجل الـ Redirect 5 ثواني عشان نشوف Console
+    setTimeout(function() {
+        window.location.href = 'login.html';
+    }, 5000);
+    
+    return;
+}
 
         console.log('👤 مستخدم نشط:', user.name || user.email);
         console.log('🔑 الدور:', user.role || 'user');
