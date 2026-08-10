@@ -1682,10 +1682,24 @@
             });
         }
 
+        // ===== تخزين مراجع Sparklines =====
+        var sparkCharts = {};
+
         function renderSpark(id, data, color) {
             var canvas = document.getElementById(id);
             if (!canvas) return;
-            new Chart(canvas.getContext('2d'), {
+            
+            // تدمير الرسم البياني القديم إذا كان موجوداً
+            if (sparkCharts[id]) {
+                try {
+                    sparkCharts[id].destroy();
+                } catch(e) {
+                    // تجاهل الأخطاء
+                }
+                delete sparkCharts[id];
+            }
+            
+            sparkCharts[id] = new Chart(canvas.getContext('2d'), {
                 type: 'line',
                 data: {
                     labels: data.map(function(_, i) { return i; }),
