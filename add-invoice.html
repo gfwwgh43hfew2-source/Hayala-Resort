@@ -1525,10 +1525,8 @@
         }
 
         /* ============================================================
-           PRINT PREVIEW STYLES — تصميم فاتورة راقٍ لبرنامج محاسبة
+           PRINT PREVIEW STYLES
            ============================================================ */
-
-        /* --- الإطار العام للفاتورة --- */
         .print-preview-overlay .print-wrapper {
             background: linear-gradient(180deg, #fffefb 0%, #fdfbf5 100%);
             position: relative;
@@ -1543,7 +1541,6 @@
             pointer-events: none;
         }
 
-        /* --- الترويسة --- */
         .print-preview-overlay .print-wrapper .invoice-header {
             display: flex;
             align-items: flex-start;
@@ -1681,7 +1678,6 @@
             font-weight: 600;
         }
 
-        /* --- شارة حالة السداد --- */
         .print-preview-overlay .print-wrapper .status-badge {
             display: inline-flex;
             align-items: center;
@@ -1700,7 +1696,6 @@
             color: var(--rust);
         }
 
-        /* --- شريط بيانات الفاتورة --- */
         .print-preview-overlay .print-wrapper .info-grid {
             display: flex;
             flex-wrap: wrap;
@@ -1740,7 +1735,6 @@
             color: var(--accent-ink);
         }
 
-        /* --- جدول البنود --- */
         .print-preview-overlay .print-wrapper table {
             width: 100%;
             border-collapse: separate;
@@ -1808,7 +1802,6 @@
             font-size: calc(0.58rem * var(--scale-factor));
         }
 
-        /* --- قسم الملخص المالي والتوقيع --- */
         .print-preview-overlay .print-wrapper .invoice-summary {
             display: flex;
             justify-content: space-between;
@@ -1884,7 +1877,6 @@
             font-weight: 800;
         }
 
-        /* --- قسم الملاحظات --- */
         .print-preview-overlay .print-wrapper .notes-section {
             margin-top: calc(22px * var(--scale-factor));
             padding-top: 0;
@@ -1942,7 +1934,6 @@
             line-height: 1;
         }
 
-        /* --- تذييل ختامي --- */
         .print-preview-overlay .print-wrapper .print-brand-footer {
             margin-top: calc(20px * var(--scale-factor));
             padding-top: calc(12px * var(--scale-factor));
@@ -1954,145 +1945,6 @@
         }
         .print-preview-overlay .print-wrapper .print-brand-footer strong {
             color: var(--accent-ink);
-        }
-
-        .print-preview-overlay .print-wrapper .footer,
-        .print-preview-overlay .print-wrapper .print-footer-notes {
-            font-size: calc(0.6rem * var(--scale-factor));
-            color: var(--ink-mute);
-        }
-        .print-preview-overlay .print-wrapper .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: calc(2px * var(--scale-factor)) calc(10px * var(--scale-factor));
-            border-radius: 50px;
-            font-size: calc(0.55rem * var(--scale-factor));
-            font-weight: 700;
-            border: 1px solid transparent;
-        }
-        .print-preview-overlay .print-wrapper .badge-paid {
-            background: var(--teal-soft);
-            color: var(--teal);
-        }
-        .print-preview-overlay .print-wrapper .badge-balance {
-            background: var(--rust-soft);
-            color: var(--rust);
-        }
-        .print-preview-overlay .print-wrapper .badge-type {
-            background: var(--surface-muted);
-            color: var(--ink-mute);
-            border-color: var(--line);
-        }
-        .print-preview-overlay .print-wrapper .badge-future {
-            background: var(--accent-soft);
-            color: var(--accent-ink);
-        }
-
-        /* ============================================================
-           PRINT PREVIEW RESPONSIVE
-           ============================================================ */
-        @media (max-width: 768px) {
-            .print-preview-overlay .print-wrapper {
-                padding: calc(20px * var(--scale-factor)) calc(16px * var(--scale-factor));
-                max-height: 70vh;
-                max-width: 95%;
-            }
-            .print-preview-overlay .print-wrapper .invoice-header {
-                flex-direction: column;
-                text-align: center;
-                gap: calc(14px * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .invoice-header .logo-section {
-                flex-direction: column;
-            }
-            .print-preview-overlay .print-wrapper .invoice-header .logo-section .logo-box {
-                width: calc(90px * var(--scale-factor));
-                height: calc(90px * var(--scale-factor));
-                min-width: calc(90px * var(--scale-factor));
-                max-width: calc(90px * var(--scale-factor));
-                min-height: calc(90px * var(--scale-factor));
-                max-height: calc(90px * var(--scale-factor));
-                border-radius: calc(14px * var(--scale-factor));
-                padding: calc(6px * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .invoice-title {
-                width: 100%;
-                align-items: center;
-            }
-            .print-preview-overlay .print-wrapper .invoice-title .qr-code {
-                width: calc(60px * var(--scale-factor));
-                height: calc(60px * var(--scale-factor));
-                padding: calc(3px * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .info-grid {
-                flex-direction: column;
-            }
-            .print-preview-overlay .print-wrapper .info-grid .item {
-                border-left: none;
-                border-bottom: 1px dashed var(--line);
-            }
-            .print-preview-overlay .print-wrapper .info-grid .item:last-child {
-                border-bottom: none;
-            }
-            .print-preview-overlay .print-actions button {
-                padding: calc(8px * var(--scale-factor)) calc(16px * var(--scale-factor));
-                font-size: calc(0.75rem * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper table {
-                font-size: calc(0.65rem * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper table th,
-            .print-preview-overlay .print-wrapper table td {
-                padding: calc(5px * var(--scale-factor)) calc(8px * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .invoice-summary {
-                flex-direction: column;
-            }
-            .print-preview-overlay .print-wrapper .summary-box {
-                flex: 0 0 auto;
-                width: 100%;
-            }
-            .print-preview-overlay .print-wrapper .signature {
-                text-align: center;
-            }
-            .print-preview-overlay .print-wrapper .signature .line {
-                margin: calc(4px * var(--scale-factor)) auto 0;
-            }
-            .print-preview-overlay .print-wrapper .notes-section {
-                padding: calc(12px * var(--scale-factor)) calc(14px * var(--scale-factor));
-                margin-top: calc(14px * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .notes-section .notes-title {
-                font-size: calc(0.65rem * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .notes-section .notes-content {
-                font-size: calc(0.55rem * var(--scale-factor));
-                line-height: 1.7;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .print-preview-overlay .print-wrapper {
-                padding: calc(14px * var(--scale-factor)) calc(12px * var(--scale-factor));
-                max-height: 60vh;
-                max-width: 98%;
-                border-radius: calc(8px * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper .invoice-header .company-details h2 {
-                font-size: calc(1.1rem * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper table {
-                font-size: calc(0.55rem * var(--scale-factor));
-            }
-            .print-preview-overlay .print-wrapper table th,
-            .print-preview-overlay .print-wrapper table td {
-                padding: calc(4px * var(--scale-factor)) calc(6px * var(--scale-factor));
-            }
-            .print-preview-overlay .print-actions button {
-                padding: calc(6px * var(--scale-factor)) calc(12px * var(--scale-factor));
-                font-size: calc(0.65rem * var(--scale-factor));
-            }
         }
 
         /* ============================================================
@@ -2161,20 +2013,6 @@
             border-right: calc(3px * var(--scale-factor)) solid var(--accent);
         }
 
-        .client-suggestions .suggestions-list .loading-suggestions {
-            padding: calc(12px * var(--scale-factor)) calc(14px * var(--scale-factor));
-            text-align: center;
-            color: var(--ink-mute);
-            font-size: calc(0.75rem * var(--scale-factor));
-        }
-
-        .no-results {
-            padding: calc(12px * var(--scale-factor)) calc(14px * var(--scale-factor));
-            text-align: center;
-            color: var(--ink-mute);
-            font-size: calc(0.75rem * var(--scale-factor));
-        }
-
         /* ============================================================
            PROPERTIES SELECT
            ============================================================ */
@@ -2207,7 +2045,7 @@
         }
 
         /* ============================================================
-           DATE INPUT - تنسيق DD/MM/YYYY (flatpickr)
+           DATE INPUT
            ============================================================ */
         .date-wrapper {
             position: relative;
@@ -2312,45 +2150,6 @@
             opacity: 1 !important;
         }
 
-        /* ============================================================
-           تحسين عرض البطاقات في الموبايل
-           ============================================================ */
-        @media (max-width: 768px) {
-            .booking-card .card-row {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: calc(4px * var(--scale-factor)) 0;
-                font-size: calc(0.68rem * var(--scale-factor));
-                border-bottom: 1px solid rgba(0, 0, 0, 0.03);
-            }
-
-            .booking-card .card-row:last-child {
-                border-bottom: none;
-            }
-
-            .booking-card .card-label {
-                font-size: calc(0.58rem * var(--scale-factor));
-                color: var(--ink-3);
-                font-weight: 600;
-                flex-shrink: 0;
-            }
-
-            .booking-card .card-value {
-                font-size: calc(0.68rem * var(--scale-factor));
-                color: var(--ink-2);
-                font-weight: 600;
-                text-align: left;
-                direction: ltr;
-                unicode-bidi: plaintext;
-            }
-
-            .booking-card .card-value.gold {
-                color: var(--teal);
-                font-weight: 800;
-            }
-        }
-
         .btn-back-dashboard {
             display: inline-flex;
             align-items: center;
@@ -2380,7 +2179,7 @@
         }
 
         /* ============================================================
-           PRINT MEDIA QUERY - التصميم المحسن بالكامل للطباعة
+           PRINT MEDIA QUERY
            ============================================================ */
         @media print {
             .print-preview-overlay .print-actions {
@@ -3408,7 +3207,7 @@
 
         /**
          * ============================================================
-         * GENERATE QR CODE - حجم مصغر 72px
+         * GENERATE QR CODE - إصدار مختصر لتجنب overflow
          * ============================================================
          */
         function generateQRCode(invoiceNumber, client, total) {
@@ -3420,58 +3219,34 @@
 
             qrContainer.innerHTML = '';
 
-            if (typeof QRCode === 'undefined') {
-                console.warn('⚠️ مكتبة QRCode غير محملة، سيتم استخدام API خارجي');
-                generateQRCodeExternal(invoiceNumber, client, total);
-                return;
+            // استخدام بيانات مختصرة جداً لتجنب overflow
+            var qrText = 'INV:' + (invoiceNumber || '----') + '|' + (client || '') + '|' + (total || '0');
+
+            // الحد الأقصى للطول 100 حرف لتجنب overflow
+            if (qrText.length > 100) {
+                qrText = qrText.substring(0, 100);
             }
 
-            var qrData = {
-                invoice: invoiceNumber || '----',
-                client: client || 'غير محدد',
-                total: total || '0.00',
-                date: new Date().toLocaleDateString('ar-EG'),
-                company: settings.companyName || 'منتجع حياله'
-            };
-
-            var qrText = JSON.stringify(qrData);
-
-            try {
-                var qr = new QRCode(qrContainer, {
-                    text: qrText,
-                    width: 72,
-                    height: 72,
-                    colorDark: '#121821',
-                    colorLight: '#ffffff',
-                    correctLevel: QRCode.CorrectLevel.H
-                });
-                currentQRCode = qr;
-                console.log('✅ تم إنشاء QR Code مصغر (72px) بنجاح');
-            } catch (error) {
-                console.error('❌ خطأ في إنشاء QR Code:', error);
-                generateQRCodeExternal(invoiceNumber, client, total);
+            if (typeof QRCode !== 'undefined') {
+                try {
+                    var qr = new QRCode(qrContainer, {
+                        text: qrText,
+                        width: 72,
+                        height: 72,
+                        colorDark: '#121821',
+                        colorLight: '#ffffff',
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                    currentQRCode = qr;
+                    console.log('✅ تم إنشاء QR Code بنجاح');
+                    return;
+                } catch (error) {
+                    console.warn('⚠️ فشل إنشاء QR Code:', error.message);
+                }
             }
-        }
 
-        /**
-         * ============================================================
-         * GENERATE QR CODE - API خارجي (حجم 72px)
-         * ============================================================
-         */
-        function generateQRCodeExternal(invoiceNumber, client, total) {
-            var qrContainer = document.getElementById('qrCodeContainer');
-            if (!qrContainer) return;
-
-            qrContainer.innerHTML = '';
-
-            var qrData = {
-                invoice: invoiceNumber || '----',
-                client: client || 'غير محدد',
-                total: total || '0.00'
-            };
-            var qrText = JSON.stringify(qrData);
+            // استخدام API خارجي كحل بديل
             var encodedText = encodeURIComponent(qrText);
-
             var qrImageUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=72x72&data=' + encodedText +
                 '&bgcolor=ffffff&color=121821';
 
@@ -3481,26 +3256,16 @@
             img.style.width = '100%';
             img.style.height = '100%';
             img.style.objectFit = 'contain';
-
             img.onerror = function() {
-                qrContainer.innerHTML = `
-                            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;background:#f8f9fa;border-radius:4px;">
-                                <i class="fas fa-qrcode" style="font-size:1.5rem;color:var(--accent);"></i>
-                                <span style="font-size:0.4rem;color:var(--ink-mute);">${invoiceNumber || ''}</span>
-                            </div>
-                        `;
+                qrContainer.innerHTML =
+                `<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:#f8f9fa;border-radius:4px;font-size:10px;color:var(--ink-mute);">${invoiceNumber || ''}</div>`;
             };
-
-            img.onload = function() {
-                console.log('✅ تم إنشاء QR Code مصغر بواسطة API خارجي');
-            };
-
             qrContainer.appendChild(img);
         }
 
         /**
          * ============================================================
-         * PREVIEW INVOICE - تصميم راقٍ لفاتورة برنامج محاسبة
+         * PREVIEW INVOICE
          * ============================================================
          */
         function previewInvoice() {
@@ -3553,7 +3318,7 @@
                         <span class="invoice-title-number">${invNum}</span>
                         <div class="qr-code" id="qrCodeContainer">
                         </div>
-                        <span class="qr-label">امسح للتحقق من الفاتورة</span>
+                        <span class="qr-label">امسح للتحقق</span>
                     </div>
                 </div>
 
@@ -3662,7 +3427,7 @@
 
         /**
          * ============================================================
-         * EXECUTE PRINT - طباعة عبر نافذة المتصفح
+         * EXECUTE PRINT
          * ============================================================
          */
         function executePrint() {
@@ -3679,7 +3444,7 @@
 
         /**
          * ============================================================
-         * OPEN PRINT WINDOW - عبر iframe مخفي
+         * OPEN PRINT WINDOW
          * ============================================================
          */
         function openPrintWindow() {
@@ -4084,7 +3849,7 @@
 
         /**
          * ============================================================
-         * GENERATE PDF FROM PREVIEW - إنشاء PDF باسم العميل تلقائياً
+         * GENERATE PDF FROM PREVIEW - إنشاء PDF باسم العميل
          * ============================================================
          */
         function generatePDFFromPreview() {
@@ -4105,41 +3870,28 @@
             }
 
             var invoiceNum = document.getElementById('invoiceNumber').value.trim() || 'invoice';
-
             var fileName = safeClientName + ' - ' + invoiceNum + '.pdf';
 
             console.log('📄 اسم الملف المطلوب حفظه:', fileName);
 
             var opt = {
-                margin: {
-                    top: 12,
-                    bottom: 12,
-                    left: 12,
-                    right: 12
-                },
+                margin: 8,
                 filename: fileName,
-                image: {
-                    type: 'jpeg',
-                    quality: 0.98
-                },
+                image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: {
                     scale: 2,
                     useCORS: true,
                     logging: false,
                     letterRendering: true,
                     allowTaint: true,
-                    backgroundColor: '#ffffff',
-                    width: element.scrollWidth,
-                    height: element.scrollHeight
+                    backgroundColor: '#ffffff'
                 },
                 jsPDF: {
                     unit: 'mm',
                     format: 'a4',
                     orientation: 'portrait'
                 },
-                pagebreak: {
-                    mode: ['avoid-all', 'css', 'legacy']
-                }
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
             };
 
             html2pdf()
@@ -4690,7 +4442,7 @@
 
         /**
          * ============================================================
-         * SAVE TO SUPABASE - متوافق مع هيكل الجدول
+         * SAVE TO SUPABASE
          * ============================================================
          */
         async function saveInvoiceToSupabase(invoiceData) {
