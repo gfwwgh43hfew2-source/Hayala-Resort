@@ -390,6 +390,18 @@
         .notif-t { font-size: 0.76rem; font-weight: 700; color: var(--ink); line-height: 1.4; }
         .notif-d { font-size: 0.68rem; color: var(--ink-3); margin-top: 2px; line-height: 1.5; }
         .notif-time { font-size: 0.6rem; color: var(--ink-3); margin-top: 4px; font-weight: 600; }
+        .notif-empty { text-align: center; padding: 26px 14px; color: var(--ink-3); }
+        .notif-empty i { font-size: 1.3rem; opacity: 0.35; margin-bottom: 8px; display: block; }
+        .notif-empty p { font-size: 0.75rem; }
+        .notif-panel-foot {
+            margin-top: 4px;
+            padding: 10px 12px 4px;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            font-size: 0.62rem;
+            color: var(--ink-3);
+            text-align: center;
+        }
+        .notif-panel-foot b { color: var(--ink-2); font-weight: 700; }
         @media (max-width: 480px) {
             .notif-panel { left: auto; right: 0; transform-origin: top right; }
         }
@@ -423,80 +435,6 @@
         .header .right .profile i { font-size: 0.6rem; color: var(--ink-3); }
 
         .dash { padding: 32px 40px 56px; max-width: 1600px; margin: 0 auto; }
-
-        .update-banner {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 16px 20px;
-            margin-bottom: 20px;
-            border-radius: var(--radius-md);
-            background: linear-gradient(90deg, rgba(14,165,233,0.08), rgba(252,211,77,0.1));
-            border: 1px solid rgba(14,165,233,0.14);
-            overflow: hidden;
-            max-height: 120px;
-            opacity: 1;
-            transition: max-height 0.4s var(--ease), opacity 0.3s ease, padding 0.4s var(--ease), margin 0.4s var(--ease);
-        }
-        .update-banner.closing {
-            max-height: 0;
-            opacity: 0;
-            padding-top: 0;
-            padding-bottom: 0;
-            margin-bottom: 0;
-            border-width: 0;
-        }
-        .update-banner-icon {
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--gold-gradient);
-            color: var(--ink);
-            font-size: 1.05rem;
-            box-shadow: 0 6px 18px rgba(252,211,77,0.35);
-        }
-        .update-banner-body { flex: 1; min-width: 0; }
-        .update-banner-title {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.85rem;
-            font-weight: 800;
-            color: var(--ink);
-            flex-wrap: wrap;
-        }
-        .update-banner-tag {
-            font-size: 0.55rem;
-            font-weight: 800;
-            background: var(--ink);
-            color: #fff;
-            padding: 2px 9px;
-            border-radius: 50px;
-        }
-        .update-banner-text { font-size: 0.75rem; color: var(--ink-2); margin-top: 4px; line-height: 1.6; }
-        .update-banner-close {
-            width: 30px;
-            height: 30px;
-            border-radius: 9px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--ink-3);
-            border: 1px solid rgba(0,0,0,0.06);
-            background: var(--surface);
-            flex-shrink: 0;
-            transition: 0.2s;
-            align-self: flex-start;
-        }
-        .update-banner-close:hover { color: var(--oxide); border-color: var(--oxide); }
-        @media (max-width: 600px) {
-            .update-banner { flex-wrap: wrap; }
-            .update-banner-close { margin-right: auto; }
-        }
 
         .hero {
             position: relative;
@@ -1265,35 +1203,20 @@
             <div class="right">
                 <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="فتح البحث"><i class="fas fa-search"></i></button>
                 <div class="notif-wrap">
-                    <button class="notif" id="notifBtn"><i class="fas fa-bell"></i><span class="dot" id="notifDot"></span></button>
+                    <button class="notif" id="notifBtn"><i class="fas fa-bell"></i><span class="dot" id="notifDot" style="display:none"></span></button>
                     <div class="notif-panel" id="notifPanel">
                         <div class="notif-panel-head">
-                            <span>الإشعارات</span>
-                            <span class="notif-panel-badge">جديد</span>
+                            <span>تنبيهات الحجوزات</span>
+                            <span class="notif-panel-badge" id="notifCountBadge" style="display:none">0</span>
                         </div>
-                        <div class="notif-item">
-                            <span class="notif-ic" style="--nc:var(--gold)"><i class="fas fa-wand-magic-sparkles"></i></span>
-                            <div>
-                                <div class="notif-t">تم تحديث تصميم لوحة التحكم بالكامل</div>
-                                <div class="notif-d">واجهة جديدة، توزيع أوضح للبطاقات، وتحسينات في الأداء</div>
-                                <div class="notif-time">اليوم</div>
+                        <div id="notifList">
+                            <div class="notif-empty">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                <p>جاري تحميل التنبيهات...</p>
                             </div>
                         </div>
-                        <div class="notif-item">
-                            <span class="notif-ic" style="--nc:var(--primary)"><i class="fas fa-chart-pie"></i></span>
-                            <div>
-                                <div class="notif-t">تحسين عرض الرسوم البيانية والإحصائيات</div>
-                                <div class="notif-d">تجربة أوضح لمتابعة الإيرادات والإشغال</div>
-                                <div class="notif-time">اليوم</div>
-                            </div>
-                        </div>
-                        <div class="notif-item">
-                            <span class="notif-ic" style="--nc:var(--viridian)"><i class="fas fa-mobile-screen-button"></i></span>
-                            <div>
-                                <div class="notif-t">تحسين التوافق مع الجوال والأجهزة اللوحية</div>
-                                <div class="notif-d">تجربة أسهل وأسرع من الهاتف</div>
-                                <div class="notif-time">اليوم</div>
-                            </div>
+                        <div class="notif-panel-foot">
+                            آخر مزامنة مع قاعدة البيانات: <b id="notifSyncTime">—</b>
                         </div>
                     </div>
                 </div>
@@ -1315,15 +1238,6 @@
 
         <div class="main-content">
             <div class="dash">
-
-                <div class="update-banner" id="updateBanner">
-                    <div class="update-banner-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
-                    <div class="update-banner-body">
-                        <div class="update-banner-title">تحديث جديد على النظام <span class="update-banner-tag">جديد</span></div>
-                        <div class="update-banner-text">تم تطوير تصميم لوحة التحكم بالكامل: توزيع أوضح للبطاقات، رسوم بيانية أدق، وتجربة أسرع على الجوال.</div>
-                    </div>
-                    <button class="update-banner-close" id="updateBannerClose" aria-label="إغلاق الإشعار"><i class="fas fa-times"></i></button>
-                </div>
 
                 <div class="hero fade-up" style="animation-delay:0.02s">
                     <div class="copy">
@@ -1759,30 +1673,68 @@
         });
 
         /* ============================================================
-           UPDATE BANNER — يظهر مرة واحدة لكل نسخة تحديث
-           غيّر UPDATE_VERSION عند كل تطوير جديد ليظهر الشريط للعميل تلقائياً
+           NOTIFICATIONS — تُبنى من بيانات حقيقية (تُستدعى داخل fetchDashboardData)
            ============================================================ */
-        (function() {
-            var UPDATE_VERSION = 'v2026-08-11';
-            var STORAGE_KEY = 'hayala_update_banner_seen';
-            var banner = document.getElementById('updateBanner');
-            var closeBtn = document.getElementById('updateBannerClose');
-            if (!banner) return;
+        function renderRealNotifications(bookingsList) {
+            var listEl = document.getElementById('notifList');
+            var dotEl = document.getElementById('notifDot');
+            var badgeEl = document.getElementById('notifCountBadge');
+            var syncEl = document.getElementById('notifSyncTime');
+            if (!listEl) return;
 
-            try {
-                if (localStorage.getItem(STORAGE_KEY) === UPDATE_VERSION) {
-                    banner.style.display = 'none';
+            var today = new Date();
+            var todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            var horizon = new Date(todayDate);
+            horizon.setDate(horizon.getDate() + 3);
+
+            if (dotEl) dotEl.classList.remove('seen');
+
+            var upcoming = [];
+            (bookingsList || []).forEach(function(b) {
+                if (!b.check_in) return;
+                var d = new Date(b.check_in);
+                if (isNaN(d.getTime())) return;
+                var dOnly = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+                if (dOnly >= todayDate && dOnly <= horizon) {
+                    var diffDays = Math.round((dOnly - todayDate) / 86400000);
+                    upcoming.push({
+                        name: b.client_name || 'عميل',
+                        property: b.property_type || 'عقار',
+                        diffDays: diffDays,
+                        date: dOnly
+                    });
                 }
-            } catch (e) {}
+            });
 
-            if (closeBtn) {
-                closeBtn.addEventListener('click', function() {
-                    banner.classList.add('closing');
-                    try { localStorage.setItem(STORAGE_KEY, UPDATE_VERSION); } catch (e) {}
-                    setTimeout(function() { banner.style.display = 'none'; }, 420);
+            upcoming.sort(function(a, b) { return a.date - b.date; });
+            upcoming = upcoming.slice(0, 6);
+
+            if (upcoming.length === 0) {
+                listEl.innerHTML = '<div class="notif-empty"><i class="fas fa-circle-check"></i><p>لا توجد وصول حجوزات خلال الأيام الثلاثة القادمة</p></div>';
+                if (dotEl) dotEl.style.display = 'none';
+                if (badgeEl) badgeEl.style.display = 'none';
+            } else {
+                var html = '';
+                upcoming.forEach(function(item) {
+                    var timeLabel = item.diffDays === 0 ? 'يصل اليوم' : (item.diffDays === 1 ? 'يصل غدًا' : 'يصل خلال ' + item.diffDays + ' أيام');
+                    var color = item.diffDays === 0 ? 'var(--oxide)' : (item.diffDays === 1 ? 'var(--ochre)' : 'var(--primary)');
+                    html += '<div class="notif-item">';
+                    html += '<span class="notif-ic" style="--nc:' + color + '"><i class="fas fa-house-chimney"></i></span>';
+                    html += '<div>';
+                    html += '<div class="notif-t">وصول العميل ' + item.name + '</div>';
+                    html += '<div class="notif-d">' + item.property + '</div>';
+                    html += '<div class="notif-time">' + timeLabel + '</div>';
+                    html += '</div></div>';
                 });
+                listEl.innerHTML = html;
+                if (dotEl) dotEl.style.display = 'block';
+                if (badgeEl) { badgeEl.textContent = upcoming.length; badgeEl.style.display = 'inline-block'; }
             }
-        })();
+
+            if (syncEl) {
+                syncEl.textContent = new Date().toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' });
+            }
+        }
 
         (function() {
             var notifBtn = document.getElementById('notifBtn');
@@ -2217,6 +2169,9 @@
                 document.getElementById('totalExpenses').textContent = roundedExpenses.toLocaleString() + ' ر.س';
                 document.getElementById('totalCommission').textContent = roundedCommission.toLocaleString() + ' ر.س';
 
+                // ===== تحديث التنبيهات الحقيقية (حجوزات واصلة خلال 3 أيام) =====
+                renderRealNotifications(bookings);
+
                 // ===== تحديث الـ Charts =====
                 var sortedMonths = Object.keys(monthlyRevenue).sort();
                 if (sortedMonths.length > 0) {
@@ -2366,6 +2321,10 @@
                 document.querySelectorAll('.number .loading-text').forEach(function(el) {
                     el.textContent = '⚠️ خطأ في التحميل';
                 });
+                var notifListEl = document.getElementById('notifList');
+                if (notifListEl) {
+                    notifListEl.innerHTML = '<div class="notif-empty"><i class="fas fa-triangle-exclamation"></i><p>تعذّر الاتصال بقاعدة البيانات</p></div>';
+                }
             }
         }
 
