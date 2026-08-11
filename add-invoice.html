@@ -5415,6 +5415,17 @@
                     console.log('🔄 تم تحميل العملاء والعقارات');
                 }, 300);
             });
+                // ============================================================
+        // جعل الدوال عامة للوصول من HTML (onclick)
+        // ============================================================
+        window.previewInvoice = previewInvoice;
+        window.resetForm = resetForm;
+        window.closePrintPreview = closePrintPreview;
+        window.executePrint = executePrint;
+        window.downloadPDF = downloadPDF;
+        window.openPrintWindow = openPrintWindow;
+        window.generatePDFFromPreview = generatePDFFromPreview;
+
         })(); // نهاية IIFE initApp
     </script>
 
