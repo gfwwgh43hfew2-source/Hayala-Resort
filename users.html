@@ -434,11 +434,6 @@
             font-size: 0.65rem;
             border-radius: 6px;
         }
-        .btn-xs {
-            padding: 2px 8px;
-            font-size: 0.55rem;
-            border-radius: 4px;
-        }
 
         /* ============================================================
            CARDS
@@ -608,14 +603,6 @@
             font-weight: 600;
             display: block;
             margin-top: 2px;
-        }
-        .permissions-table .group-header {
-            background: var(--surface-muted);
-            font-weight: 800;
-            color: var(--ink);
-            font-size: 0.65rem;
-            text-align: right;
-            padding-right: 12px;
         }
 
         .toggle-switch {
@@ -1029,7 +1016,6 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Scrollable permissions table wrapper */
         .permissions-scroll {
             overflow-x: auto;
             max-width: 100%;
@@ -1336,7 +1322,6 @@
                 };
                 window.currentUser = currentUser;
 
-                // التحقق من صلاحية إدارة المستخدمين
                 if (currentUser.role !== 'admin') {
                     alert('⚠️ غير مصرح لك بالوصول إلى هذه الصفحة. هذه الصفحة خاصة بالمديرين.');
                     window.location.href = 'index.html';
@@ -1466,7 +1451,6 @@
             container.innerHTML = `<div class="empty-state"><div class="spinner"></div><p>جاري تحميل الصلاحيات...</p></div>`;
 
             try {
-                // جلب الصلاحيات من جدول user_permissions
                 var response = await fetch(SUPABASE_URL + '/rest/v1/user_permissions?select=*', {
                     headers: {
                         'apikey': SUPABASE_ANON_KEY,
@@ -1476,7 +1460,6 @@
 
                 var permissionsData = response.ok ? await response.json() : [];
 
-                // تنظيم الصلاحيات حسب user_id
                 allPermissions = {};
                 permissionsData.forEach(function(p) {
                     if (!allPermissions[p.user_id]) allPermissions[p.user_id] = {};
@@ -1611,7 +1594,6 @@
                                 <th style="min-width:120px;text-align:right;">المستخدم</th>
                     `;
 
-            // أسماء الصلاحيات في الرأس
             allPermNames.forEach(function(perm) {
                 html += `<th title="${PERMISSION_LABELS[perm] || perm}">${getShortLabel(perm)}</th>`;
             });
@@ -1623,7 +1605,6 @@
                     `;
 
             users.forEach(function(user) {
-                // منع تعديل صلاحيات المدير الحالي (نفسه)
                 var isSelf = user.id === currentUser.id;
 
                 html += `<tr>`;
@@ -1717,7 +1698,6 @@
             var key = userId + '|' + permName;
             pendingPermissionChanges[key] = { userId: userId, permName: permName, granted: granted };
 
-            // حفظ فوري بعد 500ms (debounce)
             clearTimeout(window._permSaveTimeout);
             window._permSaveTimeout = setTimeout(function() {
                 savePendingPermissions();
@@ -1735,7 +1715,6 @@
             for (var i = 0; i < changes.length; i++) {
                 var change = changes[i];
                 try {
-                    // التحقق من وجود الصلاحية
                     var checkResponse = await fetch(
                         SUPABASE_URL + '/rest/v1/user_permissions?user_id=eq.' + change.userId + '&permission_name=eq.' + change
                         .permName, {
@@ -1749,7 +1728,6 @@
                     var existing = checkResponse.ok ? await checkResponse.json() : [];
 
                     if (existing.length > 0) {
-                        // تحديث الصلاحية
                         var updateResponse = await fetch(
                             SUPABASE_URL + '/rest/v1/user_permissions?id=eq.' + existing[0].id, {
                                 method: 'PATCH',
@@ -1768,7 +1746,6 @@
                         if (updateResponse.ok) successCount++;
                         else errorCount++;
                     } else if (change.granted) {
-                        // إضافة صلاحية جديدة
                         var addResponse = await fetch(SUPABASE_URL + '/rest/v1/user_permissions', {
                             method: 'POST',
                             headers: {
@@ -1786,7 +1763,6 @@
                         if (addResponse.ok) successCount++;
                         else errorCount++;
                     } else {
-                        // الصلاحية غير موجودة ومطلوب إلغاؤها - لا حاجة لفعل شيء
                         successCount++;
                     }
                 } catch (e) {
@@ -1968,7 +1944,7 @@
 
         /**
          * ============================================================
-         * حفظ المستخدم (إضافة أو تعديل) - مباشر من Supabase
+         * حفظ المستخدم (إضافة أو تعديل) - باستخدام Supabase Client SDK
          * ============================================================
          */
         async function saveUser(event) {
@@ -2003,7 +1979,7 @@
 
             try {
                 if (isEdit) {
-                    // ===== تحديث المستخدم في جدول profiles =====
+                    // ===== تحديث المستخدم =====
                     var updateData = {
                         name: name,
                         phone: phone,
@@ -2023,65 +1999,36 @@
                     });
 
                     if (!updateResponse.ok) {
-                        var errorText = await updateResponse.text();
-                        throw new Error('فشل في تحديث المستخدم: ' + errorText);
-                    }
-
-                    // لو فيه كلمة مرور جديدة، نحدثها في Auth
-                    if (password) {
-                        try {
-                            var authUpdateResponse = await fetch(SUPABASE_URL + '/rest/v1/auth/admin/users/' + id, {
-                                method: 'PATCH',
-                                headers: {
-                                    'apikey': SUPABASE_ANON_KEY,
-                                    'Authorization': 'Bearer ' + (window.currentAccessToken || SUPABASE_ANON_KEY),
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({ password: password })
-                            });
-                            if (!authUpdateResponse.ok) {
-                                console.warn('⚠️ تعذر تحديث كلمة المرور في Auth');
-                            }
-                        } catch (authError) {
-                            console.warn('⚠️ تعذر تحديث كلمة المرور:', authError);
-                        }
+                        throw new Error('فشل في تحديث المستخدم');
                     }
 
                     showToast('✅ تم التحديث', 'تم تحديث بيانات المستخدم بنجاح', 'success');
 
                 } else {
-                    // ===== إضافة مستخدم جديد =====
-                    // 1. إنشاء حساب في Auth
-                    var signUpResponse = await fetch(SUPABASE_URL + '/rest/v1/auth/signup', {
-                        method: 'POST',
-                        headers: {
-                            'apikey': SUPABASE_ANON_KEY,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            email: email,
-                            password: password,
+                    // ===== إضافة مستخدم جديد باستخدام Supabase Client SDK =====
+                    var { data: authData, error: authError } = await supabaseClient.auth.signUp({
+                        email: email,
+                        password: password,
+                        options: {
                             data: {
                                 name: name,
                                 phone: phone,
                                 role: role,
                                 status: status
                             }
-                        })
+                        }
                     });
 
-                    var signUpResult = await signUpResponse.json();
-
-                    if (!signUpResponse.ok) {
-                        throw new Error(signUpResult.message || 'فشل في إنشاء المستخدم');
+                    if (authError) {
+                        throw new Error(authError.message || 'فشل في إنشاء المستخدم');
                     }
 
-                    // 2. إضافة المستخدم في جدول profiles
-                    var newUserId = signUpResult.user?.id;
+                    var newUserId = authData.user?.id;
                     if (!newUserId) {
                         throw new Error('لم يتم الحصول على معرف المستخدم');
                     }
 
+                    // إضافة البروفايل (في حالة عدم وجود Trigger)
                     var profileData = {
                         id: newUserId,
                         email: email,
@@ -2105,15 +2052,9 @@
                     });
 
                     if (!profileResponse.ok) {
-                        // لو فشل إضافة البروفايل، نحذف الحساب اللي اتcreate
+                        // لو فشل إضافة البروفايل، نحذف الحساب
                         try {
-                            await fetch(SUPABASE_URL + '/rest/v1/auth/admin/users/' + newUserId, {
-                                method: 'DELETE',
-                                headers: {
-                                    'apikey': SUPABASE_ANON_KEY,
-                                    'Authorization': 'Bearer ' + (window.currentAccessToken || SUPABASE_ANON_KEY)
-                                }
-                            });
+                            await supabaseClient.auth.admin.deleteUser(newUserId);
                         } catch (e) {
                             console.warn('⚠️ تعذر حذف الحساب بعد فشل البروفايل:', e);
                         }
@@ -2134,7 +2075,7 @@
 
         /**
          * ============================================================
-         * حذف المستخدم - مباشر من Supabase
+         * حذف المستخدم
          * ============================================================
          */
         async function deleteUser(id) {
@@ -2145,14 +2086,13 @@
                 return;
             }
 
-            if (!confirm('⚠️ هل أنت متأكد من حذف المستخدم "' + user.name + '"?\n\n📧 ' + user.email + '\n👤 ' + user.role +
-                    '\n\n❗ هذا الإجراء لا يمكن التراجع عنه')) {
+            if (!confirm('⚠️ هل أنت متأكد من حذف المستخدم "' + user.name + '"?\n\n📧 ' + user.email + '\n👤 ' + user.role)) {
                 return;
             }
 
             try {
                 // 1. حذف من جدول profiles
-                var profileResponse = await fetch(SUPABASE_URL + '/rest/v1/profiles?id=eq.' + id, {
+                await fetch(SUPABASE_URL + '/rest/v1/profiles?id=eq.' + id, {
                     method: 'DELETE',
                     headers: {
                         'apikey': SUPABASE_ANON_KEY,
@@ -2160,35 +2100,21 @@
                     }
                 });
 
-                if (!profileResponse.ok) {
-                    throw new Error('فشل في حذف بيانات المستخدم');
-                }
-
-                // 2. حذف من Auth (لو عندك صلاحية)
+                // 2. حذف من Auth باستخدام Admin API
                 try {
-                    await fetch(SUPABASE_URL + '/rest/v1/auth/admin/users/' + id, {
-                        method: 'DELETE',
-                        headers: {
-                            'apikey': SUPABASE_ANON_KEY,
-                            'Authorization': 'Bearer ' + (window.currentAccessToken || SUPABASE_ANON_KEY)
-                        }
-                    });
+                    await supabaseClient.auth.admin.deleteUser(id);
                 } catch (authError) {
                     console.warn('⚠️ تعذر حذف المستخدم من Auth:', authError);
                 }
 
-                // 3. حذف صلاحيات المستخدم من user_permissions
-                try {
-                    await fetch(SUPABASE_URL + '/rest/v1/user_permissions?user_id=eq.' + id, {
-                        method: 'DELETE',
-                        headers: {
-                            'apikey': SUPABASE_ANON_KEY,
-                            'Authorization': 'Bearer ' + (window.currentAccessToken || SUPABASE_ANON_KEY)
-                        }
-                    });
-                } catch (permError) {
-                    console.warn('⚠️ تعذر حذف صلاحيات المستخدم:', permError);
-                }
+                // 3. حذف صلاحيات المستخدم
+                await fetch(SUPABASE_URL + '/rest/v1/user_permissions?user_id=eq.' + id, {
+                    method: 'DELETE',
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + (window.currentAccessToken || SUPABASE_ANON_KEY)
+                    }
+                });
 
                 showToast('✅ تم الحذف', 'تم حذف المستخدم "' + user.name + '" بنجاح', 'success');
                 loadAllData();
