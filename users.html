@@ -2001,7 +2001,7 @@
 
         /**
          * ============================================================
-         * حفظ المستخدم (إضافة أو تعديل)
+         * حفظ المستخدم - باستخدام Edge Function
          * ============================================================
          */
         async function saveUser(event) {
@@ -2020,6 +2020,7 @@
 
             var isEdit = id ? true : false;
 
+            // التحقق من عدم وجود بريد مكرر
             var existingUser = allUsers.find(function(u) {
                 return u.email === email && u.id !== id;
             });
@@ -2033,8 +2034,14 @@
                 return;
             }
 
+            // تعطيل الزر أثناء الحفظ
+            var submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
+
             try {
                 if (isEdit) {
+                    // ===== تحديث المستخدم =====
                     var updateData = {
                         name: name,
                         phone: phone,
@@ -2060,55 +2067,34 @@
                     showToast('✅ تم التحديث', 'تم تحديث بيانات المستخدم بنجاح', 'success');
 
                 } else {
-                    var { data: authData, error: authError } = await supabaseClient.auth.signUp({
-                        email: email,
-                        password: password,
-                        options: {
-                            data: {
-                                name: name,
-                                phone: phone,
-                                role: role,
-                                status: status
-                            }
-                        }
-                    });
-
-                    if (authError) {
-                        throw new Error(authError.message || 'فشل في إنشاء المستخدم');
-                    }
-
-                    var newUserId = authData.user?.id;
-                    if (!newUserId) {
-                        throw new Error('لم يتم الحصول على معرف المستخدم');
-                    }
-
-                    var profileData = {
-                        id: newUserId,
-                        email: email,
-                        name: name,
-                        phone: phone,
-                        role: role,
-                        status: status,
-                        created_at: new Date().toISOString(),
-                        updated_at: new Date().toISOString()
-                    };
-
-                    var profileResponse = await fetch(SUPABASE_URL + '/rest/v1/profiles', {
+                    // ===== إضافة مستخدم جديد عبر Edge Function =====
+                    var response = await fetch(SUPABASE_URL + '/functions/v1/create-user', {
                         method: 'POST',
                         headers: {
-                            'apikey': SUPABASE_ANON_KEY,
                             'Authorization': 'Bearer ' + (window.currentAccessToken || SUPABASE_ANON_KEY),
-                            'Content-Type': 'application/json',
-                            'Prefer': 'return=minimal'
+                            'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify(profileData)
+                        body: JSON.stringify({
+                            email: email,
+                            password: password,
+                            name: name,
+                            phone: phone,
+                            role: role,
+                            status: status
+                        })
                     });
 
-                    if (!profileResponse.ok) {
-                        throw new Error('فشل في إضافة بيانات المستخدم');
+                    var result = await response.json();
+
+                    if (!response.ok || result.error) {
+                        throw new Error(result.error || 'فشل في حفظ المستخدم');
                     }
 
-                    showToast('✅ تم الإضافة', 'تم إضافة المستخدم "' + name + '" بنجاح', 'success');
+                    showToast(
+                        '✅ تم الإضافة',
+                        'تم إضافة المستخدم "' + name + '" بنجاح',
+                        'success'
+                    );
                 }
 
                 closeModal();
@@ -2117,6 +2103,9 @@
             } catch (error) {
                 console.error('❌ خطأ:', error);
                 showToast('خطأ', error.message || 'فشل في حفظ المستخدم', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-save"></i> حفظ';
             }
         }
 
