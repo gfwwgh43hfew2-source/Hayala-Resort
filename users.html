@@ -1944,7 +1944,7 @@
 
         /**
          * ============================================================
-         * حفظ المستخدم (إضافة أو تعديل) - باستخدام Supabase Client SDK
+         * حفظ المستخدم (إضافة أو تعديل) - باستخدام Admin API
          * ============================================================
          */
         async function saveUser(event) {
@@ -2002,20 +2002,28 @@
                         throw new Error('فشل في تحديث المستخدم');
                     }
 
+                    // لو فيه كلمة مرور جديدة، نحدثها
+                    if (password) {
+                        try {
+                            await supabaseClient.auth.admin.updateUserById(id, { password: password });
+                        } catch (authError) {
+                            console.warn('⚠️ تعذر تحديث كلمة المرور:', authError);
+                        }
+                    }
+
                     showToast('✅ تم التحديث', 'تم تحديث بيانات المستخدم بنجاح', 'success');
 
                 } else {
-                    // ===== إضافة مستخدم جديد باستخدام Supabase Client SDK =====
-                    var { data: authData, error: authError } = await supabaseClient.auth.signUp({
+                    // ===== إضافة مستخدم جديد (باستخدام Admin API) =====
+                    var { data: authData, error: authError } = await supabaseClient.auth.admin.createUser({
                         email: email,
                         password: password,
-                        options: {
-                            data: {
-                                name: name,
-                                phone: phone,
-                                role: role,
-                                status: status
-                            }
+                        email_confirm: true,
+                        user_metadata: {
+                            name: name,
+                            phone: phone,
+                            role: role,
+                            status: status
                         }
                     });
 
@@ -2028,7 +2036,7 @@
                         throw new Error('لم يتم الحصول على معرف المستخدم');
                     }
 
-                    // إضافة البروفايل (في حالة عدم وجود Trigger)
+                    // إضافة البروفايل يدوياً
                     var profileData = {
                         id: newUserId,
                         email: email,
@@ -2052,11 +2060,11 @@
                     });
 
                     if (!profileResponse.ok) {
-                        // لو فشل إضافة البروفايل، نحذف الحساب
+                        // لو فشل، نحذف الحساب
                         try {
                             await supabaseClient.auth.admin.deleteUser(newUserId);
                         } catch (e) {
-                            console.warn('⚠️ تعذر حذف الحساب بعد فشل البروفايل:', e);
+                            console.warn('⚠️ تعذر حذف الحساب:', e);
                         }
                         throw new Error('فشل في إضافة بيانات المستخدم');
                     }
@@ -2100,7 +2108,7 @@
                     }
                 });
 
-                // 2. حذف من Auth باستخدام Admin API
+                // 2. حذف من Auth
                 try {
                     await supabaseClient.auth.admin.deleteUser(id);
                 } catch (authError) {
