@@ -1420,17 +1420,28 @@
         /**
          * ============================================================
          * 1. استخدام المتغير العام من التحقق الأولي
+         * (بننتظر لحد ما checkAuth() فوق يخلص فعليًا، بدل ما نحوّل
+         *  فورًا لصفحة الدخول من غير ما نستناها تجهّز)
          * ============================================================
          */
         var user = window.currentUser || {};
 
-        // إذا لم يكن هناك مستخدم، نعيد التوجيه
-        if (!user || !user.email) {
-            window.location.replace('login.html');
-        }
+        (function waitForAuth(attempts) {
+            user = window.currentUser || {};
 
-        console.log('👤 مستخدم نشط:', user.name || user.email);
-        console.log('🔑 الدور:', user.role || 'user');
+            if (user && user.email) {
+                console.log('👤 مستخدم نشط:', user.name || user.email);
+                console.log('🔑 الدور:', user.role || 'user');
+                return;
+            }
+
+            if (attempts > 30) { // بعد حوالي 3 ثواني، فعلاً مفيش جلسة
+                window.location.replace('login.html');
+                return;
+            }
+
+            setTimeout(function () { waitForAuth(attempts + 1); }, 100);
+        })(0);
 
         /**
          * ============================================================
