@@ -1002,12 +1002,12 @@
                         updated_at: profile.updated_at
                     });
  
-                    // ===== 🆕 حفظ بيانات المستخدم في localStorage =====
-                    localStorage.setItem('user_role', profile.role || 'viewer');
-                    localStorage.setItem('user_name', profile.name || session.user.email);
-                    localStorage.setItem('user_email', result.data.user.email);
-                    localStorage.setItem('user_id', session.user.id);
-                    localStorage.setItem('user_status', profile.status || 'active');
+                   // ===== 🆕 حفظ بيانات المستخدم في localStorage =====
+localStorage.setItem('user_role', profile.role || 'viewer');
+localStorage.setItem('user_name', profile.name || result.data.user.email);
+localStorage.setItem('user_email', result.data.user.email);
+localStorage.setItem('user_id', result.data.user.id);
+localStorage.setItem('user_status', profile.status || 'active');
 
                     console.log('💾 تم حفظ بيانات المستخدم في localStorage:');
                     console.log('   - الدور:', localStorage.getItem('user_role'));
