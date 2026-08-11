@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5" />
     <title>إدارة المستخدمين - منتجع حياله</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <style>
         /* ============================================================
@@ -1027,22 +1028,66 @@
          */
         var SUPABASE_URL = 'https://zwuvcblrrrriuylajvba.supabase.co';
         var SUPABASE_ANON_KEY = 'sb_publishable_YFqwTEs-W_kprUgt4bgpCQ_tf5vVeFa';
+        var supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         /**
          * ============================================================
-         * التحقق من تسجيل الدخول والصلاحية
+         * التحقق من تسجيل الدخول والصلاحية عبر Supabase Auth
+         * (فقط admin يقدر يوصل للصفحة دي)
          * ============================================================
          */
-        var user = JSON.parse(localStorage.getItem('user') || '{}');
-        if (!user || !user.email) {
-            window.location.href = 'login.html';
-        }
+        var user = {};
 
-        // التحقق من الصلاحية - فقط Admin يمكنه الوصول
-        if (user.role !== 'admin') {
-            alert('⚠️ غير مصرح لك بالوصول إلى هذه الصفحة. هذه الصفحة خاصة بالمديرين.');
-            window.location.href = 'index.html';
-        }
+        (async function checkAuth() {
+            try {
+                console.log('🔍 التحقق من الجلسة في users.html...');
+
+                var { data: { session }, error } = await supabaseClient.auth.getSession();
+
+                if (error || !session) {
+                    console.warn('⚠️ لا توجد جلسة نشطة');
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                window.currentAccessToken = session.access_token;
+
+                var { data: profile, error: profileError } = await supabaseClient
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', session.user.id)
+                    .single();
+
+                if (profileError || !profile) {
+                    console.warn('⚠️ تعذّر جلب بيانات البروفايل');
+                    await supabaseClient.auth.signOut();
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                user = {
+                    id: session.user.id,
+                    email: session.user.email,
+                    name: profile.name || session.user.email,
+                    role: profile.role || 'user',
+                    status: profile.status || 'active'
+                };
+                window.currentUser = user;
+
+                if (user.role !== 'admin') {
+                    alert('⚠️ غير مصرح لك بالوصول إلى هذه الصفحة. هذه الصفحة خاصة بالمديرين.');
+                    window.location.href = 'index.html';
+                    return;
+                }
+
+                console.log('✅ دخول أدمن مؤكّد:', user.name);
+                if (typeof loadUsers === 'function') loadUsers();
+
+            } catch (err) {
+                console.error('❌ خطأ في التحقق من الجلسة:', err);
+                window.location.href = 'login.html';
+            }
+        })();
 
         /**
          * ============================================================
@@ -1126,7 +1171,7 @@
 
         /**
          * ============================================================
-         * LOAD USERS
+         * LOAD USERS - من جدول profiles الآمن
          * ============================================================
          */
         async function loadUsers() {
@@ -1138,10 +1183,10 @@
             `;
 
             try {
-                var response = await fetch(SUPABASE_URL + '/rest/v1/users?select=*&order=created_at.desc', {
+                var response = await fetch(SUPABASE_URL + '/rest/v1/profiles?select=*&order=created_at.desc', {
                     headers: {
                         'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                        'Authorization': 'Bearer ' + (window.currentAccessToken || SUPABASE_ANON_KEY)
                     }
                 });
 
@@ -1296,6 +1341,9 @@
             userForm.reset();
             document.getElementById('userRole').value = 'user';
             document.getElementById('userStatus').value = 'active';
+            document.getElementById('userPassword').required = true;
+            document.getElementById('userPassword').placeholder = '••••••••';
+            document.getElementById('userEmail').disabled = false;
             modalOverlay.classList.add('show');
         }
 
@@ -1341,7 +1389,7 @@
 
         /**
          * ============================================================
-         * SAVE USER
+         * SAVE USER - عبر Edge Function الآمنة
          * ============================================================
          */
         async function saveUser(event) {
@@ -1375,44 +1423,43 @@
                 return;
             }
 
-            var data = {
+            // التحقق من كلمة المرور عند الإضافة
+            if (!isEdit && !password) {
+                showToast('تنبيه', 'يرجى إدخال كلمة المرور للمستخدم الجديد', 'warning');
+                return;
+            }
+
+            var payload = {
                 email: email,
                 name: name,
                 phone: phone,
                 role: role,
-                status: status,
-                updated_at: new Date().toISOString()
+                status: status
             };
-
             if (!isEdit || (isEdit && password)) {
-                data.password = password;
+                payload.password = password;
             }
-
-            var url = SUPABASE_URL + '/rest/v1/users';
-            var method = 'POST';
-
             if (isEdit) {
-                url += '?id=eq.' + id;
-                method = 'PATCH';
-                if (!password) {
-                    delete data.password;
-                }
+                payload.id = id;
             }
 
             try {
-                var response = await fetch(url, {
-                    method: method,
+                var response = await fetch(SUPABASE_URL + '/functions/v1/manage-users', {
+                    method: 'POST',
                     headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
-                        'Content-Type': 'application/json',
-                        'Prefer': 'return=minimal'
+                        'Authorization': 'Bearer ' + (window.currentAccessToken || SUPABASE_ANON_KEY),
+                        'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(data)
+                    body: JSON.stringify({
+                        action: isEdit ? 'update' : 'create',
+                        payload: payload
+                    })
                 });
 
-                if (!response.ok) {
-                    throw new Error('فشل في حفظ المستخدم');
+                var result = await response.json();
+
+                if (!response.ok || result.error) {
+                    throw new Error(result.error || 'فشل في حفظ المستخدم');
                 }
 
                 closeModal();
@@ -1425,13 +1472,13 @@
 
             } catch (error) {
                 console.error('❌ خطأ:', error);
-                showToast('خطأ', 'فشل في حفظ المستخدم', 'error');
+                showToast('خطأ', error.message || 'فشل في حفظ المستخدم', 'error');
             }
         }
 
         /**
          * ============================================================
-         * DELETE USER
+         * DELETE USER - عبر Edge Function الآمنة
          * ============================================================
          */
         async function deleteUser(id) {
@@ -1446,38 +1493,58 @@
                 return;
             }
 
-            if (!confirm('هل أنت متأكد من حذف المستخدم "' + user.name + '"؟')) {
+            if (!confirm('⚠️ هل أنت متأكد من حذف المستخدم "' + user.name + '"؟\n\n' +
+                         '📧 البريد: ' + user.email + '\n' +
+                         '👤 الدور: ' + user.role + '\n\n' +
+                         '❗ هذا الإجراء لا يمكن التراجع عنه')) {
                 return;
             }
 
             try {
-                var response = await fetch(SUPABASE_URL + '/rest/v1/users?id=eq.' + id, {
-                    method: 'DELETE',
+                var response = await fetch(SUPABASE_URL + '/functions/v1/manage-users', {
+                    method: 'POST',
                     headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
-                    }
+                        'Authorization': 'Bearer ' + (window.currentAccessToken || SUPABASE_ANON_KEY),
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        action: 'delete',
+                        payload: { id: id }
+                    })
                 });
 
-                if (!response.ok) {
-                    throw new Error('فشل في حذف المستخدم');
+                var result = await response.json();
+
+                if (!response.ok || result.error) {
+                    throw new Error(result.error || 'فشل في حذف المستخدم');
                 }
 
                 showToast('✅ تم الحذف', 'تم حذف المستخدم "' + user.name + '" بنجاح', 'success');
                 loadUsers();
 
             } catch (error) {
-                console.error('❌ خطأ:', error);
-                showToast('خطأ', 'فشل في حذف المستخدم', 'error');
+                console.error('❌ خطأ في الحذف:', error);
+                showToast('❌ خطأ', error.message || 'فشل في حذف المستخدم', 'error');
             }
         }
 
         /**
          * ============================================================
-         * TOAST SYSTEM
+         * LOGOUT - دالة مساعدة لتسجيل الخروج
          * ============================================================
          */
-        // دالة showToast موجودة مسبقاً
+        async function logoutUser() {
+            if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
+                try {
+                    await supabaseClient.auth.signOut();
+                    localStorage.removeItem('user');
+                    window.location.href = 'login.html';
+                } catch (error) {
+                    console.error('❌ خطأ في تسجيل الخروج:', error);
+                    window.location.href = 'login.html';
+                }
+            }
+        }
 
         /**
          * ============================================================
@@ -1485,11 +1552,8 @@
          * ============================================================
          */
         document.addEventListener('DOMContentLoaded', function() {
-            loadUsers();
             console.log('👥 إدارة المستخدمين - منتجع حياله');
             console.log('📊 Supabase URL:', SUPABASE_URL);
-            console.log('👤 المستخدم الحالي:', user.name, '(', user.role, ')');
-            console.log('✅ النظام جاهز للعمل');
         });
 
         // إغلاق المودال بالضغط على Escape
