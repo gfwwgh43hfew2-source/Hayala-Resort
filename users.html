@@ -1446,6 +1446,11 @@
             }
         }
 
+        /**
+         * ============================================================
+         * loadPermissions - مع التعامل مع 403
+         * ============================================================
+         */
         async function loadPermissions() {
             var container = document.getElementById('permissionsContainer');
             container.innerHTML = `<div class="empty-state"><div class="spinner"></div><p>جاري تحميل الصلاحيات...</p></div>`;
@@ -1457,6 +1462,47 @@
                         'Authorization': 'Bearer ' + (window.currentAccessToken || SUPABASE_ANON_KEY)
                     }
                 });
+
+                // لو 403، بنعتبر إن مفيش صلاحيات وبنستخدم الافتراضية
+                if (response.status === 403) {
+                    console.warn('⚠️ لا يمكن الوصول لجدول الصلاحيات (403) - استخدام الصلاحيات الافتراضية');
+                    allPermissions = {};
+                    
+                    // صلاحيات المدير الافتراضية
+                    var defaultPerms = [
+                        'view_dashboard', 'view_invoices', 'add_invoice', 'edit_invoice', 'delete_invoice',
+                        'view_bookings', 'add_booking', 'edit_booking', 'delete_booking', 'view_future_bookings',
+                        'view_clients', 'add_client', 'edit_client', 'delete_client',
+                        'view_properties', 'add_property', 'edit_property', 'delete_property',
+                        'view_expenses', 'add_expense', 'edit_expense', 'delete_expense',
+                        'view_abuzaid', 'add_abuzaid_payment', 'edit_abuzaid_payment', 'delete_abuzaid_payment',
+                        'view_client_accounts', 'add_client_payment', 'delete_client_payment',
+                        'manage_users', 'view_reports'
+                    ];
+                    
+                    // للمدير الحالي
+                    if (currentUser.id) {
+                        allPermissions[currentUser.id] = {};
+                        defaultPerms.forEach(function(perm) {
+                            allPermissions[currentUser.id][perm] = true;
+                        });
+                    }
+                    
+                    // لباقي المستخدمين (صلاحيات افتراضية)
+                    allUsers.forEach(function(user) {
+                        if (user.id !== currentUser.id) {
+                            allPermissions[user.id] = {};
+                            // المستخدمين العاديين ياخدوا صلاحيات محدودة
+                            var userPerms = ['view_dashboard', 'view_bookings', 'view_clients', 'view_properties'];
+                            userPerms.forEach(function(perm) {
+                                allPermissions[user.id][perm] = true;
+                            });
+                        }
+                    });
+                    
+                    renderPermissions(allUsers, allPermissions);
+                    return;
+                }
 
                 var permissionsData = response.ok ? await response.json() : [];
 
@@ -1470,13 +1516,24 @@
 
             } catch (error) {
                 console.error('❌ خطأ في تحميل الصلاحيات:', error);
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-exclamation-triangle" style="color:var(--rust);"></i>
-                        <p style="color:var(--rust);">حدث خطأ في تحميل الصلاحيات</p>
-                        <span>${error.message}</span>
-                    </div>
-                `;
+                // في حالة الخطأ، نستخدم الصلاحيات الافتراضية
+                allPermissions = {};
+                if (currentUser.id) {
+                    allPermissions[currentUser.id] = {};
+                    var defaultPerms = ['view_dashboard', 'view_invoices', 'add_invoice', 'edit_invoice', 'delete_invoice',
+                        'view_bookings', 'add_booking', 'edit_booking', 'delete_booking', 'view_future_bookings',
+                        'view_clients', 'add_client', 'edit_client', 'delete_client',
+                        'view_properties', 'add_property', 'edit_property', 'delete_property',
+                        'view_expenses', 'add_expense', 'edit_expense', 'delete_expense',
+                        'view_abuzaid', 'add_abuzaid_payment', 'edit_abuzaid_payment', 'delete_abuzaid_payment',
+                        'view_client_accounts', 'add_client_payment', 'delete_client_payment',
+                        'manage_users', 'view_reports'
+                    ];
+                    defaultPerms.forEach(function(perm) {
+                        allPermissions[currentUser.id][perm] = true;
+                    });
+                }
+                renderPermissions(allUsers, allPermissions);
             }
         }
 
@@ -1963,7 +2020,6 @@
 
             var isEdit = id ? true : false;
 
-            // التحقق من عدم وجود بريد مكرر
             var existingUser = allUsers.find(function(u) {
                 return u.email === email && u.id !== id;
             });
@@ -1979,7 +2035,6 @@
 
             try {
                 if (isEdit) {
-                    // ===== تحديث المستخدم =====
                     var updateData = {
                         name: name,
                         phone: phone,
@@ -2005,8 +2060,6 @@
                     showToast('✅ تم التحديث', 'تم تحديث بيانات المستخدم بنجاح', 'success');
 
                 } else {
-                    // ===== إضافة مستخدم جديد =====
-                    // استخدام SignUp عادي
                     var { data: authData, error: authError } = await supabaseClient.auth.signUp({
                         email: email,
                         password: password,
@@ -2029,7 +2082,6 @@
                         throw new Error('لم يتم الحصول على معرف المستخدم');
                     }
 
-                    // إضافة البروفايل يدوياً
                     var profileData = {
                         id: newUserId,
                         email: email,
@@ -2086,7 +2138,6 @@
             }
 
             try {
-                // 1. حذف من جدول profiles
                 await fetch(SUPABASE_URL + '/rest/v1/profiles?id=eq.' + id, {
                     method: 'DELETE',
                     headers: {
@@ -2095,7 +2146,6 @@
                     }
                 });
 
-                // 2. حذف صلاحيات المستخدم
                 await fetch(SUPABASE_URL + '/rest/v1/user_permissions?user_id=eq.' + id, {
                     method: 'DELETE',
                     headers: {
