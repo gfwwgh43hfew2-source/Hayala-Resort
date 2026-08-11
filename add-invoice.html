@@ -3405,18 +3405,35 @@
                     console.log('📋 بيانات العقارات:', propertiesList);
 
                     var select = document.getElementById('propertyType');
+                    if (!select) {
+                        console.error('❌ عنصر propertyType غير موجود في DOM');
+                        return;
+                    }
+                    
+                    console.log('📌 select موجود:', select);
                     select.innerHTML = '<option value="">اختر العقار</option>';
+                    
+                    if (propertiesList.length === 0) {
+                        console.warn('⚠️ لا توجد عقارات في قاعدة البيانات');
+                        select.innerHTML = '<option value="">لا توجد عقارات</option>';
+                        return;
+                    }
+                    
                     propertiesList.forEach(function(prop) {
                         var option = document.createElement('option');
                         option.value = prop.name;
                         option.textContent = prop.name;
                         select.appendChild(option);
                     });
+                    
+                    console.log('✅ تم تحديث قائمة العقارات - عدد الخيارات:', select.options.length);
 
                 } catch (error) {
                     console.error('❌ خطأ في جلب العقارات:', error);
                     var select = document.getElementById('propertyType');
-                    select.innerHTML = '<option value="">خطأ في تحميل العقارات</option>';
+                    if (select) {
+                        select.innerHTML = '<option value="">خطأ في تحميل العقارات</option>';
+                    }
                 }
             }
 
@@ -4785,6 +4802,12 @@
                     console.log('👤 تم جلب العملاء:', clientsList.length);
                     console.log('📋 بيانات العملاء:', clientsList);
 
+                    // تحديث الـ suggestions إذا كان هناك نص مكتوب
+                    var clientNameInput = document.getElementById('clientName');
+                    if (clientNameInput && clientNameInput.value.length > 0) {
+                        showClientSuggestions(clientNameInput.value);
+                    }
+
                 } catch (error) {
                     console.error('❌ خطأ في جلب العملاء:', error);
                     clientsList = [];
@@ -4796,12 +4819,14 @@
              * CLIENT SUGGESTIONS
              * ============================================================
              */
-            var clientSuggestions = document.getElementById('clientSuggestions');
-            var clientNameInput = document.getElementById('clientName');
-
             function showClientSuggestions(input) {
                 var searchTerm = input.trim().toLowerCase();
-                var suggestionsList = clientSuggestions;
+                var suggestionsList = document.getElementById('clientSuggestions');
+
+                if (!suggestionsList) {
+                    console.error('❌ عنصر clientSuggestions غير موجود');
+                    return;
+                }
 
                 if (!searchTerm || searchTerm.length < 1) {
                     suggestionsList.classList.remove('show');
@@ -5415,6 +5440,38 @@
                     console.log('🔄 تم تحميل العملاء والعقارات');
                 }, 300);
             });
+
+        // ============================================================
+        // جعل الدوال عامة للوصول من HTML (onclick) ومن Console
+        // ============================================================
+        window.previewInvoice = previewInvoice;
+        window.resetForm = resetForm;
+        window.closePrintPreview = closePrintPreview;
+        window.executePrint = executePrint;
+        window.downloadPDF = downloadPDF;
+        window.openPrintWindow = openPrintWindow;
+        window.generatePDFFromPreview = generatePDFFromPreview;
+        
+        // ===== دوال التحميل للاختبار والاستخدام =====
+        window.loadClientsForSuggestions = loadClientsForSuggestions;
+        window.loadProperties = loadProperties;
+        window.showClientSuggestions = showClientSuggestions;
+        window.selectClient = selectClient;
+        window.openAddClientModal = openAddClientModal;
+        window.addNewClient = addNewClient;
+        window.editBooking = editBooking;
+        window.removeBooking = removeBooking;
+        window.generateInvoiceNumber = generateInvoiceNumber;
+        window.calculateNights = calculateNights;
+        window.calculateFinancials = calculateFinancials;
+        window.calculateTotals = calculateTotals;
+        window.renderBookings = renderBookings;
+        window.clearBookingFields = clearBookingFields;
+        window.saveInvoicePDFDirect = saveInvoicePDFDirect;
+        window.searchInvoice = searchInvoice;
+        window.loadInvoiceDataFromSupabase = loadInvoiceDataFromSupabase;
+        window.saveInvoiceToSupabase = saveInvoiceToSupabase;
+
         })(); // نهاية IIFE initApp
     </script>
 
