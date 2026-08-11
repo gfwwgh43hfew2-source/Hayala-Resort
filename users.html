@@ -1944,7 +1944,7 @@
 
         /**
          * ============================================================
-         * حفظ المستخدم (إضافة أو تعديل) - باستخدام Admin API
+         * حفظ المستخدم (إضافة أو تعديل)
          * ============================================================
          */
         async function saveUser(event) {
@@ -2002,28 +2002,21 @@
                         throw new Error('فشل في تحديث المستخدم');
                     }
 
-                    // لو فيه كلمة مرور جديدة، نحدثها
-                    if (password) {
-                        try {
-                            await supabaseClient.auth.admin.updateUserById(id, { password: password });
-                        } catch (authError) {
-                            console.warn('⚠️ تعذر تحديث كلمة المرور:', authError);
-                        }
-                    }
-
                     showToast('✅ تم التحديث', 'تم تحديث بيانات المستخدم بنجاح', 'success');
 
                 } else {
-                    // ===== إضافة مستخدم جديد (باستخدام Admin API) =====
-                    var { data: authData, error: authError } = await supabaseClient.auth.admin.createUser({
+                    // ===== إضافة مستخدم جديد =====
+                    // استخدام SignUp عادي
+                    var { data: authData, error: authError } = await supabaseClient.auth.signUp({
                         email: email,
                         password: password,
-                        email_confirm: true,
-                        user_metadata: {
-                            name: name,
-                            phone: phone,
-                            role: role,
-                            status: status
+                        options: {
+                            data: {
+                                name: name,
+                                phone: phone,
+                                role: role,
+                                status: status
+                            }
                         }
                     });
 
@@ -2060,12 +2053,6 @@
                     });
 
                     if (!profileResponse.ok) {
-                        // لو فشل، نحذف الحساب
-                        try {
-                            await supabaseClient.auth.admin.deleteUser(newUserId);
-                        } catch (e) {
-                            console.warn('⚠️ تعذر حذف الحساب:', e);
-                        }
                         throw new Error('فشل في إضافة بيانات المستخدم');
                     }
 
@@ -2108,14 +2095,7 @@
                     }
                 });
 
-                // 2. حذف من Auth
-                try {
-                    await supabaseClient.auth.admin.deleteUser(id);
-                } catch (authError) {
-                    console.warn('⚠️ تعذر حذف المستخدم من Auth:', authError);
-                }
-
-                // 3. حذف صلاحيات المستخدم
+                // 2. حذف صلاحيات المستخدم
                 await fetch(SUPABASE_URL + '/rest/v1/user_permissions?user_id=eq.' + id, {
                     method: 'DELETE',
                     headers: {
