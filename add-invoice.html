@@ -3382,6 +3382,7 @@
              * ============================================================
              */
             async function loadProperties() {
+                console.log('🔄 بدء جلب العقارات من Supabase...');
                 try {
                     var response = await fetch(SUPABASE_URL + '/rest/v1/properties?select=name&order=name', {
                         headers: {
@@ -3390,8 +3391,13 @@
                         }
                     });
 
+                    console.log('📡 استجابة العقارات - الحالة:', response.status);
+                    console.log('📡 استجابة العقارات - ok:', response.ok);
+
                     if (!response.ok) {
-                        throw new Error('فشل في جلب العقارات');
+                        var errorText = await response.text();
+                        console.error('❌ فشل في جلب العقارات - التفاصيل:', errorText);
+                        throw new Error('فشل في جلب العقارات: ' + response.status + ' - ' + errorText);
                     }
 
                     propertiesList = await response.json();
@@ -4757,6 +4763,7 @@
              * ============================================================
              */
             async function loadClientsForSuggestions() {
+                console.log('🔄 بدء جلب العملاء من Supabase...');
                 try {
                     var response = await fetch(SUPABASE_URL + '/rest/v1/clients?select=id,name,phone&order=name', {
                         headers: {
@@ -4765,13 +4772,19 @@
                         }
                     });
 
+                    console.log('📡 استجابة العملاء - الحالة:', response.status);
+                    console.log('📡 استجابة العملاء - ok:', response.ok);
+
                     if (!response.ok) {
-                        throw new Error('فشل في جلب العملاء');
+                        var errorText = await response.text();
+                        console.error('❌ فشل في جلب العملاء - التفاصيل:', errorText);
+                        throw new Error('فشل في جلب العملاء: ' + response.status + ' - ' + errorText);
                     }
 
                     clientsList = await response.json();
                     console.log('👤 تم جلب العملاء:', clientsList.length);
                     console.log('📋 بيانات العملاء:', clientsList);
+
                 } catch (error) {
                     console.error('❌ خطأ في جلب العملاء:', error);
                     clientsList = [];
