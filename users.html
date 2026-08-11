@@ -1034,17 +1034,6 @@
             overflow-x: auto;
             max-width: 100%;
         }
-
-        /* Permission group color */
-        .perm-group-dashboard { border-right: 3px solid var(--blue); }
-        .perm-group-invoices { border-right: 3px solid var(--teal); }
-        .perm-group-bookings { border-right: 3px solid var(--accent); }
-        .perm-group-clients { border-right: 3px solid var(--rust); }
-        .perm-group-properties { border-right: 3px solid #8B5CF6; }
-        .perm-group-expenses { border-right: 3px solid #EC4899; }
-        .perm-group-accounting { border-right: 3px solid #F59E0B; }
-        .perm-group-users { border-right: 3px solid #EF4444; }
-        .perm-group-reports { border-right: 3px solid #06B6D4; }
     </style>
 </head>
 <body>
@@ -1124,7 +1113,8 @@
                     <i class="fas fa-plus"></i> إضافة مستخدم جديد
                 </button>
                 <button class="btn btn-outline" onclick="loadAllData()">
-                    <i class="fas fa-sync-alt"></i> تحديث                </button>
+                    <i class="fas fa-sync-alt"></i> تحديث
+                </button>
             </div>
         </div>
 
@@ -1978,7 +1968,7 @@
 
         /**
          * ============================================================
-         * حفظ المستخدم
+         * حفظ المستخدم (إضافة أو تعديل) - مباشر من Supabase
          * ============================================================
          */
         async function saveUser(event) {
@@ -2011,26 +2001,129 @@
                 return;
             }
 
-            var payload = { email: email, name: name, phone: phone, role: role, status: status };
-            if (!isEdit || (isEdit && password)) payload.password = password;
-            if (isEdit) payload.id = id;
-
             try {
-                var response = await fetch(SUPABASE_URL + '/functions/v1/manage-users', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': 'Bearer ' + (window.currentAccessToken || SUPABASE_ANON_KEY),
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ action: isEdit ? 'update' : 'create', payload: payload })
-                });
+                if (isEdit) {
+                    // ===== تحديث المستخدم في جدول profiles =====
+                    var updateData = {
+                        name: name,
+                        phone: phone,
+                        role: role,
+                        status: status,
+                        updated_at: new Date().toISOString()
+                    };
 
-                var result = await response.json();
-                if (!response.ok || result.error) throw new Error(result.error || 'فشل في حفظ المستخدم');
+                    var updateResponse = await fetch(SUPABASE_URL + '/rest/v1/profiles?id=eq.' + id, {
+                        method: 'PATCH',
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': 'Bearer ' + (window.currentAccessToken || SUPABASE_ANON_KEY),
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(updateData)
+                    });
+
+                    if (!updateResponse.ok) {
+                        var errorText = await updateResponse.text();
+                        throw new Error('فشل في تحديث المستخدم: ' + errorText);
+                    }
+
+                    // لو فيه كلمة مرور جديدة، نحدثها في Auth
+                    if (password) {
+                        try {
+                            var authUpdateResponse = await fetch(SUPABASE_URL + '/rest/v1/auth/admin/users/' + id, {
+                                method: 'PATCH',
+                                headers: {
+                                    'apikey': SUPABASE_ANON_KEY,
+                                    'Authorization': 'Bearer ' + (window.currentAccessToken || SUPABASE_ANON_KEY),
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ password: password })
+                            });
+                            if (!authUpdateResponse.ok) {
+                                console.warn('⚠️ تعذر تحديث كلمة المرور في Auth');
+                            }
+                        } catch (authError) {
+                            console.warn('⚠️ تعذر تحديث كلمة المرور:', authError);
+                        }
+                    }
+
+                    showToast('✅ تم التحديث', 'تم تحديث بيانات المستخدم بنجاح', 'success');
+
+                } else {
+                    // ===== إضافة مستخدم جديد =====
+                    // 1. إنشاء حساب في Auth
+                    var signUpResponse = await fetch(SUPABASE_URL + '/rest/v1/auth/signup', {
+                        method: 'POST',
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            email: email,
+                            password: password,
+                            data: {
+                                name: name,
+                                phone: phone,
+                                role: role,
+                                status: status
+                            }
+                        })
+                    });
+
+                    var signUpResult = await signUpResponse.json();
+
+                    if (!signUpResponse.ok) {
+                        throw new Error(signUpResult.message || 'فشل في إنشاء المستخدم');
+                    }
+
+                    // 2. إضافة المستخدم في جدول profiles
+                    var newUserId = signUpResult.user?.id;
+                    if (!newUserId) {
+                        throw new Error('لم يتم الحصول على معرف المستخدم');
+                    }
+
+                    var profileData = {
+                        id: newUserId,
+                        email: email,
+                        name: name,
+                        phone: phone,
+                        role: role,
+                        status: status,
+                        created_at: new Date().toISOString(),
+                        updated_at: new Date().toISOString()
+                    };
+
+                    var profileResponse = await fetch(SUPABASE_URL + '/rest/v1/profiles', {
+                        method: 'POST',
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': 'Bearer ' + (window.currentAccessToken || SUPABASE_ANON_KEY),
+                            'Content-Type': 'application/json',
+                            'Prefer': 'return=minimal'
+                        },
+                        body: JSON.stringify(profileData)
+                    });
+
+                    if (!profileResponse.ok) {
+                        // لو فشل إضافة البروفايل، نحذف الحساب اللي اتcreate
+                        try {
+                            await fetch(SUPABASE_URL + '/rest/v1/auth/admin/users/' + newUserId, {
+                                method: 'DELETE',
+                                headers: {
+                                    'apikey': SUPABASE_ANON_KEY,
+                                    'Authorization': 'Bearer ' + (window.currentAccessToken || SUPABASE_ANON_KEY)
+                                }
+                            });
+                        } catch (e) {
+                            console.warn('⚠️ تعذر حذف الحساب بعد فشل البروفايل:', e);
+                        }
+                        throw new Error('فشل في إضافة بيانات المستخدم');
+                    }
+
+                    showToast('✅ تم الإضافة', 'تم إضافة المستخدم "' + name + '" بنجاح', 'success');
+                }
 
                 closeModal();
-                showToast(isEdit ? '✅ تم التحديث' : '✅ تم الإضافة',
-                    isEdit ? 'تم تحديث بيانات المستخدم بنجاح' : 'تم إضافة المستخدم بنجاح', 'success');
                 loadAllData();
 
             } catch (error) {
@@ -2041,7 +2134,7 @@
 
         /**
          * ============================================================
-         * حذف المستخدم
+         * حذف المستخدم - مباشر من Supabase
          * ============================================================
          */
         async function deleteUser(id) {
@@ -2058,17 +2151,44 @@
             }
 
             try {
-                var response = await fetch(SUPABASE_URL + '/functions/v1/manage-users', {
-                    method: 'POST',
+                // 1. حذف من جدول profiles
+                var profileResponse = await fetch(SUPABASE_URL + '/rest/v1/profiles?id=eq.' + id, {
+                    method: 'DELETE',
                     headers: {
-                        'Authorization': 'Bearer ' + (window.currentAccessToken || SUPABASE_ANON_KEY),
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ action: 'delete', payload: { id: id } })
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + (window.currentAccessToken || SUPABASE_ANON_KEY)
+                    }
                 });
 
-                var result = await response.json();
-                if (!response.ok || result.error) throw new Error(result.error || 'فشل في حذف المستخدم');
+                if (!profileResponse.ok) {
+                    throw new Error('فشل في حذف بيانات المستخدم');
+                }
+
+                // 2. حذف من Auth (لو عندك صلاحية)
+                try {
+                    await fetch(SUPABASE_URL + '/rest/v1/auth/admin/users/' + id, {
+                        method: 'DELETE',
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': 'Bearer ' + (window.currentAccessToken || SUPABASE_ANON_KEY)
+                        }
+                    });
+                } catch (authError) {
+                    console.warn('⚠️ تعذر حذف المستخدم من Auth:', authError);
+                }
+
+                // 3. حذف صلاحيات المستخدم من user_permissions
+                try {
+                    await fetch(SUPABASE_URL + '/rest/v1/user_permissions?user_id=eq.' + id, {
+                        method: 'DELETE',
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': 'Bearer ' + (window.currentAccessToken || SUPABASE_ANON_KEY)
+                        }
+                    });
+                } catch (permError) {
+                    console.warn('⚠️ تعذر حذف صلاحيات المستخدم:', permError);
+                }
 
                 showToast('✅ تم الحذف', 'تم حذف المستخدم "' + user.name + '" بنجاح', 'success');
                 loadAllData();
