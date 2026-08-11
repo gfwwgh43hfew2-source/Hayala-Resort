@@ -339,7 +339,7 @@
         .main-content {
             flex: 1;
             padding: 20px 24px;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             width: 100%;
         }
@@ -434,9 +434,14 @@
             font-size: 0.65rem;
             border-radius: 6px;
         }
+        .btn-xs {
+            padding: 2px 8px;
+            font-size: 0.55rem;
+            border-radius: 4px;
+        }
 
         /* ============================================================
-           TABLE
+           CARDS
            ============================================================ */
         .card {
             background: var(--surface);
@@ -444,6 +449,7 @@
             box-shadow: var(--shadow-sm);
             border: 1px solid var(--line);
             overflow: hidden;
+            margin-bottom: 20px;
         }
         .card-header {
             padding: 16px 20px;
@@ -474,30 +480,36 @@
             overflow-x: auto;
         }
 
+        /* ============================================================
+           TABLES
+           ============================================================ */
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
         }
         table thead th {
             background: var(--surface-muted);
-            padding: 10px 12px;
+            padding: 8px 10px;
             text-align: center;
             font-weight: 700;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             color: var(--ink-mute);
             text-transform: uppercase;
             letter-spacing: 0.3px;
             border-bottom: 2px solid var(--line);
             white-space: nowrap;
+            position: sticky;
+            top: 0;
+            z-index: 5;
         }
         table tbody td {
-            padding: 10px 12px;
+            padding: 8px 10px;
             text-align: center;
             border-bottom: 1px solid var(--line);
             color: var(--ink-soft);
-            font-size: 0.78rem;
-            white-space: nowrap;
+            font-size: 0.75rem;
+            vertical-align: middle;
         }
         table tbody tr:hover td {
             background: var(--surface-muted);
@@ -541,9 +553,13 @@
             background: var(--blue);
             color: #ffffff;
         }
-        .role-user {
-            background: var(--teal-soft);
-            color: var(--teal);
+        .role-accountant {
+            background: var(--teal);
+            color: #ffffff;
+        }
+        .role-receptionist {
+            background: var(--accent);
+            color: var(--accent-ink);
         }
         .role-viewer {
             background: var(--surface-muted);
@@ -555,6 +571,92 @@
             gap: 4px;
             justify-content: center;
             flex-wrap: wrap;
+        }
+
+        /* ============================================================
+           PERMISSIONS TABLE
+           ============================================================ */
+        .permissions-table {
+            font-size: 0.7rem;
+        }
+        .permissions-table thead th {
+            font-size: 0.55rem;
+            padding: 6px 6px;
+            min-width: 60px;
+        }
+        .permissions-table tbody td {
+            padding: 4px 6px;
+            font-size: 0.65rem;
+        }
+        .permissions-table .perm-checkbox {
+            width: 32px;
+            height: 32px;
+            accent-color: var(--teal);
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .permissions-table .perm-checkbox:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        .permissions-table .perm-checkbox:checked {
+            accent-color: var(--teal);
+        }
+        .permissions-table .perm-label {
+            font-size: 0.6rem;
+            color: var(--ink-mute);
+            font-weight: 600;
+            display: block;
+            margin-top: 2px;
+        }
+        .permissions-table .group-header {
+            background: var(--surface-muted);
+            font-weight: 800;
+            color: var(--ink);
+            font-size: 0.65rem;
+            text-align: right;
+            padding-right: 12px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 36px;
+            height: 20px;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-switch .slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background: var(--line-strong);
+            transition: 0.3s;
+            border-radius: 20px;
+        }
+        .toggle-switch .slider::before {
+            content: '';
+            position: absolute;
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+        .toggle-switch input:checked + .slider {
+            background: var(--teal);
+        }
+        .toggle-switch input:checked + .slider::before {
+            transform: translateX(16px);
+        }
+        .toggle-switch input:disabled + .slider {
+            opacity: 0.4;
+            cursor: not-allowed;
         }
 
         /* ============================================================
@@ -764,6 +866,34 @@
         /* ============================================================
            RESPONSIVE
            ============================================================ */
+        @media (max-width: 992px) {
+            .permissions-table {
+                font-size: 0.6rem;
+            }
+            .permissions-table thead th {
+                font-size: 0.5rem;
+                padding: 4px 4px;
+                min-width: 40px;
+            }
+            .permissions-table tbody td {
+                padding: 3px 4px;
+                font-size: 0.55rem;
+            }
+            .toggle-switch {
+                width: 30px;
+                height: 17px;
+            }
+            .toggle-switch .slider::before {
+                height: 11px;
+                width: 11px;
+                left: 3px;
+                bottom: 3px;
+            }
+            .toggle-switch input:checked + .slider::before {
+                transform: translateX(13px);
+            }
+        }
+
         @media (max-width: 768px) {
             .main-content {
                 padding: 16px;
@@ -808,6 +938,34 @@
             .sidebar-overlay {
                 display: block;
             }
+            .permissions-table {
+                font-size: 0.5rem;
+            }
+            .permissions-table thead th {
+                font-size: 0.45rem;
+                padding: 3px 3px;
+                min-width: 30px;
+            }
+            .permissions-table tbody td {
+                padding: 2px 3px;
+                font-size: 0.5rem;
+            }
+            .toggle-switch {
+                width: 26px;
+                height: 15px;
+            }
+            .toggle-switch .slider::before {
+                height: 9px;
+                width: 9px;
+                left: 3px;
+                bottom: 3px;
+            }
+            .toggle-switch input:checked + .slider::before {
+                transform: translateX(11px);
+            }
+            .perm-label {
+                font-size: 0.45rem !important;
+            }
         }
 
         @media (max-width: 480px) {
@@ -820,6 +978,28 @@
             }
             .page-header h1 {
                 font-size: 1.1rem;
+            }
+            .permissions-table thead th {
+                font-size: 0.4rem;
+                padding: 2px 2px;
+                min-width: 24px;
+            }
+            .permissions-table tbody td {
+                padding: 2px 2px;
+                font-size: 0.45rem;
+            }
+            .toggle-switch {
+                width: 22px;
+                height: 13px;
+            }
+            .toggle-switch .slider::before {
+                height: 7px;
+                width: 7px;
+                left: 3px;
+                bottom: 3px;
+            }
+            .toggle-switch input:checked + .slider::before {
+                transform: translateX(9px);
             }
         }
 
@@ -848,6 +1028,23 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        /* Scrollable permissions table wrapper */
+        .permissions-scroll {
+            overflow-x: auto;
+            max-width: 100%;
+        }
+
+        /* Permission group color */
+        .perm-group-dashboard { border-right: 3px solid var(--blue); }
+        .perm-group-invoices { border-right: 3px solid var(--teal); }
+        .perm-group-bookings { border-right: 3px solid var(--accent); }
+        .perm-group-clients { border-right: 3px solid var(--rust); }
+        .perm-group-properties { border-right: 3px solid #8B5CF6; }
+        .perm-group-expenses { border-right: 3px solid #EC4899; }
+        .perm-group-accounting { border-right: 3px solid #F59E0B; }
+        .perm-group-users { border-right: 3px solid #EF4444; }
+        .perm-group-reports { border-right: 3px solid #06B6D4; }
     </style>
 </head>
 <body>
@@ -863,7 +1060,7 @@
                 </div>
                 <div class="logo-text">
                     <h1>منتجع حياله</h1>
-                    <span>إدارة المستخدمين</span>
+                    <span>إدارة المستخدمين والصلاحيات</span>
                 </div>
             </div>
             <nav>
@@ -919,19 +1116,19 @@
         <div class="page-header">
             <h1>
                 <i class="fas fa-users-cog"></i>
-                إدارة المستخدمين
+                إدارة المستخدمين والصلاحيات
                 <span class="badge">للإداريين فقط</span>
             </h1>
             <div>
                 <button class="btn btn-success" onclick="openAddModal()">
                     <i class="fas fa-plus"></i> إضافة مستخدم جديد
                 </button>
-                <button class="btn btn-outline" onclick="loadUsers()">
-                    <i class="fas fa-sync-alt"></i> تحديث
-                </button>
+                <button class="btn btn-outline" onclick="loadAllData()">
+                    <i class="fas fa-sync-alt"></i> تحديث                </button>
             </div>
         </div>
 
+        <!-- ===== قائمة المستخدمين ===== -->
         <div class="card">
             <div class="card-header">
                 <h2>
@@ -948,6 +1145,33 @@
                     <div class="empty-state">
                         <div class="spinner"></div>
                         <p>جاري تحميل المستخدمين...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== جدول الصلاحيات ===== -->
+        <div class="card">
+            <div class="card-header">
+                <h2>
+                    <i class="fas fa-lock"></i>
+                    صلاحيات المستخدمين
+                    <span class="count" id="permissionsCount">0</span>
+                </h2>
+                <div>
+                    <button class="btn btn-primary btn-sm" onclick="saveAllPermissions()">
+                        <i class="fas fa-save"></i> حفظ الكل
+                    </button>
+                    <button class="btn btn-outline btn-sm" onclick="loadPermissions()">
+                        <i class="fas fa-sync-alt"></i> تحديث
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="permissionsContainer">
+                    <div class="empty-state">
+                        <div class="spinner"></div>
+                        <p>جاري تحميل الصلاحيات...</p>
                     </div>
                 </div>
             </div>
@@ -988,11 +1212,12 @@
                         <input type="text" class="form-control" id="userPhone" placeholder="05xxxxxxxx" />
                     </div>
                     <div class="form-group">
-                        <label>الصلاحية <span class="required">*</span></label>
+                        <label>الدور الأساسي <span class="required">*</span></label>
                         <select class="form-control" id="userRole" required>
                             <option value="admin">مدير النظام (Admin)</option>
                             <option value="manager">مشرف (Manager)</option>
-                            <option value="user">مستخدم (User)</option>
+                            <option value="accountant">محاسب (Accountant)</option>
+                            <option value="receptionist">موظف استقبال (Receptionist)</option>
                             <option value="viewer">مشاهد (Viewer)</option>
                         </select>
                     </div>
@@ -1032,20 +1257,68 @@
 
         /**
          * ============================================================
-         * التحقق من تسجيل الدخول والصلاحية عبر Supabase Auth
-         * (فقط admin يقدر يوصل للصفحة دي)
+         * تعريف الصلاحيات المتاحة
          * ============================================================
          */
-        var user = {};
+        var PERMISSION_GROUPS = {
+            'لوحة التحكم': ['view_dashboard'],
+            'الفواتير': ['view_invoices', 'add_invoice', 'edit_invoice', 'delete_invoice'],
+            'الحجوزات': ['view_bookings', 'add_booking', 'edit_booking', 'delete_booking', 'view_future_bookings'],
+            'العملاء': ['view_clients', 'add_client', 'edit_client', 'delete_client'],
+            'العقارات': ['view_properties', 'add_property', 'edit_property', 'delete_property'],
+            'المصاريف': ['view_expenses', 'add_expense', 'edit_expense', 'delete_expense'],
+            'عمولة أبو زيد': ['view_abuzaid', 'add_abuzaid_payment', 'edit_abuzaid_payment', 'delete_abuzaid_payment'],
+            'حسابات العملاء': ['view_client_accounts', 'add_client_payment', 'delete_client_payment'],
+            'المستخدمين': ['manage_users'],
+            'التقارير': ['view_reports']
+        };
+
+        var PERMISSION_LABELS = {
+            'view_dashboard': 'عرض لوحة التحكم',
+            'view_invoices': 'عرض الفواتير',
+            'add_invoice': 'إضافة فاتورة',
+            'edit_invoice': 'تعديل فاتورة',
+            'delete_invoice': 'حذف فاتورة',
+            'view_bookings': 'عرض الحجوزات',
+            'add_booking': 'إضافة حجز',
+            'edit_booking': 'تعديل حجز',
+            'delete_booking': 'حذف حجز',
+            'view_future_bookings': 'عرض الحجوزات المستقبلية',
+            'view_clients': 'عرض العملاء',
+            'add_client': 'إضافة عميل',
+            'edit_client': 'تعديل عميل',
+            'delete_client': 'حذف عميل',
+            'view_properties': 'عرض العقارات',
+            'add_property': 'إضافة عقار',
+            'edit_property': 'تعديل عقار',
+            'delete_property': 'حذف عقار',
+            'view_expenses': 'عرض المصاريف',
+            'add_expense': 'إضافة مصروف',
+            'edit_expense': 'تعديل مصروف',
+            'delete_expense': 'حذف مصروف',
+            'view_abuzaid': 'عرض عمولة أبو زيد',
+            'add_abuzaid_payment': 'إضافة دفعة أبو زيد',
+            'edit_abuzaid_payment': 'تعديل دفعة أبو زيد',
+            'delete_abuzaid_payment': 'حذف دفعة أبو زيد',
+            'view_client_accounts': 'عرض حسابات العملاء',
+            'add_client_payment': 'إضافة دفعة عميل',
+            'delete_client_payment': 'حذف دفعة عميل',
+            'manage_users': 'إدارة المستخدمين',
+            'view_reports': 'عرض التقارير'
+        };
+
+        /**
+         * ============================================================
+         * التحقق من تسجيل الدخول والصلاحية
+         * ============================================================
+         */
+        var currentUser = {};
 
         (async function checkAuth() {
             try {
-                console.log('🔍 التحقق من الجلسة في users.html...');
-
                 var { data: { session }, error } = await supabaseClient.auth.getSession();
 
                 if (error || !session) {
-                    console.warn('⚠️ لا توجد جلسة نشطة');
                     window.location.href = 'login.html';
                     return;
                 }
@@ -1059,32 +1332,32 @@
                     .single();
 
                 if (profileError || !profile) {
-                    console.warn('⚠️ تعذّر جلب بيانات البروفايل');
                     await supabaseClient.auth.signOut();
                     window.location.href = 'login.html';
                     return;
                 }
 
-                user = {
+                currentUser = {
                     id: session.user.id,
                     email: session.user.email,
                     name: profile.name || session.user.email,
                     role: profile.role || 'user',
                     status: profile.status || 'active'
                 };
-                window.currentUser = user;
+                window.currentUser = currentUser;
 
-                if (user.role !== 'admin') {
+                // التحقق من صلاحية إدارة المستخدمين
+                if (currentUser.role !== 'admin') {
                     alert('⚠️ غير مصرح لك بالوصول إلى هذه الصفحة. هذه الصفحة خاصة بالمديرين.');
                     window.location.href = 'index.html';
                     return;
                 }
 
-                console.log('✅ دخول أدمن مؤكّد:', user.name);
-                if (typeof loadUsers === 'function') loadUsers();
+                console.log('✅ دخول أدمن مؤكّد:', currentUser.name);
+                loadAllData();
 
             } catch (err) {
-                console.error('❌ خطأ في التحقق من الجلسة:', err);
+                console.error('❌ خطأ:', err);
                 window.location.href = 'login.html';
             }
         })();
@@ -1113,23 +1386,10 @@
             if (e.key === 'Escape' && sidebar.classList.contains('open')) {
                 toggleSidebar();
             }
+            if (e.key === 'Escape' && document.getElementById('userModal').classList.contains('show')) {
+                closeModal();
+            }
         });
-
-        /**
-         * ============================================================
-         * DOM REFS
-         * ============================================================
-         */
-        var tableContainer = document.getElementById('tableContainer');
-        var usersCount = document.getElementById('usersCount');
-        var searchInput = document.getElementById('searchInput');
-        var modalOverlay = document.getElementById('userModal');
-        var modalTitle = document.getElementById('modalTitle');
-        var submitBtn = document.getElementById('submitBtn');
-        var editId = document.getElementById('editId');
-        var userForm = document.getElementById('userForm');
-
-        var allUsers = [];
 
         /**
          * ============================================================
@@ -1157,30 +1417,29 @@
             `;
 
             container.appendChild(toast);
-            setTimeout(function() {
-                toast.classList.add('show');
-            }, 10);
-
+            setTimeout(function() { toast.classList.add('show'); }, 10);
             setTimeout(function() {
                 toast.classList.remove('show');
-                setTimeout(function() {
-                    if (toast.parentElement) toast.remove();
-                }, 300);
+                setTimeout(function() { if (toast.parentElement) toast.remove(); }, 300);
             }, 4000);
         }
 
         /**
          * ============================================================
-         * LOAD USERS - من جدول profiles الآمن
+         * جلب البيانات
          * ============================================================
          */
+        var allUsers = [];
+        var allPermissions = {};
+
+        async function loadAllData() {
+            await loadUsers();
+            await loadPermissions();
+        }
+
         async function loadUsers() {
-            tableContainer.innerHTML = `
-                <div class="empty-state">
-                    <div class="spinner"></div>
-                    <p>جاري تحميل المستخدمين...</p>
-                </div>
-            `;
+            var container = document.getElementById('tableContainer');
+            container.innerHTML = `<div class="empty-state"><div class="spinner"></div><p>جاري تحميل المستخدمين...</p></div>`;
 
             try {
                 var response = await fetch(SUPABASE_URL + '/rest/v1/profiles?select=*&order=created_at.desc', {
@@ -1190,16 +1449,14 @@
                     }
                 });
 
-                if (!response.ok) {
-                    throw new Error('فشل في جلب المستخدمين');
-                }
+                if (!response.ok) throw new Error('فشل في جلب المستخدمين');
 
                 allUsers = await response.json();
                 renderUsers(allUsers);
 
             } catch (error) {
                 console.error('❌ خطأ:', error);
-                tableContainer.innerHTML = `
+                container.innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-exclamation-triangle" style="color:var(--rust);"></i>
                         <p style="color:var(--rust);">حدث خطأ في تحميل المستخدمين</p>
@@ -1214,21 +1471,60 @@
             }
         }
 
+        async function loadPermissions() {
+            var container = document.getElementById('permissionsContainer');
+            container.innerHTML = `<div class="empty-state"><div class="spinner"></div><p>جاري تحميل الصلاحيات...</p></div>`;
+
+            try {
+                // جلب الصلاحيات من جدول user_permissions
+                var response = await fetch(SUPABASE_URL + '/rest/v1/user_permissions?select=*', {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + (window.currentAccessToken || SUPABASE_ANON_KEY)
+                    }
+                });
+
+                var permissionsData = response.ok ? await response.json() : [];
+
+                // تنظيم الصلاحيات حسب user_id
+                allPermissions = {};
+                permissionsData.forEach(function(p) {
+                    if (!allPermissions[p.user_id]) allPermissions[p.user_id] = {};
+                    allPermissions[p.user_id][p.permission_name] = p.granted;
+                });
+
+                renderPermissions(allUsers, allPermissions);
+
+            } catch (error) {
+                console.error('❌ خطأ في تحميل الصلاحيات:', error);
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle" style="color:var(--rust);"></i>
+                        <p style="color:var(--rust);">حدث خطأ في تحميل الصلاحيات</p>
+                        <span>${error.message}</span>
+                    </div>
+                `;
+            }
+        }
+
         /**
          * ============================================================
-         * RENDER USERS
+         * عرض المستخدمين
          * ============================================================
          */
         function renderUsers(users) {
+            var container = document.getElementById('tableContainer');
+            var countBadge = document.getElementById('usersCount');
+
             if (!users || users.length === 0) {
-                tableContainer.innerHTML = `
+                container.innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-users"></i>
                         <p>لا يوجد مستخدمين</p>
                         <span>اضغط على "إضافة مستخدم جديد" لإضافة أول مستخدم</span>
                     </div>
                 `;
-                usersCount.textContent = '0';
+                countBadge.textContent = '0';
                 return;
             }
 
@@ -1240,7 +1536,7 @@
                             <th>البريد الإلكتروني</th>
                             <th>الاسم</th>
                             <th>الجوال</th>
-                            <th>الصلاحية</th>
+                            <th>الدور</th>
                             <th>الحالة</th>
                             <th>الإجراءات</th>
                         </tr>
@@ -1249,27 +1545,25 @@
             `;
 
             users.forEach(function(user, index) {
-                var roleClass = 'role-user';
-                var roleText = 'مستخدم';
-                if (user.role === 'admin') { roleClass = 'role-admin';
-                    roleText = 'مدير'; } else if (user.role === 'manager') { roleClass = 'role-manager';
-                    roleText = 'مشرف'; } else if (user.role === 'viewer') { roleClass = 'role-viewer';
-                    roleText = 'مشاهد'; }
+                var roleClass = 'role-viewer';
+                var roleText = 'مشاهد';
+                if (user.role === 'admin') { roleClass = 'role-admin'; roleText = 'مدير'; }
+                else if (user.role === 'manager') { roleClass = 'role-manager'; roleText = 'مشرف'; }
+                else if (user.role === 'accountant') { roleClass = 'role-accountant'; roleText = 'محاسب'; }
+                else if (user.role === 'receptionist') { roleClass = 'role-receptionist'; roleText = 'استقبال'; }
 
                 var statusClass = 'status-active';
                 var statusText = 'نشط';
-                if (user.status === 'inactive') { statusClass = 'status-inactive';
-                    statusText = 'غير نشط'; } else if (user.status === 'suspended') { statusClass = 'status-suspended';
-                    statusText = 'موقوف'; }
+                if (user.status === 'inactive') { statusClass = 'status-inactive'; statusText = 'غير نشط'; }
+                else if (user.status === 'suspended') { statusClass = 'status-suspended'; statusText = 'موقوف'; }
 
-                // منع حذف المستخدم الحالي (نفسه)
-                var isCurrentUser = (user.email === currentUserEmail());
+                var isCurrentUser = (user.id === currentUser.id);
 
                 html += `
                     <tr>
                         <td>${index + 1}</td>
                         <td>${user.email}</td>
-                        <td>${user.name}</td>
+                        <td><strong>${user.name}</strong></td>
                         <td>${user.phone || '-'}</td>
                         <td><span class="role-badge ${roleClass}">${roleText}</span></td>
                         <td><span class="status-badge ${statusClass}">${statusText}</span></td>
@@ -1289,32 +1583,335 @@
                 `;
             });
 
-            html += `
-                    </tbody>
-                </table>
-            `;
-
-            tableContainer.innerHTML = html;
-            usersCount.textContent = users.length;
+            html += `</tbody></table>`;
+            container.innerHTML = html;
+            countBadge.textContent = users.length;
         }
 
         /**
          * ============================================================
-         * CURRENT USER EMAIL
+         * عرض الصلاحيات
          * ============================================================
          */
-        function currentUserEmail() {
-            var currentUser = JSON.parse(localStorage.getItem('user') || '{}');
-            return currentUser.email || '';
+        function renderPermissions(users, permissions) {
+            var container = document.getElementById('permissionsContainer');
+            var countBadge = document.getElementById('permissionsCount');
+
+            if (!users || users.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-lock"></i>
+                        <p>لا يوجد مستخدمين لعرض صلاحياتهم</p>
+                    </div>
+                `;
+                countBadge.textContent = '0';
+                return;
+            }
+
+            var allPermNames = [];
+            for (var group in PERMISSION_GROUPS) {
+                allPermNames = allPermNames.concat(PERMISSION_GROUPS[group]);
+            }
+
+            var html = `
+                <div class="permissions-scroll">
+                    <table class="permissions-table">
+                        <thead>
+                            <tr>
+                                <th style="min-width:120px;text-align:right;">المستخدم</th>
+                    `;
+
+            // أسماء الصلاحيات في الرأس
+            allPermNames.forEach(function(perm) {
+                html += `<th title="${PERMISSION_LABELS[perm] || perm}">${getShortLabel(perm)}</th>`;
+            });
+
+            html += `
+                            </tr>
+                        </thead>
+                        <tbody>
+                    `;
+
+            users.forEach(function(user) {
+                // منع تعديل صلاحيات المدير الحالي (نفسه)
+                var isSelf = user.id === currentUser.id;
+
+                html += `<tr>`;
+                html += `<td style="text-align:right;font-weight:700;font-size:0.7rem;">
+                            ${user.name}
+                            <span class="perm-label" style="font-size:0.5rem;color:var(--ink-mute);">${user.email}</span>
+                         </td>`;
+
+                allPermNames.forEach(function(perm) {
+                    var isGranted = permissions[user.id] && permissions[user.id][perm] !== false;
+                    var checked = isGranted ? 'checked' : '';
+                    var disabled = isSelf ? 'disabled' : '';
+
+                    html += `
+                        <td>
+                            <label class="toggle-switch">
+                                <input type="checkbox" class="perm-checkbox" 
+                                       data-user="${user.id}" 
+                                       data-perm="${perm}" 
+                                       ${checked} ${disabled}
+                                       onchange="togglePermission('${user.id}', '${perm}', this.checked)" />
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                    `;
+                });
+
+                html += `</tr>`;
+            });
+
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+                <div style="padding:10px 0 4px;text-align:center;color:var(--ink-mute);font-size:0.6rem;">
+                    <i class="fas fa-info-circle"></i> 
+                    💡 التبديلات تحفظ تلقائياً عند التغيير. زر "حفظ الكل" يحفظ جميع التغييرات.
+                    ${currentUser.id ? `🔒 صلاحيات حسابك الحالي (${currentUser.name}) مقفلة ولا يمكن تعديلها.` : ''}
+                </div>
+            `;
+
+            container.innerHTML = html;
+            countBadge.textContent = users.length;
+        }
+
+        function getShortLabel(perm) {
+            var map = {
+                'view_dashboard': 'لوحة',
+                'view_invoices': 'عرض فواتير',
+                'add_invoice': 'إضافة فاتورة',
+                'edit_invoice': 'تعديل فاتورة',
+                'delete_invoice': 'حذف فاتورة',
+                'view_bookings': 'عرض حجوزات',
+                'add_booking': 'إضافة حجز',
+                'edit_booking': 'تعديل حجز',
+                'delete_booking': 'حذف حجز',
+                'view_future_bookings': 'حجوزات مستقبلية',
+                'view_clients': 'عرض عملاء',
+                'add_client': 'إضافة عميل',
+                'edit_client': 'تعديل عميل',
+                'delete_client': 'حذف عميل',
+                'view_properties': 'عرض عقارات',
+                'add_property': 'إضافة عقار',
+                'edit_property': 'تعديل عقار',
+                'delete_property': 'حذف عقار',
+                'view_expenses': 'عرض مصاريف',
+                'add_expense': 'إضافة مصروف',
+                'edit_expense': 'تعديل مصروف',
+                'delete_expense': 'حذف مصروف',
+                'view_abuzaid': 'عرض عمولة',
+                'add_abuzaid_payment': 'دفعة أبو زيد',
+                'edit_abuzaid_payment': 'تعديل دفعة',
+                'delete_abuzaid_payment': 'حذف دفعة',
+                'view_client_accounts': 'حسابات العملاء',
+                'add_client_payment': 'دفعة عميل',
+                'delete_client_payment': 'حذف دفعة عميل',
+                'manage_users': 'إدارة مستخدمين',
+                'view_reports': 'التقارير'
+            };
+            return map[perm] || perm.replace(/_/g, ' ');
         }
 
         /**
          * ============================================================
-         * FILTER USERS
+         * تبديل الصلاحية (تسجيل فوري)
+         * ============================================================
+         */
+        var pendingPermissionChanges = {};
+
+        function togglePermission(userId, permName, granted) {
+            var key = userId + '|' + permName;
+            pendingPermissionChanges[key] = { userId: userId, permName: permName, granted: granted };
+
+            // حفظ فوري بعد 500ms (debounce)
+            clearTimeout(window._permSaveTimeout);
+            window._permSaveTimeout = setTimeout(function() {
+                savePendingPermissions();
+            }, 500);
+        }
+
+        async function savePendingPermissions() {
+            var changes = Object.values(pendingPermissionChanges);
+            if (changes.length === 0) return;
+
+            pendingPermissionChanges = {};
+            var successCount = 0;
+            var errorCount = 0;
+
+            for (var i = 0; i < changes.length; i++) {
+                var change = changes[i];
+                try {
+                    // التحقق من وجود الصلاحية
+                    var checkResponse = await fetch(
+                        SUPABASE_URL + '/rest/v1/user_permissions?user_id=eq.' + change.userId + '&permission_name=eq.' + change
+                        .permName, {
+                            headers: {
+                                'apikey': SUPABASE_ANON_KEY,
+                                'Authorization': 'Bearer ' + (window.currentAccessToken || SUPABASE_ANON_KEY)
+                            }
+                        }
+                    );
+
+                    var existing = checkResponse.ok ? await checkResponse.json() : [];
+
+                    if (existing.length > 0) {
+                        // تحديث الصلاحية
+                        var updateResponse = await fetch(
+                            SUPABASE_URL + '/rest/v1/user_permissions?id=eq.' + existing[0].id, {
+                                method: 'PATCH',
+                                headers: {
+                                    'apikey': SUPABASE_ANON_KEY,
+                                    'Authorization': 'Bearer ' + (window.currentAccessToken || SUPABASE_ANON_KEY),
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    granted: change.granted,
+                                    updated_at: new Date().toISOString(),
+                                    granted_by: currentUser.id
+                                })
+                            }
+                        );
+                        if (updateResponse.ok) successCount++;
+                        else errorCount++;
+                    } else if (change.granted) {
+                        // إضافة صلاحية جديدة
+                        var addResponse = await fetch(SUPABASE_URL + '/rest/v1/user_permissions', {
+                            method: 'POST',
+                            headers: {
+                                'apikey': SUPABASE_ANON_KEY,
+                                'Authorization': 'Bearer ' + (window.currentAccessToken || SUPABASE_ANON_KEY),
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                user_id: change.userId,
+                                permission_name: change.permName,
+                                granted: change.granted,
+                                granted_by: currentUser.id
+                            })
+                        });
+                        if (addResponse.ok) successCount++;
+                        else errorCount++;
+                    } else {
+                        // الصلاحية غير موجودة ومطلوب إلغاؤها - لا حاجة لفعل شيء
+                        successCount++;
+                    }
+                } catch (e) {
+                    console.error('❌ خطأ في حفظ الصلاحية:', e);
+                    errorCount++;
+                }
+            }
+
+            if (errorCount > 0) {
+                showToast('⚠️ تحذير', 'تم حفظ ' + successCount + ' صلاحية، فشل ' + errorCount, 'warning');
+            } else if (successCount > 0) {
+                showToast('✅ تم الحفظ', 'تم حفظ ' + successCount + ' صلاحية بنجاح', 'success');
+            }
+        }
+
+        /**
+         * ============================================================
+         * حفظ كل الصلاحيات
+         * ============================================================
+         */
+        async function saveAllPermissions() {
+            var checkboxes = document.querySelectorAll('.perm-checkbox:not(:disabled)');
+            var changes = [];
+
+            checkboxes.forEach(function(cb) {
+                var userId = cb.dataset.user;
+                var permName = cb.dataset.perm;
+                var granted = cb.checked;
+                changes.push({ userId: userId, permName: permName, granted: granted });
+            });
+
+            if (changes.length === 0) {
+                showToast('ℹ️ معلومات', 'لا توجد تغييرات للحفظ', 'warning');
+                return;
+            }
+
+            showToast('⏳ جاري الحفظ', 'جاري حفظ ' + changes.length + ' صلاحية...', 'warning');
+
+            var successCount = 0;
+            var errorCount = 0;
+
+            for (var i = 0; i < changes.length; i++) {
+                var change = changes[i];
+                try {
+                    var checkResponse = await fetch(
+                        SUPABASE_URL + '/rest/v1/user_permissions?user_id=eq.' + change.userId + '&permission_name=eq.' + change
+                        .permName, {
+                            headers: {
+                                'apikey': SUPABASE_ANON_KEY,
+                                'Authorization': 'Bearer ' + (window.currentAccessToken || SUPABASE_ANON_KEY)
+                            }
+                        }
+                    );
+
+                    var existing = checkResponse.ok ? await checkResponse.json() : [];
+
+                    if (existing.length > 0) {
+                        var updateResponse = await fetch(
+                            SUPABASE_URL + '/rest/v1/user_permissions?id=eq.' + existing[0].id, {
+                                method: 'PATCH',
+                                headers: {
+                                    'apikey': SUPABASE_ANON_KEY,
+                                    'Authorization': 'Bearer ' + (window.currentAccessToken || SUPABASE_ANON_KEY),
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    granted: change.granted,
+                                    updated_at: new Date().toISOString(),
+                                    granted_by: currentUser.id
+                                })
+                            }
+                        );
+                        if (updateResponse.ok) successCount++;
+                        else errorCount++;
+                    } else if (change.granted) {
+                        var addResponse = await fetch(SUPABASE_URL + '/rest/v1/user_permissions', {
+                            method: 'POST',
+                            headers: {
+                                'apikey': SUPABASE_ANON_KEY,
+                                'Authorization': 'Bearer ' + (window.currentAccessToken || SUPABASE_ANON_KEY),
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                user_id: change.userId,
+                                permission_name: change.permName,
+                                granted: change.granted,
+                                granted_by: currentUser.id
+                            })
+                        });
+                        if (addResponse.ok) successCount++;
+                        else errorCount++;
+                    } else {
+                        successCount++;
+                    }
+                } catch (e) {
+                    console.error('❌ خطأ:', e);
+                    errorCount++;
+                }
+            }
+
+            if (errorCount > 0) {
+                showToast('⚠️ تحذير', 'تم حفظ ' + successCount + ' صلاحية، فشل ' + errorCount, 'warning');
+            } else {
+                showToast('✅ تم الحفظ', 'تم حفظ جميع الصلاحيات (' + successCount + ') بنجاح', 'success');
+                await loadPermissions();
+            }
+        }
+
+        /**
+         * ============================================================
+         * فلترة المستخدمين
          * ============================================================
          */
         function filterUsers() {
-            var searchTerm = searchInput.value.toLowerCase().trim();
+            var searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
             if (!searchTerm) {
                 renderUsers(allUsers);
                 return;
@@ -1331,27 +1928,21 @@
 
         /**
          * ============================================================
-         * OPEN ADD MODAL
+         * فتح وإغلاق المودال
          * ============================================================
          */
         function openAddModal() {
-            editId.value = '';
-            modalTitle.textContent = 'إضافة مستخدم جديد';
-            submitBtn.innerHTML = '<i class="fas fa-save"></i> حفظ';
-            userForm.reset();
-            document.getElementById('userRole').value = 'user';
+            document.getElementById('editId').value = '';
+            document.getElementById('modalTitle').textContent = 'إضافة مستخدم جديد';
+            document.getElementById('submitBtn').innerHTML = '<i class="fas fa-save"></i> حفظ';
+            document.getElementById('userForm').reset();
+            document.getElementById('userRole').value = 'viewer';
             document.getElementById('userStatus').value = 'active';
             document.getElementById('userPassword').required = true;
-            document.getElementById('userPassword').placeholder = '••••••••';
             document.getElementById('userEmail').disabled = false;
-            modalOverlay.classList.add('show');
+            document.getElementById('userModal').classList.add('show');
         }
 
-        /**
-         * ============================================================
-         * OPEN EDIT MODAL
-         * ============================================================
-         */
         function openEditModal(id) {
             var user = allUsers.find(function(u) { return u.id === id; });
             if (!user) {
@@ -1359,9 +1950,9 @@
                 return;
             }
 
-            editId.value = id;
-            modalTitle.textContent = 'تعديل مستخدم';
-            submitBtn.innerHTML = '<i class="fas fa-edit"></i> تحديث';
+            document.getElementById('editId').value = id;
+            document.getElementById('modalTitle').textContent = 'تعديل مستخدم';
+            document.getElementById('submitBtn').innerHTML = '<i class="fas fa-edit"></i> تحديث';
             document.getElementById('userEmail').value = user.email;
             document.getElementById('userEmail').disabled = true;
             document.getElementById('userPassword').value = '';
@@ -1369,27 +1960,25 @@
             document.getElementById('userPassword').placeholder = 'اتركه فارغاً للإبقاء على كلمة المرور الحالية';
             document.getElementById('userName').value = user.name;
             document.getElementById('userPhone').value = user.phone || '';
-            document.getElementById('userRole').value = user.role || 'user';
+            document.getElementById('userRole').value = user.role || 'viewer';
             document.getElementById('userStatus').value = user.status || 'active';
-
-            modalOverlay.classList.add('show');
+            document.getElementById('userModal').classList.add('show');
         }
 
-        /**
-         * ============================================================
-         * CLOSE MODAL
-         * ============================================================
-         */
         function closeModal() {
-            modalOverlay.classList.remove('show');
+            document.getElementById('userModal').classList.remove('show');
             document.getElementById('userEmail').disabled = false;
             document.getElementById('userPassword').required = true;
             document.getElementById('userPassword').placeholder = '••••••••';
         }
 
+        document.getElementById('userModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
         /**
          * ============================================================
-         * SAVE USER - عبر Edge Function الآمنة
+         * حفظ المستخدم
          * ============================================================
          */
         async function saveUser(event) {
@@ -1401,16 +1990,10 @@
             var phone = document.getElementById('userPhone').value.trim();
             var role = document.getElementById('userRole').value;
             var status = document.getElementById('userStatus').value;
-            var id = editId.value;
+            var id = document.getElementById('editId').value;
 
-            if (!email) {
-                showToast('تنبيه', 'يرجى إدخال البريد الإلكتروني', 'warning');
-                return;
-            }
-            if (!name) {
-                showToast('تنبيه', 'يرجى إدخال اسم المستخدم', 'warning');
-                return;
-            }
+            if (!email) { showToast('تنبيه', 'يرجى إدخال البريد الإلكتروني', 'warning'); return; }
+            if (!name) { showToast('تنبيه', 'يرجى إدخال اسم المستخدم', 'warning'); return; }
 
             var isEdit = id ? true : false;
 
@@ -1423,25 +2006,14 @@
                 return;
             }
 
-            // التحقق من كلمة المرور عند الإضافة
             if (!isEdit && !password) {
                 showToast('تنبيه', 'يرجى إدخال كلمة المرور للمستخدم الجديد', 'warning');
                 return;
             }
 
-            var payload = {
-                email: email,
-                name: name,
-                phone: phone,
-                role: role,
-                status: status
-            };
-            if (!isEdit || (isEdit && password)) {
-                payload.password = password;
-            }
-            if (isEdit) {
-                payload.id = id;
-            }
+            var payload = { email: email, name: name, phone: phone, role: role, status: status };
+            if (!isEdit || (isEdit && password)) payload.password = password;
+            if (isEdit) payload.id = id;
 
             try {
                 var response = await fetch(SUPABASE_URL + '/functions/v1/manage-users', {
@@ -1450,25 +2022,16 @@
                         'Authorization': 'Bearer ' + (window.currentAccessToken || SUPABASE_ANON_KEY),
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({
-                        action: isEdit ? 'update' : 'create',
-                        payload: payload
-                    })
+                    body: JSON.stringify({ action: isEdit ? 'update' : 'create', payload: payload })
                 });
 
                 var result = await response.json();
-
-                if (!response.ok || result.error) {
-                    throw new Error(result.error || 'فشل في حفظ المستخدم');
-                }
+                if (!response.ok || result.error) throw new Error(result.error || 'فشل في حفظ المستخدم');
 
                 closeModal();
-                showToast(
-                    isEdit ? '✅ تم التحديث' : '✅ تم الإضافة',
-                    isEdit ? 'تم تحديث بيانات المستخدم بنجاح' : 'تم إضافة المستخدم بنجاح',
-                    'success'
-                );
-                loadUsers();
+                showToast(isEdit ? '✅ تم التحديث' : '✅ تم الإضافة',
+                    isEdit ? 'تم تحديث بيانات المستخدم بنجاح' : 'تم إضافة المستخدم بنجاح', 'success');
+                loadAllData();
 
             } catch (error) {
                 console.error('❌ خطأ:', error);
@@ -1478,25 +2041,19 @@
 
         /**
          * ============================================================
-         * DELETE USER - عبر Edge Function الآمنة
+         * حذف المستخدم
          * ============================================================
          */
         async function deleteUser(id) {
             var user = allUsers.find(function(u) { return u.id === id; });
-            if (!user) {
-                showToast('خطأ', 'المستخدم غير موجود', 'error');
-                return;
-            }
-
-            if (user.email === currentUserEmail()) {
+            if (!user) { showToast('خطأ', 'المستخدم غير موجود', 'error'); return; }
+            if (user.id === currentUser.id) {
                 showToast('تنبيه', 'لا يمكنك حذف حسابك الحالي', 'warning');
                 return;
             }
 
-            if (!confirm('⚠️ هل أنت متأكد من حذف المستخدم "' + user.name + '"؟\n\n' +
-                         '📧 البريد: ' + user.email + '\n' +
-                         '👤 الدور: ' + user.role + '\n\n' +
-                         '❗ هذا الإجراء لا يمكن التراجع عنه')) {
+            if (!confirm('⚠️ هل أنت متأكد من حذف المستخدم "' + user.name + '"?\n\n📧 ' + user.email + '\n👤 ' + user.role +
+                    '\n\n❗ هذا الإجراء لا يمكن التراجع عنه')) {
                 return;
             }
 
@@ -1507,20 +2064,14 @@
                         'Authorization': 'Bearer ' + (window.currentAccessToken || SUPABASE_ANON_KEY),
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({
-                        action: 'delete',
-                        payload: { id: id }
-                    })
+                    body: JSON.stringify({ action: 'delete', payload: { id: id } })
                 });
 
                 var result = await response.json();
-
-                if (!response.ok || result.error) {
-                    throw new Error(result.error || 'فشل في حذف المستخدم');
-                }
+                if (!response.ok || result.error) throw new Error(result.error || 'فشل في حذف المستخدم');
 
                 showToast('✅ تم الحذف', 'تم حذف المستخدم "' + user.name + '" بنجاح', 'success');
-                loadUsers();
+                loadAllData();
 
             } catch (error) {
                 console.error('❌ خطأ في الحذف:', error);
@@ -1530,7 +2081,7 @@
 
         /**
          * ============================================================
-         * LOGOUT - دالة مساعدة لتسجيل الخروج
+         * تسجيل الخروج
          * ============================================================
          */
         async function logoutUser() {
@@ -1548,27 +2099,27 @@
 
         /**
          * ============================================================
-         * INIT
+         * رسالة الترحيب
          * ============================================================
          */
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('👥 إدارة المستخدمين - منتجع حياله');
-            console.log('📊 Supabase URL:', SUPABASE_URL);
-        });
+        console.log('👥 إدارة المستخدمين والصلاحيات - منتجع حياله');
+        console.log('📊 Supabase URL:', SUPABASE_URL);
+        console.log('👤 المدير الحالي:', currentUser.name);
+        console.log('✅ جاهزة للعمل مع نظام الصلاحيات الديناميكي');
 
-        // إغلاق المودال بالضغط على Escape
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && modalOverlay.classList.contains('show')) {
-                closeModal();
-            }
-        });
-
-        // إغلاق المودال بالضغط على الخلفية
-        modalOverlay.addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
-        });
+        // جعل الدوال عامة للاستخدام من HTML
+        window.openAddModal = openAddModal;
+        window.openEditModal = openEditModal;
+        window.deleteUser = deleteUser;
+        window.closeModal = closeModal;
+        window.saveUser = saveUser;
+        window.loadAllData = loadAllData;
+        window.loadUsers = loadUsers;
+        window.loadPermissions = loadPermissions;
+        window.filterUsers = filterUsers;
+        window.togglePermission = togglePermission;
+        window.saveAllPermissions = saveAllPermissions;
+        window.logoutUser = logoutUser;
     </script>
 
 </body>
