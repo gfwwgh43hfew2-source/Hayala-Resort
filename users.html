@@ -2069,11 +2069,12 @@
                 } else {
                     // ===== إضافة مستخدم جديد عبر Edge Function =====
                     var response = await fetch(SUPABASE_URL + '/functions/v1/create-user', {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': 'Bearer ' + (window.currentAccessToken || SUPABASE_ANON_KEY),
-                            'Content-Type': 'application/json'
-                        },
+    method: 'POST',
+    headers: {
+        'Authorization': 'Bearer ' + (window.currentAccessToken || SUPABASE_ANON_KEY),
+        'apikey': SUPABASE_ANON_KEY,
+        'Content-Type': 'application/json'
+    },
                         body: JSON.stringify({
                             email: email,
                             password: password,
