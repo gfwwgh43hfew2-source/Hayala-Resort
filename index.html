@@ -120,6 +120,7 @@
         }
 
         .sidebar-overlay.active {
+            display: block;
             opacity: 1;
             pointer-events: auto;
         }
@@ -234,6 +235,7 @@
             transition: all 0.2s var(--ease-smooth);
             margin-bottom: 2px;
             border-right: 3px solid transparent;
+            cursor: pointer;
         }
 
         .sidebar .menu .item:hover {
@@ -668,7 +670,7 @@
         }
 
         /* ==========================================================
-           DASHBOARD - متجاوب بالكامل
+           DASHBOARD
            ========================================================== */
         .dash {
             padding: 14px 10px 90px;
@@ -862,7 +864,7 @@
         }
 
         /* ==========================================================
-           STATS - متجاوبة بالكامل
+           STATS
            ========================================================== */
         .stats-wrap {
             position: relative;
@@ -2501,7 +2503,7 @@
 
         /**
          * ============================================================
-         * SIDEBAR TOGGLE - محسّن للموبايل
+         * SIDEBAR TOGGLE - محسّن للموبايل (إغلاق موثوق)
          * ============================================================
          */
         var sidebar = document.getElementById('sidebar');
@@ -2511,21 +2513,50 @@
         var bottomMenuBtn = document.getElementById('bottomMenuBtn');
         var mobileOpen = false;
 
-        function toggleSidebar() {
+        /**
+         * دالة فتح القائمة الجانبية
+         */
+        function openSidebar() {
             if (window.innerWidth <= 768) {
-                mobileOpen = !mobileOpen;
-                if (mobileOpen) {
-                    sidebar.classList.add('open');
-                    overlay.classList.add('active');
-                    document.body.style.overflow = 'hidden';
+                mobileOpen = true;
+                sidebar.classList.add('open');
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                if (hamburger) {
                     hamburger.innerHTML = '<i class="fas fa-times"></i>';
-                } else {
-                    sidebar.classList.remove('open');
-                    overlay.classList.remove('active');
-                    document.body.style.overflow = '';
+                }
+                console.log('📱 القائمة مفتوحة');
+            }
+        }
+
+        /**
+         * دالة إغلاق القائمة الجانبية
+         */
+        function closeSidebar() {
+            if (window.innerWidth <= 768) {
+                mobileOpen = false;
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+                if (hamburger) {
                     hamburger.innerHTML = '<i class="fas fa-bars"></i>';
                 }
+                console.log('📱 القائمة مغلقة');
+            }
+        }
+
+        /**
+         * دالة تبديل القائمة الجانبية
+         */
+        function toggleSidebar() {
+            if (window.innerWidth <= 768) {
+                if (mobileOpen) {
+                    closeSidebar();
+                } else {
+                    openSidebar();
+                }
             } else {
+                // وضع سطح المكتب
                 var nowCollapsed = sidebar.classList.toggle('collapsed');
                 if (nowCollapsed) {
                     main.classList.add('expanded');
@@ -2535,37 +2566,58 @@
             }
         }
 
+        // ===== زر الهامبرجر =====
         if (hamburger) {
-            hamburger.addEventListener('click', toggleSidebar);
+            hamburger.addEventListener('click', function(e) {
+                e.stopPropagation();
+                toggleSidebar();
+            });
         }
+
+        // ===== زر القائمة في الـ Bottom Nav =====
         if (bottomMenuBtn) {
-            bottomMenuBtn.addEventListener('click', toggleSidebar);
+            bottomMenuBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                toggleSidebar();
+            });
         }
+
+        // ===== الـ Overlay (الخلفية المظلمة) - إغلاق عند الضغط عليها =====
         if (overlay) {
-            overlay.addEventListener('click', function() {
+            overlay.addEventListener('click', function(e) {
+                e.stopPropagation();
                 if (window.innerWidth <= 768 && mobileOpen) {
-                    toggleSidebar();
+                    closeSidebar();
                 }
             });
         }
 
+        // ===== إغلاق القائمة عند الضغط على أي رابط داخلها (للموبايل) =====
+        var sidebarLinks = document.querySelectorAll('.sidebar .menu .item');
+        sidebarLinks.forEach(function(link) {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 768 && mobileOpen) {
+                    closeSidebar();
+                }
+            });
+        });
+
+        // ===== إغلاق القائمة عند الضغط على زر Escape =====
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && window.innerWidth <= 768 && mobileOpen) {
-                toggleSidebar();
+                closeSidebar();
             }
         });
 
+        // ===== عند تغيير حجم الشاشة =====
         window.addEventListener('resize', function() {
-            if (window.innerWidth > 768) {
-                sidebar.classList.remove('open');
-                overlay.classList.remove('active');
-                document.body.style.overflow = '';
-                mobileOpen = false;
-                if (hamburger) {
-                    hamburger.innerHTML = '<i class="fas fa-bars"></i>';
-                }
+            if (window.innerWidth > 768 && mobileOpen) {
+                // إذا كانت القائمة مفتوحة وتم تغيير الحجم إلى سطح المكتب
+                closeSidebar();
             }
         });
+
+        console.log('✅ Sidebar Toggle جاهز - إغلاق موثوق');
 
         /**
          * ============================================================
@@ -3292,7 +3344,7 @@
         console.log('🏕️ منتجع وشاليهات حيالة القصيم - لوحة التحكم المتطورة');
         console.log('📊 تم تحميل النظام بنجاح');
         console.log('👤 المستخدم:', window.currentUser?.name || 'غير معروف');
-        console.log('📱 تم إصلاح التجاوب على الموبايل بالكامل');
+        console.log('📱 تم إصلاح إغلاق القائمة الجانبية على الموبايل');
     </script>
 
 </body>
