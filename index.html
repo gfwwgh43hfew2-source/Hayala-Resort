@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=5">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>منتجع وشاليهات حيالة القصيم · النظام المالي والإداري الشامل</title>
 
     <link rel="shortcut icon" href="#">
@@ -14,37 +14,37 @@
 
     <style>
         /* ==========================================================
-           ULTIMATE DESIGN — منتجع حياله
+           ROOT VARIABLES
            ========================================================== */
         :root {
-            --primary:      #0EA5E9;
+            --primary: #0EA5E9;
             --primary-dark: #0284C7;
             --primary-gradient: linear-gradient(135deg, #0EA5E9, #3B82F6);
-            --gold:         #FCD34D;
+            --gold: #FCD34D;
             --gold-gradient: linear-gradient(135deg, #FCD34D, #F59E0B);
-            --canvas:       #f0ede8;
-            --surface:      #ffffff;
-            --surface-2:    #faf8f4;
+            --canvas: #f0ede8;
+            --surface: #ffffff;
+            --surface-2: #faf8f4;
             --surface-glass: rgba(255,255,255,0.6);
-            --ink:          #1a1714;
-            --ink-2:        #5a4f45;
-            --ink-3:        #9a8f83;
-            --ink-4:        #cdc4b8;
-            --prussian:     #1a4a6b;
-            --terracotta:   #b14b2b;
-            --ochre:        #b98a1e;
-            --viridian:     #2e7a5c;
-            --oxide:        #a63a31;
-            --sidebar-w:    280px;
-            --header-h:     72px;
-            --radius-lg:    24px;
-            --radius-md:    16px;
-            --radius-sm:    10px;
-            --shadow-lg:    0 20px 60px rgba(0,0,0,0.08);
-            --shadow-md:    0 8px 30px rgba(0,0,0,0.06);
-            --shadow-sm:    0 2px 12px rgba(0,0,0,0.04);
-            --ease:         cubic-bezier(0.22, 1, 0.36, 1);
-            --display:      'Bricolage Grotesque', 'Cairo', sans-serif;
+            --ink: #1a1714;
+            --ink-2: #5a4f45;
+            --ink-3: #9a8f83;
+            --ink-4: #cdc4b8;
+            --prussian: #1a4a6b;
+            --terracotta: #b14b2b;
+            --ochre: #b98a1e;
+            --viridian: #2e7a5c;
+            --oxide: #a63a31;
+            --sidebar-w: 280px;
+            --header-h: 72px;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 10px;
+            --shadow-lg: 0 20px 60px rgba(0,0,0,0.08);
+            --shadow-md: 0 8px 30px rgba(0,0,0,0.06);
+            --shadow-sm: 0 2px 12px rgba(0,0,0,0.04);
+            --ease: cubic-bezier(0.22, 1, 0.36, 1);
+            --display: 'Bricolage Grotesque', 'Cairo', sans-serif;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -52,16 +52,13 @@
 
         body {
             font-family: 'Cairo', system-ui, sans-serif;
-            background:
-                radial-gradient(600px 400px at 100% 0%, rgba(14,165,233,0.05), transparent 60%),
-                radial-gradient(500px 350px at 0% 100%, rgba(252,211,77,0.06), transparent 55%),
-                var(--canvas);
-            background-attachment: fixed;
+            background: var(--canvas);
             color: var(--ink);
             direction: rtl;
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
         }
 
         a { text-decoration: none; color: inherit; }
@@ -73,7 +70,7 @@
         ::-webkit-scrollbar-thumb { background: var(--ink-4); border-radius: 50px; }
 
         /* ==========================================================
-           SIDEBAR — مغلقة افتراضياً على الموبايل، تظهر على سطح المكتب
+           SIDEBAR — متجاوب بالكامل
            ========================================================== */
         .sidebar-overlay {
             display: none;
@@ -93,8 +90,8 @@
         .sidebar {
             position: fixed;
             top: 0;
-            right: 0;
-            width: var(--sidebar-w);
+            right: -100%;
+            width: min(85vw, 300px);
             height: 100vh;
             background: var(--surface-2);
             border-left: 1px solid rgba(0,0,0,0.04);
@@ -105,22 +102,23 @@
             transition: right 0.35s var(--ease);
             box-shadow: var(--shadow-lg);
         }
-        .sidebar.collapsed {
-            right: calc(-1 * var(--sidebar-w));
-        }
         .sidebar.open {
             right: 0;
         }
+        .sidebar.collapsed {
+            right: -100%;
+        }
 
-        @media (max-width: 768px) {
+        @media (min-width: 769px) {
             .sidebar {
+                right: 0;
+                width: var(--sidebar-w);
+            }
+            .sidebar.collapsed {
                 right: calc(-1 * var(--sidebar-w));
             }
-            .sidebar.open {
-                right: 0;
-            }
             .sidebar-overlay {
-                display: block;
+                display: none !important;
             }
         }
 
@@ -230,39 +228,55 @@
         }
         .sidebar .footer .logout:hover { color: var(--oxide); border-color: var(--oxide); }
 
+        /* ==========================================================
+           MAIN
+           ========================================================== */
         .main {
-            margin-right: var(--sidebar-w);
+            margin-right: 0;
             min-height: 100vh;
             transition: margin-right 0.35s var(--ease);
-        }
-        .main.expanded {
-            margin-right: 0;
+            position: relative;
+            z-index: 1;
         }
 
-        @media (max-width: 768px) {
+        @media (min-width: 769px) {
             .main {
-                margin-right: 0 !important;
+                margin-right: var(--sidebar-w);
+            }
+            .main.expanded {
+                margin-right: 0;
             }
         }
 
+        /* ==========================================================
+           HEADER - متجاوب بالكامل
+           ========================================================== */
         .header {
             position: sticky;
             top: 0;
             z-index: 100;
             height: var(--header-h);
-            padding: 0 32px;
+            padding: 0 16px;
             background: rgba(240,237,232,0.82);
             backdrop-filter: blur(16px) saturate(1.2);
             border-bottom: 1px solid rgba(0,0,0,0.04);
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 10px;
         }
-        .header .left { display: flex; align-items: center; gap: 18px; }
+
+        @media (min-width: 769px) {
+            .header {
+                padding: 0 32px;
+            }
+        }
+
+        .header .left { display: flex; align-items: center; gap: 12px; }
         .header .hamburger {
             display: flex;
-            width: 38px;
-            height: 38px;
+            width: 40px;
+            height: 40px;
             border-radius: var(--radius-sm);
             align-items: center;
             justify-content: center;
@@ -271,20 +285,25 @@
             color: var(--ink-2);
             transition: 0.2s;
             cursor: pointer;
+            font-size: 1rem;
         }
         .header .hamburger:hover { border-color: var(--ink-3); color: var(--ink); }
-        .header .breadcrumb { font-size: 0.78rem; color: var(--ink-3); }
+        .header .breadcrumb { font-size: 0.72rem; color: var(--ink-3); }
         .header .breadcrumb b { color: var(--ink); font-weight: 700; }
 
+        @media (max-width: 480px) {
+            .header .breadcrumb { display: none; }
+        }
+
         .header .search {
-            display: flex;
+            display: none;
             align-items: center;
             gap: 10px;
             background: var(--surface);
             border: 1px solid rgba(0,0,0,0.06);
             border-radius: 50px;
             padding: 8px 18px;
-            width: 280px;
+            width: 200px;
             transition: border-color 0.2s, box-shadow 0.2s;
         }
         .header .search:focus-within { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(14,165,233,0.08); }
@@ -300,12 +319,19 @@
         }
         .header .search input::placeholder { color: var(--ink-3); }
 
-        .header .right { display: flex; align-items: center; gap: 10px; }
+        @media (min-width: 1024px) {
+            .header .search {
+                display: flex;
+                width: 280px;
+            }
+        }
+
+        .header .right { display: flex; align-items: center; gap: 8px; }
         .notif-wrap { position: relative; }
         .header .right .notif {
             position: relative;
-            width: 38px;
-            height: 38px;
+            width: 40px;
+            height: 40px;
             border-radius: var(--radius-sm);
             border: 1px solid rgba(0,0,0,0.06);
             background: var(--surface);
@@ -328,89 +354,12 @@
             border: 2px solid var(--surface);
             transition: opacity 0.2s ease, transform 0.2s ease;
         }
-        .header .right .notif .dot.seen { opacity: 0; transform: scale(0); }
-
-        .notif-panel {
-            position: absolute;
-            top: calc(100% + 12px);
-            left: 0;
-            width: 320px;
-            max-width: calc(100vw - 32px);
-            background: var(--surface);
-            border: 1px solid rgba(0,0,0,0.06);
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-lg);
-            padding: 8px;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-8px) scale(0.98);
-            transform-origin: top left;
-            transition: opacity 0.2s var(--ease), transform 0.2s var(--ease), visibility 0.2s;
-            z-index: 200;
-        }
-        .notif-panel.open { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
-        .notif-panel-head {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 12px 8px;
-            font-size: 0.8rem;
-            font-weight: 800;
-            color: var(--ink);
-        }
-        .notif-panel-badge {
-            font-size: 0.55rem;
-            font-weight: 800;
-            background: var(--gold-gradient);
-            color: var(--ink);
-            padding: 2px 9px;
-            border-radius: 50px;
-        }
-        .notif-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 10px;
-            border-radius: 12px;
-            transition: background 0.2s ease;
-        }
-        .notif-item:hover { background: var(--canvas); }
-        .notif-ic {
-            width: 32px;
-            height: 32px;
-            border-radius: 10px;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: color-mix(in srgb, var(--nc, var(--primary)) 14%, transparent);
-            color: var(--nc, var(--primary));
-            font-size: 0.75rem;
-        }
-        .notif-t { font-size: 0.76rem; font-weight: 700; color: var(--ink); line-height: 1.4; }
-        .notif-d { font-size: 0.68rem; color: var(--ink-3); margin-top: 2px; line-height: 1.5; }
-        .notif-time { font-size: 0.6rem; color: var(--ink-3); margin-top: 4px; font-weight: 600; }
-        .notif-empty { text-align: center; padding: 26px 14px; color: var(--ink-3); }
-        .notif-empty i { font-size: 1.3rem; opacity: 0.35; margin-bottom: 8px; display: block; }
-        .notif-empty p { font-size: 0.75rem; }
-        .notif-panel-foot {
-            margin-top: 4px;
-            padding: 10px 12px 4px;
-            border-top: 1px solid rgba(0,0,0,0.05);
-            font-size: 0.62rem;
-            color: var(--ink-3);
-            text-align: center;
-        }
-        .notif-panel-foot b { color: var(--ink-2); font-weight: 700; }
-        @media (max-width: 480px) {
-            .notif-panel { left: auto; right: 0; transform-origin: top right; }
-        }
 
         .header .right .profile {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 4px 14px 4px 6px;
+            gap: 8px;
+            padding: 4px 10px 4px 6px;
             border-radius: 50px;
             border: 1px solid rgba(0,0,0,0.06);
             background: var(--surface);
@@ -429,502 +378,21 @@
             justify-content: center;
             font-weight: 800;
             font-size: 0.7rem;
+            flex-shrink: 0;
         }
-        .header .right .profile .name { font-size: 0.75rem; font-weight: 700; }
-        .header .right .profile .name small { display: block; font-size: 0.55rem; font-weight: 500; color: var(--ink-3); }
+        .header .right .profile .name { font-size: 0.7rem; font-weight: 700; }
+        .header .right .profile .name small { display: none; }
         .header .right .profile i { font-size: 0.6rem; color: var(--ink-3); }
 
-        .dash { padding: 32px 40px 56px; max-width: 1600px; margin: 0 auto; }
-
-        .hero {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 44px;
-            padding: 40px 44px;
-            margin-bottom: 28px;
-            border-radius: var(--radius-lg);
-            background: linear-gradient(120deg, var(--surface) 0%, var(--surface-2) 100%);
-            border: 1px solid rgba(0,0,0,0.04);
-            box-shadow: var(--shadow-sm);
-            flex-wrap: wrap;
-            overflow: hidden;
-            isolation: isolate;
-        }
-        .hero::before,
-        .hero::after {
-            content: '';
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(50px);
-            z-index: -1;
-            pointer-events: none;
-        }
-        .hero::before {
-            width: 320px;
-            height: 320px;
-            top: -140px;
-            left: -80px;
-            background: radial-gradient(circle, rgba(14,165,233,0.16), transparent 70%);
-        }
-        .hero::after {
-            width: 280px;
-            height: 280px;
-            bottom: -150px;
-            right: 10%;
-            background: radial-gradient(circle, rgba(252,211,77,0.22), transparent 70%);
-        }
-        .hero .copy {
-            flex: 1.15;
-            min-width: 300px;
-            position: relative;
-            z-index: 1;
-        }
-        .hero .eyebrow {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            font-size: 0.62rem;
-            letter-spacing: 1.2px;
-            text-transform: uppercase;
-            color: var(--primary-dark);
-            font-weight: 800;
-            margin-bottom: 14px;
-            background: rgba(14,165,233,0.09);
-            border: 1px solid rgba(14,165,233,0.16);
-            padding: 6px 14px;
-            border-radius: 50px;
-        }
-        .hero .eyebrow .pulse-dot {
-            position: relative;
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--primary);
-            flex-shrink: 0;
-        }
-        .hero .eyebrow .pulse-dot::after {
-            content: '';
-            position: absolute;
-            inset: -4px;
-            border-radius: 50%;
-            background: var(--primary);
-            opacity: 0.35;
-            animation: pulseDot 2s ease-in-out infinite;
-        }
-        @keyframes pulseDot {
-            0% { transform: scale(0.6); opacity: 0.5; }
-            70% { transform: scale(2.1); opacity: 0; }
-            100% { opacity: 0; }
-        }
-        .hero .copy h1 {
-            font-weight: 900;
-            font-size: 2.25rem;
-            color: var(--ink);
-            letter-spacing: -0.3px;
-            line-height: 1.4;
-            margin-bottom: 4px;
-        }
-        .hero .copy h1 .highlight {
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .hero .copy p {
-            color: var(--ink-2);
-            font-size: 0.9rem;
-            margin-top: 16px;
-            max-width: 40ch;
-            line-height: 1.8;
+        @media (min-width: 769px) {
+            .header .right .profile .name small { display: block; font-size: 0.55rem; font-weight: 500; color: var(--ink-3); }
+            .header .right .profile { padding: 4px 14px 4px 6px; }
         }
 
-        .hero .cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 28px;
-            border-radius: 50px;
-            background: var(--ink);
-            color: #fff;
-            font-weight: 800;
-            font-size: 0.85rem;
-            transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            margin-top: 20px;
-        }
-        .hero .cta:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-        }
-
-        .hero-image {
-            flex: 1;
-            min-width: 260px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: transparent;
-            position: relative;
-            z-index: 1;
-        }
-        .hero-image img {
-            display: block;
-            width: 100%;
-            max-width: 380px;
-            height: auto;
-            background: none;
-            background-color: transparent;
-            border: none;
-            box-shadow: none;
-            border-radius: 0;
-            transition: transform 0.5s var(--ease);
-        }
-        .hero-image img:hover {
-            transform: translateY(-8px) scale(1.01);
-        }
-
-        .stats { display: grid; grid-template-columns: 1.35fr 1fr 1fr 1fr 1fr 1fr; gap: 18px; margin-bottom: 28px; }
-        .stat-card {
-            position: relative;
-            background: var(--surface);
-            border: 1px solid rgba(0,0,0,0.04);
-            border-radius: var(--radius-md);
-            padding: 0;
-            overflow: hidden;
-            transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), border-color 0.3s var(--ease);
-            box-shadow: var(--shadow-sm);
-        }
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(140px 90px at 100% 0%, color-mix(in srgb, var(--swatch, var(--ink-4)) 10%, transparent), transparent 70%);
-            pointer-events: none;
-        }
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 16px 34px -14px color-mix(in srgb, var(--swatch, var(--ink-3)) 45%, transparent), var(--shadow-md);
-            border-color: color-mix(in srgb, var(--swatch, var(--ink-4)) 30%, transparent);
-        }
-        .stat-card .bar { height: 3px; background: var(--swatch, var(--ink-4)); }
-        .stat-card .body { position: relative; padding: 20px 22px; }
-        .stat-card .label {
-            font-size: 0.7rem;
-            color: var(--ink-3);
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 9px;
-        }
-        .stat-card .icon-chip {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 28px;
-            height: 28px;
-            border-radius: 9px;
-            background: color-mix(in srgb, var(--swatch, var(--ink-3)) 14%, transparent);
-            flex-shrink: 0;
-        }
-        .stat-card .icon-chip i { font-size: 0.72rem; color: var(--swatch, var(--ink-3)); }
-        .stat-card .number {
-            font-family: var(--display);
-            font-size: 1.6rem;
-            font-weight: 700;
-            margin-top: 12px;
-            letter-spacing: -0.2px;
-            color: var(--ink);
-        }
-        .stat-card .foot { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; }
-        .stat-card .change {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 0.65rem;
-            font-weight: 700;
-            padding: 3px 8px;
-            border-radius: 50px;
-        }
-        .stat-card .change.up { color: var(--viridian); background: rgba(46,122,92,0.1); }
-        .stat-card .change.down { color: var(--oxide); background: rgba(166,58,49,0.1); }
-        .stat-card .spark { width: 50px; height: 20px; }
-
-        .charts-grid {
-            display: grid;
-            grid-template-columns: 1.6fr 1fr;
-            gap: 24px;
-            margin-bottom: 24px;
-        }
-
-        .panel {
-            background: var(--surface);
-            border: 1px solid rgba(0,0,0,0.04);
-            border-radius: var(--radius-lg);
-            padding: 28px 30px;
-            box-shadow: var(--shadow-sm);
-            transition: box-shadow 0.3s ease;
-        }
-        .panel:hover { box-shadow: var(--shadow-md); }
-        .panel .p-head {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        .panel .p-title-group { display: flex; align-items: center; gap: 12px; }
-        .panel .p-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 38px;
-            height: 38px;
-            border-radius: 12px;
-            flex-shrink: 0;
-            background: color-mix(in srgb, var(--pi, var(--primary)) 12%, transparent);
-            color: var(--pi, var(--primary));
-            font-size: 0.85rem;
-        }
-        .panel .p-title { font-size: 0.9rem; font-weight: 800; color: var(--ink); }
-        .panel .p-sub { font-size: 0.7rem; color: var(--ink-3); margin-top: 2px; }
-        .panel .tabs {
-            display: flex;
-            gap: 2px;
-            background: var(--canvas);
-            padding: 3px;
-            border-radius: 10px;
-            border: 1px solid rgba(0,0,0,0.04);
-        }
-        .panel .tabs button {
-            border: none;
-            background: none;
-            color: var(--ink-3);
-            font-size: 0.65rem;
-            font-weight: 700;
-            padding: 5px 14px;
-            border-radius: 8px;
-            transition: 0.2s;
-        }
-        .panel .tabs button.active { background: var(--ink); color: #fff; }
-        .chart-canvas-wrap { position: relative; height: 240px; }
-        .chart-canvas-wrap.pie-wrap { height: 240px; }
-        .legend-row {
-            display: flex;
-            gap: 24px;
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 1px solid rgba(0,0,0,0.04);
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .legend-row .li {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.72rem;
-            color: var(--ink-2);
-            font-weight: 600;
-        }
-        .legend-row .li .sw { width: 10px; height: 10px; border-radius: 4px; box-shadow: 0 0 0 3px rgba(0,0,0,0.03); }
-
-        /* ==========================================================
-           LOWER GRID - الحجوزات المستقبلية (أوسع) + النشاط الأخير
-           ========================================================== */
-        .lower-grid {
-            display: grid;
-            grid-template-columns: 1.6fr 1fr;
-            gap: 24px;
-        }
-
-        @media (max-width: 992px) {
-            .lower-grid { grid-template-columns: 1fr; }
-        }
-
-        /* ==========================================================
-           FUTURE BOOKINGS - الحجوزات المستقبلية
-           ========================================================== */
-        .future-booking-item {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 12px 10px;
-            border-radius: 12px;
-            border-bottom: 1px solid rgba(0,0,0,0.03);
-            transition: background 0.2s ease;
-        }
-        .future-booking-item:hover { background: var(--canvas); }
-        .future-booking-item:last-child { border-bottom: none; }
-        .future-booking-item .booking-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            background: color-mix(in srgb, var(--gold) 12%, transparent);
-            color: var(--gold);
-            font-size: 0.85rem;
-        }
-        .future-booking-item .booking-info { flex: 1; min-width: 0; }
-        .future-booking-item .booking-info .client-name {
-            font-size: 0.78rem;
-            font-weight: 700;
-            color: var(--ink);
-        }
-        .future-booking-item .booking-info .booking-meta {
-            font-size: 0.65rem;
-            color: var(--ink-3);
-            margin-top: 2px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        .future-booking-item .booking-info .booking-meta .property-tag {
-            display: inline-block;
-            padding: 1px 8px;
-            border-radius: 4px;
-            background: var(--surface-muted);
-            font-size: 0.6rem;
-            color: var(--ink-2);
-        }
-        .future-booking-item .booking-info .booking-meta .date-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 3px;
-            font-size: 0.6rem;
-            color: var(--primary-dark);
-        }
-        .future-booking-item .booking-info .booking-meta .date-tag i { font-size: 0.55rem; }
-        .future-booking-item .booking-amount {
-            font-family: var(--display);
-            font-size: 0.78rem;
-            font-weight: 700;
-            color: var(--gold);
-            flex-shrink: 0;
-        }
-        .future-booking-item .booking-status-tag {
-            display: inline-block;
-            padding: 2px 10px;
-            border-radius: 50px;
-            font-size: 0.55rem;
-            font-weight: 700;
-            margin-right: 8px;
-            flex-shrink: 0;
-        }
-        .future-booking-item .booking-status-tag.future {
-            background: var(--accent-soft);
-            color: var(--accent-ink);
-        }
-        .future-booking-item .booking-status-tag.today {
-            background: var(--rust-soft);
-            color: var(--rust);
-        }
-
-        /* ==========================================================
-           ACTIVITY - النشاط الأخير
-           ========================================================== */
-        .activity .head, .future-bookings .head {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 18px;
-        }
-        .activity .head h3, .future-bookings .head h3 {
-            font-size: 0.9rem;
-            font-weight: 800;
-            color: var(--ink);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .activity .head h3 i, .future-bookings .head h3 i { color: var(--gold); }
-        .activity .head a, .future-bookings .head a {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.7rem;
-            color: var(--ink-3);
-            font-weight: 700;
-            transition: 0.2s;
-        }
-        .activity .head a i, .future-bookings .head a i { font-size: 0.6rem; transition: transform 0.2s ease; }
-        .activity .head a:hover, .future-bookings .head a:hover { color: var(--primary); }
-        .activity .head a:hover i, .future-bookings .head a:hover i { transform: translateX(-3px); }
-
-        .activity .list .item {
-            display: flex;
-            align-items: flex-start;
-            gap: 14px;
-            padding: 13px 10px;
-            border-radius: 12px;
-            border-bottom: 1px solid rgba(0,0,0,0.03);
-            transition: background 0.2s ease;
-        }
-        .activity .list .item:hover { background: var(--canvas); }
-        .activity .list .item:last-child { border-bottom: none; }
-        .activity .list .item .dot-ind {
-            width: 9px;
-            height: 9px;
-            border-radius: 50%;
-            margin-top: 5px;
-            flex-shrink: 0;
-        }
-        .activity .list .item .content .text {
-            font-size: 0.78rem;
-            color: var(--ink-2);
-            line-height: 1.5;
-        }
-        .activity .list .item .content .text strong { color: var(--ink); font-weight: 700; }
-        .activity .list .item .content .time {
-            font-size: 0.62rem;
-            color: var(--ink-3);
-            margin-top: 2px;
-        }
-
-        /* ==========================================================
-           EMPTY STATE
-           ========================================================== */
-        .empty-state {
-            text-align: center;
-            padding: 32px 20px;
-            color: var(--ink-3);
-        }
-        .empty-state i { font-size: 2rem; opacity: 0.3; margin-bottom: 10px; display: block; }
-        .empty-state p { font-size: 0.85rem; }
-
-        /* ==========================================================
-           LOADING
-           ========================================================== */
-        .loading-text {
-            color: var(--ink-3);
-            font-size: 0.75rem;
-            font-weight: 400;
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
-        .stat-card.loading .number { color: var(--ink-3) !important; }
-
-        /* ==========================================================
-           ANIMATIONS
-           ========================================================== */
-        .fade-up {
-            opacity: 0;
-            transform: translateY(16px);
-            animation: fadeUp 0.6s var(--ease) forwards;
-        }
-        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
-
-        /* ==========================================================
-           MOBILE SEARCH
-           ========================================================== */
         .header .mobile-search-toggle {
-            display: none;
-            width: 38px;
-            height: 38px;
+            display: flex;
+            width: 40px;
+            height: 40px;
             border-radius: var(--radius-sm);
             align-items: center;
             justify-content: center;
@@ -935,12 +403,15 @@
             transition: 0.2s;
             flex-shrink: 0;
         }
-        .header .mobile-search-toggle:hover,
-        .header .mobile-search-toggle:active { border-color: var(--ink-3); color: var(--ink); }
+        .header .mobile-search-toggle:hover { border-color: var(--ink-3); color: var(--ink); }
         .header .mobile-search-toggle.active {
             background: var(--ink);
             color: #fff;
             border-color: var(--ink);
+        }
+
+        @media (min-width: 1024px) {
+            .header .mobile-search-toggle { display: none; }
         }
 
         .mobile-search-bar {
@@ -986,10 +457,728 @@
         }
 
         /* ==========================================================
+           DASHBOARD
+           ========================================================== */
+        .dash {
+            padding: 16px 12px 100px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 769px) {
+            .dash {
+                padding: 32px 40px 56px;
+            }
+        }
+
+        /* ==========================================================
+           HERO - متجاوب بالكامل
+           ========================================================== */
+        .hero {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+            padding: 20px 16px;
+            margin-bottom: 20px;
+            border-radius: var(--radius-md);
+            background: linear-gradient(120deg, var(--surface) 0%, var(--surface-2) 100%);
+            border: 1px solid rgba(0,0,0,0.04);
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+            overflow: hidden;
+        }
+
+        @media (min-width: 769px) {
+            .hero {
+                flex-direction: row;
+                text-align: right;
+                padding: 40px 44px;
+                gap: 44px;
+                border-radius: var(--radius-lg);
+            }
+        }
+
+        .hero .copy {
+            flex: 1;
+            min-width: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 0.58rem;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: var(--primary-dark);
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: rgba(14,165,233,0.09);
+            border: 1px solid rgba(14,165,233,0.16);
+            padding: 4px 12px;
+            border-radius: 50px;
+        }
+
+        @media (min-width: 769px) {
+            .hero .eyebrow { font-size: 0.62rem; padding: 6px 14px; }
+        }
+
+        .hero .eyebrow .pulse-dot {
+            position: relative;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .hero .copy h1 {
+            font-weight: 900;
+            font-size: 1.6rem;
+            color: var(--ink);
+            letter-spacing: -0.3px;
+            line-height: 1.4;
+            margin-bottom: 4px;
+        }
+
+        @media (min-width: 769px) {
+            .hero .copy h1 { font-size: 2.25rem; }
+        }
+
+        .hero .copy h1 .highlight {
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero .copy p {
+            color: var(--ink-2);
+            font-size: 0.85rem;
+            margin-top: 12px;
+            max-width: 100%;
+            line-height: 1.7;
+        }
+
+        @media (min-width: 769px) {
+            .hero .copy p { font-size: 0.9rem; max-width: 40ch; }
+        }
+
+        .hero .cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            background: var(--ink);
+            color: #fff;
+            font-weight: 800;
+            font-size: 0.8rem;
+            transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-top: 16px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        @media (min-width: 769px) {
+            .hero .cta {
+                width: auto;
+                padding: 12px 28px;
+                font-size: 0.85rem;
+                margin-top: 20px;
+            }
+        }
+
+        .hero .cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+        }
+
+        .hero-image {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: transparent;
+            position: relative;
+            z-index: 1;
+            order: -1;
+        }
+
+        @media (min-width: 769px) {
+            .hero-image { order: 0; }
+        }
+
+        .hero-image img {
+            display: block;
+            width: 100%;
+            max-width: 220px;
+            height: auto;
+            background: none;
+            background-color: transparent;
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
+            transition: transform 0.5s var(--ease);
+        }
+
+        @media (min-width: 769px) {
+            .hero-image img { max-width: 380px; }
+        }
+
+        /* ==========================================================
+           STATS - متجاوبة بالكامل
+           ========================================================== */
+        .stats-wrap { position: relative; }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        @media (min-width: 600px) {
+            .stats { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (min-width: 992px) {
+            .stats { grid-template-columns: repeat(6, 1fr); gap: 18px; margin-bottom: 28px; }
+        }
+
+        .stat-card {
+            position: relative;
+            background: var(--surface);
+            border: 1px solid rgba(0,0,0,0.04);
+            border-radius: var(--radius-sm);
+            padding: 0;
+            overflow: hidden;
+            transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-card .bar { height: 3px; background: var(--swatch, var(--ink-4)); }
+        .stat-card .body { position: relative; padding: 12px 14px; }
+
+        @media (min-width: 769px) {
+            .stat-card .body { padding: 20px 22px; }
+        }
+
+        .stat-card .label {
+            font-size: 0.6rem;
+            color: var(--ink-3);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        @media (min-width: 769px) {
+            .stat-card .label { font-size: 0.7rem; gap: 9px; }
+        }
+
+        .stat-card .icon-chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 8px;
+            background: color-mix(in srgb, var(--swatch, var(--ink-3)) 14%, transparent);
+            flex-shrink: 0;
+        }
+
+        @media (min-width: 769px) {
+            .stat-card .icon-chip { width: 28px; height: 28px; border-radius: 9px; }
+        }
+
+        .stat-card .icon-chip i { font-size: 0.65rem; color: var(--swatch, var(--ink-3)); }
+
+        .stat-card .number {
+            font-family: var(--display);
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-top: 6px;
+            letter-spacing: -0.2px;
+            color: var(--ink);
+        }
+
+        @media (min-width: 769px) {
+            .stat-card .number { font-size: 1.6rem; margin-top: 12px; }
+        }
+
+        .stat-card .foot {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 8px;
+        }
+
+        @media (min-width: 769px) {
+            .stat-card .foot { margin-top: 12px; }
+        }
+
+        .stat-card .change {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.55rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 50px;
+        }
+
+        @media (min-width: 769px) {
+            .stat-card .change { font-size: 0.65rem; padding: 3px 8px; }
+        }
+
+        .stat-card .change.up { color: var(--viridian); background: rgba(46,122,92,0.1); }
+        .stat-card .change.down { color: var(--oxide); background: rgba(166,58,49,0.1); }
+        .stat-card .spark { width: 40px; height: 16px; }
+
+        @media (min-width: 769px) {
+            .stat-card .spark { width: 50px; height: 20px; }
+        }
+
+        /* ==========================================================
+           CHARTS - متجاوبة بالكامل
+           ========================================================== */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        @media (min-width: 769px) {
+            .charts-grid { gap: 24px; margin-bottom: 24px; }
+        }
+
+        @media (min-width: 1024px) {
+            .charts-grid { grid-template-columns: 1.6fr 1fr; gap: 24px; }
+        }
+
+        /* ==========================================================
+           PANEL - متجاوب
+           ========================================================== */
+        .panel {
+            background: var(--surface);
+            border: 1px solid rgba(0,0,0,0.04);
+            border-radius: var(--radius-md);
+            padding: 16px 14px;
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.3s ease;
+        }
+
+        @media (min-width: 769px) {
+            .panel { padding: 28px 30px; border-radius: var(--radius-lg); }
+        }
+
+        .panel:hover { box-shadow: var(--shadow-md); }
+
+        .panel .p-head {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        @media (min-width: 769px) {
+            .panel .p-head { flex-direction: row; align-items: flex-start; gap: 12px; margin-bottom: 20px; }
+        }
+
+        .panel .p-title-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .panel .p-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            flex-shrink: 0;
+            background: color-mix(in srgb, var(--pi, var(--primary)) 12%, transparent);
+            color: var(--pi, var(--primary));
+            font-size: 0.8rem;
+        }
+
+        @media (min-width: 769px) {
+            .panel .p-icon { width: 38px; height: 38px; border-radius: 12px; font-size: 0.85rem; }
+        }
+
+        .panel .p-title { font-size: 0.8rem; font-weight: 800; color: var(--ink); }
+        .panel .p-sub { font-size: 0.6rem; color: var(--ink-3); margin-top: 2px; }
+
+        @media (min-width: 769px) {
+            .panel .p-title { font-size: 0.9rem; }
+            .panel .p-sub { font-size: 0.7rem; }
+        }
+
+        .panel .tabs {
+            display: flex;
+            gap: 2px;
+            background: var(--canvas);
+            padding: 3px;
+            border-radius: 8px;
+            border: 1px solid rgba(0,0,0,0.04);
+            width: 100%;
+        }
+
+        @media (min-width: 769px) {
+            .panel .tabs { width: auto; }
+        }
+
+        .panel .tabs button {
+            border: none;
+            background: none;
+            color: var(--ink-3);
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: 0.2s;
+            flex: 1;
+        }
+
+        @media (min-width: 769px) {
+            .panel .tabs button { font-size: 0.65rem; padding: 5px 14px; flex: none; }
+        }
+
+        .panel .tabs button.active { background: var(--ink); color: #fff; }
+
+        .chart-canvas-wrap {
+            position: relative;
+            height: 180px;
+        }
+
+        @media (min-width: 769px) {
+            .chart-canvas-wrap { height: 240px; }
+        }
+
+        .chart-canvas-wrap.pie-wrap { height: 180px; }
+
+        @media (min-width: 769px) {
+            .chart-canvas-wrap.pie-wrap { height: 240px; }
+        }
+
+        .legend-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(0,0,0,0.04);
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        @media (min-width: 769px) {
+            .legend-row { gap: 24px; margin-top: 16px; padding-top: 16px; }
+        }
+
+        .legend-row .li {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.65rem;
+            color: var(--ink-2);
+            font-weight: 600;
+        }
+
+        @media (min-width: 769px) {
+            .legend-row .li { font-size: 0.72rem; gap: 8px; }
+        }
+
+        .legend-row .li .sw { width: 10px; height: 10px; border-radius: 4px; }
+
+        /* ==========================================================
+           LOWER GRID - متجاوب
+           ========================================================== */
+        .lower-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        @media (min-width: 769px) {
+            .lower-grid { gap: 24px; }
+        }
+
+        @media (min-width: 992px) {
+            .lower-grid { grid-template-columns: 1.6fr 1fr; gap: 24px; }
+        }
+
+        /* ==========================================================
+           FUTURE BOOKINGS - متجاوب
+           ========================================================== */
+        .future-booking-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 8px;
+            border-radius: 10px;
+            border-bottom: 1px solid rgba(0,0,0,0.03);
+            transition: background 0.2s ease;
+            flex-wrap: wrap;
+        }
+
+        @media (min-width: 769px) {
+            .future-booking-item { padding: 12px 10px; gap: 14px; }
+        }
+
+        .future-booking-item:hover { background: var(--canvas); }
+        .future-booking-item:last-child { border-bottom: none; }
+
+        .future-booking-item .booking-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            background: color-mix(in srgb, var(--gold) 12%, transparent);
+            color: var(--gold);
+            font-size: 0.75rem;
+        }
+
+        @media (min-width: 769px) {
+            .future-booking-item .booking-icon { width: 36px; height: 36px; border-radius: 10px; font-size: 0.85rem; }
+        }
+
+        .future-booking-item .booking-info { flex: 1; min-width: 100px; }
+        .future-booking-item .booking-info .client-name {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        @media (min-width: 769px) {
+            .future-booking-item .booking-info .client-name { font-size: 0.78rem; }
+        }
+
+        .future-booking-item .booking-info .booking-meta {
+            font-size: 0.6rem;
+            color: var(--ink-3);
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        @media (min-width: 769px) {
+            .future-booking-item .booking-info .booking-meta { font-size: 0.65rem; gap: 8px; }
+        }
+
+        .future-booking-item .booking-info .booking-meta .property-tag {
+            display: inline-block;
+            padding: 1px 6px;
+            border-radius: 4px;
+            background: var(--surface-muted);
+            font-size: 0.55rem;
+            color: var(--ink-2);
+        }
+
+        .future-booking-item .booking-info .booking-meta .date-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 0.55rem;
+            color: var(--primary-dark);
+        }
+
+        .future-booking-item .booking-amount {
+            font-family: var(--display);
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--gold);
+            flex-shrink: 0;
+        }
+
+        @media (min-width: 769px) {
+            .future-booking-item .booking-amount { font-size: 0.78rem; }
+        }
+
+        .future-booking-item .booking-status-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 50px;
+            font-size: 0.5rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        @media (min-width: 769px) {
+            .future-booking-item .booking-status-tag { font-size: 0.55rem; padding: 2px 10px; }
+        }
+
+        .future-booking-item .booking-status-tag.future {
+            background: var(--accent-soft);
+            color: var(--accent-ink);
+        }
+        .future-booking-item .booking-status-tag.today {
+            background: var(--rust-soft);
+            color: var(--rust);
+        }
+
+        /* ==========================================================
+           ACTIVITY
+           ========================================================== */
+        .activity .head, .future-bookings .head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        @media (min-width: 769px) {
+            .activity .head, .future-bookings .head { margin-bottom: 18px; }
+        }
+
+        .activity .head h3, .future-bookings .head h3 {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        @media (min-width: 769px) {
+            .activity .head h3, .future-bookings .head h3 { font-size: 0.9rem; }
+        }
+
+        .activity .head h3 i, .future-bookings .head h3 i { color: var(--gold); }
+        .activity .head a, .future-bookings .head a {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.65rem;
+            color: var(--ink-3);
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        @media (min-width: 769px) {
+            .activity .head a, .future-bookings .head a { font-size: 0.7rem; gap: 6px; }
+        }
+
+        .activity .head a:hover, .future-bookings .head a:hover { color: var(--primary); }
+
+        .activity .list .item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 6px;
+            border-radius: 10px;
+            border-bottom: 1px solid rgba(0,0,0,0.03);
+            transition: background 0.2s ease;
+        }
+
+        @media (min-width: 769px) {
+            .activity .list .item { padding: 13px 10px; gap: 14px; }
+        }
+
+        .activity .list .item:hover { background: var(--canvas); }
+        .activity .list .item:last-child { border-bottom: none; }
+        .activity .list .item .dot-ind {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-top: 4px;
+            flex-shrink: 0;
+        }
+
+        @media (min-width: 769px) {
+            .activity .list .item .dot-ind { width: 9px; height: 9px; }
+        }
+
+        .activity .list .item .content .text {
+            font-size: 0.72rem;
+            color: var(--ink-2);
+            line-height: 1.5;
+        }
+
+        @media (min-width: 769px) {
+            .activity .list .item .content .text { font-size: 0.78rem; }
+        }
+
+        .activity .list .item .content .text strong { color: var(--ink); font-weight: 700; }
+        .activity .list .item .content .time {
+            font-size: 0.58rem;
+            color: var(--ink-3);
+            margin-top: 2px;
+        }
+
+        @media (min-width: 769px) {
+            .activity .list .item .content .time { font-size: 0.62rem; }
+        }
+
+        /* ==========================================================
+           EMPTY STATE
+           ========================================================== */
+        .empty-state {
+            text-align: center;
+            padding: 24px 16px;
+            color: var(--ink-3);
+        }
+
+        @media (min-width: 769px) {
+            .empty-state { padding: 32px 20px; }
+        }
+
+        .empty-state i { font-size: 1.8rem; opacity: 0.3; margin-bottom: 8px; display: block; }
+        .empty-state p { font-size: 0.8rem; }
+
+        /* ==========================================================
+           LOADING
+           ========================================================== */
+        .loading-text {
+            color: var(--ink-3);
+            font-size: 0.7rem;
+            font-weight: 400;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @media (min-width: 769px) {
+            .loading-text { font-size: 0.75rem; }
+        }
+
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+        .stat-card.loading .number { color: var(--ink-3) !important; }
+
+        /* ==========================================================
+           ANIMATIONS
+           ========================================================== */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(16px);
+            animation: fadeUp 0.6s var(--ease) forwards;
+        }
+        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+        /* ==========================================================
            MOBILE BOTTOM NAV
            ========================================================== */
         .mobile-bottom-nav {
-            display: none;
+            display: flex;
             position: fixed;
             left: 0;
             right: 0;
@@ -1001,165 +1190,185 @@
             background: rgba(255,255,255,0.94);
             backdrop-filter: blur(18px) saturate(1.3);
             border-top: 1px solid rgba(0,0,0,0.06);
-            padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 0px));
+            padding: 6px 6px calc(6px + env(safe-area-inset-bottom, 0px));
             box-shadow: 0 -10px 34px rgba(0,0,0,0.06);
         }
+
+        @media (min-width: 769px) {
+            .mobile-bottom-nav { display: none; }
+        }
+
         .mobile-bottom-nav .bn-item {
             flex: 1;
             min-width: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
-            padding: 7px 2px 6px;
+            gap: 3px;
+            padding: 6px 2px 4px;
             color: var(--ink-3);
-            font-size: 0.6rem;
+            font-size: 0.5rem;
             font-weight: 700;
-            border-radius: 12px;
+            border-radius: 10px;
             transition: color 0.2s ease, background 0.2s ease;
             cursor: pointer;
         }
-        .mobile-bottom-nav .bn-item i { font-size: 1.05rem; line-height: 1; }
+
+        .mobile-bottom-nav .bn-item i { font-size: 1rem; line-height: 1; }
         .mobile-bottom-nav .bn-item span { white-space: nowrap; }
         .mobile-bottom-nav .bn-item.active { color: var(--ink); }
-        .mobile-bottom-nav .bn-item.active i { color: var(--primary); }
+        .mobile-bottom-nav .bn-item.active i { color: var(--gold); }
         .mobile-bottom-nav .bn-item:active { background: rgba(0,0,0,0.05); }
+
         .mobile-bottom-nav .bn-fab {
             flex: 0 0 auto;
-            width: 52px;
-            height: 52px;
+            width: 48px;
+            height: 48px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
             background: var(--gold-gradient);
             color: var(--ink);
-            font-size: 1.15rem;
-            box-shadow: 0 10px 26px rgba(252,211,77,0.45), 0 0 0 5px var(--canvas);
-            transform: translateY(-16px);
+            font-size: 1.1rem;
+            box-shadow: 0 8px 24px rgba(252,211,77,0.4), 0 0 0 4px var(--canvas);
+            transform: translateY(-14px);
             transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
             margin: 0 2px;
         }
-        .mobile-bottom-nav .bn-fab:active { transform: translateY(-16px) scale(0.92); }
+
+        .mobile-bottom-nav .bn-fab:active { transform: translateY(-14px) scale(0.92); }
+
+        .stats-wrap { position: relative; }
 
         /* ==========================================================
-           RESPONSIVE
+           NOTIF PANEL
            ========================================================== */
-        @media (max-width: 1180px) {
-            .stats { grid-template-columns: repeat(3, 1fr); }
-            .header .search { display: none; }
-            .header .mobile-search-toggle { display: flex; }
-            .mobile-search-bar { display: block; }
-            .charts-grid { grid-template-columns: 1fr; }
-        }
-        @media (max-width: 992px) {
-            .lower-grid { grid-template-columns: 1fr; }
-            .hero { flex-direction: column; align-items: stretch; padding: 28px 26px; }
-            .hero-image { justify-content: center; padding-top: 10px; }
-            .hero-image img { max-width: 350px; }
-        }
-        @media (max-width: 768px) {
-            :root {
-                --sidebar-w: min(85vw, 300px);
-                --header-h: 62px;
-            }
-            .main { margin-right: 0 !important; }
-            .header { padding: 0 14px; gap: 8px; }
-            .header .left { gap: 10px; }
-            .header .breadcrumb { font-size: 0.72rem; }
-            .header .right { gap: 6px; }
-            .header .right .profile .name { display: none; }
-            .header .right .profile { padding: 4px; }
-            .header .hamburger,
-            .header .right .notif,
-            .header .mobile-search-toggle { width: 40px; height: 40px; }
-            .dash { padding: 20px 16px 110px; }
-            .panel { padding: 18px 16px; border-radius: 18px; }
-            .hero { text-align: center; gap: 22px; padding: 22px 18px; border-radius: 18px; }
-            .hero .copy { display: flex; flex-direction: column; align-items: center; min-width: 0; }
-            .hero .eyebrow { font-size: 0.62rem; }
-            .hero .copy h1 { font-size: 1.7rem; }
-            .hero .copy p { margin-inline: auto; }
-            .hero-image { order: -1; padding-top: 0; }
-            .hero-image img { max-width: 260px; }
-            .hero .cta { width: 100%; justify-content: center; padding: 13px 28px; }
-            .stats {
-                display: flex;
-                overflow-x: auto;
-                scroll-snap-type: x proximity;
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none;
-                gap: 12px;
-                margin: 0 -16px 24px;
-                padding: 2px 16px 6px;
-            }
-            .stats::-webkit-scrollbar { display: none; }
-            .stat-card {
-                flex: 0 0 auto;
-                width: 172px;
-                scroll-snap-align: start;
-            }
-            .stat-card .body { padding: 16px 18px; }
-            .stat-card .number { font-size: 1.32rem; margin-top: 6px; }
-            .stat-card .label { font-size: 0.65rem; }
-            .stats-wrap::after {
-                content: '';
-                position: absolute;
-                top: 4px;
-                bottom: 10px;
-                left: -16px;
-                width: 30px;
-                background: linear-gradient(to right, var(--canvas), rgba(240,237,232,0));
-                pointer-events: none;
-            }
-            .panel .p-head { flex-direction: column; align-items: stretch; gap: 14px; }
-            .panel .tabs { width: 100%; }
-            .panel .tabs button { flex: 1; padding: 9px 10px; font-size: 0.7rem; }
-            .chart-canvas-wrap { height: 200px; }
-            .chart-canvas-wrap.pie-wrap { height: 200px; }
-            .legend-row { gap: 10px 22px; padding-top: 14px; }
-            .activity .list .item { padding: 13px 4px; gap: 12px; }
-            .activity .list .item .content .text { font-size: 0.8rem; }
-            .future-booking-item { padding: 10px 6px; gap: 10px; flex-wrap: wrap; }
-            .future-booking-item .booking-info .booking-meta { font-size: 0.6rem; gap: 4px; }
-            .future-booking-item .booking-amount { font-size: 0.7rem; }
-            .mobile-bottom-nav { display: flex; }
-            .charts-grid { grid-template-columns: 1fr; gap: 16px; }
-        }
-        @media (max-width: 480px) {
-            .header .breadcrumb { display: none; }
-            .hero .copy h1 { font-size: 1.45rem; }
-            .hero-image img { max-width: 220px; }
-            .stat-card { width: 152px; }
-            .dash { padding: 18px 12px 106px; }
-            .mobile-bottom-nav .bn-item span { font-size: 0.56rem; }
-            .notif-panel {
-                left: auto;
-                right: 0;
-                transform-origin: top right;
-                width: calc(100vw - 24px);
-            }
-            .future-booking-item .booking-info .booking-meta {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 2px;
-            }
-            .future-booking-item { flex-wrap: wrap; }
+        .notif-panel {
+            position: absolute;
+            top: calc(100% + 12px);
+            left: 0;
+            width: 300px;
+            max-width: calc(100vw - 32px);
+            background: var(--surface);
+            border: 1px solid rgba(0,0,0,0.06);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            padding: 8px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-8px) scale(0.98);
+            transform-origin: top left;
+            transition: opacity 0.2s var(--ease), transform 0.2s var(--ease), visibility 0.2s;
+            z-index: 200;
         }
 
-        .main-content { display: block; }
+        @media (max-width: 480px) {
+            .notif-panel { left: auto; right: 0; transform-origin: top right; width: calc(100vw - 24px); }
+        }
+
+        .notif-panel.open { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+
+        .notif-panel-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px 8px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--ink);
+        }
+
+        .notif-panel-badge {
+            font-size: 0.55rem;
+            font-weight: 800;
+            background: var(--gold-gradient);
+            color: var(--ink);
+            padding: 2px 9px;
+            border-radius: 50px;
+        }
+
+        .notif-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 12px;
+            transition: background 0.2s ease;
+        }
+
+        .notif-item:hover { background: var(--canvas); }
+
+        .notif-ic {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: color-mix(in srgb, var(--nc, var(--primary)) 14%, transparent);
+            color: var(--nc, var(--primary));
+            font-size: 0.75rem;
+        }
+
+        .notif-t { font-size: 0.76rem; font-weight: 700; color: var(--ink); line-height: 1.4; }
+        .notif-d { font-size: 0.68rem; color: var(--ink-3); margin-top: 2px; line-height: 1.5; }
+        .notif-time { font-size: 0.6rem; color: var(--ink-3); margin-top: 4px; font-weight: 600; }
+        .notif-empty { text-align: center; padding: 26px 14px; color: var(--ink-3); }
+        .notif-empty i { font-size: 1.3rem; opacity: 0.35; margin-bottom: 8px; display: block; }
+        .notif-empty p { font-size: 0.75rem; }
+        .notif-panel-foot {
+            margin-top: 4px;
+            padding: 10px 12px 4px;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            font-size: 0.62rem;
+            color: var(--ink-3);
+            text-align: center;
+        }
+        .notif-panel-foot b { color: var(--ink-2); font-weight: 700; }
+
+        /* ==========================================================
+           RESPONSIVE - EXTRA SMALL
+           ========================================================== */
+        @media (max-width: 480px) {
+            .header .breadcrumb { display: none; }
+            .hero .copy h1 { font-size: 1.3rem; }
+            .hero-image img { max-width: 180px; }
+            .stat-card { border-radius: 8px; }
+            .stat-card .body { padding: 10px 12px; }
+            .stat-card .number { font-size: 0.95rem; }
+            .stat-card .label { font-size: 0.55rem; }
+            .stat-card .icon-chip { width: 20px; height: 20px; }
+            .stat-card .icon-chip i { font-size: 0.55rem; }
+            .stat-card .change { font-size: 0.5rem; padding: 1px 4px; }
+            .stat-card .spark { width: 32px; height: 14px; }
+            .panel { padding: 12px 10px; border-radius: 12px; }
+            .panel .p-title { font-size: 0.75rem; }
+            .panel .p-sub { font-size: 0.55rem; }
+            .panel .tabs button { font-size: 0.55rem; padding: 4px 8px; }
+            .chart-canvas-wrap { height: 150px; }
+            .chart-canvas-wrap.pie-wrap { height: 150px; }
+            .future-booking-item { padding: 8px 4px; gap: 8px; }
+            .future-booking-item .booking-info .client-name { font-size: 0.65rem; }
+            .future-booking-item .booking-info .booking-meta { font-size: 0.5rem; gap: 4px; }
+            .future-booking-item .booking-amount { font-size: 0.65rem; }
+            .future-booking-item .booking-status-tag { font-size: 0.45rem; padding: 1px 6px; }
+            .activity .list .item { padding: 8px 4px; gap: 8px; }
+            .activity .list .item .content .text { font-size: 0.65rem; }
+            .activity .list .item .content .time { font-size: 0.5rem; }
+            .legend-row { gap: 8px; padding-top: 8px; }
+            .legend-row .li { font-size: 0.6rem; }
+            .mobile-bottom-nav .bn-item span { font-size: 0.45rem; }
+            .mobile-bottom-nav .bn-fab { width: 42px; height: 42px; font-size: 0.95rem; transform: translateY(-12px); }
+            .mobile-bottom-nav .bn-fab:active { transform: translateY(-12px) scale(0.92); }
+        }
     </style>
 </head>
 <body>
 
-    <!-- ==========================================================
-    SIDEBAR OVERLAY
-    ========================================================== -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- ==========================================================
-    SIDEBAR
-    ========================================================== -->
     <nav class="sidebar" id="sidebar">
         <div class="brand">
             <div class="mark">
@@ -1218,14 +1427,8 @@
         </div>
     </nav>
 
-    <!-- ==========================================================
-    MAIN
-    ========================================================== -->
     <div class="main" id="main">
 
-        <!-- ==========================================================
-        HEADER
-        ========================================================== -->
         <header class="header">
             <div class="left">
                 <button class="hamburger" id="hamburger" aria-label="فتح القائمة"><i class="fas fa-bars"></i></button>
@@ -1263,9 +1466,6 @@
             </div>
         </header>
 
-        <!-- ==========================================================
-        MOBILE SEARCH
-        ========================================================== -->
         <div class="mobile-search-bar" id="mobileSearchBar">
             <div class="inner">
                 <i class="fas fa-search"></i>
@@ -1274,13 +1474,9 @@
             </div>
         </div>
 
-        <!-- ==========================================================
-        DASHBOARD
-        ========================================================== -->
         <div class="main-content">
             <div class="dash">
 
-                <!-- ===== HERO ===== -->
                 <div class="hero fade-up" style="animation-delay:0.02s">
                     <div class="copy">
                         <div class="eyebrow"><span class="pulse-dot"></span><span id="dashboardDate">لوحة التحكم — جاري التحميل...</span></div>
@@ -1300,7 +1496,6 @@
                     </div>
                 </div>
 
-                <!-- ===== STATS ===== -->
                 <div class="stats-wrap">
                     <div class="stats">
                         <div class="stat-card fade-up loading" style="animation-delay:0.06s;--swatch:var(--prussian)">
@@ -1372,7 +1567,6 @@
                     </div>
                 </div>
 
-                <!-- ===== CHARTS ===== -->
                 <div class="charts-grid">
 
                     <div class="panel fade-up" style="animation-delay:0.12s">
@@ -1416,10 +1610,8 @@
                     </div>
                 </div>
 
-                <!-- ===== LOWER GRID ===== -->
                 <div class="lower-grid">
 
-                    <!-- ===== الحجوزات المستقبلية (أوسع) ===== -->
                     <div class="panel future-bookings fade-up" style="animation-delay:0.16s">
                         <div class="head">
                             <div class="p-title-group">
@@ -1436,7 +1628,6 @@
                         </div>
                     </div>
 
-                    <!-- ===== النشاط الأخير (أضيق) ===== -->
                     <div class="panel activity fade-up" style="animation-delay:0.18s">
                         <div class="head">
                             <div class="p-title-group">
@@ -1456,9 +1647,6 @@
         </div>
     </div>
 
-    <!-- ==========================================================
-    MOBILE BOTTOM NAV
-    ========================================================== -->
     <nav class="mobile-bottom-nav" id="mobileBottomNav">
         <a href="index.html" class="bn-item active">
             <i class="fas fa-home"></i>
@@ -1481,76 +1669,28 @@
         </button>
     </nav>
 
-    <!-- ==========================================================
-    JAVASCRIPT
-    ========================================================== -->
     <script>
-        /**
-         * ============================================================
-         * SUPABASE CONFIGURATION
-         * ============================================================
-         */
+        // ===== سكبت كامل الجافاسكريبت من النسخة السابقة =====
         var SUPABASE_URL = 'https://zwuvcblrrrriuylajvba.supabase.co';
         var SUPABASE_ANON_KEY = 'sb_publishable_YFqwTEs-W_kprUgt4bgpCQ_tf5vVeFa';
         var supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         console.log('🚀 بدء تشغيل لوحة التحكم (index.html)');
 
-        /**
-         * ============================================================
-         * SUPABASE AUTH - التحقق من الجلسة
-         * ============================================================
-         */
         (async function checkAuth() {
             try {
                 console.log('🔍 التحقق من الجلسة في index.html...');
-                
                 var { data: { session }, error } = await supabaseClient.auth.getSession();
-                
-                console.log('📋 نتيجة التحقق:', { 
-                    session: session ? 'موجودة ✅' : 'غير موجودة ❌', 
-                    error: error 
-                });
-                
-                if (error) {
-                    console.error('❌ خطأ في جلب الجلسة:', error);
-                    window.location.href = 'login.html';
-                    return;
-                }
-                
-                if (!session) {
-                    console.warn('⚠️ لا توجد جلسة نشطة، جاري التحويل إلى تسجيل الدخول');
-                    window.location.href = 'login.html';
-                    return;
-                }
-
+                console.log('📋 نتيجة التحقق:', { session: session ? 'موجودة ✅' : 'غير موجودة ❌', error: error });
+                if (error) { console.error('❌ خطأ في جلب الجلسة:', error); window.location.href = 'login.html'; return; }
+                if (!session) { console.warn('⚠️ لا توجد جلسة نشطة، جاري التحويل إلى تسجيل الدخول'); window.location.href = 'login.html'; return; }
                 console.log('✅ توجد جلسة للمستخدم:', session.user.email);
                 console.log('🆔 معرف المستخدم:', session.user.id);
-
-                // ===== محاولة جلب البروفايل =====
                 console.log('🔄 جاري جلب بيانات البروفايل...');
-                
-                var { data: profile, error: profileError } = await supabaseClient
-                    .from('profiles')
-                    .select('*')
-                    .eq('id', session.user.id)
-                    .single();
-
-                console.log('📋 نتيجة جلب البروفايل:', { 
-                    profile: profile, 
-                    error: profileError 
-                });
-
+                var { data: profile, error: profileError } = await supabaseClient.from('profiles').select('*').eq('id', session.user.id).single();
+                console.log('📋 نتيجة جلب البروفايل:', { profile: profile, error: profileError });
                 if (profileError) {
                     console.error('❌ خطأ في جلب البروفايل:', profileError);
-                    console.log('📋 تفاصيل الخطأ:', {
-                        code: profileError.code,
-                        message: profileError.message,
-                        details: profileError.details,
-                        hint: profileError.hint
-                    });
-                    
-                    // عرض رسالة خطأ للمستخدم
                     document.body.innerHTML = `
                         <div style="text-align: center; padding: 50px; direction: rtl; font-family: 'Cairo', sans-serif; background: #f0ede8; min-height: 100vh;">
                             <div style="max-width: 500px; margin: 0 auto; background: #fff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
@@ -1564,7 +1704,6 @@
                     `;
                     return;
                 }
-
                 if (!profile) {
                     console.warn('⚠️ لا يوجد بروفايل للمستخدم!');
                     document.body.innerHTML = `
@@ -1580,63 +1719,26 @@
                     `;
                     return;
                 }
-
                 console.log('✅ تم جلب البروفايل بنجاح!');
-                console.log('📊 بيانات البروفايل:', {
-                    id: profile.id,
-                    email: profile.email,
-                    name: profile.name,
-                    role: profile.role,
-                    status: profile.status,
-                    phone: profile.phone
-                });
-
-                // ===== تحديث الواجهة =====
+                console.log('📊 بيانات البروفايل:', { id: profile.id, email: profile.email, name: profile.name, role: profile.role, status: profile.status, phone: profile.phone });
                 var profileName = document.getElementById('profileName');
                 var profileAvatar = document.getElementById('profileAvatar');
                 var sidebarName = document.getElementById('sidebarName');
                 var sidebarAvatar = document.getElementById('sidebarAvatar');
                 var sidebarRole = document.getElementById('sidebarRole');
-                
                 var displayName = profile.name || session.user.email || 'مستخدم';
                 var roleText = profile.role === 'admin' ? 'مدير النظام' : 'مستخدم';
                 var roleArabic = profile.role === 'admin' ? 'مدير النظام' : 'مستخدم';
-                
-                if (profileName) {
-                    profileName.innerHTML = displayName + '<small>' + roleText + '</small>';
-                }
-                if (profileAvatar) {
-                    profileAvatar.textContent = displayName.charAt(0) || 'أ';
-                }
-                if (sidebarName) {
-                    sidebarName.textContent = displayName;
-                }
-                if (sidebarAvatar) {
-                    sidebarAvatar.textContent = displayName.charAt(0) || 'أ';
-                }
-                if (sidebarRole) {
-                    sidebarRole.textContent = roleArabic;
-                }
-
-                // تخزين بيانات المستخدم
-                window.currentUser = {
-                    id: session.user.id,
-                    email: session.user.email,
-                    name: displayName,
-                    role: profile.role
-                };
-
+                if (profileName) { profileName.innerHTML = displayName + '<small>' + roleText + '</small>'; }
+                if (profileAvatar) { profileAvatar.textContent = displayName.charAt(0) || 'أ'; }
+                if (sidebarName) { sidebarName.textContent = displayName; }
+                if (sidebarAvatar) { sidebarAvatar.textContent = displayName.charAt(0) || 'أ'; }
+                if (sidebarRole) { sidebarRole.textContent = roleArabic; }
+                window.currentUser = { id: session.user.id, email: session.user.email, name: displayName, role: profile.role };
                 console.log('✅ تم تحديث الواجهة بنجاح');
                 console.log('👤 المستخدم الحالي:', window.currentUser);
-
             } catch (error) {
                 console.error('❌ خطأ غير متوقع:', error);
-                console.log('📋 تفاصيل الخطأ غير المتوقع:', {
-                    name: error.name,
-                    message: error.message,
-                    stack: error.stack
-                });
-                
                 document.body.innerHTML = `
                     <div style="text-align: center; padding: 50px; direction: rtl; font-family: 'Cairo', sans-serif; background: #f0ede8; min-height: 100vh;">
                         <div style="max-width: 500px; margin: 0 auto; background: #fff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
@@ -1651,28 +1753,12 @@
             }
         })();
 
-        /**
-         * ============================================================
-         * دالة تسجيل الخروج
-         * ============================================================
-         */
         async function logoutUser() {
             if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
-                try {
-                    console.log('🚪 جاري تسجيل الخروج...');
-                    await supabaseClient.auth.signOut();
-                    console.log('✅ تم تسجيل الخروج بنجاح');
-                    window.location.href = 'login.html';
-                } catch (error) {
-                    console.error('❌ خطأ في تسجيل الخروج:', error);
-                    window.location.href = 'login.html';
-                }
+                try { await supabaseClient.auth.signOut(); window.location.href = 'login.html'; } catch (error) { window.location.href = 'login.html'; }
             }
         }
 
-        /* ============================================================
-           SIDEBAR TOGGLE
-           ============================================================ */
         var sidebar = document.getElementById('sidebar');
         var overlay = document.getElementById('sidebarOverlay');
         var hamburger = document.getElementById('hamburger');
@@ -1683,72 +1769,32 @@
         function toggleSidebar() {
             if (window.innerWidth <= 768) {
                 mobileOpen = !mobileOpen;
-                if (mobileOpen) {
-                    sidebar.classList.add('open');
-                    overlay.classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                    hamburger.innerHTML = '<i class="fas fa-times"></i>';
-                } else {
-                    sidebar.classList.remove('open');
-                    overlay.classList.remove('active');
-                    document.body.style.overflow = '';
-                    hamburger.innerHTML = '<i class="fas fa-bars"></i>';
-                }
+                if (mobileOpen) { sidebar.classList.add('open'); overlay.classList.add('active'); document.body.style.overflow = 'hidden'; hamburger.innerHTML = '<i class="fas fa-times"></i>'; } 
+                else { sidebar.classList.remove('open'); overlay.classList.remove('active'); document.body.style.overflow = ''; hamburger.innerHTML = '<i class="fas fa-bars"></i>'; }
             } else {
                 var nowCollapsed = sidebar.classList.toggle('collapsed');
-                if (nowCollapsed) {
-                    main.classList.add('expanded');
-                } else {
-                    main.classList.remove('expanded');
-                }
+                if (nowCollapsed) { main.classList.add('expanded'); } else { main.classList.remove('expanded'); }
             }
         }
 
-        if (hamburger) {
-            hamburger.addEventListener('click', toggleSidebar);
-        }
-        if (bottomMenuBtn) {
-            bottomMenuBtn.addEventListener('click', toggleSidebar);
-        }
-        if (overlay) {
-            overlay.addEventListener('click', function() {
-                if (window.innerWidth <= 768 && mobileOpen) {
-                    toggleSidebar();
-                }
-            });
-        }
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && window.innerWidth <= 768 && mobileOpen) {
-                toggleSidebar();
-            }
-        });
+        if (hamburger) { hamburger.addEventListener('click', toggleSidebar); }
+        if (bottomMenuBtn) { bottomMenuBtn.addEventListener('click', toggleSidebar); }
+        if (overlay) { overlay.addEventListener('click', function() { if (window.innerWidth <= 768 && mobileOpen) { toggleSidebar(); } }); }
+        document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && window.innerWidth <= 768 && mobileOpen) { toggleSidebar(); } });
         window.addEventListener('resize', function() {
-            if (window.innerWidth > 768) {
-                sidebar.classList.remove('open');
-                overlay.classList.remove('active');
-                document.body.style.overflow = '';
-                mobileOpen = false;
-                hamburger.innerHTML = '<i class="fas fa-bars"></i>';
-            }
+            if (window.innerWidth > 768) { sidebar.classList.remove('open'); overlay.classList.remove('active'); document.body.style.overflow = ''; mobileOpen = false; hamburger.innerHTML = '<i class="fas fa-bars"></i>'; }
         });
 
-        /* ============================================================
-           NOTIFICATIONS — تُبنى من بيانات حقيقية (تُستدعى داخل fetchDashboardData)
-           ============================================================ */
         function renderRealNotifications(bookingsList) {
             var listEl = document.getElementById('notifList');
             var dotEl = document.getElementById('notifDot');
             var badgeEl = document.getElementById('notifCountBadge');
             var syncEl = document.getElementById('notifSyncTime');
             if (!listEl) return;
-
             var today = new Date();
             var todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-            var horizon = new Date(todayDate);
-            horizon.setDate(horizon.getDate() + 3);
-
+            var horizon = new Date(todayDate); horizon.setDate(horizon.getDate() + 3);
             if (dotEl) dotEl.classList.remove('seen');
-
             var upcoming = [];
             (bookingsList || []).forEach(function(b) {
                 if (!b.check_in) return;
@@ -1757,18 +1803,11 @@
                 var dOnly = new Date(d.getFullYear(), d.getMonth(), d.getDate());
                 if (dOnly >= todayDate && dOnly <= horizon) {
                     var diffDays = Math.round((dOnly - todayDate) / 86400000);
-                    upcoming.push({
-                        name: b.client_name || 'عميل',
-                        property: b.property_type || 'عقار',
-                        diffDays: diffDays,
-                        date: dOnly
-                    });
+                    upcoming.push({ name: b.client_name || 'عميل', property: b.property_type || 'عقار', diffDays: diffDays, date: dOnly });
                 }
             });
-
             upcoming.sort(function(a, b) { return a.date - b.date; });
             upcoming = upcoming.slice(0, 6);
-
             if (upcoming.length === 0) {
                 listEl.innerHTML = '<div class="notif-empty"><i class="fas fa-circle-check"></i><p>لا توجد وصول حجوزات خلال الأيام الثلاثة القادمة</p></div>';
                 if (dotEl) dotEl.style.display = 'none';
@@ -1787,13 +1826,10 @@
                     html += '</div></div>';
                 });
                 listEl.innerHTML = html;
-                if (dotEl) dotEl.style.display = 'block';
+                if (dotEl) { dotEl.style.display = 'block'; }
                 if (badgeEl) { badgeEl.textContent = upcoming.length; badgeEl.style.display = 'inline-block'; }
             }
-
-            if (syncEl) {
-                syncEl.textContent = new Date().toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' });
-            }
+            if (syncEl) { syncEl.textContent = new Date().toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' }); }
         }
 
         (function() {
@@ -1801,89 +1837,52 @@
             var notifPanel = document.getElementById('notifPanel');
             var notifDot = document.getElementById('notifDot');
             if (!notifBtn || !notifPanel) return;
-
             notifBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
                 notifPanel.classList.toggle('open');
-                if (notifPanel.classList.contains('open') && notifDot) {
-                    notifDot.classList.add('seen');
-                }
+                if (notifPanel.classList.contains('open') && notifDot) { notifDot.classList.add('seen'); }
             });
             document.addEventListener('click', function(e) {
-                if (!notifPanel.contains(e.target) && e.target !== notifBtn) {
-                    notifPanel.classList.remove('open');
-                }
+                if (!notifPanel.contains(e.target) && e.target !== notifBtn) { notifPanel.classList.remove('open'); }
             });
         })();
 
-        /* ============================================================
-           MOBILE SEARCH TOGGLE
-           ============================================================ */
         (function() {
             var mobileSearchToggle = document.getElementById('mobileSearchToggle');
             var mobileSearchBar = document.getElementById('mobileSearchBar');
             var mobileSearchInput = document.getElementById('mobileSearchInput');
             var closeSearchBtn = document.getElementById('closeSearchBtn');
-
             function openMobileSearch() {
                 mobileSearchBar.classList.add('open');
                 mobileSearchToggle.classList.add('active');
                 mobileSearchToggle.innerHTML = '<i class="fas fa-times"></i>';
-                setTimeout(function() {
-                    if (mobileSearchInput) {
-                        mobileSearchInput.focus();
-                    }
-                }, 320);
+                setTimeout(function() { if (mobileSearchInput) { mobileSearchInput.focus(); } }, 320);
             }
-
             function closeMobileSearch() {
                 mobileSearchBar.classList.remove('open');
                 mobileSearchToggle.classList.remove('active');
                 mobileSearchToggle.innerHTML = '<i class="fas fa-search"></i>';
             }
-
             if (mobileSearchToggle && mobileSearchBar) {
                 mobileSearchToggle.addEventListener('click', function() {
-                    if (mobileSearchBar.classList.contains('open')) {
-                        closeMobileSearch();
-                    } else {
-                        openMobileSearch();
-                    }
+                    if (mobileSearchBar.classList.contains('open')) { closeMobileSearch(); } else { openMobileSearch(); }
                 });
             }
-            if (closeSearchBtn) {
-                closeSearchBtn.addEventListener('click', closeMobileSearch);
-            }
+            if (closeSearchBtn) { closeSearchBtn.addEventListener('click', closeMobileSearch); }
         })();
 
-        /* ============================================================
-           CHART.JS
-           ============================================================ */
         Chart.defaults.font.family = "'Cairo', sans-serif";
         Chart.defaults.color = '#9a8f83';
 
         var salesChart;
         var pieChart;
-        var chartData = {
-            labels: [],
-            sales: [],
-            occupancy: []
-        };
-        var pieData = {
-            labels: [],
-            values: []
-        };
+        var chartData = { labels: [], sales: [], occupancy: [] };
+        var pieData = { labels: [], values: [] };
 
         function renderSalesChart() {
             var ctx = document.getElementById('salesChart').getContext('2d');
-            if (salesChart) {
-                salesChart.destroy();
-            }
-            if (chartData.labels.length === 0) {
-                chartData.labels = ['لا توجد بيانات'];
-                chartData.sales = [0];
-                chartData.occupancy = [0];
-            }
+            if (salesChart) { salesChart.destroy(); }
+            if (chartData.labels.length === 0) { chartData.labels = ['لا توجد بيانات']; chartData.sales = [0]; chartData.occupancy = [0]; }
             salesChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -1914,10 +1913,7 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    interaction: {
-                        mode: 'index',
-                        intersect: false
-                    },
+                    interaction: { mode: 'index', intersect: false },
                     plugins: {
                         legend: { display: false },
                         tooltip: {
@@ -1928,39 +1924,18 @@
                             borderWidth: 1,
                             padding: 10,
                             cornerRadius: 8,
-                            titleFont: {
-                                family: "'Cairo', sans-serif",
-                                weight: '700',
-                                size: 11
-                            },
-                            bodyFont: {
-                                family: "'Cairo', sans-serif",
-                                size: 11
-                            },
+                            titleFont: { family: "'Cairo', sans-serif", weight: '700', size: 11 },
+                            bodyFont: { family: "'Cairo', sans-serif", size: 11 },
                             rtl: true,
-                            callbacks: {
-                                label: function(item) {
-                                    return item.dataset.label + ': ' + item.parsed.y.toLocaleString();
-                                }
-                            }
+                            callbacks: { label: function(item) { return item.dataset.label + ': ' + item.parsed.y.toLocaleString(); } }
                         }
                     },
                     scales: {
-                        x: {
-                            grid: { display: false },
-                            border: { display: false },
-                            ticks: { font: { size: 10 } }
-                        },
+                        x: { grid: { display: false }, border: { display: false }, ticks: { font: { size: 10 } } },
                         y: {
                             grid: { color: 'rgba(0,0,0,0.04)' },
                             border: { display: false },
-                            ticks: {
-                                font: { size: 10 },
-                                callback: function(v) {
-                                    if (v >= 1000) return (v / 1000) + 'k';
-                                    return v;
-                                }
-                            }
+                            ticks: { font: { size: 10 }, callback: function(v) { if (v >= 1000) return (v / 1000) + 'k'; return v; } }
                         }
                     }
                 }
@@ -1969,13 +1944,8 @@
 
         function renderPieChart() {
             var ctx = document.getElementById('pieChart').getContext('2d');
-            if (pieChart) {
-                pieChart.destroy();
-            }
-            if (pieData.labels.length === 0) {
-                pieData.labels = ['لا توجد بيانات'];
-                pieData.values = [100];
-            }
+            if (pieChart) { pieChart.destroy(); }
+            if (pieData.labels.length === 0) { pieData.labels = ['لا توجد بيانات']; pieData.values = [100]; }
             var colors = ['#1a4a6b', '#b98a1e', '#2e7a5c', '#b14b2b', '#1a6a4a', '#a63a31', '#2a5a7a', '#c98a2e'];
             pieChart = new Chart(ctx, {
                 type: 'doughnut',
@@ -2003,60 +1973,28 @@
                             borderWidth: 1,
                             padding: 10,
                             cornerRadius: 8,
-                            titleFont: {
-                                family: "'Cairo', sans-serif",
-                                weight: '700',
-                                size: 11
-                            },
-                            bodyFont: {
-                                family: "'Cairo', sans-serif",
-                                size: 11
-                            },
+                            titleFont: { family: "'Cairo', sans-serif", weight: '700', size: 11 },
+                            bodyFont: { family: "'Cairo', sans-serif", size: 11 },
                             rtl: true,
-                            callbacks: {
-                                label: function(item) {
-                                    return item.label + ': ' + item.parsed + '%';
-                                }
-                            }
+                            callbacks: { label: function(item) { return item.label + ': ' + item.parsed + '%'; } }
                         }
                     },
-                    animation: {
-                        animateRotate: true,
-                        duration: 1000
-                    }
+                    animation: { animateRotate: true, duration: 1000 }
                 }
             });
         }
 
-        // ===== تخزين مراجع Sparklines =====
         var sparkCharts = {};
 
         function renderSpark(id, data, color) {
             var canvas = document.getElementById(id);
             if (!canvas) return;
-            
-            // تدمير الرسم البياني القديم إذا كان موجوداً
-            if (sparkCharts[id]) {
-                try {
-                    sparkCharts[id].destroy();
-                } catch(e) {
-                    // تجاهل الأخطاء
-                }
-                delete sparkCharts[id];
-            }
-            
+            if (sparkCharts[id]) { try { sparkCharts[id].destroy(); } catch(e) {} delete sparkCharts[id]; }
             sparkCharts[id] = new Chart(canvas.getContext('2d'), {
                 type: 'line',
                 data: {
                     labels: data.map(function(_, i) { return i; }),
-                    datasets: [{
-                        data: data,
-                        borderColor: color,
-                        borderWidth: 1.6,
-                        pointRadius: 0,
-                        tension: 0.4,
-                        fill: false
-                    }]
+                    datasets: [{ data: data, borderColor: color, borderWidth: 1.6, pointRadius: 0, tension: 0.4, fill: false }]
                 },
                 options: {
                     responsive: true,
@@ -2068,92 +2006,56 @@
             });
         }
 
-        /* ============================================================
-           جلب البيانات من Supabase مع خصم الخصم وإزالة الكسور
-           ============================================================ */
         async function fetchDashboardData() {
             try {
                 console.log('🔄 بدء جلب البيانات...');
-
-                // 1. جلب بيانات الحجوزات
                 var bookingsResponse = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=*', {
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
-                    }
+                    headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY }
                 });
-
-                if (!bookingsResponse.ok) {
-                    throw new Error('فشل في جلب بيانات الحجوزات');
-                }
-
+                if (!bookingsResponse.ok) { throw new Error('فشل في جلب بيانات الحجوزات'); }
                 var bookings = await bookingsResponse.json();
                 console.log('📊 تم جلب الحجوزات:', bookings.length);
-
-                // 2. جلب بيانات العملاء
                 var clientsResponse = await fetch(SUPABASE_URL + '/rest/v1/clients?select=id', {
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
-                    }
+                    headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY }
                 });
                 var clients = clientsResponse.ok ? await clientsResponse.json() : [];
-
-                // 3. جلب بيانات المصروفات
                 console.log('🔄 جلب المصروفات...');
                 var expensesResponse = await fetch(SUPABASE_URL + '/rest/v1/expenses?select=*', {
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
-                    }
+                    headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY }
                 });
-
                 var expenses = [];
                 var totalExpenses = 0;
-
                 if (expensesResponse.ok) {
                     expenses = await expensesResponse.json();
                     console.log('📋 تم جلب المصروفات، عدد السجلات:', expenses.length);
-
                     if (expenses.length > 0) {
                         expenses.forEach(function(expense) {
                             var amount = parseFloat(expense.total || expense.amount || 0);
-                            if (!isNaN(amount) && amount > 0) {
-                                totalExpenses += amount;
-                            }
+                            if (!isNaN(amount) && amount > 0) { totalExpenses += amount; }
                         });
                     }
                     console.log('💰 إجمالي المصروفات:', totalExpenses);
-                } else {
-                    console.warn('⚠️ فشل في جلب المصروفات');
-                }
-
-                // ===== معالجة البيانات =====
+                } else { console.warn('⚠️ فشل في جلب المصروفات'); }
                 var totalRevenue = 0;
                 var totalBookings = bookings.length;
                 var totalClients = clients.length;
                 var futureBookings = 0;
                 var today = new Date();
                 var todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-
                 var monthlyRevenue = {};
                 var monthlyCount = {};
                 var propertyTypes = {};
                 var activities = [];
                 var clientBookings = {};
                 var futureBookingsList = [];
-
                 bookings.forEach(function(booking) {
-                    // ===== خصم الخصم من الإيرادات =====
                     var total = parseFloat(booking.total) || 0;
                     var discount = parseFloat(booking.discount) || 0;
                     var netRevenue = total - discount;
                     totalRevenue += netRevenue;
-
                     var propType = booking.property_type || 'غير محدد';
                     if (!propertyTypes[propType]) propertyTypes[propType] = 0;
                     propertyTypes[propType] += 1;
-
                     var checkIn = booking.check_in;
                     if (checkIn) {
                         var d = new Date(checkIn);
@@ -2161,7 +2063,6 @@
                             var dOnly = new Date(d.getFullYear(), d.getMonth(), d.getDate());
                             if (dOnly >= todayDate) {
                                 futureBookings++;
-                                // جمع الحجوزات المستقبلية للعرض في اللوحة
                                 futureBookingsList.push({
                                     client_name: booking.client_name || 'عميل',
                                     property_type: booking.property_type || 'عقار',
@@ -2173,7 +2074,6 @@
                             }
                         }
                     }
-
                     if (booking.invoice_date) {
                         var date = new Date(booking.invoice_date);
                         if (!isNaN(date.getTime())) {
@@ -2184,30 +2084,16 @@
                             monthlyCount[monthKey] += 1;
                         }
                     }
-
                     if (booking.client_name) {
-                        activities.push({
-                            name: booking.client_name,
-                            property: booking.property_type || 'عقار',
-                            date: booking.check_in || booking.invoice_date || ''
-                        });
+                        activities.push({ name: booking.client_name, property: booking.property_type || 'عقار', date: booking.check_in || booking.invoice_date || '' });
                     }
-
                     if (booking.client_name) {
                         if (!clientBookings[booking.client_name]) clientBookings[booking.client_name] = 0;
                         clientBookings[booking.client_name] += 1;
                     }
                 });
-
-                // ترتيب الحجوزات المستقبلية حسب التاريخ (الأقرب أولاً)
-                futureBookingsList.sort(function(a, b) {
-                    return new Date(a.check_in) - new Date(b.check_in);
-                });
-
-                // أخذ أول 5 حجوزات فقط
+                futureBookingsList.sort(function(a, b) { return new Date(a.check_in) - new Date(b.check_in); });
                 var topFutureBookings = futureBookingsList.slice(0, 5);
-
-                // ===== عرض الحجوزات المستقبلية في اللوحة =====
                 var futureContainer = document.getElementById('futureBookingsList');
                 if (topFutureBookings.length === 0) {
                     futureContainer.innerHTML = '<div class="empty-state"><i class="fas fa-calendar-day"></i><p>لا توجد حجوزات مستقبلية</p></div>';
@@ -2218,7 +2104,6 @@
                         var isToday = item.check_in ? new Date(item.check_in).toDateString() === new Date().toDateString() : false;
                         var statusClass = isToday ? 'today' : 'future';
                         var statusText = isToday ? 'اليوم' : 'قادم';
-
                         futureHtml += `
                             <div class="future-booking-item">
                                 <span class="booking-icon"><i class="fas fa-calendar-check"></i></span>
@@ -2236,40 +2121,26 @@
                     });
                     futureContainer.innerHTML = futureHtml;
                 }
-
-                // حساب صافي الأرباح = الإيرادات - المصروفات
                 var netProfit = Math.max(0, totalRevenue - totalExpenses);
                 var commissionRate = 0.20;
                 var totalCommission = netProfit * commissionRate;
-
-                // ===== تقريب الأرقام =====
                 var roundedRevenue = Math.round(totalRevenue);
                 var roundedExpenses = Math.round(totalExpenses);
                 var roundedCommission = Math.round(totalCommission);
-
                 console.log('📊 الإيرادات (بعد الخصم):', roundedRevenue, 'المصروفات:', roundedExpenses, 'العمولة:', roundedCommission);
-
-                // ===== تحديث الإحصائيات =====
                 document.getElementById('totalRevenue').textContent = roundedRevenue.toLocaleString() + ' ر.س';
                 document.getElementById('totalBookings').textContent = totalBookings.toLocaleString();
                 document.getElementById('totalClients').textContent = (totalClients || 0).toLocaleString();
                 document.getElementById('upcomingBookings').textContent = futureBookings.toLocaleString();
                 document.getElementById('totalExpenses').textContent = roundedExpenses.toLocaleString() + ' ر.س';
                 document.getElementById('totalCommission').textContent = roundedCommission.toLocaleString() + ' ر.س';
-
-                // ===== تحديث التنبيهات =====
                 renderRealNotifications(bookings);
-
-                // ===== تحديث الـ Charts =====
                 var sortedMonths = Object.keys(monthlyRevenue).sort();
                 if (sortedMonths.length > 0) {
-                    var monthNames = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
-                        'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
-                    ];
+                    var monthNames = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
                     var labels = [];
                     var sales = [];
                     var occupancy = [];
-
                     sortedMonths.forEach(function(monthKey) {
                         var parts = monthKey.split('-');
                         var year = parts[0];
@@ -2279,7 +2150,6 @@
                         var occ = monthlyCount[monthKey] || 0;
                         occupancy.push(Math.round((occ / 30) * 100));
                     });
-
                     chartData.labels = labels;
                     chartData.sales = sales;
                     chartData.occupancy = occupancy;
@@ -2289,25 +2159,13 @@
                     chartData.occupancy = [0];
                 }
                 renderSalesChart();
-
-                // ===== تحديث الـ Pie Chart =====
                 var propLabels = Object.keys(propertyTypes);
                 if (propLabels.length > 0) {
-                    var propValues = propLabels.map(function(key) {
-                        return propertyTypes[key];
-                    });
-                    var totalProps = propValues.reduce(function(a, b) {
-                        return a + b;
-                    }, 0);
-                    var piePercentages = propValues.map(function(v) {
-                        return Math.round((v / totalProps) * 100);
-                    });
-                    var sum = piePercentages.reduce(function(a, b) {
-                        return a + b;
-                    }, 0);
-                    if (sum !== 100 && piePercentages.length > 0) {
-                        piePercentages[piePercentages.length - 1] += (100 - sum);
-                    }
+                    var propValues = propLabels.map(function(key) { return propertyTypes[key]; });
+                    var totalProps = propValues.reduce(function(a, b) { return a + b; }, 0);
+                    var piePercentages = propValues.map(function(v) { return Math.round((v / totalProps) * 100); });
+                    var sum = piePercentages.reduce(function(a, b) { return a + b; }, 0);
+                    if (sum !== 100 && piePercentages.length > 0) { piePercentages[piePercentages.length - 1] += (100 - sum); }
                     pieData.labels = propLabels;
                     pieData.values = piePercentages;
                 } else {
@@ -2315,8 +2173,6 @@
                     pieData.values = [100];
                 }
                 renderPieChart();
-
-                // ===== تحديث Legends =====
                 var colors = ['#1a4a6b', '#b98a1e', '#2e7a5c', '#b14b2b', '#1a6a4a', '#a63a31', '#2a5a7a', '#c98a2e'];
                 var legendHtml = '';
                 pieData.labels.forEach(function(label, index) {
@@ -2325,8 +2181,6 @@
                     }
                 });
                 document.getElementById('pieLegend').innerHTML = legendHtml || '<span class="li">لا توجد بيانات</span>';
-
-                // ===== تحديث النشاطات =====
                 var activityContainer = document.getElementById('activityList');
                 if (activities.length === 0) {
                     activityContainer.innerHTML = '<div class="empty-state"><i class="fas fa-clock"></i><p>لا توجد حجوزات مسجلة</p></div>';
@@ -2334,7 +2188,6 @@
                     var colors2 = ['var(--viridian)', 'var(--ochre)', 'var(--prussian)', 'var(--oxide)'];
                     var activityHtml = '';
                     var activitiesToShow = activities.slice(0, 5);
-
                     activitiesToShow.forEach(function(item, index) {
                         var colorIndex = index % colors2.length;
                         activityHtml += '<div class="item">';
@@ -2347,56 +2200,39 @@
                     });
                     activityContainer.innerHTML = activityHtml;
                 }
-
-                // ===== تحديث التاريخ =====
                 var dateEl = document.getElementById('dashboardDate');
                 if (dateEl) {
                     var now = new Date();
-                    var months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
-                        'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
-                    ];
+                    var months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
                     dateEl.textContent = 'لوحة التحكم — ' + months[now.getMonth()] + ' ' + now.getFullYear();
                 }
-
-                // ===== تحديث Sparklines =====
                 var sparkData = [];
-                for (var i = 0; i < 8; i++) {
-                    sparkData.push(Math.round(Math.random() * 100));
-                }
+                for (var i = 0; i < 8; i++) { sparkData.push(Math.round(Math.random() * 100)); }
                 renderSpark('spark1', sparkData, '#1a4a6b');
                 renderSpark('spark2', sparkData, '#9a8f83');
                 renderSpark('spark3', sparkData, '#2e7a5c');
                 renderSpark('spark4', sparkData, '#a63a31');
                 renderSpark('spark5', sparkData, '#b98a1e');
                 renderSpark('spark6', sparkData, '#b98a1e');
-
-                // ===== إزالة حالة التحميل =====
-                document.querySelectorAll('.stat-card.loading').forEach(function(el) {
-                    el.classList.remove('loading');
-                });
-
+                document.querySelectorAll('.stat-card.loading').forEach(function(el) { el.classList.remove('loading'); });
             } catch (error) {
                 console.error('❌ خطأ في جلب البيانات:', error);
-                document.querySelectorAll('.stat-card.loading').forEach(function(el) {
-                    el.classList.remove('loading');
-                });
-                document.querySelectorAll('.number .loading-text').forEach(function(el) {
-                    el.textContent = '⚠️ خطأ في التحميل';
-                });
+                document.querySelectorAll('.stat-card.loading').forEach(function(el) { el.classList.remove('loading'); });
+                document.querySelectorAll('.number .loading-text').forEach(function(el) { el.textContent = '⚠️ خطأ في التحميل'; });
                 var notifListEl = document.getElementById('notifList');
-                if (notifListEl) {
-                    notifListEl.innerHTML = '<div class="notif-empty"><i class="fas fa-triangle-exclamation"></i><p>تعذّر الاتصال بقاعدة البيانات</p></div>';
-                }
+                if (notifListEl) { notifListEl.innerHTML = '<div class="notif-empty"><i class="fas fa-triangle-exclamation"></i><p>تعذّر الاتصال بقاعدة البيانات</p></div>'; }
                 var futureContainer = document.getElementById('futureBookingsList');
-                if (futureContainer) {
-                    futureContainer.innerHTML = '<div class="empty-state"><i class="fas fa-triangle-exclamation"></i><p>تعذّر تحميل الحجوزات</p></div>';
-                }
+                if (futureContainer) { futureContainer.innerHTML = '<div class="empty-state"><i class="fas fa-triangle-exclamation"></i><p>تعذّر تحميل الحجوزات</p></div>'; }
             }
         }
 
-        // ===== تشغيل التحديث =====
         fetchDashboardData();
         setInterval(fetchDashboardData, 300000);
+
+        console.log('🏕️ منتجع وشاليهات حيالة القصيم - لوحة التحكم المتطورة');
+        console.log('📊 تم تحميل النظام بنجاح');
+        console.log('👤 المستخدم:', window.currentUser?.name || 'غير معروف');
+        console.log('📱 متجاوب بالكامل مع جميع أحجام الشاشات');
     </script>
 
 </body>
