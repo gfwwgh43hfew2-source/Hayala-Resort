@@ -105,7 +105,7 @@
         }
 
         /* ==========================================================
-           SIDEBAR - تظهر فقط عند الطلب
+           SIDEBAR
            ========================================================== */
         .sidebar-overlay {
             display: none;
@@ -158,7 +158,6 @@
             }
         }
 
-        /* ===== Brand ===== */
         .sidebar .brand {
             padding: 28px 24px 20px;
             display: flex;
@@ -203,7 +202,6 @@
             -webkit-text-fill-color: var(--ink-3);
         }
 
-        /* ===== Menu ===== */
         .sidebar .menu {
             flex: 1;
             padding: 16px 12px;
@@ -272,7 +270,6 @@
             color: var(--ink);
         }
 
-        /* ===== Footer ===== */
         .sidebar .footer {
             padding: 14px 20px 24px;
             border-top: 1px solid rgba(0, 0, 0, 0.04);
@@ -353,9 +350,6 @@
             }
         }
 
-        /* ==========================================================
-           MAIN CONTENT - بدون Scale
-           ========================================================== */
         .main-content {
             display: block;
             width: 100%;
@@ -1639,18 +1633,31 @@
         }
 
         /* ==========================================================
-           ANIMATIONS
+           ANIMATIONS - بدون إزاحة ✅
            ========================================================== */
         .fade-up {
             opacity: 0;
-            transform: translateY(20px);
-            animation: fadeUp 0.6s var(--ease-spring) forwards;
+            transform: translateY(0);
+            animation: fadeUp 0.7s var(--ease-spring) forwards;
         }
 
         @keyframes fadeUp {
             to {
                 opacity: 1;
                 transform: translateY(0);
+            }
+        }
+
+        .fade-up-double {
+            opacity: 0;
+            transform: translateY(0) scale(0.97);
+            animation: fadeUpDouble 0.8s var(--ease-spring) forwards;
+        }
+
+        @keyframes fadeUpDouble {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
             }
         }
 
@@ -2503,7 +2510,7 @@
 
         /**
          * ============================================================
-         * SIDEBAR TOGGLE - محسّن للموبايل (إغلاق موثوق)
+         * SIDEBAR TOGGLE
          * ============================================================
          */
         var sidebar = document.getElementById('sidebar');
@@ -2513,9 +2520,6 @@
         var bottomMenuBtn = document.getElementById('bottomMenuBtn');
         var mobileOpen = false;
 
-        /**
-         * دالة فتح القائمة الجانبية
-         */
         function openSidebar() {
             if (window.innerWidth <= 768) {
                 mobileOpen = true;
@@ -2529,9 +2533,6 @@
             }
         }
 
-        /**
-         * دالة إغلاق القائمة الجانبية
-         */
         function closeSidebar() {
             if (window.innerWidth <= 768) {
                 mobileOpen = false;
@@ -2545,9 +2546,6 @@
             }
         }
 
-        /**
-         * دالة تبديل القائمة الجانبية
-         */
         function toggleSidebar() {
             if (window.innerWidth <= 768) {
                 if (mobileOpen) {
@@ -2556,7 +2554,6 @@
                     openSidebar();
                 }
             } else {
-                // وضع سطح المكتب
                 var nowCollapsed = sidebar.classList.toggle('collapsed');
                 if (nowCollapsed) {
                     main.classList.add('expanded');
@@ -2566,7 +2563,6 @@
             }
         }
 
-        // ===== زر الهامبرجر =====
         if (hamburger) {
             hamburger.addEventListener('click', function(e) {
                 e.stopPropagation();
@@ -2574,7 +2570,6 @@
             });
         }
 
-        // ===== زر القائمة في الـ Bottom Nav =====
         if (bottomMenuBtn) {
             bottomMenuBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
@@ -2582,7 +2577,6 @@
             });
         }
 
-        // ===== الـ Overlay (الخلفية المظلمة) - إغلاق عند الضغط عليها =====
         if (overlay) {
             overlay.addEventListener('click', function(e) {
                 e.stopPropagation();
@@ -2592,7 +2586,6 @@
             });
         }
 
-        // ===== إغلاق القائمة عند الضغط على أي رابط داخلها (للموبايل) =====
         var sidebarLinks = document.querySelectorAll('.sidebar .menu .item');
         sidebarLinks.forEach(function(link) {
             link.addEventListener('click', function() {
@@ -2602,22 +2595,19 @@
             });
         });
 
-        // ===== إغلاق القائمة عند الضغط على زر Escape =====
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && window.innerWidth <= 768 && mobileOpen) {
                 closeSidebar();
             }
         });
 
-        // ===== عند تغيير حجم الشاشة =====
         window.addEventListener('resize', function() {
             if (window.innerWidth > 768 && mobileOpen) {
-                // إذا كانت القائمة مفتوحة وتم تغيير الحجم إلى سطح المكتب
                 closeSidebar();
             }
         });
 
-        console.log('✅ Sidebar Toggle جاهز - إغلاق موثوق');
+        console.log('✅ Sidebar Toggle جاهز');
 
         /**
          * ============================================================
@@ -3344,7 +3334,7 @@
         console.log('🏕️ منتجع وشاليهات حيالة القصيم - لوحة التحكم المتطورة');
         console.log('📊 تم تحميل النظام بنجاح');
         console.log('👤 المستخدم:', window.currentUser?.name || 'غير معروف');
-        console.log('📱 تم إصلاح إغلاق القائمة الجانبية على الموبايل');
+        console.log('📱 تم إصلاح مشكلة الإزاحة للأعلى');
     </script>
 
 </body>
