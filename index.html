@@ -17,11 +17,11 @@
            ROOT VARIABLES
            ========================================================== */
         :root {
-            --gold-1: #5EEAD4;
-            --gold-2: #2DD4BF;
-            --gold-3: #0D9488;
-            --gold-4: #0F766E;
-            --gold-gradient: linear-gradient(135deg, #5EEAD4 0%, #2DD4BF 40%, #14B8A6 70%, #0D9488 100%);
+            --gold-1: #59CAEA;
+            --gold-2: #06B9EA;
+            --gold-3: #0890C4;
+            --gold-4: #043E7E;
+            --gold-gradient: linear-gradient(135deg, #59CAEA 0%, #06B9EA 40%, #0890C4 70%, #043E7E 100%);
             --primary: #0EA5E9;
             --primary-dark: #0284C7;
             --canvas: #f5f1ea;
@@ -32,9 +32,9 @@
             --ink-2: #4a3f35;
             --ink-3: #8a7f73;
             --ink-4: #c4b9ab;
-            --prussian: #1a4a6b;
-            --ochre: #0891B2;
-            --viridian: #2e7a5c;
+            --prussian: #043E7E;
+            --ochre: #FEC410;
+            --viridian: #4E8C09;
             --oxide: #a63a31;
             --sidebar-w: 290px;
             --header-h: 74px;
@@ -44,8 +44,8 @@
             --shadow-soft: 0 8px 40px rgba(0, 0, 0, 0.05);
             --shadow-medium: 0 16px 60px rgba(0, 0, 0, 0.08);
             --shadow-strong: 0 24px 80px rgba(0, 0, 0, 0.12);
-            --shadow-gold: 0 8px 40px rgba(13, 148, 136, 0.2);
-            --shadow-gold-strong: 0 16px 60px rgba(13, 148, 136, 0.3);
+            --shadow-gold: 0 8px 40px rgba(8, 144, 196, 0.2);
+            --shadow-gold-strong: 0 16px 60px rgba(8, 144, 196, 0.3);
             --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
             --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
             --display: 'Bricolage Grotesque', 'Cairo', sans-serif;
@@ -2257,9 +2257,9 @@
                             <canvas id="pieChart"></canvas>
                         </div>
                         <div class="legend-row" id="pieLegend">
-                            <span class="li"><span class="sw" style="background:#1a4a6b"></span> فيلا</span>
-                            <span class="li"><span class="sw" style="background:#b98a1e"></span> شقة</span>
-                            <span class="li"><span class="sw" style="background:#2e7a5c"></span> استوديو</span>
+                            <span class="li"><span class="sw" style="background:#043E7E"></span> فيلا</span>
+                            <span class="li"><span class="sw" style="background:#06B9EA"></span> شقة</span>
+                            <span class="li"><span class="sw" style="background:#7EB60C"></span> استوديو</span>
                             <span class="li"><span class="sw" style="background:#b14b2b"></span> جناح</span>
                         </div>
                     </div>
@@ -2395,9 +2395,9 @@
                     document.body.innerHTML = `
                             <div style="text-align: center; padding: 50px; direction: rtl; font-family: 'Cairo', sans-serif; background: #f0ede8; min-height: 100vh;">
                                 <div style="max-width: 500px; margin: 0 auto; background: #ffffff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
-                                    <h2 style="color: #0D9488;">⚠️ تعذّر تحميل بيانات الحساب</h2>
+                                    <h2 style="color: #043E7E;">⚠️ تعذّر تحميل بيانات الحساب</h2>
                                     <p style="color: #5a4f45; margin: 20px 0;">${profileError.message}</p>
-                                    <button onclick="logoutUser()" style="padding: 14px 40px; background: #2DD4BF; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #1a1714;">
+                                    <button onclick="logoutUser()" style="padding: 14px 40px; background: #59CAEA; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #1a1714;">
                                         <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
                                     </button>
                                 </div>
@@ -2411,9 +2411,9 @@
                     document.body.innerHTML = `
                             <div style="text-align: center; padding: 50px; direction: rtl; font-family: 'Cairo', sans-serif; background: #f0ede8; min-height: 100vh;">
                                 <div style="max-width: 500px; margin: 0 auto; background: #ffffff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
-                                    <h2 style="color: #0D9488;">⚠️ حساب غير مكتمل</h2>
+                                    <h2 style="color: #043E7E;">⚠️ حساب غير مكتمل</h2>
                                     <p style="color: #5a4f45; margin: 20px 0;">لا يوجد بروفايل لهذا الحساب. يرجى التواصل مع الدعم الفني.</p>
-                                    <button onclick="logoutUser()" style="padding: 14px 40px; background: #2DD4BF; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #1a1714;">
+                                    <button onclick="logoutUser()" style="padding: 14px 40px; background: #59CAEA; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #1a1714;">
                                         <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
                                     </button>
                                 </div>
@@ -2473,9 +2473,9 @@
                 document.body.innerHTML = `
                         <div style="text-align: center; padding: 50px; direction: rtl; font-family: 'Cairo', sans-serif; background: #f0ede8; min-height: 100vh;">
                             <div style="max-width: 500px; margin: 0 auto; background: #ffffff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
-                                <h2 style="color: #0D9488;">⚠️ خطأ في النظام</h2>
+                                <h2 style="color: #043E7E;">⚠️ خطأ في النظام</h2>
                                 <p style="color: #5a4f45; margin: 20px 0;">${error.message || 'حدث خطأ غير متوقع'}</p>
-                                <button onclick="logoutUser()" style="padding: 14px 40px; background: #2DD4BF; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #1a1714;">
+                                <button onclick="logoutUser()" style="padding: 14px 40px; background: #59CAEA; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #1a1714;">
                                     <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
                                 </button>
                             </div>
@@ -2779,7 +2779,7 @@
                     datasets: [{
                         label: 'الإيرادات',
                         data: chartData.sales,
-                        backgroundColor: '#0D9488',
+                        backgroundColor: '#06B9EA',
                         borderRadius: 6,
                         barPercentage: 0.5,
                         categoryPercentage: 0.65,
@@ -2883,7 +2883,7 @@
                 pieData.values = [100];
             }
 
-            var colors = ['#1a4a6b', '#0d9488', '#2e7a5c', '#b14b2b', '#1a6a4a', '#a63a31', '#2a5a7a', '#2dd4bf'];
+            var colors = ['#043E7E', '#06B9EA', '#7EB60C', '#b14b2b', '#4E8C09', '#a63a31', '#0890C4', '#59CAEA'];
 
             pieChart = new Chart(ctx, {
                 type: 'doughnut',
@@ -3237,7 +3237,7 @@
                 }
                 renderPieChart();
 
-                var colors = ['#1a4a6b', '#0d9488', '#2e7a5c', '#b14b2b', '#1a6a4a', '#a63a31', '#2a5a7a', '#2dd4bf'];
+                var colors = ['#043E7E', '#06B9EA', '#7EB60C', '#b14b2b', '#4E8C09', '#a63a31', '#0890C4', '#59CAEA'];
                 var legendHtml = '';
                 pieData.labels.forEach(function(label, index) {
                     if (index < colors.length) {
@@ -3284,12 +3284,12 @@
                 for (var i = 0; i < 8; i++) {
                     sparkData.push(Math.round(Math.random() * 100));
                 }
-                renderSpark('spark1', sparkData, '#0D9488');
-                renderSpark('spark2', sparkData, '#1a4a6b');
-                renderSpark('spark3', sparkData, '#2e7a5c');
+                renderSpark('spark1', sparkData, '#06B9EA');
+                renderSpark('spark2', sparkData, '#043E7E');
+                renderSpark('spark3', sparkData, '#7EB60C');
                 renderSpark('spark4', sparkData, '#a63a31');
-                renderSpark('spark5', sparkData, '#b98a1e');
-                renderSpark('spark6', sparkData, '#b98a1e');
+                renderSpark('spark5', sparkData, '#0890C4');
+                renderSpark('spark6', sparkData, '#0890C4');
 
                 document.querySelectorAll('.stat-card.loading').forEach(function(el) {
                     el.classList.remove('loading');
