@@ -14,7 +14,7 @@
 
     <style>
         /* ========================================================== */
-        /* ROOT VARIABLES - نفس ألوان الكود القديم                       */
+        /* ROOT VARIABLES - ألوان كود add-invoice.html                */
         /* ========================================================== */
         :root {
             --gold-1: #F5D06B;
@@ -27,7 +27,7 @@
             --canvas: #f5f1ea;
             --surface: #ffffff;
             --surface-2: #fbf9f5;
-            --surface-glass: rgba(255, 255, 255, 0.85);
+            --surface-glass: rgba(255, 255, 255, 0.72);
             --ink: #1a1612;
             --ink-2: #4a3f35;
             --ink-3: #8a7f73;
@@ -105,7 +105,7 @@
         }
 
         /* ========================================================== */
-        /* SIDEBAR - متجاوب بالكامل                                    */
+        /* SIDEBAR                                                    */
         /* ========================================================== */
         .sidebar-overlay {
             display: none;
@@ -165,7 +165,6 @@
             gap: 12px;
             border-bottom: 1px solid rgba(0, 0, 0, 0.04);
             flex-shrink: 0;
-            flex-wrap: wrap;
         }
 
         .sidebar .brand .mark {
@@ -281,7 +280,6 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            flex-wrap: wrap;
         }
 
         .sidebar .footer .user .avatar {
@@ -330,7 +328,7 @@
         }
 
         /* ========================================================== */
-        /* MAIN - متجاوب بالكامل                                      */
+        /* MAIN                                                       */
         /* ========================================================== */
         .main {
             margin-right: 0;
@@ -362,7 +360,7 @@
         }
 
         /* ========================================================== */
-        /* HEADER - متجاوب بالكامل                                     */
+        /* HEADER                                                     */
         /* ========================================================== */
         .header {
             position: sticky;
@@ -390,7 +388,6 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            min-width: 0;
         }
 
         .header .hamburger {
@@ -520,7 +517,7 @@
         }
 
         /* ========================================================== */
-        /* NOTIF PANEL - متجاوب                                       */
+        /* NOTIF PANEL                                                */
         /* ========================================================== */
         .notif-panel {
             position: absolute;
@@ -804,7 +801,7 @@
         }
 
         /* ========================================================== */
-        /* DASHBOARD - متجاوب بالكامل                                 */
+        /* DASHBOARD                                                  */
         /* ========================================================== */
         .dash {
             padding: 12px 10px 80px;
@@ -821,7 +818,7 @@
         }
 
         /* ========================================================== */
-        /* HERO - متجاوب بالكامل                                      */
+        /* HERO                                                       */
         /* ========================================================== */
         .hero {
             position: relative;
@@ -999,7 +996,7 @@
         }
 
         /* ========================================================== */
-        /* STATS - متجاوب بالكامل                                     */
+        /* STATS                                                      */
         /* ========================================================== */
         .stats-wrap {
             position: relative;
@@ -1187,7 +1184,7 @@
         }
 
         /* ========================================================== */
-        /* CHARTS - متجاوب بالكامل                                    */
+        /* CHARTS                                                     */
         /* ========================================================== */
         .charts-grid {
             display: grid;
@@ -1212,7 +1209,7 @@
         }
 
         /* ========================================================== */
-        /* PANEL - متجاوب بالكامل                                     */
+        /* PANEL                                                      */
         /* ========================================================== */
         .panel {
             background: var(--surface);
@@ -1407,7 +1404,7 @@
         }
 
         /* ========================================================== */
-        /* LOWER GRID - متجاوب بالكامل                               */
+        /* LOWER GRID                                                 */
         /* ========================================================== */
         .lower-grid {
             display: grid;
@@ -1430,7 +1427,7 @@
         }
 
         /* ========================================================== */
-        /* FUTURE BOOKINGS - متجاوب بالكامل                          */
+        /* FUTURE BOOKINGS                                            */
         /* ========================================================== */
         .future-booking-item {
             display: flex;
@@ -1567,7 +1564,7 @@
         }
 
         /* ========================================================== */
-        /* ACTIVITY - متجاوب بالكامل                                 */
+        /* ACTIVITY                                                   */
         /* ========================================================== */
         .activity .head,
         .future-bookings .head {
@@ -1707,7 +1704,7 @@
         }
 
         /* ========================================================== */
-        /* EMPTY STATE - متجاوب بالكامل                              */
+        /* EMPTY STATE                                                */
         /* ========================================================== */
         .empty-state {
             text-align: center;
@@ -1774,7 +1771,7 @@
         }
 
         /* ========================================================== */
-        /* ANIMATIONS - بدون إزاحة ✅                                 */
+        /* ANIMATIONS - بدون إزاحة                                    */
         /* ========================================================== */
         .fade-up {
             opacity: 0;
@@ -1803,7 +1800,7 @@
         }
 
         /* ========================================================== */
-        /* MOBILE BOTTOM NAV - متجاوب بالكامل                        */
+        /* MOBILE BOTTOM NAV                                          */
         /* ========================================================== */
         .mobile-bottom-nav {
             display: flex;
@@ -2344,7 +2341,7 @@
     </nav>
 
     <!-- ========================================================== -->
-    <!-- JAVASCRIPT                                                 -->
+    <!-- JAVASCRIPT - نفس طريقة جلب البيانات من add-invoice.html   -->
     <!-- ========================================================== -->
     <script>
         /**
@@ -2614,7 +2611,7 @@
 
         /**
          * ============================================================ */
-         * NOTIFICATIONS                                               */
+         * NOTIFICATIONS - نفس طريقة جلب البيانات من add-invoice.html  */
          * ============================================================ */
         function renderRealNotifications(bookingsList) {
             var listEl = document.getElementById('notifList');
@@ -3005,12 +3002,13 @@
 
         /**
          * ============================================================ */
-         * FETCH DASHBOARD DATA                                        */
+         * FETCH DASHBOARD DATA - نفس طريقة جلب البيانات من add-invoice.html */
          * ============================================================ */
         async function fetchDashboardData() {
             try {
                 console.log('🔄 بدء جلب البيانات...');
 
+                // جلب الحجوزات
                 var bookingsResponse = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=*', {
                     headers: {
                         'apikey': SUPABASE_ANON_KEY,
@@ -3025,6 +3023,7 @@
                 var bookings = await bookingsResponse.json();
                 console.log('📊 تم جلب الحجوزات:', bookings.length);
 
+                // جلب العملاء
                 var clientsResponse = await fetch(SUPABASE_URL + '/rest/v1/clients?select=id', {
                     headers: {
                         'apikey': SUPABASE_ANON_KEY,
@@ -3033,6 +3032,7 @@
                 });
                 var clients = clientsResponse.ok ? await clientsResponse.json() : [];
 
+                // جلب المصروفات
                 console.log('🔄 جلب المصروفات...');
                 var expensesResponse = await fetch(SUPABASE_URL + '/rest/v1/expenses?select=*', {
                     headers: {
@@ -3061,6 +3061,7 @@
                     console.warn('⚠️ فشل في جلب المصروفات');
                 }
 
+                // حساب الإحصائيات
                 var totalRevenue = 0;
                 var totalBookings = bookings.length;
                 var totalClients = clients.length;
@@ -3166,6 +3167,7 @@
                     futureContainer.innerHTML = futureHtml;
                 }
 
+                // حساب العمولة
                 var netProfit = Math.max(0, totalRevenue - totalExpenses);
                 var commissionRate = 0.20;
                 var totalCommission = netProfit * commissionRate;
@@ -3177,6 +3179,7 @@
                 console.log('📊 الإيرادات (بعد الخصم):', roundedRevenue, 'المصروفات:', roundedExpenses, 'العمولة:',
                     roundedCommission);
 
+                // تحديث الواجهة
                 document.getElementById('totalRevenue').textContent = roundedRevenue.toLocaleString() + ' ر.س';
                 document.getElementById('totalBookings').textContent = totalBookings.toLocaleString();
                 document.getElementById('totalClients').textContent = (totalClients || 0).toLocaleString();
@@ -3186,6 +3189,7 @@
 
                 renderRealNotifications(bookings);
 
+                // إعداد بيانات الرسم البياني
                 var sortedMonths = Object.keys(monthlyRevenue).sort();
                 if (sortedMonths.length > 0) {
                     var monthNames = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
@@ -3215,6 +3219,7 @@
                 }
                 renderSalesChart();
 
+                // إعداد بيانات الرسم الدائري
                 var propLabels = Object.keys(propertyTypes);
                 if (propLabels.length > 0) {
                     var propValues = propLabels.map(function(key) {
@@ -3240,6 +3245,7 @@
                 }
                 renderPieChart();
 
+                // تحديث وسيلة الإيضاح
                 var colors = ['#1a4a6b', '#b98a1e', '#2e7a5c', '#b14b2b', '#1a6a4a', '#a63a31', '#2a5a7a', '#c98a2e'];
                 var legendHtml = '';
                 pieData.labels.forEach(function(label, index) {
@@ -3250,12 +3256,13 @@
                 });
                 document.getElementById('pieLegend').innerHTML = legendHtml || '<span class="li">لا توجد بيانات</span>';
 
+                // تحديث النشاطات
                 var activityContainer = document.getElementById('activityList');
                 if (activities.length === 0) {
                     activityContainer.innerHTML =
                         '<div class="empty-state"><i class="fas fa-clock"></i><p>لا توجد حجوزات مسجلة</p></div>';
                 } else {
-                    var colors2 = ['var(--viridian)', 'var(--ochre)', 'var(--prussian)', 'var(--oxide)'];
+                    var colors2 = ['#2e7a5c', '#b98a1e', '#1a4a6b', '#a63a31'];
                     var activityHtml = '';
                     var activitiesToShow = activities.slice(0, 5);
 
@@ -3274,6 +3281,7 @@
                     activityContainer.innerHTML = activityHtml;
                 }
 
+                // تحديث التاريخ
                 var dateEl = document.getElementById('dashboardDate');
                 if (dateEl) {
                     var now = new Date();
@@ -3283,6 +3291,7 @@
                     dateEl.textContent = 'لوحة التحكم — ' + months[now.getMonth()] + ' ' + now.getFullYear();
                 }
 
+                // رسم Sparklines
                 var sparkData = [];
                 for (var i = 0; i < 8; i++) {
                     sparkData.push(Math.round(Math.random() * 100));
@@ -3294,6 +3303,7 @@
                 renderSpark('spark5', sparkData, '#b98a1e');
                 renderSpark('spark6', sparkData, '#b98a1e');
 
+                // إزالة حالة التحميل
                 document.querySelectorAll('.stat-card.loading').forEach(function(el) {
                     el.classList.remove('loading');
                 });
@@ -3323,15 +3333,14 @@
 
         /**
          * ============================================================ */
-         * INIT                                                        */
+         * INIT - تنفيذ مباشر (نفس طريقة add-invoice.html)             */
          * ============================================================ */
-        fetchDashboardData();
-        setInterval(fetchDashboardData, 300000);
-
         console.log('🏕️ منتجع وشاليهات حيالة القصيم - لوحة التحكم المتطورة');
         console.log('📊 تم تحميل النظام بنجاح');
-        console.log('👤 المستخدم:', window.currentUser?.name || 'غير معروف');
-        console.log('📱 تم إصلاح قائمة التنبيهات');
+
+        // جلب البيانات فوراً
+        fetchDashboardData();
+        setInterval(fetchDashboardData, 300000);
     </script>
 
 </body>
