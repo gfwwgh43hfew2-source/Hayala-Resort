@@ -14,38 +14,45 @@
 
     <style>
         /* ==========================================================
-           ROOT VARIABLES
+           ROOT VARIABLES - LIGHT THEME
            ========================================================== */
         :root {
-            --gold-1: #5EEAD4;
-            --gold-2: #2DD4BF;
-            --gold-3: #0D9488;
-            --gold-4: #0F766E;
-            --gold-gradient: linear-gradient(135deg, #5EEAD4 0%, #2DD4BF 40%, #14B8A6 70%, #0D9488 100%);
-            --primary: #0EA5E9;
-            --primary-dark: #0284C7;
-            --canvas: #f5f1ea;
-            --surface: #ffffff;
-            --surface-2: #fbf9f5;
-            --surface-glass: rgba(255, 255, 255, 0.72);
-            --ink: #1a1612;
-            --ink-2: #4a3f35;
-            --ink-3: #8a7f73;
-            --ink-4: #c4b9ab;
-            --prussian: #1a4a6b;
-            --ochre: #0891B2;
-            --viridian: #2e7a5c;
-            --oxide: #a63a31;
-            --sidebar-w: 290px;
-            --header-h: 74px;
+            /* New Light Color Palette */
+            --primary-soft: #3B82F6;
+            --primary-light: #93C5FD;
+            --primary-dark: #2563EB;
+            --accent-soft: #8B5CF6;
+            --accent-light: #C4B5FD;
+            --warm-gray-1: #F8F7F4;
+            --warm-gray-2: #F1EFEA;
+            --warm-gray-3: #E3DFD8;
+            --warm-gray-4: #C9C4BB;
+            --ink-light: #2D2A24;
+            --ink-mid: #5C554A;
+            --ink-soft: #8A8276;
+            --ink-faint: #B8B0A4;
+
+            /* Gradients and accents */
+            --accent-gradient: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+            --accent-gradient-soft: linear-gradient(135deg, #93C5FD 0%, #C4B5FD 100%);
+
+            --surface: #FFFFFF;
+            --surface-2: #FAF9F7;
+            --surface-glass: rgba(255, 255, 255, 0.8);
+            --canvas: #F5F3F0;
+
+            --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.04);
+            --shadow-medium: 0 12px 48px rgba(0, 0, 0, 0.07);
+            --shadow-strong: 0 20px 60px rgba(0, 0, 0, 0.10);
+            --shadow-accent: 0 8px 30px rgba(59, 130, 246, 0.15);
+            --shadow-accent-strong: 0 12px 48px rgba(59, 130, 246, 0.20);
+
             --radius-lg: 24px;
             --radius-md: 16px;
             --radius-sm: 12px;
-            --shadow-soft: 0 8px 40px rgba(0, 0, 0, 0.05);
-            --shadow-medium: 0 16px 60px rgba(0, 0, 0, 0.08);
-            --shadow-strong: 0 24px 80px rgba(0, 0, 0, 0.12);
-            --shadow-gold: 0 8px 40px rgba(13, 148, 136, 0.2);
-            --shadow-gold-strong: 0 16px 60px rgba(13, 148, 136, 0.3);
+            --sidebar-w: 290px;
+            --header-h: 74px;
+
             --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
             --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
             --display: 'Bricolage Grotesque', 'Cairo', sans-serif;
@@ -65,7 +72,7 @@
         body {
             font-family: var(--body);
             background: var(--canvas);
-            color: var(--ink);
+            color: var(--ink-light);
             direction: rtl;
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
@@ -100,7 +107,7 @@
             background: transparent;
         }
         ::-webkit-scrollbar-thumb {
-            background: var(--gold-3);
+            background: var(--primary-soft);
             border-radius: 50px;
         }
 
@@ -111,8 +118,8 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(6px);
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(4px);
             z-index: 998;
             opacity: 0;
             transition: opacity 0.3s var(--ease-smooth);
@@ -174,9 +181,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--gold-gradient);
+            background: var(--accent-gradient);
             flex-shrink: 0;
-            box-shadow: var(--shadow-gold);
+            box-shadow: var(--shadow-accent);
         }
 
         .sidebar .brand .mark svg {
@@ -188,7 +195,7 @@
             font-weight: 800;
             font-size: 0.95rem;
             line-height: 1.3;
-            background: var(--gold-gradient);
+            background: var(--accent-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -198,8 +205,8 @@
             display: block;
             font-size: 0.55rem;
             font-weight: 500;
-            color: var(--ink-3);
-            -webkit-text-fill-color: var(--ink-3);
+            color: var(--ink-soft);
+            -webkit-text-fill-color: var(--ink-soft);
         }
 
         .sidebar .menu {
@@ -210,7 +217,7 @@
 
         .sidebar .menu .label {
             font-size: 0.5rem;
-            color: var(--ink-3);
+            color: var(--ink-soft);
             text-transform: uppercase;
             letter-spacing: 1.4px;
             padding: 14px 12px 6px;
@@ -227,7 +234,7 @@
             gap: 12px;
             padding: 10px 14px;
             border-radius: var(--radius-sm);
-            color: var(--ink-2);
+            color: var(--ink-mid);
             font-weight: 600;
             font-size: 0.8rem;
             transition: all 0.2s var(--ease-smooth);
@@ -238,14 +245,14 @@
 
         .sidebar .menu .item:hover {
             background: rgba(0, 0, 0, 0.03);
-            color: var(--ink);
+            color: var(--ink-light);
         }
 
         .sidebar .menu .item.active {
             background: var(--surface);
-            color: var(--ink);
+            color: var(--ink-light);
             box-shadow: var(--shadow-soft);
-            border-right-color: var(--gold-3);
+            border-right-color: var(--primary-soft);
         }
 
         .sidebar .menu .item i {
@@ -257,7 +264,7 @@
 
         .sidebar .menu .item.active i {
             opacity: 1;
-            color: var(--gold-3);
+            color: var(--primary-soft);
         }
 
         .sidebar .menu .item .badge {
@@ -266,8 +273,8 @@
             font-weight: 800;
             padding: 1px 10px;
             border-radius: 50px;
-            background: var(--gold-gradient);
-            color: var(--ink);
+            background: var(--accent-gradient);
+            color: #fff;
         }
 
         .sidebar .footer {
@@ -286,15 +293,15 @@
             width: 40px;
             height: 40px;
             border-radius: var(--radius-sm);
-            background: var(--gold-gradient);
-            color: var(--ink);
+            background: var(--accent-gradient);
+            color: #fff;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 800;
             font-size: 0.85rem;
             flex-shrink: 0;
-            box-shadow: var(--shadow-gold);
+            box-shadow: var(--shadow-accent);
         }
 
         .sidebar .footer .user .info .name {
@@ -304,7 +311,7 @@
 
         .sidebar .footer .user .info .role {
             font-size: 0.55rem;
-            color: var(--ink-3);
+            color: var(--ink-soft);
             font-weight: 600;
         }
 
@@ -316,15 +323,15 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--ink-3);
+            color: var(--ink-soft);
             border: 1px solid rgba(0, 0, 0, 0.06);
             transition: all 0.3s var(--ease-smooth);
         }
 
         .sidebar .footer .logout:hover {
-            color: var(--oxide);
-            border-color: var(--oxide);
-            background: rgba(166, 58, 49, 0.08);
+            color: #EF4444;
+            border-color: #EF4444;
+            background: rgba(239, 68, 68, 0.08);
         }
 
         /* ==========================================================
@@ -401,7 +408,7 @@
             justify-content: center;
             border: 1px solid rgba(0, 0, 0, 0.06);
             background: var(--surface);
-            color: var(--ink-2);
+            color: var(--ink-mid);
             transition: 0.2s;
             cursor: pointer;
             font-size: 0.95rem;
@@ -409,17 +416,17 @@
         }
 
         .header .hamburger:hover {
-            border-color: var(--gold-3);
-            color: var(--ink);
+            border-color: var(--primary-soft);
+            color: var(--ink-light);
         }
 
         .header .breadcrumb {
             font-size: 0.7rem;
-            color: var(--ink-3);
+            color: var(--ink-soft);
         }
 
         .header .breadcrumb b {
-            color: var(--ink);
+            color: var(--ink-light);
             font-weight: 700;
         }
 
@@ -442,27 +449,27 @@
         }
 
         .header .search:focus-within {
-            border-color: var(--gold-3);
-            box-shadow: 0 0 0 3px rgba(212, 160, 46, 0.08);
+            border-color: var(--primary-soft);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.08);
         }
 
         .header .search i {
             font-size: 0.75rem;
-            color: var(--ink-3);
+            color: var(--ink-soft);
         }
 
         .header .search input {
             background: none;
             border: none;
             outline: none;
-            color: var(--ink);
+            color: var(--ink-light);
             font-family: inherit;
             font-size: 0.75rem;
             width: 100%;
         }
 
         .header .search input::placeholder {
-            color: var(--ink-3);
+            color: var(--ink-soft);
         }
 
         @media (min-width: 1024px) {
@@ -489,7 +496,7 @@
             border-radius: var(--radius-sm);
             border: 1px solid rgba(0, 0, 0, 0.06);
             background: var(--surface);
-            color: var(--ink-2);
+            color: var(--ink-mid);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -499,8 +506,8 @@
         }
 
         .header .right .notif:hover {
-            border-color: var(--gold-3);
-            color: var(--ink);
+            border-color: var(--primary-soft);
+            color: var(--ink-light);
         }
 
         .header .right .notif .dot {
@@ -510,12 +517,12 @@
             width: 7px;
             height: 7px;
             border-radius: 50%;
-            background: var(--oxide);
+            background: #EF4444;
             border: 2px solid var(--surface);
         }
 
         /* ==========================================================
-           NOTIF PANEL - إصلاح مشكلة الخروج عن الشاشة ✅
+           NOTIF PANEL
            ========================================================== */
         .notif-panel {
             position: absolute;
@@ -549,14 +556,14 @@
             padding: 8px 12px 6px;
             font-size: 0.75rem;
             font-weight: 800;
-            color: var(--ink);
+            color: var(--ink-light);
         }
 
         .notif-panel-badge {
             font-size: 0.5rem;
             font-weight: 800;
-            background: var(--gold-gradient);
-            color: var(--ink);
+            background: var(--accent-gradient);
+            color: #fff;
             padding: 1px 8px;
             border-radius: 50px;
         }
@@ -582,28 +589,28 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: color-mix(in srgb, var(--nc, var(--primary)) 14%, transparent);
-            color: var(--nc, var(--primary));
+            background: color-mix(in srgb, var(--nc, var(--primary-soft)) 14%, transparent);
+            color: var(--nc, var(--primary-soft));
             font-size: 0.7rem;
         }
 
         .notif-t {
             font-size: 0.7rem;
             font-weight: 700;
-            color: var(--ink);
+            color: var(--ink-light);
             line-height: 1.3;
         }
 
         .notif-d {
             font-size: 0.6rem;
-            color: var(--ink-3);
+            color: var(--ink-soft);
             margin-top: 2px;
             line-height: 1.4;
         }
 
         .notif-time {
             font-size: 0.55rem;
-            color: var(--ink-3);
+            color: var(--ink-soft);
             margin-top: 3px;
             font-weight: 600;
         }
@@ -611,7 +618,7 @@
         .notif-empty {
             text-align: center;
             padding: 20px 12px;
-            color: var(--ink-3);
+            color: var(--ink-soft);
         }
 
         .notif-empty i {
@@ -630,12 +637,12 @@
             padding: 8px 12px 4px;
             border-top: 1px solid rgba(0, 0, 0, 0.05);
             font-size: 0.55rem;
-            color: var(--ink-3);
+            color: var(--ink-soft);
             text-align: center;
         }
 
         .notif-panel-foot b {
-            color: var(--ink-2);
+            color: var(--ink-mid);
             font-weight: 700;
         }
 
@@ -652,15 +659,15 @@
         }
 
         .header .right .profile:hover {
-            border-color: var(--gold-3);
+            border-color: var(--primary-soft);
         }
 
         .header .right .profile .avatar {
             width: 28px;
             height: 28px;
             border-radius: 50%;
-            background: var(--gold-gradient);
-            color: var(--ink);
+            background: var(--accent-gradient);
+            color: #fff;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -680,7 +687,7 @@
 
         .header .right .profile i {
             font-size: 0.5rem;
-            color: var(--ink-3);
+            color: var(--ink-soft);
         }
 
         @media (min-width: 769px) {
@@ -688,7 +695,7 @@
                 display: block;
                 font-size: 0.5rem;
                 font-weight: 500;
-                color: var(--ink-3);
+                color: var(--ink-soft);
             }
             .header .right .profile {
                 padding: 4px 14px 4px 6px;
@@ -712,21 +719,21 @@
             justify-content: center;
             border: 1px solid rgba(0, 0, 0, 0.06);
             background: var(--surface);
-            color: var(--ink-2);
+            color: var(--ink-mid);
             font-size: 0.85rem;
             transition: 0.2s;
             flex-shrink: 0;
         }
 
         .header .mobile-search-toggle:hover {
-            border-color: var(--gold-3);
-            color: var(--ink);
+            border-color: var(--primary-soft);
+            color: var(--ink-light);
         }
 
         .header .mobile-search-toggle.active {
-            background: var(--gold-gradient);
-            color: var(--ink);
-            border-color: var(--gold-3);
+            background: var(--accent-gradient);
+            color: #fff;
+            border-color: var(--primary-soft);
         }
 
         @media (min-width: 1024px) {
@@ -765,7 +772,7 @@
         }
 
         .mobile-search-bar .inner i.fa-search {
-            color: var(--ink-3);
+            color: var(--ink-soft);
             font-size: 0.85rem;
             flex-shrink: 0;
         }
@@ -778,15 +785,15 @@
             background: none;
             font-family: inherit;
             font-size: 0.8rem;
-            color: var(--ink);
+            color: var(--ink-light);
         }
 
         .mobile-search-bar .inner input::placeholder {
-            color: var(--ink-3);
+            color: var(--ink-soft);
         }
 
         .mobile-search-bar .close-search {
-            color: var(--ink-3);
+            color: var(--ink-soft);
             font-size: 0.9rem;
             padding: 4px;
             flex-shrink: 0;
@@ -854,11 +861,11 @@
             font-size: 0.55rem;
             letter-spacing: 1px;
             text-transform: uppercase;
-            color: var(--gold-3);
+            color: var(--primary-soft);
             font-weight: 800;
             margin-bottom: 8px;
-            background: rgba(212, 160, 46, 0.08);
-            border: 1px solid rgba(212, 160, 46, 0.12);
+            background: rgba(59, 130, 246, 0.08);
+            border: 1px solid rgba(59, 130, 246, 0.12);
             padding: 4px 12px;
             border-radius: 50px;
         }
@@ -875,14 +882,14 @@
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background: var(--gold-3);
+            background: var(--primary-soft);
             flex-shrink: 0;
         }
 
         .hero .copy h1 {
             font-weight: 900;
             font-size: 1.4rem;
-            color: var(--ink);
+            color: var(--ink-light);
             letter-spacing: -0.3px;
             line-height: 1.3;
             margin-bottom: 4px;
@@ -895,14 +902,14 @@
         }
 
         .hero .copy h1 .highlight {
-            background: var(--gold-gradient);
+            background: var(--accent-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
         .hero .copy p {
-            color: var(--ink-2);
+            color: var(--ink-mid);
             font-size: 0.8rem;
             margin-top: 8px;
             max-width: 100%;
@@ -923,12 +930,12 @@
             gap: 8px;
             padding: 11px 20px;
             border-radius: 50px;
-            background: var(--gold-gradient);
-            color: var(--ink);
+            background: var(--accent-gradient);
+            color: #fff;
             font-weight: 800;
             font-size: 0.75rem;
             transition: all 0.3s var(--ease-spring);
-            box-shadow: var(--shadow-gold-strong);
+            box-shadow: var(--shadow-accent-strong);
             margin-top: 12px;
             width: 100%;
             justify-content: center;
@@ -945,7 +952,7 @@
 
         .hero .cta:hover {
             transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 16px 56px rgba(212, 160, 46, 0.4);
+            box-shadow: 0 16px 56px rgba(59, 130, 246, 0.35);
         }
 
         .hero-image {
@@ -1044,7 +1051,7 @@
 
         .stat-card .bar {
             height: 3px;
-            background: var(--swatch, var(--ink-4));
+            background: var(--swatch, var(--ink-faint));
         }
 
         .stat-card .body {
@@ -1060,7 +1067,7 @@
 
         .stat-card .label {
             font-size: 0.55rem;
-            color: var(--ink-3);
+            color: var(--ink-soft);
             font-weight: 700;
             display: flex;
             align-items: center;
@@ -1083,7 +1090,7 @@
             width: 22px;
             height: 22px;
             border-radius: 6px;
-            background: color-mix(in srgb, var(--swatch, var(--ink-3)) 12%, transparent);
+            background: color-mix(in srgb, var(--swatch, var(--ink-soft)) 12%, transparent);
             flex-shrink: 0;
         }
 
@@ -1097,7 +1104,7 @@
 
         .stat-card .icon-chip i {
             font-size: 0.6rem;
-            color: var(--swatch, var(--ink-3));
+            color: var(--swatch, var(--ink-soft));
         }
 
         @media (min-width: 769px) {
@@ -1112,7 +1119,7 @@
             font-weight: 700;
             margin-top: 4px;
             letter-spacing: -0.2px;
-            color: var(--ink);
+            color: var(--ink-light);
         }
 
         @media (min-width: 769px) {
@@ -1153,13 +1160,13 @@
         }
 
         .stat-card .change.up {
-            color: var(--viridian);
-            background: rgba(46, 122, 92, 0.1);
+            color: #10B981;
+            background: rgba(16, 185, 129, 0.1);
         }
 
         .stat-card .change.down {
-            color: var(--oxide);
-            background: rgba(166, 58, 49, 0.1);
+            color: #EF4444;
+            background: rgba(239, 68, 68, 0.1);
         }
 
         .stat-card .spark {
@@ -1255,8 +1262,8 @@
             height: 32px;
             border-radius: 10px;
             flex-shrink: 0;
-            background: color-mix(in srgb, var(--pi, var(--primary)) 10%, transparent);
-            color: var(--pi, var(--primary));
+            background: color-mix(in srgb, var(--pi, var(--primary-soft)) 10%, transparent);
+            color: var(--pi, var(--primary-soft));
             font-size: 0.75rem;
         }
 
@@ -1272,12 +1279,12 @@
         .panel .p-title {
             font-size: 0.78rem;
             font-weight: 800;
-            color: var(--ink);
+            color: var(--ink-light);
         }
 
         .panel .p-sub {
             font-size: 0.6rem;
-            color: var(--ink-3);
+            color: var(--ink-soft);
             margin-top: 2px;
         }
 
@@ -1309,7 +1316,7 @@
         .panel .tabs button {
             border: none;
             background: none;
-            color: var(--ink-3);
+            color: var(--ink-soft);
             font-size: 0.55rem;
             font-weight: 700;
             padding: 5px 10px;
@@ -1327,9 +1334,9 @@
         }
 
         .panel .tabs button.active {
-            background: var(--gold-gradient);
-            color: var(--ink);
-            box-shadow: var(--shadow-gold);
+            background: var(--accent-gradient);
+            color: #fff;
+            box-shadow: var(--shadow-accent);
         }
 
         .chart-canvas-wrap {
@@ -1377,7 +1384,7 @@
             align-items: center;
             gap: 5px;
             font-size: 0.6rem;
-            color: var(--ink-2);
+            color: var(--ink-mid);
             font-weight: 600;
         }
 
@@ -1454,8 +1461,8 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            background: color-mix(in srgb, var(--gold-3) 12%, transparent);
-            color: var(--gold-3);
+            background: color-mix(in srgb, var(--primary-soft) 12%, transparent);
+            color: var(--primary-soft);
             font-size: 0.7rem;
         }
 
@@ -1476,7 +1483,7 @@
         .future-booking-item .booking-info .client-name {
             font-size: 0.7rem;
             font-weight: 700;
-            color: var(--ink);
+            color: var(--ink-light);
         }
 
         @media (min-width: 769px) {
@@ -1487,7 +1494,7 @@
 
         .future-booking-item .booking-info .booking-meta {
             font-size: 0.55rem;
-            color: var(--ink-3);
+            color: var(--ink-soft);
             margin-top: 2px;
             display: flex;
             align-items: center;
@@ -1506,9 +1513,9 @@
             display: inline-block;
             padding: 1px 6px;
             border-radius: 4px;
-            background: var(--surface-muted);
+            background: var(--warm-gray-2);
             font-size: 0.5rem;
-            color: var(--ink-2);
+            color: var(--ink-mid);
         }
 
         .future-booking-item .booking-info .booking-meta .date-tag {
@@ -1523,7 +1530,7 @@
             font-family: var(--display);
             font-size: 0.65rem;
             font-weight: 700;
-            color: var(--gold-3);
+            color: var(--primary-soft);
             flex-shrink: 0;
         }
 
@@ -1550,8 +1557,13 @@
         }
 
         .future-booking-item .booking-status-tag.today {
-            background: var(--rust-soft);
-            color: var(--rust);
+            background: rgba(239, 68, 68, 0.12);
+            color: #EF4444;
+        }
+
+        .future-booking-item .booking-status-tag.future {
+            background: rgba(59, 130, 246, 0.08);
+            color: var(--primary-soft);
         }
 
         /* ==========================================================
@@ -1578,7 +1590,7 @@
         .future-bookings .head h3 {
             font-size: 0.78rem;
             font-weight: 800;
-            color: var(--ink);
+            color: var(--ink-light);
             display: flex;
             align-items: center;
             gap: 6px;
@@ -1593,7 +1605,7 @@
 
         .activity .head h3 i,
         .future-bookings .head h3 i {
-            color: var(--gold-3);
+            color: var(--primary-soft);
         }
 
         .activity .head a,
@@ -1602,7 +1614,7 @@
             align-items: center;
             gap: 4px;
             font-size: 0.6rem;
-            color: var(--ink-3);
+            color: var(--ink-soft);
             font-weight: 700;
             transition: 0.2s;
             padding: 3px 10px;
@@ -1620,9 +1632,9 @@
 
         .activity .head a:hover,
         .future-bookings .head a:hover {
-            color: var(--gold-3);
-            border-color: var(--gold-3);
-            background: rgba(212, 160, 46, 0.06);
+            color: var(--primary-soft);
+            border-color: var(--primary-soft);
+            background: rgba(59, 130, 246, 0.06);
         }
 
         .activity .list .item {
@@ -1667,7 +1679,7 @@
 
         .activity .list .item .content .text {
             font-size: 0.7rem;
-            color: var(--ink-2);
+            color: var(--ink-mid);
             line-height: 1.5;
         }
 
@@ -1678,13 +1690,13 @@
         }
 
         .activity .list .item .content .text strong {
-            color: var(--ink);
+            color: var(--ink-light);
             font-weight: 700;
         }
 
         .activity .list .item .content .time {
             font-size: 0.55rem;
-            color: var(--ink-3);
+            color: var(--ink-soft);
             margin-top: 2px;
         }
 
@@ -1700,7 +1712,7 @@
         .empty-state {
             text-align: center;
             padding: 20px 14px;
-            color: var(--ink-3);
+            color: var(--ink-soft);
         }
 
         @media (min-width: 769px) {
@@ -1714,7 +1726,7 @@
             opacity: 0.3;
             margin-bottom: 8px;
             display: block;
-            color: var(--gold-3);
+            color: var(--primary-soft);
         }
 
         .empty-state p {
@@ -1735,7 +1747,7 @@
            LOADING
            ========================================================== */
         .loading-text {
-            color: var(--ink-3);
+            color: var(--ink-soft);
             font-size: 0.65rem;
             font-weight: 400;
             animation: pulse 1.5s ease-in-out infinite;
@@ -1758,11 +1770,11 @@
         }
 
         .stat-card.loading .number {
-            color: var(--ink-3) !important;
+            color: var(--ink-soft) !important;
         }
 
         /* ==========================================================
-           ANIMATIONS - بدون إزاحة ✅
+           ANIMATIONS
            ========================================================== */
         .fade-up {
             opacity: 0;
@@ -1824,7 +1836,7 @@
             align-items: center;
             gap: 2px;
             padding: 5px 2px 4px;
-            color: var(--ink-3);
+            color: var(--ink-soft);
             font-size: 0.45rem;
             font-weight: 700;
             border-radius: 10px;
@@ -1842,11 +1854,11 @@
         }
 
         .mobile-bottom-nav .bn-item.active {
-            color: var(--ink);
+            color: var(--ink-light);
         }
 
         .mobile-bottom-nav .bn-item.active i {
-            color: var(--gold-3);
+            color: var(--primary-soft);
         }
 
         .mobile-bottom-nav .bn-item:active {
@@ -1862,10 +1874,10 @@
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            background: var(--gold-gradient);
-            color: var(--ink);
+            background: var(--accent-gradient);
+            color: #fff;
             font-size: 1.1rem;
-            box-shadow: 0 8px 32px rgba(212, 160, 46, 0.4);
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.4);
             transform: translateY(-14px);
             transition: all 0.2s var(--ease-spring);
             margin: 0 2px;
@@ -1890,8 +1902,8 @@
         <div class="brand">
             <div class="mark">
                 <svg viewBox="0 0 24 24" fill="none">
-                    <path d="M4 19V9l8-5 8 5v10" stroke="#1a1714" stroke-width="2" stroke-linejoin="round"/>
-                    <path d="M9 19v-6h6v6" stroke="#1a1714" stroke-width="2" stroke-linejoin="round"/>
+                    <path d="M4 19V9l8-5 8 5v10" stroke="#ffffff" stroke-width="2" stroke-linejoin="round"/>
+                    <path d="M9 19v-6h6v6" stroke="#ffffff" stroke-width="2" stroke-linejoin="round"/>
                 </svg>
             </div>
             <div class="text">
@@ -1924,15 +1936,15 @@
             <a href="abuzeid.html" class="item">
                 <i class="fas fa-hand-holding-heart"></i> عمولة أبو زيد
             </a>
-            <a href="client-accounts.html" class="item" style="border-color: rgba(212, 160, 46, 0.2);">
-                <i class="fas fa-user-clock" style="color: var(--gold-3);"></i>
+            <a href="client-accounts.html" class="item" style="border-color: rgba(59, 130, 246, 0.2);">
+                <i class="fas fa-user-clock" style="color: var(--primary-soft);"></i>
                 حسابات العملاء
-                <span class="badge" style="background: var(--gold-gradient);">متبقي</span>
+                <span class="badge" style="background: var(--accent-gradient);">متبقي</span>
             </a>
-            <a href="users.html" class="item" style="border-color: rgba(212, 160, 46, 0.2);">
-                <i class="fas fa-users-cog" style="color: var(--gold-3);"></i>
+            <a href="users.html" class="item" style="border-color: rgba(59, 130, 246, 0.2);">
+                <i class="fas fa-users-cog" style="color: var(--primary-soft);"></i>
                 إدارة المستخدمين
-                <span class="badge" style="background: var(--gold-gradient);">Admin</span>
+                <span class="badge" style="background: var(--accent-gradient);">Admin</span>
             </a>
             <a href="filter.html" class="item">
                 <i class="fas fa-filter"></i> فلترة الحجوزات
@@ -2077,11 +2089,11 @@
                 <!-- ===== STATS ===== -->
                 <div class="stats-wrap">
                     <div class="stats">
-                        <div class="stat-card fade-up loading" style="animation-delay:0.06s;--swatch:var(--gold-3)">
-                            <div class="bar" style="background:var(--gold-gradient);"></div>
+                        <div class="stat-card fade-up loading" style="animation-delay:0.06s;--swatch:var(--primary-soft)">
+                            <div class="bar" style="background:var(--accent-gradient);"></div>
                             <div class="body">
                                 <div class="label">
-                                    <span class="icon-chip"><i class="fas fa-wallet" style="color:var(--gold-3);"></i></span>
+                                    <span class="icon-chip"><i class="fas fa-wallet" style="color:var(--primary-soft);"></i></span>
                                     إجمالي الإيرادات
                                 </div>
                                 <div class="number" id="totalRevenue">
@@ -2099,7 +2111,7 @@
                             </div>
                         </div>
 
-                        <div class="stat-card fade-up loading" style="animation-delay:0.09s;--swatch:var(--prussian)">
+                        <div class="stat-card fade-up loading" style="animation-delay:0.09s;--swatch:var(--primary-dark)">
                             <div class="bar"></div>
                             <div class="body">
                                 <div class="label">
@@ -2121,7 +2133,7 @@
                             </div>
                         </div>
 
-                        <div class="stat-card fade-up loading" style="animation-delay:0.12s;--swatch:var(--viridian)">
+                        <div class="stat-card fade-up loading" style="animation-delay:0.12s;--swatch:var(--accent-soft)">
                             <div class="bar"></div>
                             <div class="body">
                                 <div class="label">
@@ -2143,7 +2155,7 @@
                             </div>
                         </div>
 
-                        <div class="stat-card fade-up loading" style="animation-delay:0.15s;--swatch:var(--oxide)">
+                        <div class="stat-card fade-up loading" style="animation-delay:0.15s;--swatch:var(--primary-light)">
                             <div class="bar"></div>
                             <div class="body">
                                 <div class="label">
@@ -2165,11 +2177,11 @@
                             </div>
                         </div>
 
-                        <div class="stat-card fade-up loading" style="animation-delay:0.18s;--swatch:var(--ochre)">
-                            <div class="bar" style="background:var(--ochre);"></div>
+                        <div class="stat-card fade-up loading" style="animation-delay:0.18s;--swatch:#F59E0B">
+                            <div class="bar" style="background:#F59E0B;"></div>
                             <div class="body">
                                 <div class="label">
-                                    <span class="icon-chip"><i class="fas fa-money-bill-wave" style="color:var(--ochre);"></i></span>
+                                    <span class="icon-chip"><i class="fas fa-money-bill-wave" style="color:#F59E0B;"></i></span>
                                     إجمالي المصروفات
                                 </div>
                                 <div class="number" id="totalExpenses">
@@ -2187,11 +2199,11 @@
                             </div>
                         </div>
 
-                        <div class="stat-card fade-up loading" style="animation-delay:0.21s;--swatch:var(--gold-3)">
-                            <div class="bar" style="background:var(--gold-gradient);"></div>
+                        <div class="stat-card fade-up loading" style="animation-delay:0.21s;--swatch:var(--primary-soft)">
+                            <div class="bar" style="background:var(--accent-gradient);"></div>
                             <div class="body">
                                 <div class="label">
-                                    <span class="icon-chip"><i class="fas fa-hand-holding-heart" style="color:var(--gold-3);"></i></span>
+                                    <span class="icon-chip"><i class="fas fa-hand-holding-heart" style="color:var(--primary-soft);"></i></span>
                                     عمولة أبو زيد
                                 </div>
                                 <div class="number" id="totalCommission">
@@ -2217,7 +2229,7 @@
                     <div class="panel fade-up" style="animation-delay:0.12s">
                         <div class="p-head">
                             <div class="p-title-group">
-                                <span class="p-icon" style="--pi:var(--gold-3)"><i class="fas fa-chart-line"></i></span>
+                                <span class="p-icon" style="--pi:var(--primary-soft)"><i class="fas fa-chart-line"></i></span>
                                 <div>
                                     <div class="p-title">أداء الحجوزات الشهري</div>
                                     <div class="p-sub">مقارنة الإيرادات والإشغال خلال السنة</div>
@@ -2233,11 +2245,11 @@
                         </div>
                         <div class="legend-row">
                             <span class="li">
-                                <span class="sw" style="background:var(--gold-3)"></span>
+                                <span class="sw" style="background:var(--primary-soft)"></span>
                                 الإيرادات
                             </span>
                             <span class="li">
-                                <span class="sw" style="background:var(--oxide)"></span>
+                                <span class="sw" style="background:#EF4444"></span>
                                 الإشغال
                             </span>
                         </div>
@@ -2246,7 +2258,7 @@
                     <div class="panel fade-up" style="animation-delay:0.15s">
                         <div class="p-head">
                             <div class="p-title-group">
-                                <span class="p-icon" style="--pi:var(--gold-3)"><i class="fas fa-chart-pie"></i></span>
+                                <span class="p-icon" style="--pi:var(--primary-soft)"><i class="fas fa-chart-pie"></i></span>
                                 <div>
                                     <div class="p-title">توزيع الإشغال</div>
                                     <div class="p-sub">حسب نوع العقار</div>
@@ -2271,7 +2283,7 @@
                     <div class="panel future-bookings fade-up" style="animation-delay:0.16s">
                         <div class="head">
                             <div class="p-title-group">
-                                <span class="p-icon" style="--pi:var(--gold-3)"><i class="fas fa-calendar-check"></i></span>
+                                <span class="p-icon" style="--pi:var(--primary-soft)"><i class="fas fa-calendar-check"></i></span>
                                 <h3>الحجوزات المستقبلية</h3>
                             </div>
                             <a href="future.html">عرض الكل <i class="fas fa-arrow-left"></i></a>
@@ -2287,7 +2299,7 @@
                     <div class="panel activity fade-up" style="animation-delay:0.18s">
                         <div class="head">
                             <div class="p-title-group">
-                                <span class="p-icon" style="--pi:var(--viridian)"><i class="fas fa-bolt"></i></span>
+                                <span class="p-icon" style="--pi:var(--accent-soft)"><i class="fas fa-bolt"></i></span>
                                 <h3>النشاط الأخير</h3>
                             </div>
                             <a href="bookings.html">عرض الكل <i class="fas fa-arrow-left"></i></a>
@@ -2395,9 +2407,9 @@
                     document.body.innerHTML = `
                             <div style="text-align: center; padding: 50px; direction: rtl; font-family: 'Cairo', sans-serif; background: #f0ede8; min-height: 100vh;">
                                 <div style="max-width: 500px; margin: 0 auto; background: #ffffff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
-                                    <h2 style="color: #0D9488;">⚠️ تعذّر تحميل بيانات الحساب</h2>
+                                    <h2 style="color: #3B82F6;">⚠️ تعذّر تحميل بيانات الحساب</h2>
                                     <p style="color: #5a4f45; margin: 20px 0;">${profileError.message}</p>
-                                    <button onclick="logoutUser()" style="padding: 14px 40px; background: #2DD4BF; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #1a1714;">
+                                    <button onclick="logoutUser()" style="padding: 14px 40px; background: #3B82F6; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #ffffff;">
                                         <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
                                     </button>
                                 </div>
@@ -2411,9 +2423,9 @@
                     document.body.innerHTML = `
                             <div style="text-align: center; padding: 50px; direction: rtl; font-family: 'Cairo', sans-serif; background: #f0ede8; min-height: 100vh;">
                                 <div style="max-width: 500px; margin: 0 auto; background: #ffffff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
-                                    <h2 style="color: #0D9488;">⚠️ حساب غير مكتمل</h2>
+                                    <h2 style="color: #3B82F6;">⚠️ حساب غير مكتمل</h2>
                                     <p style="color: #5a4f45; margin: 20px 0;">لا يوجد بروفايل لهذا الحساب. يرجى التواصل مع الدعم الفني.</p>
-                                    <button onclick="logoutUser()" style="padding: 14px 40px; background: #2DD4BF; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #1a1714;">
+                                    <button onclick="logoutUser()" style="padding: 14px 40px; background: #3B82F6; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #ffffff;">
                                         <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
                                     </button>
                                 </div>
@@ -2473,9 +2485,9 @@
                 document.body.innerHTML = `
                         <div style="text-align: center; padding: 50px; direction: rtl; font-family: 'Cairo', sans-serif; background: #f0ede8; min-height: 100vh;">
                             <div style="max-width: 500px; margin: 0 auto; background: #ffffff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
-                                <h2 style="color: #0D9488;">⚠️ خطأ في النظام</h2>
+                                <h2 style="color: #3B82F6;">⚠️ خطأ في النظام</h2>
                                 <p style="color: #5a4f45; margin: 20px 0;">${error.message || 'حدث خطأ غير متوقع'}</p>
-                                <button onclick="logoutUser()" style="padding: 14px 40px; background: #2DD4BF; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #1a1714;">
+                                <button onclick="logoutUser()" style="padding: 14px 40px; background: #3B82F6; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #ffffff;">
                                     <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
                                 </button>
                             </div>
@@ -2653,8 +2665,8 @@
                 upcoming.forEach(function(item) {
                     var timeLabel = item.diffDays === 0 ? 'يصل اليوم' : (item.diffDays === 1 ? 'يصل غدًا' :
                         'يصل خلال ' + item.diffDays + ' أيام');
-                    var color = item.diffDays === 0 ? 'var(--oxide)' : (item.diffDays === 1 ? 'var(--ochre)' :
-                        'var(--gold-3)');
+                    var color = item.diffDays === 0 ? '#EF4444' : (item.diffDays === 1 ? '#F59E0B' :
+                        'var(--primary-soft)');
                     html += '<div class="notif-item">';
                     html += '<span class="notif-ic" style="--nc:' + color +
                         '"><i class="fas fa-house-chimney"></i></span>';
@@ -2779,7 +2791,7 @@
                     datasets: [{
                         label: 'الإيرادات',
                         data: chartData.sales,
-                        backgroundColor: '#0D9488',
+                        backgroundColor: '#3B82F6',
                         borderRadius: 6,
                         barPercentage: 0.5,
                         categoryPercentage: 0.65,
@@ -2788,12 +2800,12 @@
                         label: 'الإشغال (%)',
                         data: chartData.occupancy,
                         type: 'line',
-                        borderColor: '#a63a31',
-                        backgroundColor: '#a63a31',
+                        borderColor: '#EF4444',
+                        backgroundColor: '#EF4444',
                         borderWidth: 2,
                         pointRadius: 3,
                         pointBackgroundColor: '#ffffff',
-                        pointBorderColor: '#a63a31',
+                        pointBorderColor: '#EF4444',
                         pointBorderWidth: 2,
                         tension: 0.35,
                         order: 1
@@ -3171,8 +3183,7 @@
                 var roundedExpenses = Math.round(totalExpenses);
                 var roundedCommission = Math.round(totalCommission);
 
-                console.log('📊 الإيرادات (بعد الخصم):', roundedRevenue, 'المصروفات:', roundedExpenses, 'العمولة:',
-                    roundedCommission);
+                console.log('📊 الإيرادات (بعد الخصم):', roundedRevenue, 'المصروفات:', roundedExpenses, 'العمولة:', roundedCommission);
 
                 document.getElementById('totalRevenue').textContent = roundedRevenue.toLocaleString() + ' ر.س';
                 document.getElementById('totalBookings').textContent = totalBookings.toLocaleString();
@@ -3252,7 +3263,7 @@
                     activityContainer.innerHTML =
                         '<div class="empty-state"><i class="fas fa-clock"></i><p>لا توجد حجوزات مسجلة</p></div>';
                 } else {
-                    var colors2 = ['var(--viridian)', 'var(--ochre)', 'var(--prussian)', 'var(--oxide)'];
+                    var colors2 = ['#10B981', '#F59E0B', '#3B82F6', '#EF4444'];
                     var activityHtml = '';
                     var activitiesToShow = activities.slice(0, 5);
 
@@ -3284,12 +3295,12 @@
                 for (var i = 0; i < 8; i++) {
                     sparkData.push(Math.round(Math.random() * 100));
                 }
-                renderSpark('spark1', sparkData, '#0D9488');
-                renderSpark('spark2', sparkData, '#1a4a6b');
-                renderSpark('spark3', sparkData, '#2e7a5c');
-                renderSpark('spark4', sparkData, '#a63a31');
-                renderSpark('spark5', sparkData, '#b98a1e');
-                renderSpark('spark6', sparkData, '#b98a1e');
+                renderSpark('spark1', sparkData, '#3B82F6');
+                renderSpark('spark2', sparkData, '#2563EB');
+                renderSpark('spark3', sparkData, '#8B5CF6');
+                renderSpark('spark4', sparkData, '#93C5FD');
+                renderSpark('spark5', sparkData, '#3B82F6');
+                renderSpark('spark6', sparkData, '#F59E0B');
 
                 document.querySelectorAll('.stat-card.loading').forEach(function(el) {
                     el.classList.remove('loading');
