@@ -14,48 +14,80 @@
 
     <style>
         /* ==========================================================
-           ROOT VARIABLES - تدرجات الأزرق المعدني الفاخر
+           ROOT VARIABLES - تصميم احترافي بالألوان الفاتحة
            ========================================================== */
         :root {
-            --primary-1: #0C2D4A;
-            --primary-2: #1A5276;
-            --primary-3: #2E86C1;
-            --primary-4: #5DADE2;
-            --primary-5: #85C1E9;
-            --primary-6: #D6EAF8;
+            /* الأزرق المعدني */
+            --blue-1: #0C2D4A;
+            --blue-2: #1A5276;
+            --blue-3: #2E86C1;
+            --blue-4: #5DADE2;
+            --blue-5: #85C1E9;
+            --blue-6: #D6EAF8;
+            --blue-7: #EBF5FB;
+            
+            /* الذهبي */
             --gold-1: #7D6608;
             --gold-2: #B7950B;
             --gold-3: #D4AC0D;
             --gold-4: #F1C40F;
             --gold-5: #F9E79F;
             --gold-6: #FEF9E7;
-            --accent-gradient: linear-gradient(135deg, #0C2D4A 0%, #1A5276 40%, #2E86C1 70%, #5DADE2 100%);
-            --gold-gradient: linear-gradient(135deg, #7D6608 0%, #B7950B 40%, #D4AC0D 70%, #F1C40F 100%);
-            --canvas: #E8EEF3;
+            
+            /* الأساسية */
+            --primary: #2E86C1;
+            --primary-dark: #1A5276;
+            --primary-light: #85C1E9;
+            --primary-gradient: linear-gradient(135deg, #1A5276 0%, #2E86C1 60%, #5DADE2 100%);
+            --gold-gradient: linear-gradient(135deg, #B7950B 0%, #D4AC0D 50%, #F1C40F 100%);
+            
+            /* الخلفيات */
+            --canvas: #F0F4F8;
             --surface: #FFFFFF;
-            --surface-2: #F4F7FA;
+            --surface-2: #F8FAFC;
             --surface-3: #EAF0F6;
             --surface-glass: rgba(255, 255, 255, 0.88);
+            
+            /* النصوص */
             --ink: #0C1A2B;
             --ink-2: #1C2E44;
             --ink-3: #4A5D6E;
             --ink-4: #8A9BAB;
             --ink-5: #C5D0DA;
-            --shadow-soft: 0 8px 40px rgba(12, 45, 74, 0.06);
-            --shadow-medium: 0 16px 60px rgba(12, 45, 74, 0.10);
-            --shadow-strong: 0 24px 80px rgba(12, 45, 74, 0.15);
-            --shadow-accent: 0 8px 40px rgba(46, 134, 193, 0.25);
-            --shadow-accent-strong: 0 16px 60px rgba(46, 134, 193, 0.35);
-            --shadow-gold: 0 8px 40px rgba(212, 172, 13, 0.25);
-            --shadow-gold-strong: 0 16px 60px rgba(212, 172, 13, 0.35);
+            
+            /* الألوان الإضافية */
+            --teal: #1A7A6A;
+            --teal-soft: #D5F5E3;
+            --rust: #A63A31;
+            --rust-soft: #FADBD8;
+            --purple: #6C3483;
+            --purple-soft: #EBDEF0;
+            --orange: #B9770E;
+            --orange-soft: #FDEBD0;
+            
+            /* الظلال */
+            --shadow-soft: 0 8px 40px rgba(26, 82, 118, 0.06);
+            --shadow-medium: 0 16px 60px rgba(26, 82, 118, 0.10);
+            --shadow-strong: 0 24px 80px rgba(26, 82, 118, 0.15);
+            --shadow-primary: 0 8px 40px rgba(46, 134, 193, 0.25);
+            --shadow-primary-strong: 0 16px 60px rgba(46, 134, 193, 0.35);
+            --shadow-gold: 0 8px 40px rgba(212, 172, 13, 0.20);
+            
+            /* الزوايا */
             --radius-sm: 10px;
             --radius-md: 16px;
             --radius-lg: 24px;
             --radius-xl: 32px;
+            
+            /* الحركة */
             --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
             --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+            
+            /* الخطوط */
             --display: 'Bricolage Grotesque', 'Cairo', sans-serif;
             --body: 'Cairo', system-ui, sans-serif;
+            
+            /* الأبعاد */
             --sidebar-w: 290px;
             --header-h: 74px;
         }
@@ -108,11 +140,11 @@
             background: transparent;
         }
         ::-webkit-scrollbar-thumb {
-            background: var(--primary-4);
+            background: var(--blue-4);
             border-radius: 50px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-3);
+            background: var(--blue-3);
         }
 
         /* ==========================================================
@@ -176,7 +208,7 @@
             gap: 14px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             flex-shrink: 0;
-            background: var(--accent-gradient);
+            background: var(--primary-gradient);
             position: relative;
             overflow: hidden;
         }
@@ -185,8 +217,8 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            opacity: 0.3;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.4;
         }
 
         .sidebar .brand .mark {
@@ -263,14 +295,14 @@
 
         .sidebar .menu .item:hover {
             background: rgba(46, 134, 193, 0.06);
-            color: var(--primary-2);
+            color: var(--blue-2);
         }
 
         .sidebar .menu .item.active {
             background: var(--surface);
-            color: var(--primary-2);
+            color: var(--blue-2);
             box-shadow: var(--shadow-soft);
-            border-right-color: var(--primary-3);
+            border-right-color: var(--blue-3);
         }
 
         .sidebar .menu .item i {
@@ -284,7 +316,7 @@
 
         .sidebar .menu .item.active i {
             opacity: 1;
-            color: var(--primary-3);
+            color: var(--blue-3);
         }
 
         .sidebar .menu .item .badge {
@@ -293,7 +325,7 @@
             font-weight: 800;
             padding: 1px 10px;
             border-radius: 50px;
-            background: var(--accent-gradient);
+            background: var(--gold-gradient);
             color: #ffffff;
         }
 
@@ -314,7 +346,7 @@
             width: 40px;
             height: 40px;
             border-radius: var(--radius-sm);
-            background: var(--accent-gradient);
+            background: var(--primary-gradient);
             color: #ffffff;
             display: flex;
             align-items: center;
@@ -322,7 +354,7 @@
             font-weight: 800;
             font-size: 0.85rem;
             flex-shrink: 0;
-            box-shadow: var(--shadow-accent);
+            box-shadow: var(--shadow-primary);
         }
 
         .sidebar .footer .user .info .name {
@@ -351,9 +383,9 @@
         }
 
         .sidebar .footer .logout:hover {
-            color: #a63a31;
-            border-color: #a63a31;
-            background: rgba(166, 58, 49, 0.08);
+            color: var(--rust);
+            border-color: var(--rust);
+            background: var(--rust-soft);
         }
 
         /* ==========================================================
@@ -391,7 +423,7 @@
         }
 
         /* ==========================================================
-           HEADER - تصميم احترافي
+           HEADER
            ========================================================== */
         .header {
             position: sticky;
@@ -438,9 +470,9 @@
         }
 
         .header .hamburger:hover {
-            border-color: var(--primary-3);
-            color: var(--primary-2);
-            box-shadow: var(--shadow-accent);
+            border-color: var(--blue-3);
+            color: var(--blue-2);
+            box-shadow: var(--shadow-primary);
         }
 
         .header .breadcrumb {
@@ -479,7 +511,7 @@
         }
 
         .header .search:focus-within {
-            border-color: var(--primary-3);
+            border-color: var(--blue-3);
             box-shadow: 0 0 0 4px rgba(46, 134, 193, 0.08);
         }
 
@@ -536,9 +568,9 @@
         }
 
         .header .right .notif:hover {
-            border-color: var(--primary-3);
-            color: var(--primary-2);
-            box-shadow: var(--shadow-accent);
+            border-color: var(--blue-3);
+            color: var(--blue-2);
+            box-shadow: var(--shadow-primary);
         }
 
         .header .right .notif .dot {
@@ -548,7 +580,7 @@
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: #a63a31;
+            background: var(--rust);
             border: 2px solid var(--surface);
             animation: pulse-dot 2s ease-in-out infinite;
         }
@@ -570,9 +602,6 @@
             opacity: 0.3;
         }
 
-        /* ==========================================================
-           NOTIF PANEL - محسّن
-           ========================================================== */
         .notif-panel {
             position: absolute;
             top: calc(100% + 12px);
@@ -611,7 +640,7 @@
         .notif-panel-badge {
             font-size: 0.5rem;
             font-weight: 800;
-            background: var(--accent-gradient);
+            background: var(--primary-gradient);
             color: #ffffff;
             padding: 2px 10px;
             border-radius: 50px;
@@ -643,8 +672,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: color-mix(in srgb, var(--nc, var(--primary-3)) 14%, transparent);
-            color: var(--nc, var(--primary-3));
+            background: color-mix(in srgb, var(--nc, var(--blue-3)) 14%, transparent);
+            color: var(--nc, var(--blue-3));
             font-size: 0.75rem;
         }
 
@@ -713,15 +742,15 @@
         }
 
         .header .right .profile:hover {
-            border-color: var(--primary-3);
-            box-shadow: var(--shadow-accent);
+            border-color: var(--blue-3);
+            box-shadow: var(--shadow-primary);
         }
 
         .header .right .profile .avatar {
             width: 30px;
             height: 30px;
             border-radius: 50%;
-            background: var(--accent-gradient);
+            background: var(--primary-gradient);
             color: #ffffff;
             display: flex;
             align-items: center;
@@ -781,14 +810,14 @@
         }
 
         .header .mobile-search-toggle:hover {
-            border-color: var(--primary-3);
-            color: var(--primary-2);
+            border-color: var(--blue-3);
+            color: var(--blue-2);
         }
 
         .header .mobile-search-toggle.active {
-            background: var(--accent-gradient);
+            background: var(--primary-gradient);
             color: #ffffff;
-            border-color: var(--primary-3);
+            border-color: var(--blue-3);
         }
 
         @media (min-width: 1024px) {
@@ -878,7 +907,7 @@
         }
 
         /* ==========================================================
-           HERO - تصميم احترافي مع تدرج خلفية
+           HERO
            ========================================================== */
         .hero {
             position: relative;
@@ -945,7 +974,7 @@
             font-size: 0.55rem;
             letter-spacing: 1.2px;
             text-transform: uppercase;
-            color: var(--primary-3);
+            color: var(--blue-3);
             font-weight: 800;
             margin-bottom: 10px;
             background: rgba(46, 134, 193, 0.08);
@@ -966,7 +995,7 @@
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background: var(--primary-3);
+            background: var(--blue-3);
             flex-shrink: 0;
             animation: pulse-dot 2s ease-in-out infinite;
         }
@@ -987,7 +1016,7 @@
         }
 
         .hero .copy h1 .highlight {
-            background: var(--accent-gradient);
+            background: var(--primary-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -1015,12 +1044,12 @@
             gap: 10px;
             padding: 12px 24px;
             border-radius: 50px;
-            background: var(--accent-gradient);
+            background: var(--primary-gradient);
             color: #ffffff;
             font-weight: 800;
             font-size: 0.78rem;
             transition: all 0.3s var(--ease-spring);
-            box-shadow: var(--shadow-accent-strong);
+            box-shadow: var(--shadow-primary-strong);
             margin-top: 16px;
             width: 100%;
             justify-content: center;
@@ -1083,7 +1112,7 @@
         }
 
         /* ==========================================================
-           STATS - تصميم احترافي
+           STATS - تصميم احترافي بالألوان
            ========================================================== */
         .stats-wrap {
             position: relative;
@@ -1139,7 +1168,7 @@
         }
 
         .stat-card .bar {
-            height: 3px;
+            height: 4px;
             background: var(--swatch, var(--ink-5));
         }
 
@@ -1249,13 +1278,13 @@
         }
 
         .stat-card .change.up {
-            color: #1a7a6a;
-            background: #d5f5e3;
+            color: var(--teal);
+            background: var(--teal-soft);
         }
 
         .stat-card .change.down {
-            color: #a63a31;
-            background: #fadbd8;
+            color: var(--rust);
+            background: var(--rust-soft);
         }
 
         .stat-card .spark {
@@ -1271,7 +1300,7 @@
         }
 
         /* ==========================================================
-           CHARTS - تصميم احترافي
+           CHARTS
            ========================================================== */
         .charts-grid {
             display: grid;
@@ -1296,7 +1325,7 @@
         }
 
         /* ==========================================================
-           PANEL - تصميم احترافي
+           PANEL
            ========================================================== */
         .panel {
             background: var(--surface);
@@ -1351,8 +1380,8 @@
             height: 36px;
             border-radius: 12px;
             flex-shrink: 0;
-            background: color-mix(in srgb, var(--pi, var(--primary-3)) 10%, transparent);
-            color: var(--pi, var(--primary-3));
+            background: color-mix(in srgb, var(--pi, var(--blue-3)) 10%, transparent);
+            color: var(--pi, var(--blue-3));
             font-size: 0.8rem;
         }
 
@@ -1423,9 +1452,9 @@
         }
 
         .panel .tabs button.active {
-            background: var(--accent-gradient);
+            background: var(--primary-gradient);
             color: #ffffff;
-            box-shadow: var(--shadow-accent);
+            box-shadow: var(--shadow-primary);
         }
 
         .panel .tabs button:hover:not(.active) {
@@ -1518,7 +1547,7 @@
         }
 
         /* ==========================================================
-           FUTURE BOOKINGS - تصميم محسّن
+           FUTURE BOOKINGS
            ========================================================== */
         .future-booking-item {
             display: flex;
@@ -1554,8 +1583,8 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            background: color-mix(in srgb, var(--primary-3) 12%, transparent);
-            color: var(--primary-3);
+            background: color-mix(in srgb, var(--blue-3) 12%, transparent);
+            color: var(--blue-3);
             font-size: 0.75rem;
         }
 
@@ -1616,14 +1645,14 @@
             align-items: center;
             gap: 4px;
             font-size: 0.5rem;
-            color: var(--primary-2);
+            color: var(--blue-2);
         }
 
         .future-booking-item .booking-amount {
             font-family: var(--display);
             font-size: 0.68rem;
             font-weight: 700;
-            color: var(--primary-2);
+            color: var(--blue-2);
             flex-shrink: 0;
         }
 
@@ -1650,17 +1679,17 @@
         }
 
         .future-booking-item .booking-status-tag.today {
-            background: #fadbd8;
-            color: #a63a31;
+            background: var(--rust-soft);
+            color: var(--rust);
         }
 
         .future-booking-item .booking-status-tag.future {
-            background: #d5f5e3;
-            color: #1a7a6a;
+            background: var(--teal-soft);
+            color: var(--teal);
         }
 
         /* ==========================================================
-           ACTIVITY - تصميم محسّن
+           ACTIVITY
            ========================================================== */
         .activity .head,
         .future-bookings .head {
@@ -1698,7 +1727,7 @@
 
         .activity .head h3 i,
         .future-bookings .head h3 i {
-            color: var(--primary-3);
+            color: var(--blue-3);
         }
 
         .activity .head a,
@@ -1725,8 +1754,8 @@
 
         .activity .head a:hover,
         .future-bookings .head a:hover {
-            color: var(--primary-3);
-            border-color: var(--primary-3);
+            color: var(--blue-3);
+            border-color: var(--blue-3);
             background: rgba(46, 134, 193, 0.06);
         }
 
@@ -1819,7 +1848,7 @@
             opacity: 0.3;
             margin-bottom: 10px;
             display: block;
-            color: var(--primary-3);
+            color: var(--blue-3);
         }
 
         .empty-state p {
@@ -1951,7 +1980,7 @@
         }
 
         .mobile-bottom-nav .bn-item.active i {
-            color: var(--primary-3);
+            color: var(--blue-3);
         }
 
         .mobile-bottom-nav .bn-item:active {
@@ -1967,7 +1996,7 @@
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            background: var(--accent-gradient);
+            background: var(--primary-gradient);
             color: #ffffff;
             font-size: 1.15rem;
             box-shadow: 0 8px 32px rgba(46, 134, 193, 0.4);
@@ -2030,14 +2059,14 @@
                 <i class="fas fa-hand-holding-heart"></i> عمولة أبو زيد
             </a>
             <a href="client-accounts.html" class="item" style="border-color: rgba(46, 134, 193, 0.2);">
-                <i class="fas fa-user-clock" style="color: var(--primary-3);"></i>
+                <i class="fas fa-user-clock" style="color: var(--blue-3);"></i>
                 حسابات العملاء
-                <span class="badge" style="background: var(--accent-gradient);">متبقي</span>
+                <span class="badge" style="background: var(--primary-gradient);">متبقي</span>
             </a>
             <a href="users.html" class="item" style="border-color: rgba(46, 134, 193, 0.2);">
-                <i class="fas fa-users-cog" style="color: var(--primary-3);"></i>
+                <i class="fas fa-users-cog" style="color: var(--blue-3);"></i>
                 إدارة المستخدمين
-                <span class="badge" style="background: var(--accent-gradient);">Admin</span>
+                <span class="badge" style="background: var(--primary-gradient);">Admin</span>
             </a>
             <a href="filter.html" class="item">
                 <i class="fas fa-filter"></i> فلترة الحجوزات
@@ -2184,11 +2213,11 @@
                 <!-- ===== STATS ===== -->
                 <div class="stats-wrap">
                     <div class="stats">
-                        <div class="stat-card fade-up loading" style="animation-delay:0.06s;--swatch:var(--primary-3)">
-                            <div class="bar" style="background:var(--accent-gradient);"></div>
+                        <div class="stat-card fade-up loading" style="animation-delay:0.06s;--swatch:var(--blue-3)">
+                            <div class="bar" style="background:var(--primary-gradient);"></div>
                             <div class="body">
                                 <div class="label">
-                                    <span class="icon-chip"><i class="fas fa-wallet" style="color:var(--primary-3);"></i></span>
+                                    <span class="icon-chip"><i class="fas fa-wallet" style="color:var(--blue-3);"></i></span>
                                     إجمالي الإيرادات
                                 </div>
                                 <div class="number" id="totalRevenue">
@@ -2206,7 +2235,7 @@
                             </div>
                         </div>
 
-                        <div class="stat-card fade-up loading" style="animation-delay:0.09s;--swatch:var(--primary-1)">
+                        <div class="stat-card fade-up loading" style="animation-delay:0.09s;--swatch:var(--blue-1)">
                             <div class="bar"></div>
                             <div class="body">
                                 <div class="label">
@@ -2228,7 +2257,7 @@
                             </div>
                         </div>
 
-                        <div class="stat-card fade-up loading" style="animation-delay:0.12s;--swatch:#1a7a6a">
+                        <div class="stat-card fade-up loading" style="animation-delay:0.12s;--swatch:var(--teal)">
                             <div class="bar"></div>
                             <div class="body">
                                 <div class="label">
@@ -2250,7 +2279,7 @@
                             </div>
                         </div>
 
-                        <div class="stat-card fade-up loading" style="animation-delay:0.15s;--swatch:#a63a31">
+                        <div class="stat-card fade-up loading" style="animation-delay:0.15s;--swatch:var(--rust)">
                             <div class="bar"></div>
                             <div class="body">
                                 <div class="label">
@@ -2272,11 +2301,11 @@
                             </div>
                         </div>
 
-                        <div class="stat-card fade-up loading" style="animation-delay:0.18s;--swatch:#b7950b">
+                        <div class="stat-card fade-up loading" style="animation-delay:0.18s;--swatch:var(--gold-2)">
                             <div class="bar" style="background:var(--gold-gradient);"></div>
                             <div class="body">
                                 <div class="label">
-                                    <span class="icon-chip"><i class="fas fa-money-bill-wave" style="color:#b7950b;"></i></span>
+                                    <span class="icon-chip"><i class="fas fa-money-bill-wave" style="color:var(--gold-2);"></i></span>
                                     إجمالي المصروفات
                                 </div>
                                 <div class="number" id="totalExpenses">
@@ -2324,7 +2353,7 @@
                     <div class="panel fade-up" style="animation-delay:0.12s">
                         <div class="p-head">
                             <div class="p-title-group">
-                                <span class="p-icon" style="--pi:var(--primary-3)"><i class="fas fa-chart-line"></i></span>
+                                <span class="p-icon" style="--pi:var(--blue-3)"><i class="fas fa-chart-line"></i></span>
                                 <div>
                                     <div class="p-title">أداء الحجوزات الشهري</div>
                                     <div class="p-sub">مقارنة الإيرادات والإشغال خلال السنة</div>
@@ -2340,11 +2369,11 @@
                         </div>
                         <div class="legend-row">
                             <span class="li">
-                                <span class="sw" style="background:var(--primary-3)"></span>
+                                <span class="sw" style="background:var(--blue-3)"></span>
                                 الإيرادات
                             </span>
                             <span class="li">
-                                <span class="sw" style="background:#a63a31"></span>
+                                <span class="sw" style="background:var(--rust)"></span>
                                 الإشغال
                             </span>
                         </div>
@@ -2353,7 +2382,7 @@
                     <div class="panel fade-up" style="animation-delay:0.15s">
                         <div class="p-head">
                             <div class="p-title-group">
-                                <span class="p-icon" style="--pi:var(--primary-3)"><i class="fas fa-chart-pie"></i></span>
+                                <span class="p-icon" style="--pi:var(--blue-3)"><i class="fas fa-chart-pie"></i></span>
                                 <div>
                                     <div class="p-title">توزيع الإشغال</div>
                                     <div class="p-sub">حسب نوع العقار</div>
@@ -2364,9 +2393,9 @@
                             <canvas id="pieChart"></canvas>
                         </div>
                         <div class="legend-row" id="pieLegend">
-                            <span class="li"><span class="sw" style="background:#0C2D4A"></span> فيلا</span>
-                            <span class="li"><span class="sw" style="background:#2E86C1"></span> شقة</span>
-                            <span class="li"><span class="sw" style="background:#1a7a6a"></span> استوديو</span>
+                            <span class="li"><span class="sw" style="background:var(--blue-1)"></span> فيلا</span>
+                            <span class="li"><span class="sw" style="background:var(--blue-3)"></span> شقة</span>
+                            <span class="li"><span class="sw" style="background:var(--teal)"></span> استوديو</span>
                             <span class="li"><span class="sw" style="background:#b14b2b"></span> جناح</span>
                         </div>
                     </div>
@@ -2378,7 +2407,7 @@
                     <div class="panel future-bookings fade-up" style="animation-delay:0.16s">
                         <div class="head">
                             <div class="p-title-group">
-                                <span class="p-icon" style="--pi:var(--primary-3)"><i class="fas fa-calendar-check"></i></span>
+                                <span class="p-icon" style="--pi:var(--blue-3)"><i class="fas fa-calendar-check"></i></span>
                                 <h3>الحجوزات المستقبلية</h3>
                             </div>
                             <a href="future.html">عرض الكل <i class="fas fa-arrow-left"></i></a>
@@ -2394,7 +2423,7 @@
                     <div class="panel activity fade-up" style="animation-delay:0.18s">
                         <div class="head">
                             <div class="p-title-group">
-                                <span class="p-icon" style="--pi:#1a7a6a"><i class="fas fa-bolt"></i></span>
+                                <span class="p-icon" style="--pi:var(--teal)"><i class="fas fa-bolt"></i></span>
                                 <h3>النشاط الأخير</h3>
                             </div>
                             <a href="bookings.html">عرض الكل <i class="fas fa-arrow-left"></i></a>
@@ -2760,8 +2789,8 @@
                 upcoming.forEach(function(item) {
                     var timeLabel = item.diffDays === 0 ? 'يصل اليوم' : (item.diffDays === 1 ? 'يصل غدًا' :
                         'يصل خلال ' + item.diffDays + ' أيام');
-                    var color = item.diffDays === 0 ? '#a63a31' : (item.diffDays === 1 ? '#b7950b' :
-                        'var(--primary-3)');
+                    var color = item.diffDays === 0 ? 'var(--rust)' : (item.diffDays === 1 ? 'var(--gold-2)' :
+                        'var(--blue-3)');
                     html += '<div class="notif-item">';
                     html += '<span class="notif-ic" style="--nc:' + color +
                         '"><i class="fas fa-house-chimney"></i></span>';
@@ -2990,7 +3019,7 @@
                 pieData.values = [100];
             }
 
-            var colors = ['#0C2D4A', '#2E86C1', '#1a7a6a', '#b14b2b', '#4E8C09', '#a63a31', '#0890C4', '#59CAEA'];
+            var colors = ['#0C2D4A', '#2E86C1', '#1A7A6A', '#B14B2B', '#4E8C09', '#A63A31', '#0890C4', '#59CAEA'];
 
             pieChart = new Chart(ctx, {
                 type: 'doughnut',
@@ -3344,7 +3373,7 @@
                 }
                 renderPieChart();
 
-                var colors = ['#0C2D4A', '#2E86C1', '#1a7a6a', '#b14b2b', '#4E8C09', '#a63a31', '#0890C4', '#59CAEA'];
+                var colors = ['#0C2D4A', '#2E86C1', '#1A7A6A', '#B14B2B', '#4E8C09', '#A63A31', '#0890C4', '#59CAEA'];
                 var legendHtml = '';
                 pieData.labels.forEach(function(label, index) {
                     if (index < colors.length) {
@@ -3359,7 +3388,7 @@
                     activityContainer.innerHTML =
                         '<div class="empty-state"><i class="fas fa-clock"></i><p>لا توجد حجوزات مسجلة</p></div>';
                 } else {
-                    var colors2 = ['#1a7a6a', '#b7950b', '#0C2D4A', '#a63a31'];
+                    var colors2 = ['#1A7A6A', '#B7950B', '#0C2D4A', '#A63A31'];
                     var activityHtml = '';
                     var activitiesToShow = activities.slice(0, 5);
 
@@ -3393,10 +3422,10 @@
                 }
                 renderSpark('spark1', sparkData, '#2E86C1');
                 renderSpark('spark2', sparkData, '#0C2D4A');
-                renderSpark('spark3', sparkData, '#1a7a6a');
-                renderSpark('spark4', sparkData, '#a63a31');
-                renderSpark('spark5', sparkData, '#b7950b');
-                renderSpark('spark6', sparkData, '#b7950b');
+                renderSpark('spark3', sparkData, '#1A7A6A');
+                renderSpark('spark4', sparkData, '#A63A31');
+                renderSpark('spark5', sparkData, '#B7950B');
+                renderSpark('spark6', sparkData, '#B7950B');
 
                 document.querySelectorAll('.stat-card.loading').forEach(function(el) {
                     el.classList.remove('loading');
