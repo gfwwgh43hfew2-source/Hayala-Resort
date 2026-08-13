@@ -13,39 +13,39 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-        /* ==========================================================
-           ROOT VARIABLES
-           ========================================================== */
+        /* ========================================================== */
+        /* ROOT VARIABLES - نفس ألوان الكود القديم                       */
+        /* ========================================================== */
         :root {
-            --gold-1: #5EEAD4;
-            --gold-2: #2DD4BF;
-            --gold-3: #0D9488;
-            --gold-4: #0F766E;
-            --gold-gradient: linear-gradient(135deg, #5EEAD4 0%, #2DD4BF 40%, #14B8A6 70%, #0D9488 100%);
+            --gold-1: #F5D06B;
+            --gold-2: #E8B84C;
+            --gold-3: #D4A02E;
+            --gold-4: #B8891E;
+            --gold-gradient: linear-gradient(135deg, #F5D06B 0%, #E8B84C 40%, #D4A02E 70%, #B8891E 100%);
             --primary: #0EA5E9;
             --primary-dark: #0284C7;
             --canvas: #f5f1ea;
             --surface: #ffffff;
             --surface-2: #fbf9f5;
-            --surface-glass: rgba(255, 255, 255, 0.72);
+            --surface-glass: rgba(255, 255, 255, 0.85);
             --ink: #1a1612;
             --ink-2: #4a3f35;
             --ink-3: #8a7f73;
             --ink-4: #c4b9ab;
             --prussian: #1a4a6b;
-            --ochre: #0891B2;
+            --ochre: #b98a1e;
             --viridian: #2e7a5c;
             --oxide: #a63a31;
-            --sidebar-w: 290px;
-            --header-h: 74px;
+            --sidebar-w: 280px;
+            --header-h: 68px;
             --radius-lg: 24px;
             --radius-md: 16px;
             --radius-sm: 12px;
             --shadow-soft: 0 8px 40px rgba(0, 0, 0, 0.05);
             --shadow-medium: 0 16px 60px rgba(0, 0, 0, 0.08);
             --shadow-strong: 0 24px 80px rgba(0, 0, 0, 0.12);
-            --shadow-gold: 0 8px 40px rgba(13, 148, 136, 0.2);
-            --shadow-gold-strong: 0 16px 60px rgba(13, 148, 136, 0.3);
+            --shadow-gold: 0 8px 40px rgba(212, 160, 46, 0.2);
+            --shadow-gold-strong: 0 16px 60px rgba(212, 160, 46, 0.3);
             --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
             --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
             --display: 'Bricolage Grotesque', 'Cairo', sans-serif;
@@ -104,9 +104,9 @@
             border-radius: 50px;
         }
 
-        /* ==========================================================
-           SIDEBAR
-           ========================================================== */
+        /* ========================================================== */
+        /* SIDEBAR - متجاوب بالكامل                                    */
+        /* ========================================================== */
         .sidebar-overlay {
             display: none;
             position: fixed;
@@ -159,18 +159,19 @@
         }
 
         .sidebar .brand {
-            padding: 28px 24px 20px;
+            padding: 24px 20px 18px;
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
             border-bottom: 1px solid rgba(0, 0, 0, 0.04);
             flex-shrink: 0;
+            flex-wrap: wrap;
         }
 
         .sidebar .brand .mark {
-            width: 44px;
-            height: 44px;
-            border-radius: 14px;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -180,13 +181,13 @@
         }
 
         .sidebar .brand .mark svg {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
         }
 
         .sidebar .brand .text {
             font-weight: 800;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             line-height: 1.3;
             background: var(--gold-gradient);
             -webkit-background-clip: text;
@@ -196,7 +197,7 @@
 
         .sidebar .brand .text span {
             display: block;
-            font-size: 0.55rem;
+            font-size: 0.5rem;
             font-weight: 500;
             color: var(--ink-3);
             -webkit-text-fill-color: var(--ink-3);
@@ -204,34 +205,34 @@
 
         .sidebar .menu {
             flex: 1;
-            padding: 16px 12px;
+            padding: 12px 10px;
             overflow-y: auto;
         }
 
         .sidebar .menu .label {
-            font-size: 0.5rem;
+            font-size: 0.45rem;
             color: var(--ink-3);
             text-transform: uppercase;
-            letter-spacing: 1.4px;
-            padding: 14px 12px 6px;
+            letter-spacing: 1.2px;
+            padding: 12px 10px 4px;
             font-weight: 800;
         }
 
         .sidebar .menu .label:first-child {
-            padding-top: 4px;
+            padding-top: 2px;
         }
 
         .sidebar .menu .item {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 10px 14px;
+            gap: 10px;
+            padding: 8px 12px;
             border-radius: var(--radius-sm);
             color: var(--ink-2);
             font-weight: 600;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             transition: all 0.2s var(--ease-smooth);
-            margin-bottom: 2px;
+            margin-bottom: 1px;
             border-right: 3px solid transparent;
             cursor: pointer;
         }
@@ -249,9 +250,9 @@
         }
 
         .sidebar .menu .item i {
-            width: 18px;
+            width: 16px;
             text-align: center;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             opacity: 0.7;
         }
 
@@ -262,16 +263,16 @@
 
         .sidebar .menu .item .badge {
             margin-right: auto;
-            font-size: 0.45rem;
+            font-size: 0.4rem;
             font-weight: 800;
-            padding: 1px 10px;
+            padding: 1px 8px;
             border-radius: 50px;
             background: var(--gold-gradient);
             color: var(--ink);
         }
 
         .sidebar .footer {
-            padding: 14px 20px 24px;
+            padding: 12px 16px 20px;
             border-top: 1px solid rgba(0, 0, 0, 0.04);
             flex-shrink: 0;
         }
@@ -279,12 +280,13 @@
         .sidebar .footer .user {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
         .sidebar .footer .user .avatar {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: var(--radius-sm);
             background: var(--gold-gradient);
             color: var(--ink);
@@ -292,26 +294,26 @@
             align-items: center;
             justify-content: center;
             font-weight: 800;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             flex-shrink: 0;
             box-shadow: var(--shadow-gold);
         }
 
         .sidebar .footer .user .info .name {
-            font-size: 0.8rem;
+            font-size: 0.72rem;
             font-weight: 800;
         }
 
         .sidebar .footer .user .info .role {
-            font-size: 0.55rem;
+            font-size: 0.5rem;
             color: var(--ink-3);
             font-weight: 600;
         }
 
         .sidebar .footer .logout {
             margin-right: auto;
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
@@ -327,9 +329,9 @@
             background: rgba(166, 58, 49, 0.08);
         }
 
-        /* ==========================================================
-           MAIN
-           ========================================================== */
+        /* ========================================================== */
+        /* MAIN - متجاوب بالكامل                                      */
+        /* ========================================================== */
         .main {
             margin-right: 0;
             min-height: 100vh;
@@ -345,12 +347,10 @@
             .main {
                 margin-right: var(--sidebar-w);
                 width: calc(100% - var(--sidebar-w));
-                max-width: calc(100vw - var(--sidebar-w));
             }
             .main.expanded {
                 margin-right: 0;
                 width: 100%;
-                max-width: 100vw;
             }
         }
 
@@ -361,41 +361,42 @@
             overflow-x: hidden;
         }
 
-        /* ==========================================================
-           HEADER
-           ========================================================== */
+        /* ========================================================== */
+        /* HEADER - متجاوب بالكامل                                     */
+        /* ========================================================== */
         .header {
             position: sticky;
             top: 0;
             z-index: 100;
-            height: 62px;
-            padding: 0 14px;
+            height: 58px;
+            padding: 0 12px;
             background: var(--surface-glass);
             backdrop-filter: blur(20px) saturate(1.4);
             border-bottom: 1px solid rgba(0, 0, 0, 0.04);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 8px;
+            gap: 6px;
         }
 
         @media (min-width: 769px) {
             .header {
                 height: var(--header-h);
-                padding: 0 32px;
+                padding: 0 28px;
             }
         }
 
         .header .left {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            min-width: 0;
         }
 
         .header .hamburger {
             display: flex;
-            width: 38px;
-            height: 38px;
+            width: 34px;
+            height: 34px;
             border-radius: var(--radius-sm);
             align-items: center;
             justify-content: center;
@@ -404,7 +405,7 @@
             color: var(--ink-2);
             transition: 0.2s;
             cursor: pointer;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             flex-shrink: 0;
         }
 
@@ -414,8 +415,11 @@
         }
 
         .header .breadcrumb {
-            font-size: 0.7rem;
+            font-size: 0.6rem;
             color: var(--ink-3);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .header .breadcrumb b {
@@ -432,12 +436,12 @@
         .header .search {
             display: none;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             background: var(--surface);
             border: 1px solid rgba(0, 0, 0, 0.06);
             border-radius: 50px;
-            padding: 7px 16px;
-            width: 200px;
+            padding: 5px 14px;
+            width: 160px;
             transition: border-color 0.2s;
         }
 
@@ -447,7 +451,7 @@
         }
 
         .header .search i {
-            font-size: 0.75rem;
+            font-size: 0.65rem;
             color: var(--ink-3);
         }
 
@@ -457,7 +461,7 @@
             outline: none;
             color: var(--ink);
             font-family: inherit;
-            font-size: 0.75rem;
+            font-size: 0.65rem;
             width: 100%;
         }
 
@@ -468,14 +472,15 @@
         @media (min-width: 1024px) {
             .header .search {
                 display: flex;
-                width: 280px;
+                width: 240px;
             }
         }
 
         .header .right {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
+            flex-shrink: 0;
         }
 
         .notif-wrap {
@@ -484,8 +489,8 @@
 
         .header .right .notif {
             position: relative;
-            width: 38px;
-            height: 38px;
+            width: 34px;
+            height: 34px;
             border-radius: var(--radius-sm);
             border: 1px solid rgba(0, 0, 0, 0.06);
             background: var(--surface);
@@ -494,7 +499,7 @@
             align-items: center;
             justify-content: center;
             transition: 0.2s;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             flex-shrink: 0;
         }
 
@@ -505,29 +510,29 @@
 
         .header .right .notif .dot {
             position: absolute;
-            top: 6px;
-            left: 6px;
-            width: 7px;
-            height: 7px;
+            top: 5px;
+            left: 5px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
             background: var(--oxide);
             border: 2px solid var(--surface);
         }
 
-        /* ==========================================================
-           NOTIF PANEL - إصلاح مشكلة الخروج عن الشاشة ✅
-           ========================================================== */
+        /* ========================================================== */
+        /* NOTIF PANEL - متجاوب                                       */
+        /* ========================================================== */
         .notif-panel {
             position: absolute;
-            top: calc(100% + 10px);
+            top: calc(100% + 8px);
             left: 50%;
             transform: translateX(-50%) translateY(-8px) scale(0.96);
-            width: min(360px, calc(100vw - 24px));
+            width: min(340px, calc(100vw - 20px));
             background: var(--surface);
             border: 1px solid rgba(0, 0, 0, 0.06);
             border-radius: var(--radius-md);
             box-shadow: var(--shadow-strong);
-            padding: 8px;
+            padding: 6px;
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.25s var(--ease-spring), transform 0.25s var(--ease-spring), visibility 0.25s;
@@ -546,14 +551,14 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 8px 12px 6px;
-            font-size: 0.75rem;
+            padding: 6px 10px 4px;
+            font-size: 0.7rem;
             font-weight: 800;
             color: var(--ink);
         }
 
         .notif-panel-badge {
-            font-size: 0.5rem;
+            font-size: 0.45rem;
             font-weight: 800;
             background: var(--gold-gradient);
             color: var(--ink);
@@ -564,9 +569,9 @@
         .notif-item {
             display: flex;
             align-items: flex-start;
-            gap: 10px;
-            padding: 8px 10px;
-            border-radius: 10px;
+            gap: 8px;
+            padding: 6px 8px;
+            border-radius: 8px;
             transition: background 0.2s ease;
         }
 
@@ -575,61 +580,61 @@
         }
 
         .notif-ic {
-            width: 30px;
-            height: 30px;
-            border-radius: 8px;
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
             flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
             background: color-mix(in srgb, var(--nc, var(--primary)) 14%, transparent);
             color: var(--nc, var(--primary));
-            font-size: 0.7rem;
+            font-size: 0.6rem;
         }
 
         .notif-t {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: 700;
             color: var(--ink);
             line-height: 1.3;
         }
 
         .notif-d {
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             color: var(--ink-3);
-            margin-top: 2px;
+            margin-top: 1px;
             line-height: 1.4;
         }
 
         .notif-time {
-            font-size: 0.55rem;
+            font-size: 0.5rem;
             color: var(--ink-3);
-            margin-top: 3px;
+            margin-top: 2px;
             font-weight: 600;
         }
 
         .notif-empty {
             text-align: center;
-            padding: 20px 12px;
+            padding: 16px 10px;
             color: var(--ink-3);
         }
 
         .notif-empty i {
-            font-size: 1.2rem;
+            font-size: 1rem;
             opacity: 0.35;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             display: block;
         }
 
         .notif-empty p {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
         }
 
         .notif-panel-foot {
             margin-top: 4px;
-            padding: 8px 12px 4px;
+            padding: 6px 10px 4px;
             border-top: 1px solid rgba(0, 0, 0, 0.05);
-            font-size: 0.55rem;
+            font-size: 0.5rem;
             color: var(--ink-3);
             text-align: center;
         }
@@ -642,8 +647,8 @@
         .header .right .profile {
             display: flex;
             align-items: center;
-            gap: 6px;
-            padding: 3px 8px 3px 4px;
+            gap: 4px;
+            padding: 2px 6px 2px 3px;
             border-radius: 50px;
             border: 1px solid rgba(0, 0, 0, 0.06);
             background: var(--surface);
@@ -656,8 +661,8 @@
         }
 
         .header .right .profile .avatar {
-            width: 28px;
-            height: 28px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
             background: var(--gold-gradient);
             color: var(--ink);
@@ -665,12 +670,12 @@
             align-items: center;
             justify-content: center;
             font-weight: 800;
-            font-size: 0.65rem;
+            font-size: 0.55rem;
             flex-shrink: 0;
         }
 
         .header .right .profile .name {
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             font-weight: 700;
         }
 
@@ -679,41 +684,41 @@
         }
 
         .header .right .profile i {
-            font-size: 0.5rem;
+            font-size: 0.45rem;
             color: var(--ink-3);
         }
 
         @media (min-width: 769px) {
             .header .right .profile .name small {
                 display: block;
-                font-size: 0.5rem;
+                font-size: 0.45rem;
                 font-weight: 500;
                 color: var(--ink-3);
             }
             .header .right .profile {
-                padding: 4px 14px 4px 6px;
+                padding: 3px 12px 3px 5px;
             }
             .header .right .profile .name {
-                font-size: 0.75rem;
+                font-size: 0.7rem;
             }
             .header .right .profile .avatar {
-                width: 32px;
-                height: 32px;
-                font-size: 0.75rem;
+                width: 28px;
+                height: 28px;
+                font-size: 0.65rem;
             }
         }
 
         .header .mobile-search-toggle {
             display: flex;
-            width: 38px;
-            height: 38px;
+            width: 34px;
+            height: 34px;
             border-radius: var(--radius-sm);
             align-items: center;
             justify-content: center;
             border: 1px solid rgba(0, 0, 0, 0.06);
             background: var(--surface);
             color: var(--ink-2);
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             transition: 0.2s;
             flex-shrink: 0;
         }
@@ -738,7 +743,7 @@
         .mobile-search-bar {
             display: none;
             position: sticky;
-            top: 62px;
+            top: 58px;
             z-index: 95;
             background: var(--surface-glass);
             backdrop-filter: blur(16px);
@@ -748,25 +753,31 @@
             transition: max-height 0.35s var(--ease-spring), padding 0.35s var(--ease-spring);
         }
 
+        @media (min-width: 769px) {
+            .mobile-search-bar {
+                top: var(--header-h);
+            }
+        }
+
         .mobile-search-bar.open {
-            max-height: 70px;
-            padding: 10px 14px;
+            max-height: 60px;
+            padding: 8px 12px;
         }
 
         .mobile-search-bar .inner {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             background: var(--surface);
             border: 1px solid rgba(0, 0, 0, 0.06);
             border-radius: 50px;
-            padding: 10px 16px;
+            padding: 8px 14px;
             box-shadow: var(--shadow-soft);
         }
 
         .mobile-search-bar .inner i.fa-search {
             color: var(--ink-3);
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             flex-shrink: 0;
         }
 
@@ -777,7 +788,7 @@
             outline: none;
             background: none;
             font-family: inherit;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--ink);
         }
 
@@ -787,16 +798,16 @@
 
         .mobile-search-bar .close-search {
             color: var(--ink-3);
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             padding: 4px;
             flex-shrink: 0;
         }
 
-        /* ==========================================================
-           DASHBOARD
-           ========================================================== */
+        /* ========================================================== */
+        /* DASHBOARD - متجاوب بالكامل                                 */
+        /* ========================================================== */
         .dash {
-            padding: 14px 10px 90px;
+            padding: 12px 10px 80px;
             max-width: 1600px;
             margin: 0 auto;
             width: 100%;
@@ -805,21 +816,21 @@
 
         @media (min-width: 769px) {
             .dash {
-                padding: 32px 40px 56px;
+                padding: 28px 36px 50px;
             }
         }
 
-        /* ==========================================================
-           HERO
-           ========================================================== */
+        /* ========================================================== */
+        /* HERO - متجاوب بالكامل                                      */
+        /* ========================================================== */
         .hero {
             position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
-            padding: 18px 14px;
-            margin-bottom: 18px;
+            gap: 16px;
+            padding: 16px 12px;
+            margin-bottom: 16px;
             border-radius: var(--radius-md);
             background: linear-gradient(145deg, var(--surface) 0%, var(--surface-2) 100%);
             border: 1px solid rgba(0, 0, 0, 0.04);
@@ -833,9 +844,10 @@
             .hero {
                 flex-direction: row;
                 text-align: right;
-                padding: 40px 44px;
-                gap: 44px;
+                padding: 32px 36px;
+                gap: 36px;
                 border-radius: var(--radius-lg);
+                margin-bottom: 24px;
             }
         }
 
@@ -850,30 +862,30 @@
         .hero .eyebrow {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            font-size: 0.55rem;
-            letter-spacing: 1px;
+            gap: 5px;
+            font-size: 0.5rem;
+            letter-spacing: 0.8px;
             text-transform: uppercase;
             color: var(--gold-3);
             font-weight: 800;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             background: rgba(212, 160, 46, 0.08);
             border: 1px solid rgba(212, 160, 46, 0.12);
-            padding: 4px 12px;
+            padding: 3px 10px;
             border-radius: 50px;
         }
 
         @media (min-width: 769px) {
             .hero .eyebrow {
-                font-size: 0.6rem;
-                padding: 6px 16px;
+                font-size: 0.55rem;
+                padding: 5px 14px;
             }
         }
 
         .hero .eyebrow .pulse-dot {
             position: relative;
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
             border-radius: 50%;
             background: var(--gold-3);
             flex-shrink: 0;
@@ -881,16 +893,16 @@
 
         .hero .copy h1 {
             font-weight: 900;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             color: var(--ink);
-            letter-spacing: -0.3px;
+            letter-spacing: -0.2px;
             line-height: 1.3;
             margin-bottom: 4px;
         }
 
         @media (min-width: 769px) {
             .hero .copy h1 {
-                font-size: 2.25rem;
+                font-size: 2rem;
             }
         }
 
@@ -903,33 +915,33 @@
 
         .hero .copy p {
             color: var(--ink-2);
-            font-size: 0.8rem;
-            margin-top: 8px;
+            font-size: 0.7rem;
+            margin-top: 6px;
             max-width: 100%;
             line-height: 1.6;
         }
 
         @media (min-width: 769px) {
             .hero .copy p {
-                font-size: 0.9rem;
+                font-size: 0.85rem;
                 max-width: 40ch;
-                margin-top: 14px;
+                margin-top: 12px;
             }
         }
 
         .hero .cta {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 11px 20px;
+            gap: 6px;
+            padding: 9px 18px;
             border-radius: 50px;
             background: var(--gold-gradient);
             color: var(--ink);
             font-weight: 800;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             transition: all 0.3s var(--ease-spring);
             box-shadow: var(--shadow-gold-strong);
-            margin-top: 12px;
+            margin-top: 10px;
             width: 100%;
             justify-content: center;
         }
@@ -937,9 +949,9 @@
         @media (min-width: 769px) {
             .hero .cta {
                 width: auto;
-                padding: 14px 34px;
-                font-size: 0.85rem;
-                margin-top: 20px;
+                padding: 12px 30px;
+                font-size: 0.8rem;
+                margin-top: 18px;
             }
         }
 
@@ -970,7 +982,7 @@
         .hero-image img {
             display: block;
             width: 100%;
-            max-width: 200px;
+            max-width: 160px;
             height: auto;
             background: none;
             background-color: transparent;
@@ -982,13 +994,13 @@
 
         @media (min-width: 769px) {
             .hero-image img {
-                max-width: 380px;
+                max-width: 320px;
             }
         }
 
-        /* ==========================================================
-           STATS
-           ========================================================== */
+        /* ========================================================== */
+        /* STATS - متجاوب بالكامل                                     */
+        /* ========================================================== */
         .stats-wrap {
             position: relative;
             width: 100%;
@@ -998,31 +1010,31 @@
         .stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 16px;
+            gap: 6px;
+            margin-bottom: 14px;
             width: 100%;
         }
 
         @media (min-width: 500px) {
             .stats {
                 grid-template-columns: repeat(3, 1fr);
-                gap: 10px;
+                gap: 8px;
             }
         }
 
         @media (min-width: 769px) {
             .stats {
                 grid-template-columns: repeat(3, 1fr);
-                gap: 14px;
-                margin-bottom: 24px;
+                gap: 12px;
+                margin-bottom: 20px;
             }
         }
 
         @media (min-width: 992px) {
             .stats {
                 grid-template-columns: repeat(6, 1fr);
-                gap: 18px;
-                margin-bottom: 28px;
+                gap: 14px;
+                margin-bottom: 24px;
             }
         }
 
@@ -1038,7 +1050,7 @@
         }
 
         .stat-card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             box-shadow: var(--shadow-medium);
         }
 
@@ -1049,30 +1061,30 @@
 
         .stat-card .body {
             position: relative;
-            padding: 10px 12px;
+            padding: 8px 10px;
         }
 
         @media (min-width: 769px) {
             .stat-card .body {
-                padding: 16px 18px;
+                padding: 14px 16px;
             }
         }
 
         .stat-card .label {
-            font-size: 0.55rem;
+            font-size: 0.45rem;
             color: var(--ink-3);
             font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
             text-transform: uppercase;
             letter-spacing: 0.2px;
         }
 
         @media (min-width: 769px) {
             .stat-card .label {
-                font-size: 0.65rem;
-                gap: 8px;
+                font-size: 0.55rem;
+                gap: 6px;
             }
         }
 
@@ -1080,45 +1092,45 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 22px;
-            height: 22px;
-            border-radius: 6px;
+            width: 18px;
+            height: 18px;
+            border-radius: 5px;
             background: color-mix(in srgb, var(--swatch, var(--ink-3)) 12%, transparent);
             flex-shrink: 0;
         }
 
         @media (min-width: 769px) {
             .stat-card .icon-chip {
-                width: 28px;
-                height: 28px;
-                border-radius: 9px;
+                width: 24px;
+                height: 24px;
+                border-radius: 7px;
             }
         }
 
         .stat-card .icon-chip i {
-            font-size: 0.6rem;
+            font-size: 0.5rem;
             color: var(--swatch, var(--ink-3));
         }
 
         @media (min-width: 769px) {
             .stat-card .icon-chip i {
-                font-size: 0.72rem;
+                font-size: 0.65rem;
             }
         }
 
         .stat-card .number {
             font-family: var(--display);
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 700;
-            margin-top: 4px;
+            margin-top: 3px;
             letter-spacing: -0.2px;
             color: var(--ink);
         }
 
         @media (min-width: 769px) {
             .stat-card .number {
-                font-size: 1.5rem;
-                margin-top: 10px;
+                font-size: 1.3rem;
+                margin-top: 8px;
             }
         }
 
@@ -1126,29 +1138,29 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-top: 6px;
+            margin-top: 4px;
         }
 
         @media (min-width: 769px) {
             .stat-card .foot {
-                margin-top: 10px;
+                margin-top: 8px;
             }
         }
 
         .stat-card .change {
             display: inline-flex;
             align-items: center;
-            gap: 3px;
-            font-size: 0.5rem;
+            gap: 2px;
+            font-size: 0.45rem;
             font-weight: 700;
-            padding: 1px 6px;
+            padding: 1px 5px;
             border-radius: 50px;
         }
 
         @media (min-width: 769px) {
             .stat-card .change {
-                font-size: 0.6rem;
-                padding: 3px 8px;
+                font-size: 0.55rem;
+                padding: 2px 8px;
             }
         }
 
@@ -1163,50 +1175,50 @@
         }
 
         .stat-card .spark {
-            width: 36px;
-            height: 16px;
+            width: 30px;
+            height: 14px;
         }
 
         @media (min-width: 769px) {
             .stat-card .spark {
-                width: 50px;
-                height: 20px;
+                width: 44px;
+                height: 18px;
             }
         }
 
-        /* ==========================================================
-           CHARTS
-           ========================================================== */
+        /* ========================================================== */
+        /* CHARTS - متجاوب بالكامل                                    */
+        /* ========================================================== */
         .charts-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 14px;
-            margin-bottom: 16px;
+            gap: 12px;
+            margin-bottom: 14px;
             width: 100%;
         }
 
         @media (min-width: 769px) {
             .charts-grid {
-                gap: 24px;
-                margin-bottom: 24px;
+                gap: 20px;
+                margin-bottom: 20px;
             }
         }
 
         @media (min-width: 1024px) {
             .charts-grid {
                 grid-template-columns: 1.6fr 1fr;
-                gap: 24px;
+                gap: 20px;
             }
         }
 
-        /* ==========================================================
-           PANEL
-           ========================================================== */
+        /* ========================================================== */
+        /* PANEL - متجاوب بالكامل                                     */
+        /* ========================================================== */
         .panel {
             background: var(--surface);
             border: 1px solid rgba(0, 0, 0, 0.04);
             border-radius: var(--radius-md);
-            padding: 14px 12px;
+            padding: 12px 10px;
             box-shadow: var(--shadow-soft);
             transition: all 0.3s var(--ease-spring);
             width: 100%;
@@ -1215,7 +1227,7 @@
 
         @media (min-width: 769px) {
             .panel {
-                padding: 24px 28px;
+                padding: 20px 24px;
                 border-radius: var(--radius-lg);
             }
         }
@@ -1228,65 +1240,65 @@
             display: flex;
             flex-direction: column;
             align-items: stretch;
-            gap: 10px;
-            margin-bottom: 14px;
+            gap: 8px;
+            margin-bottom: 12px;
         }
 
         @media (min-width: 769px) {
             .panel .p-head {
                 flex-direction: row;
                 align-items: flex-start;
-                gap: 12px;
-                margin-bottom: 20px;
+                gap: 10px;
+                margin-bottom: 16px;
             }
         }
 
         .panel .p-title-group {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .panel .p-icon {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 32px;
-            height: 32px;
-            border-radius: 10px;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
             flex-shrink: 0;
             background: color-mix(in srgb, var(--pi, var(--primary)) 10%, transparent);
             color: var(--pi, var(--primary));
-            font-size: 0.75rem;
+            font-size: 0.65rem;
         }
 
         @media (min-width: 769px) {
             .panel .p-icon {
-                width: 40px;
-                height: 40px;
-                border-radius: 12px;
-                font-size: 0.9rem;
+                width: 36px;
+                height: 36px;
+                border-radius: 10px;
+                font-size: 0.8rem;
             }
         }
 
         .panel .p-title {
-            font-size: 0.78rem;
+            font-size: 0.7rem;
             font-weight: 800;
             color: var(--ink);
         }
 
         .panel .p-sub {
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             color: var(--ink-3);
-            margin-top: 2px;
+            margin-top: 1px;
         }
 
         @media (min-width: 769px) {
             .panel .p-title {
-                font-size: 0.9rem;
+                font-size: 0.85rem;
             }
             .panel .p-sub {
-                font-size: 0.7rem;
+                font-size: 0.65rem;
             }
         }
 
@@ -1294,7 +1306,7 @@
             display: flex;
             gap: 2px;
             background: var(--canvas);
-            padding: 3px;
+            padding: 2px;
             border-radius: 8px;
             border: 1px solid rgba(0, 0, 0, 0.04);
             width: 100%;
@@ -1310,9 +1322,9 @@
             border: none;
             background: none;
             color: var(--ink-3);
-            font-size: 0.55rem;
+            font-size: 0.5rem;
             font-weight: 700;
-            padding: 5px 10px;
+            padding: 4px 8px;
             border-radius: 6px;
             transition: 0.2s;
             flex: 1;
@@ -1320,8 +1332,8 @@
 
         @media (min-width: 769px) {
             .panel .tabs button {
-                font-size: 0.62rem;
-                padding: 6px 16px;
+                font-size: 0.58rem;
+                padding: 5px 14px;
                 flex: none;
             }
         }
@@ -1334,31 +1346,31 @@
 
         .chart-canvas-wrap {
             position: relative;
-            height: 160px;
+            height: 140px;
             width: 100%;
         }
 
         @media (min-width: 769px) {
             .chart-canvas-wrap {
-                height: 240px;
+                height: 220px;
             }
         }
 
         .chart-canvas-wrap.pie-wrap {
-            height: 160px;
+            height: 140px;
         }
 
         @media (min-width: 769px) {
             .chart-canvas-wrap.pie-wrap {
-                height: 240px;
+                height: 220px;
             }
         }
 
         .legend-row {
             display: flex;
-            gap: 10px;
-            margin-top: 10px;
-            padding-top: 10px;
+            gap: 8px;
+            margin-top: 8px;
+            padding-top: 8px;
             border-top: 1px solid rgba(0, 0, 0, 0.04);
             flex-wrap: wrap;
             justify-content: center;
@@ -1366,66 +1378,66 @@
 
         @media (min-width: 769px) {
             .legend-row {
-                gap: 24px;
-                margin-top: 16px;
-                padding-top: 16px;
+                gap: 20px;
+                margin-top: 14px;
+                padding-top: 14px;
             }
         }
 
         .legend-row .li {
             display: flex;
             align-items: center;
-            gap: 5px;
-            font-size: 0.6rem;
+            gap: 4px;
+            font-size: 0.55rem;
             color: var(--ink-2);
             font-weight: 600;
         }
 
         @media (min-width: 769px) {
             .legend-row .li {
-                font-size: 0.7rem;
-                gap: 8px;
+                font-size: 0.65rem;
+                gap: 6px;
             }
         }
 
         .legend-row .li .sw {
-            width: 10px;
-            height: 10px;
-            border-radius: 4px;
+            width: 8px;
+            height: 8px;
+            border-radius: 3px;
         }
 
-        /* ==========================================================
-           LOWER GRID
-           ========================================================== */
+        /* ========================================================== */
+        /* LOWER GRID - متجاوب بالكامل                               */
+        /* ========================================================== */
         .lower-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 14px;
+            gap: 12px;
             width: 100%;
         }
 
         @media (min-width: 769px) {
             .lower-grid {
-                gap: 24px;
+                gap: 20px;
             }
         }
 
         @media (min-width: 992px) {
             .lower-grid {
                 grid-template-columns: 1.6fr 1fr;
-                gap: 24px;
+                gap: 20px;
             }
         }
 
-        /* ==========================================================
-           FUTURE BOOKINGS
-           ========================================================== */
+        /* ========================================================== */
+        /* FUTURE BOOKINGS - متجاوب بالكامل                          */
+        /* ========================================================== */
         .future-booking-item {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 8px 6px;
-            border-radius: 8px;
+            gap: 6px;
+            padding: 6px 4px;
+            border-radius: 6px;
             border-bottom: 1px solid rgba(0, 0, 0, 0.03);
             transition: background 0.2s ease;
             flex-wrap: wrap;
@@ -1433,8 +1445,8 @@
 
         @media (min-width: 769px) {
             .future-booking-item {
-                padding: 12px 10px;
-                gap: 14px;
+                padding: 10px 8px;
+                gap: 12px;
             }
         }
 
@@ -1447,81 +1459,81 @@
         }
 
         .future-booking-item .booking-icon {
-            width: 30px;
-            height: 30px;
-            border-radius: 8px;
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
             background: color-mix(in srgb, var(--gold-3) 12%, transparent);
             color: var(--gold-3);
-            font-size: 0.7rem;
+            font-size: 0.6rem;
         }
 
         @media (min-width: 769px) {
             .future-booking-item .booking-icon {
-                width: 36px;
-                height: 36px;
-                border-radius: 10px;
-                font-size: 0.85rem;
+                width: 32px;
+                height: 32px;
+                border-radius: 8px;
+                font-size: 0.75rem;
             }
         }
 
         .future-booking-item .booking-info {
             flex: 1;
-            min-width: 80px;
+            min-width: 60px;
         }
 
         .future-booking-item .booking-info .client-name {
-            font-size: 0.7rem;
+            font-size: 0.6rem;
             font-weight: 700;
             color: var(--ink);
         }
 
         @media (min-width: 769px) {
             .future-booking-item .booking-info .client-name {
-                font-size: 0.78rem;
+                font-size: 0.72rem;
             }
         }
 
         .future-booking-item .booking-info .booking-meta {
-            font-size: 0.55rem;
+            font-size: 0.5rem;
             color: var(--ink-3);
-            margin-top: 2px;
+            margin-top: 1px;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
             flex-wrap: wrap;
         }
 
         @media (min-width: 769px) {
             .future-booking-item .booking-info .booking-meta {
-                font-size: 0.65rem;
-                gap: 8px;
+                font-size: 0.6rem;
+                gap: 6px;
             }
         }
 
         .future-booking-item .booking-info .booking-meta .property-tag {
             display: inline-block;
-            padding: 1px 6px;
-            border-radius: 4px;
+            padding: 1px 5px;
+            border-radius: 3px;
             background: var(--surface-muted);
-            font-size: 0.5rem;
+            font-size: 0.45rem;
             color: var(--ink-2);
         }
 
         .future-booking-item .booking-info .booking-meta .date-tag {
             display: inline-flex;
             align-items: center;
-            gap: 3px;
-            font-size: 0.5rem;
+            gap: 2px;
+            font-size: 0.45rem;
             color: var(--primary-dark);
         }
 
         .future-booking-item .booking-amount {
             font-family: var(--display);
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             font-weight: 700;
             color: var(--gold-3);
             flex-shrink: 0;
@@ -1529,23 +1541,23 @@
 
         @media (min-width: 769px) {
             .future-booking-item .booking-amount {
-                font-size: 0.78rem;
+                font-size: 0.72rem;
             }
         }
 
         .future-booking-item .booking-status-tag {
             display: inline-block;
-            padding: 1px 6px;
+            padding: 1px 5px;
             border-radius: 50px;
-            font-size: 0.45rem;
+            font-size: 0.4rem;
             font-weight: 700;
             flex-shrink: 0;
         }
 
         @media (min-width: 769px) {
             .future-booking-item .booking-status-tag {
-                font-size: 0.55rem;
-                padding: 2px 10px;
+                font-size: 0.5rem;
+                padding: 2px 8px;
             }
         }
 
@@ -1554,40 +1566,40 @@
             color: var(--rust);
         }
 
-        /* ==========================================================
-           ACTIVITY
-           ========================================================== */
+        /* ========================================================== */
+        /* ACTIVITY - متجاوب بالكامل                                 */
+        /* ========================================================== */
         .activity .head,
         .future-bookings .head {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 4px;
         }
 
         @media (min-width: 769px) {
             .activity .head,
             .future-bookings .head {
-                margin-bottom: 18px;
+                margin-bottom: 14px;
             }
         }
 
         .activity .head h3,
         .future-bookings .head h3 {
-            font-size: 0.78rem;
+            font-size: 0.7rem;
             font-weight: 800;
             color: var(--ink);
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
         }
 
         @media (min-width: 769px) {
             .activity .head h3,
             .future-bookings .head h3 {
-                font-size: 0.9rem;
+                font-size: 0.85rem;
             }
         }
 
@@ -1600,12 +1612,12 @@
         .future-bookings .head a {
             display: inline-flex;
             align-items: center;
-            gap: 4px;
-            font-size: 0.6rem;
+            gap: 3px;
+            font-size: 0.55rem;
             color: var(--ink-3);
             font-weight: 700;
             transition: 0.2s;
-            padding: 3px 10px;
+            padding: 2px 8px;
             border-radius: 50px;
             border: 1px solid rgba(0, 0, 0, 0.04);
         }
@@ -1613,8 +1625,8 @@
         @media (min-width: 769px) {
             .activity .head a,
             .future-bookings .head a {
-                font-size: 0.68rem;
-                padding: 4px 14px;
+                font-size: 0.62rem;
+                padding: 4px 12px;
             }
         }
 
@@ -1628,17 +1640,17 @@
         .activity .list .item {
             display: flex;
             align-items: flex-start;
-            gap: 10px;
-            padding: 8px 6px;
-            border-radius: 8px;
+            gap: 8px;
+            padding: 6px 4px;
+            border-radius: 6px;
             border-bottom: 1px solid rgba(0, 0, 0, 0.03);
             transition: background 0.2s ease;
         }
 
         @media (min-width: 769px) {
             .activity .list .item {
-                padding: 14px 10px;
-                gap: 14px;
+                padding: 12px 8px;
+                gap: 12px;
             }
         }
 
@@ -1651,29 +1663,29 @@
         }
 
         .activity .list .item .dot-ind {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
-            margin-top: 4px;
+            margin-top: 3px;
             flex-shrink: 0;
         }
 
         @media (min-width: 769px) {
             .activity .list .item .dot-ind {
-                width: 10px;
-                height: 10px;
+                width: 8px;
+                height: 8px;
             }
         }
 
         .activity .list .item .content .text {
-            font-size: 0.7rem;
+            font-size: 0.6rem;
             color: var(--ink-2);
             line-height: 1.5;
         }
 
         @media (min-width: 769px) {
             .activity .list .item .content .text {
-                font-size: 0.78rem;
+                font-size: 0.72rem;
             }
         }
 
@@ -1683,67 +1695,67 @@
         }
 
         .activity .list .item .content .time {
-            font-size: 0.55rem;
+            font-size: 0.5rem;
             color: var(--ink-3);
-            margin-top: 2px;
+            margin-top: 1px;
         }
 
         @media (min-width: 769px) {
             .activity .list .item .content .time {
-                font-size: 0.62rem;
+                font-size: 0.58rem;
             }
         }
 
-        /* ==========================================================
-           EMPTY STATE
-           ========================================================== */
+        /* ========================================================== */
+        /* EMPTY STATE - متجاوب بالكامل                              */
+        /* ========================================================== */
         .empty-state {
             text-align: center;
-            padding: 20px 14px;
+            padding: 16px 10px;
             color: var(--ink-3);
         }
 
         @media (min-width: 769px) {
             .empty-state {
-                padding: 36px 20px;
+                padding: 30px 18px;
             }
         }
 
         .empty-state i {
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             opacity: 0.3;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             display: block;
             color: var(--gold-3);
         }
 
         .empty-state p {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 600;
         }
 
         @media (min-width: 769px) {
             .empty-state i {
-                font-size: 2.4rem;
+                font-size: 2rem;
             }
             .empty-state p {
-                font-size: 0.85rem;
+                font-size: 0.8rem;
             }
         }
 
-        /* ==========================================================
-           LOADING
-           ========================================================== */
+        /* ========================================================== */
+        /* LOADING                                                    */
+        /* ========================================================== */
         .loading-text {
             color: var(--ink-3);
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             font-weight: 400;
             animation: pulse 1.5s ease-in-out infinite;
         }
 
         @media (min-width: 769px) {
             .loading-text {
-                font-size: 0.75rem;
+                font-size: 0.7rem;
             }
         }
 
@@ -1761,9 +1773,9 @@
             color: var(--ink-3) !important;
         }
 
-        /* ==========================================================
-           ANIMATIONS - بدون إزاحة ✅
-           ========================================================== */
+        /* ========================================================== */
+        /* ANIMATIONS - بدون إزاحة ✅                                 */
+        /* ========================================================== */
         .fade-up {
             opacity: 0;
             transform: translateY(0);
@@ -1790,9 +1802,9 @@
             }
         }
 
-        /* ==========================================================
-           MOBILE BOTTOM NAV
-           ========================================================== */
+        /* ========================================================== */
+        /* MOBILE BOTTOM NAV - متجاوب بالكامل                        */
+        /* ========================================================== */
         .mobile-bottom-nav {
             display: flex;
             position: fixed;
@@ -1806,7 +1818,7 @@
             background: var(--surface-glass);
             backdrop-filter: blur(20px) saturate(1.4);
             border-top: 1px solid rgba(0, 0, 0, 0.06);
-            padding: 5px 6px calc(5px + env(safe-area-inset-bottom, 0px));
+            padding: 4px 4px calc(4px + env(safe-area-inset-bottom, 0px));
             box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.06);
         }
 
@@ -1822,18 +1834,18 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 2px;
-            padding: 5px 2px 4px;
+            gap: 1px;
+            padding: 4px 2px 3px;
             color: var(--ink-3);
-            font-size: 0.45rem;
+            font-size: 0.4rem;
             font-weight: 700;
-            border-radius: 10px;
+            border-radius: 8px;
             transition: all 0.2s var(--ease-smooth);
             cursor: pointer;
         }
 
         .mobile-bottom-nav .bn-item i {
-            font-size: 1rem;
+            font-size: 0.9rem;
             line-height: 1;
         }
 
@@ -1856,36 +1868,36 @@
 
         .mobile-bottom-nav .bn-fab {
             flex: 0 0 auto;
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
             background: var(--gold-gradient);
             color: var(--ink);
-            font-size: 1.1rem;
+            font-size: 1rem;
             box-shadow: 0 8px 32px rgba(212, 160, 46, 0.4);
-            transform: translateY(-14px);
+            transform: translateY(-12px);
             transition: all 0.2s var(--ease-spring);
             margin: 0 2px;
         }
 
         .mobile-bottom-nav .bn-fab:active {
-            transform: translateY(-14px) scale(0.92);
+            transform: translateY(-12px) scale(0.92);
         }
     </style>
 </head>
 <body>
 
-    <!-- ==========================================================
-    SIDEBAR OVERLAY
-    ========================================================== -->
+    <!-- ========================================================== -->
+    <!-- SIDEBAR OVERLAY                                            -->
+    <!-- ========================================================== -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- ==========================================================
-    SIDEBAR
-    ========================================================== -->
+    <!-- ========================================================== -->
+    <!-- SIDEBAR                                                    -->
+    <!-- ========================================================== -->
     <nav class="sidebar" id="sidebar">
         <div class="brand">
             <div class="mark">
@@ -1975,14 +1987,14 @@
         </div>
     </nav>
 
-    <!-- ==========================================================
-    MAIN
-    ========================================================== -->
+    <!-- ========================================================== -->
+    <!-- MAIN                                                       -->
+    <!-- ========================================================== -->
     <div class="main" id="main">
 
-        <!-- ==========================================================
-        HEADER
-        ========================================================== -->
+        <!-- ========================================================== -->
+        <!-- HEADER                                                    -->
+        <!-- ========================================================== -->
         <header class="header">
             <div class="left">
                 <button class="hamburger" id="hamburger" aria-label="فتح القائمة">
@@ -2032,9 +2044,9 @@
             </div>
         </header>
 
-        <!-- ==========================================================
-        MOBILE SEARCH
-        ========================================================== -->
+        <!-- ========================================================== -->
+        <!-- MOBILE SEARCH                                              -->
+        <!-- ========================================================== -->
         <div class="mobile-search-bar" id="mobileSearchBar">
             <div class="inner">
                 <i class="fas fa-search"></i>
@@ -2045,9 +2057,9 @@
             </div>
         </div>
 
-        <!-- ==========================================================
-        DASHBOARD
-        ========================================================== -->
+        <!-- ========================================================== -->
+        <!-- DASHBOARD                                                  -->
+        <!-- ========================================================== -->
         <div class="main-content">
             <div class="dash">
 
@@ -2306,9 +2318,9 @@
         </div>
     </div>
 
-    <!-- ==========================================================
-    MOBILE BOTTOM NAV
-    ========================================================== -->
+    <!-- ========================================================== -->
+    <!-- MOBILE BOTTOM NAV                                          -->
+    <!-- ========================================================== -->
     <nav class="mobile-bottom-nav" id="mobileBottomNav">
         <a href="index.html" class="bn-item active">
             <i class="fas fa-home"></i>
@@ -2331,15 +2343,14 @@
         </button>
     </nav>
 
-    <!-- ==========================================================
-    JAVASCRIPT
-    ========================================================== -->
+    <!-- ========================================================== -->
+    <!-- JAVASCRIPT                                                 -->
+    <!-- ========================================================== -->
     <script>
         /**
-         * ============================================================
-         * SUPABASE CONFIGURATION
-         * ============================================================
-         */
+         * ============================================================ */
+         * SUPABASE CONFIGURATION                                      */
+         * ============================================================ */
         var SUPABASE_URL = 'https://zwuvcblrrrriuylajvba.supabase.co';
         var SUPABASE_ANON_KEY = 'sb_publishable_YFqwTEs-W_kprUgt4bgpCQ_tf5vVeFa';
         var supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -2347,10 +2358,9 @@
         console.log('🚀 بدء تشغيل لوحة التحكم (index.html)');
 
         /**
-         * ============================================================
-         * SUPABASE AUTH
-         * ============================================================
-         */
+         * ============================================================ */
+         * SUPABASE AUTH                                               */
+         * ============================================================ */
         (async function checkAuth() {
             try {
                 console.log('🔍 التحقق من الجلسة في index.html...');
@@ -2395,9 +2405,9 @@
                     document.body.innerHTML = `
                             <div style="text-align: center; padding: 50px; direction: rtl; font-family: 'Cairo', sans-serif; background: #f0ede8; min-height: 100vh;">
                                 <div style="max-width: 500px; margin: 0 auto; background: #ffffff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
-                                    <h2 style="color: #0D9488;">⚠️ تعذّر تحميل بيانات الحساب</h2>
+                                    <h2 style="color: #d4a020;">⚠️ تعذّر تحميل بيانات الحساب</h2>
                                     <p style="color: #5a4f45; margin: 20px 0;">${profileError.message}</p>
-                                    <button onclick="logoutUser()" style="padding: 14px 40px; background: #2DD4BF; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #1a1714;">
+                                    <button onclick="logoutUser()" style="padding: 14px 40px; background: #f5c842; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #1a1714;">
                                         <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
                                     </button>
                                 </div>
@@ -2411,9 +2421,9 @@
                     document.body.innerHTML = `
                             <div style="text-align: center; padding: 50px; direction: rtl; font-family: 'Cairo', sans-serif; background: #f0ede8; min-height: 100vh;">
                                 <div style="max-width: 500px; margin: 0 auto; background: #ffffff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
-                                    <h2 style="color: #0D9488;">⚠️ حساب غير مكتمل</h2>
+                                    <h2 style="color: #d4a020;">⚠️ حساب غير مكتمل</h2>
                                     <p style="color: #5a4f45; margin: 20px 0;">لا يوجد بروفايل لهذا الحساب. يرجى التواصل مع الدعم الفني.</p>
-                                    <button onclick="logoutUser()" style="padding: 14px 40px; background: #2DD4BF; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #1a1714;">
+                                    <button onclick="logoutUser()" style="padding: 14px 40px; background: #f5c842; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #1a1714;">
                                         <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
                                     </button>
                                 </div>
@@ -2473,9 +2483,9 @@
                 document.body.innerHTML = `
                         <div style="text-align: center; padding: 50px; direction: rtl; font-family: 'Cairo', sans-serif; background: #f0ede8; min-height: 100vh;">
                             <div style="max-width: 500px; margin: 0 auto; background: #ffffff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
-                                <h2 style="color: #0D9488;">⚠️ خطأ في النظام</h2>
+                                <h2 style="color: #d4a020;">⚠️ خطأ في النظام</h2>
                                 <p style="color: #5a4f45; margin: 20px 0;">${error.message || 'حدث خطأ غير متوقع'}</p>
-                                <button onclick="logoutUser()" style="padding: 14px 40px; background: #2DD4BF; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #1a1714;">
+                                <button onclick="logoutUser()" style="padding: 14px 40px; background: #f5c842; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #1a1714;">
                                     <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
                                 </button>
                             </div>
@@ -2485,10 +2495,9 @@
         })();
 
         /**
-         * ============================================================
-         * LOGOUT
-         * ============================================================
-         */
+         * ============================================================ */
+         * LOGOUT                                                      */
+         * ============================================================ */
         async function logoutUser() {
             if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
                 try {
@@ -2504,10 +2513,9 @@
         }
 
         /**
-         * ============================================================
-         * SIDEBAR TOGGLE
-         * ============================================================
-         */
+         * ============================================================ */
+         * SIDEBAR TOGGLE                                             */
+         * ============================================================ */
         var sidebar = document.getElementById('sidebar');
         var overlay = document.getElementById('sidebarOverlay');
         var hamburger = document.getElementById('hamburger');
@@ -2605,10 +2613,9 @@
         console.log('✅ Sidebar Toggle جاهز');
 
         /**
-         * ============================================================
-         * NOTIFICATIONS
-         * ============================================================
-         */
+         * ============================================================ */
+         * NOTIFICATIONS                                               */
+         * ============================================================ */
         function renderRealNotifications(bookingsList) {
             var listEl = document.getElementById('notifList');
             var dotEl = document.getElementById('notifDot');
@@ -2698,10 +2705,9 @@
         })();
 
         /**
-         * ============================================================
-         * MOBILE SEARCH
-         * ============================================================
-         */
+         * ============================================================ */
+         * MOBILE SEARCH                                               */
+         * ============================================================ */
         (function() {
             var mobileSearchToggle = document.getElementById('mobileSearchToggle');
             var mobileSearchBar = document.getElementById('mobileSearchBar');
@@ -2740,10 +2746,9 @@
         })();
 
         /**
-         * ============================================================
-         * CHART.JS
-         * ============================================================
-         */
+         * ============================================================ */
+         * CHART.JS                                                    */
+         * ============================================================ */
         Chart.defaults.font.family = "'Cairo', sans-serif";
         Chart.defaults.color = '#8a7f73';
 
@@ -2779,7 +2784,7 @@
                     datasets: [{
                         label: 'الإيرادات',
                         data: chartData.sales,
-                        backgroundColor: '#0D9488',
+                        backgroundColor: '#d4a02e',
                         borderRadius: 6,
                         barPercentage: 0.5,
                         categoryPercentage: 0.65,
@@ -2883,7 +2888,7 @@
                 pieData.values = [100];
             }
 
-            var colors = ['#1a4a6b', '#0d9488', '#2e7a5c', '#b14b2b', '#1a6a4a', '#a63a31', '#2a5a7a', '#2dd4bf'];
+            var colors = ['#1a4a6b', '#b98a1e', '#2e7a5c', '#b14b2b', '#1a6a4a', '#a63a31', '#2a5a7a', '#c98a2e'];
 
             pieChart = new Chart(ctx, {
                 type: 'doughnut',
@@ -2939,10 +2944,9 @@
         }
 
         /**
-         * ============================================================
-         * SPARKLINES
-         * ============================================================
-         */
+         * ============================================================ */
+         * SPARKLINES                                                  */
+         * ============================================================ */
         var sparkCharts = {};
 
         function renderSpark(id, data, color) {
@@ -3000,10 +3004,9 @@
         }
 
         /**
-         * ============================================================
-         * FETCH DASHBOARD DATA
-         * ============================================================
-         */
+         * ============================================================ */
+         * FETCH DASHBOARD DATA                                        */
+         * ============================================================ */
         async function fetchDashboardData() {
             try {
                 console.log('🔄 بدء جلب البيانات...');
@@ -3237,7 +3240,7 @@
                 }
                 renderPieChart();
 
-                var colors = ['#1a4a6b', '#0d9488', '#2e7a5c', '#b14b2b', '#1a6a4a', '#a63a31', '#2a5a7a', '#2dd4bf'];
+                var colors = ['#1a4a6b', '#b98a1e', '#2e7a5c', '#b14b2b', '#1a6a4a', '#a63a31', '#2a5a7a', '#c98a2e'];
                 var legendHtml = '';
                 pieData.labels.forEach(function(label, index) {
                     if (index < colors.length) {
@@ -3284,7 +3287,7 @@
                 for (var i = 0; i < 8; i++) {
                     sparkData.push(Math.round(Math.random() * 100));
                 }
-                renderSpark('spark1', sparkData, '#0D9488');
+                renderSpark('spark1', sparkData, '#d4a02e');
                 renderSpark('spark2', sparkData, '#1a4a6b');
                 renderSpark('spark3', sparkData, '#2e7a5c');
                 renderSpark('spark4', sparkData, '#a63a31');
@@ -3319,10 +3322,9 @@
         }
 
         /**
-         * ============================================================
-         * INIT
-         * ============================================================
-         */
+         * ============================================================ */
+         * INIT                                                        */
+         * ============================================================ */
         fetchDashboardData();
         setInterval(fetchDashboardData, 300000);
 
