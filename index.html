@@ -14,38 +14,48 @@
 
     <style>
         /* ==========================================================
-           ROOT VARIABLES
+           ROOT VARIABLES - تدرجات الأزرق المعدني
            ========================================================== */
         :root {
-            --gold-1: #59CAEA;
-            --gold-2: #06B9EA;
-            --gold-3: #0890C4;
-            --gold-4: #043E7E;
-            --gold-gradient: linear-gradient(135deg, #59CAEA 0%, #06B9EA 40%, #0890C4 70%, #043E7E 100%);
-            --primary: #0EA5E9;
-            --primary-dark: #0284C7;
-            --canvas: #f5f1ea;
+            --blue-1: #1a5276;
+            --blue-2: #2e86c1;
+            --blue-3: #85c1e9;
+            --blue-4: #d6eaf8;
+            --blue-5: #ebf5fb;
+            --gold-1: #b7950b;
+            --gold-2: #d4ac0d;
+            --gold-3: #f1c40f;
+            --gold-4: #f9e79f;
+            --gold-5: #fef9e7;
+            --primary: #2e86c1;
+            --primary-dark: #1a5276;
+            --primary-light: #85c1e9;
+            --primary-gradient: linear-gradient(135deg, #1a5276 0%, #2e86c1 50%, #85c1e9 100%);
+            --gold-gradient: linear-gradient(135deg, #b7950b 0%, #d4ac0d 50%, #f1c40f 100%);
+            --canvas: #f0f4f8;
             --surface: #ffffff;
-            --surface-2: #fbf9f5;
-            --surface-glass: rgba(255, 255, 255, 0.72);
-            --ink: #1a1612;
-            --ink-2: #4a3f35;
-            --ink-3: #8a7f73;
-            --ink-4: #c4b9ab;
-            --prussian: #043E7E;
-            --ochre: #FEC410;
-            --viridian: #4E8C09;
-            --oxide: #a63a31;
+            --surface-2: #f8fafc;
+            --surface-glass: rgba(255, 255, 255, 0.85);
+            --ink: #1a2634;
+            --ink-2: #2c3e50;
+            --ink-3: #5d6d7e;
+            --ink-4: #aab7c4;
+            --prussian: #1a5276;
+            --teal: #1a7a6a;
+            --teal-soft: #d5f5e3;
+            --rust: #a63a31;
+            --rust-soft: #fadbd8;
             --sidebar-w: 290px;
             --header-h: 74px;
             --radius-lg: 24px;
             --radius-md: 16px;
             --radius-sm: 12px;
-            --shadow-soft: 0 8px 40px rgba(0, 0, 0, 0.05);
-            --shadow-medium: 0 16px 60px rgba(0, 0, 0, 0.08);
-            --shadow-strong: 0 24px 80px rgba(0, 0, 0, 0.12);
-            --shadow-gold: 0 8px 40px rgba(8, 144, 196, 0.2);
-            --shadow-gold-strong: 0 16px 60px rgba(8, 144, 196, 0.3);
+            --shadow-soft: 0 8px 40px rgba(26, 82, 118, 0.06);
+            --shadow-medium: 0 16px 60px rgba(26, 82, 118, 0.10);
+            --shadow-strong: 0 24px 80px rgba(26, 82, 118, 0.15);
+            --shadow-blue: 0 8px 40px rgba(46, 134, 193, 0.2);
+            --shadow-blue-strong: 0 16px 60px rgba(46, 134, 193, 0.3);
+            --shadow-gold: 0 8px 40px rgba(212, 172, 13, 0.25);
             --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
             --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
             --display: 'Bricolage Grotesque', 'Cairo', sans-serif;
@@ -100,7 +110,7 @@
             background: transparent;
         }
         ::-webkit-scrollbar-thumb {
-            background: var(--gold-3);
+            background: var(--primary-light);
             border-radius: 50px;
         }
 
@@ -111,7 +121,7 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(26, 38, 52, 0.5);
             backdrop-filter: blur(6px);
             z-index: 998;
             opacity: 0;
@@ -165,6 +175,7 @@
             gap: 14px;
             border-bottom: 1px solid rgba(0, 0, 0, 0.04);
             flex-shrink: 0;
+            background: var(--primary-gradient);
         }
 
         .sidebar .brand .mark {
@@ -174,32 +185,31 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--gold-gradient);
+            background: rgba(255, 255, 255, 0.2);
             flex-shrink: 0;
-            box-shadow: var(--shadow-gold);
+            backdrop-filter: blur(4px);
         }
 
         .sidebar .brand .mark svg {
             width: 20px;
             height: 20px;
         }
+        .sidebar .brand .mark svg path {
+            stroke: #ffffff;
+        }
 
         .sidebar .brand .text {
             font-weight: 800;
             font-size: 0.95rem;
             line-height: 1.3;
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #ffffff;
         }
 
         .sidebar .brand .text span {
             display: block;
             font-size: 0.55rem;
             font-weight: 500;
-            color: var(--ink-3);
-            -webkit-text-fill-color: var(--ink-3);
+            color: rgba(255, 255, 255, 0.7);
         }
 
         .sidebar .menu {
@@ -237,15 +247,15 @@
         }
 
         .sidebar .menu .item:hover {
-            background: rgba(0, 0, 0, 0.03);
-            color: var(--ink);
+            background: rgba(46, 134, 193, 0.06);
+            color: var(--primary-dark);
         }
 
         .sidebar .menu .item.active {
             background: var(--surface);
-            color: var(--ink);
+            color: var(--primary-dark);
             box-shadow: var(--shadow-soft);
-            border-right-color: var(--gold-3);
+            border-right-color: var(--primary);
         }
 
         .sidebar .menu .item i {
@@ -253,11 +263,12 @@
             text-align: center;
             font-size: 0.9rem;
             opacity: 0.7;
+            color: var(--ink-3);
         }
 
         .sidebar .menu .item.active i {
             opacity: 1;
-            color: var(--gold-3);
+            color: var(--primary);
         }
 
         .sidebar .menu .item .badge {
@@ -274,6 +285,7 @@
             padding: 14px 20px 24px;
             border-top: 1px solid rgba(0, 0, 0, 0.04);
             flex-shrink: 0;
+            background: var(--surface);
         }
 
         .sidebar .footer .user {
@@ -286,20 +298,21 @@
             width: 40px;
             height: 40px;
             border-radius: var(--radius-sm);
-            background: var(--gold-gradient);
-            color: var(--ink);
+            background: var(--primary-gradient);
+            color: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 800;
             font-size: 0.85rem;
             flex-shrink: 0;
-            box-shadow: var(--shadow-gold);
+            box-shadow: var(--shadow-blue);
         }
 
         .sidebar .footer .user .info .name {
             font-size: 0.8rem;
             font-weight: 800;
+            color: var(--ink);
         }
 
         .sidebar .footer .user .info .role {
@@ -322,9 +335,9 @@
         }
 
         .sidebar .footer .logout:hover {
-            color: var(--oxide);
-            border-color: var(--oxide);
-            background: rgba(166, 58, 49, 0.08);
+            color: var(--rust);
+            border-color: var(--rust);
+            background: var(--rust-soft);
         }
 
         /* ==========================================================
@@ -409,8 +422,8 @@
         }
 
         .header .hamburger:hover {
-            border-color: var(--gold-3);
-            color: var(--ink);
+            border-color: var(--primary);
+            color: var(--primary-dark);
         }
 
         .header .breadcrumb {
@@ -442,8 +455,8 @@
         }
 
         .header .search:focus-within {
-            border-color: var(--gold-3);
-            box-shadow: 0 0 0 3px rgba(212, 160, 46, 0.08);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(46, 134, 193, 0.1);
         }
 
         .header .search i {
@@ -499,8 +512,8 @@
         }
 
         .header .right .notif:hover {
-            border-color: var(--gold-3);
-            color: var(--ink);
+            border-color: var(--primary);
+            color: var(--primary-dark);
         }
 
         .header .right .notif .dot {
@@ -510,12 +523,12 @@
             width: 7px;
             height: 7px;
             border-radius: 50%;
-            background: var(--oxide);
+            background: var(--rust);
             border: 2px solid var(--surface);
         }
 
         /* ==========================================================
-           NOTIF PANEL - إصلاح مشكلة الخروج عن الشاشة ✅
+           NOTIF PANEL
            ========================================================== */
         .notif-panel {
             position: absolute;
@@ -555,8 +568,8 @@
         .notif-panel-badge {
             font-size: 0.5rem;
             font-weight: 800;
-            background: var(--gold-gradient);
-            color: var(--ink);
+            background: var(--primary-gradient);
+            color: #ffffff;
             padding: 1px 8px;
             border-radius: 50px;
         }
@@ -652,15 +665,15 @@
         }
 
         .header .right .profile:hover {
-            border-color: var(--gold-3);
+            border-color: var(--primary);
         }
 
         .header .right .profile .avatar {
             width: 28px;
             height: 28px;
             border-radius: 50%;
-            background: var(--gold-gradient);
-            color: var(--ink);
+            background: var(--primary-gradient);
+            color: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -719,14 +732,14 @@
         }
 
         .header .mobile-search-toggle:hover {
-            border-color: var(--gold-3);
-            color: var(--ink);
+            border-color: var(--primary);
+            color: var(--primary-dark);
         }
 
         .header .mobile-search-toggle.active {
-            background: var(--gold-gradient);
-            color: var(--ink);
-            border-color: var(--gold-3);
+            background: var(--primary-gradient);
+            color: #ffffff;
+            border-color: var(--primary);
         }
 
         @media (min-width: 1024px) {
@@ -854,11 +867,11 @@
             font-size: 0.55rem;
             letter-spacing: 1px;
             text-transform: uppercase;
-            color: var(--gold-3);
+            color: var(--primary);
             font-weight: 800;
             margin-bottom: 8px;
-            background: rgba(212, 160, 46, 0.08);
-            border: 1px solid rgba(212, 160, 46, 0.12);
+            background: rgba(46, 134, 193, 0.08);
+            border: 1px solid rgba(46, 134, 193, 0.12);
             padding: 4px 12px;
             border-radius: 50px;
         }
@@ -875,7 +888,7 @@
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background: var(--gold-3);
+            background: var(--primary);
             flex-shrink: 0;
         }
 
@@ -895,7 +908,7 @@
         }
 
         .hero .copy h1 .highlight {
-            background: var(--gold-gradient);
+            background: var(--primary-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -923,12 +936,12 @@
             gap: 8px;
             padding: 11px 20px;
             border-radius: 50px;
-            background: var(--gold-gradient);
-            color: var(--ink);
+            background: var(--primary-gradient);
+            color: #ffffff;
             font-weight: 800;
             font-size: 0.75rem;
             transition: all 0.3s var(--ease-spring);
-            box-shadow: var(--shadow-gold-strong);
+            box-shadow: var(--shadow-blue-strong);
             margin-top: 12px;
             width: 100%;
             justify-content: center;
@@ -945,7 +958,7 @@
 
         .hero .cta:hover {
             transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 16px 56px rgba(212, 160, 46, 0.4);
+            box-shadow: 0 16px 56px rgba(46, 134, 193, 0.4);
         }
 
         .hero-image {
@@ -1153,13 +1166,13 @@
         }
 
         .stat-card .change.up {
-            color: var(--viridian);
-            background: rgba(46, 122, 92, 0.1);
+            color: var(--teal);
+            background: var(--teal-soft);
         }
 
         .stat-card .change.down {
-            color: var(--oxide);
-            background: rgba(166, 58, 49, 0.1);
+            color: var(--rust);
+            background: var(--rust-soft);
         }
 
         .stat-card .spark {
@@ -1327,9 +1340,9 @@
         }
 
         .panel .tabs button.active {
-            background: var(--gold-gradient);
-            color: var(--ink);
-            box-shadow: var(--shadow-gold);
+            background: var(--primary-gradient);
+            color: #ffffff;
+            box-shadow: var(--shadow-blue);
         }
 
         .chart-canvas-wrap {
@@ -1454,8 +1467,8 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            background: color-mix(in srgb, var(--gold-3) 12%, transparent);
-            color: var(--gold-3);
+            background: color-mix(in srgb, var(--primary) 12%, transparent);
+            color: var(--primary);
             font-size: 0.7rem;
         }
 
@@ -1506,7 +1519,7 @@
             display: inline-block;
             padding: 1px 6px;
             border-radius: 4px;
-            background: var(--surface-muted);
+            background: var(--canvas);
             font-size: 0.5rem;
             color: var(--ink-2);
         }
@@ -1523,7 +1536,7 @@
             font-family: var(--display);
             font-size: 0.65rem;
             font-weight: 700;
-            color: var(--gold-3);
+            color: var(--primary-dark);
             flex-shrink: 0;
         }
 
@@ -1593,7 +1606,7 @@
 
         .activity .head h3 i,
         .future-bookings .head h3 i {
-            color: var(--gold-3);
+            color: var(--primary);
         }
 
         .activity .head a,
@@ -1620,9 +1633,9 @@
 
         .activity .head a:hover,
         .future-bookings .head a:hover {
-            color: var(--gold-3);
-            border-color: var(--gold-3);
-            background: rgba(212, 160, 46, 0.06);
+            color: var(--primary);
+            border-color: var(--primary);
+            background: rgba(46, 134, 193, 0.06);
         }
 
         .activity .list .item {
@@ -1714,7 +1727,7 @@
             opacity: 0.3;
             margin-bottom: 8px;
             display: block;
-            color: var(--gold-3);
+            color: var(--primary);
         }
 
         .empty-state p {
@@ -1762,7 +1775,7 @@
         }
 
         /* ==========================================================
-           ANIMATIONS - بدون إزاحة ✅
+           ANIMATIONS
            ========================================================== */
         .fade-up {
             opacity: 0;
@@ -1846,7 +1859,7 @@
         }
 
         .mobile-bottom-nav .bn-item.active i {
-            color: var(--gold-3);
+            color: var(--primary);
         }
 
         .mobile-bottom-nav .bn-item:active {
@@ -1862,10 +1875,10 @@
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            background: var(--gold-gradient);
-            color: var(--ink);
+            background: var(--primary-gradient);
+            color: #ffffff;
             font-size: 1.1rem;
-            box-shadow: 0 8px 32px rgba(212, 160, 46, 0.4);
+            box-shadow: 0 8px 32px rgba(46, 134, 193, 0.4);
             transform: translateY(-14px);
             transition: all 0.2s var(--ease-spring);
             margin: 0 2px;
@@ -1890,8 +1903,8 @@
         <div class="brand">
             <div class="mark">
                 <svg viewBox="0 0 24 24" fill="none">
-                    <path d="M4 19V9l8-5 8 5v10" stroke="#1a1714" stroke-width="2" stroke-linejoin="round"/>
-                    <path d="M9 19v-6h6v6" stroke="#1a1714" stroke-width="2" stroke-linejoin="round"/>
+                    <path d="M4 19V9l8-5 8 5v10" stroke="#fff" stroke-width="2" stroke-linejoin="round"/>
+                    <path d="M9 19v-6h6v6" stroke="#fff" stroke-width="2" stroke-linejoin="round"/>
                 </svg>
             </div>
             <div class="text">
@@ -1924,15 +1937,15 @@
             <a href="abuzeid.html" class="item">
                 <i class="fas fa-hand-holding-heart"></i> عمولة أبو زيد
             </a>
-            <a href="client-accounts.html" class="item" style="border-color: rgba(212, 160, 46, 0.2);">
-                <i class="fas fa-user-clock" style="color: var(--gold-3);"></i>
+            <a href="client-accounts.html" class="item" style="border-color: rgba(46, 134, 193, 0.2);">
+                <i class="fas fa-user-clock" style="color: var(--primary);"></i>
                 حسابات العملاء
-                <span class="badge" style="background: var(--gold-gradient);">متبقي</span>
+                <span class="badge" style="background: var(--primary-gradient); color:#fff;">متبقي</span>
             </a>
-            <a href="users.html" class="item" style="border-color: rgba(212, 160, 46, 0.2);">
-                <i class="fas fa-users-cog" style="color: var(--gold-3);"></i>
+            <a href="users.html" class="item" style="border-color: rgba(46, 134, 193, 0.2);">
+                <i class="fas fa-users-cog" style="color: var(--primary);"></i>
                 إدارة المستخدمين
-                <span class="badge" style="background: var(--gold-gradient);">Admin</span>
+                <span class="badge" style="background: var(--primary-gradient); color:#fff;">Admin</span>
             </a>
             <a href="filter.html" class="item">
                 <i class="fas fa-filter"></i> فلترة الحجوزات
@@ -2077,11 +2090,11 @@
                 <!-- ===== STATS ===== -->
                 <div class="stats-wrap">
                     <div class="stats">
-                        <div class="stat-card fade-up loading" style="animation-delay:0.06s;--swatch:var(--gold-3)">
-                            <div class="bar" style="background:var(--gold-gradient);"></div>
+                        <div class="stat-card fade-up loading" style="animation-delay:0.06s;--swatch:var(--primary)">
+                            <div class="bar" style="background:var(--primary-gradient);"></div>
                             <div class="body">
                                 <div class="label">
-                                    <span class="icon-chip"><i class="fas fa-wallet" style="color:var(--gold-3);"></i></span>
+                                    <span class="icon-chip"><i class="fas fa-wallet" style="color:var(--primary);"></i></span>
                                     إجمالي الإيرادات
                                 </div>
                                 <div class="number" id="totalRevenue">
@@ -2121,7 +2134,7 @@
                             </div>
                         </div>
 
-                        <div class="stat-card fade-up loading" style="animation-delay:0.12s;--swatch:var(--viridian)">
+                        <div class="stat-card fade-up loading" style="animation-delay:0.12s;--swatch:var(--teal)">
                             <div class="bar"></div>
                             <div class="body">
                                 <div class="label">
@@ -2143,7 +2156,7 @@
                             </div>
                         </div>
 
-                        <div class="stat-card fade-up loading" style="animation-delay:0.15s;--swatch:var(--oxide)">
+                        <div class="stat-card fade-up loading" style="animation-delay:0.15s;--swatch:var(--rust)">
                             <div class="bar"></div>
                             <div class="body">
                                 <div class="label">
@@ -2217,7 +2230,7 @@
                     <div class="panel fade-up" style="animation-delay:0.12s">
                         <div class="p-head">
                             <div class="p-title-group">
-                                <span class="p-icon" style="--pi:var(--gold-3)"><i class="fas fa-chart-line"></i></span>
+                                <span class="p-icon" style="--pi:var(--primary)"><i class="fas fa-chart-line"></i></span>
                                 <div>
                                     <div class="p-title">أداء الحجوزات الشهري</div>
                                     <div class="p-sub">مقارنة الإيرادات والإشغال خلال السنة</div>
@@ -2233,11 +2246,11 @@
                         </div>
                         <div class="legend-row">
                             <span class="li">
-                                <span class="sw" style="background:var(--gold-3)"></span>
+                                <span class="sw" style="background:var(--primary)"></span>
                                 الإيرادات
                             </span>
                             <span class="li">
-                                <span class="sw" style="background:var(--oxide)"></span>
+                                <span class="sw" style="background:var(--rust)"></span>
                                 الإشغال
                             </span>
                         </div>
@@ -2246,7 +2259,7 @@
                     <div class="panel fade-up" style="animation-delay:0.15s">
                         <div class="p-head">
                             <div class="p-title-group">
-                                <span class="p-icon" style="--pi:var(--gold-3)"><i class="fas fa-chart-pie"></i></span>
+                                <span class="p-icon" style="--pi:var(--primary)"><i class="fas fa-chart-pie"></i></span>
                                 <div>
                                     <div class="p-title">توزيع الإشغال</div>
                                     <div class="p-sub">حسب نوع العقار</div>
@@ -2257,9 +2270,9 @@
                             <canvas id="pieChart"></canvas>
                         </div>
                         <div class="legend-row" id="pieLegend">
-                            <span class="li"><span class="sw" style="background:#043E7E"></span> فيلا</span>
-                            <span class="li"><span class="sw" style="background:#06B9EA"></span> شقة</span>
-                            <span class="li"><span class="sw" style="background:#7EB60C"></span> استوديو</span>
+                            <span class="li"><span class="sw" style="background:#1a5276"></span> فيلا</span>
+                            <span class="li"><span class="sw" style="background:#2e86c1"></span> شقة</span>
+                            <span class="li"><span class="sw" style="background:#1a7a6a"></span> استوديو</span>
                             <span class="li"><span class="sw" style="background:#b14b2b"></span> جناح</span>
                         </div>
                     </div>
@@ -2271,7 +2284,7 @@
                     <div class="panel future-bookings fade-up" style="animation-delay:0.16s">
                         <div class="head">
                             <div class="p-title-group">
-                                <span class="p-icon" style="--pi:var(--gold-3)"><i class="fas fa-calendar-check"></i></span>
+                                <span class="p-icon" style="--pi:var(--primary)"><i class="fas fa-calendar-check"></i></span>
                                 <h3>الحجوزات المستقبلية</h3>
                             </div>
                             <a href="future.html">عرض الكل <i class="fas fa-arrow-left"></i></a>
@@ -2287,7 +2300,7 @@
                     <div class="panel activity fade-up" style="animation-delay:0.18s">
                         <div class="head">
                             <div class="p-title-group">
-                                <span class="p-icon" style="--pi:var(--viridian)"><i class="fas fa-bolt"></i></span>
+                                <span class="p-icon" style="--pi:var(--teal)"><i class="fas fa-bolt"></i></span>
                                 <h3>النشاط الأخير</h3>
                             </div>
                             <a href="bookings.html">عرض الكل <i class="fas fa-arrow-left"></i></a>
@@ -2393,11 +2406,11 @@
                 if (profileError) {
                     console.error('❌ خطأ في جلب البروفايل:', profileError);
                     document.body.innerHTML = `
-                            <div style="text-align: center; padding: 50px; direction: rtl; font-family: 'Cairo', sans-serif; background: #f0ede8; min-height: 100vh;">
+                            <div style="text-align: center; padding: 50px; direction: rtl; font-family: 'Cairo', sans-serif; background: #f0f4f8; min-height: 100vh;">
                                 <div style="max-width: 500px; margin: 0 auto; background: #ffffff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
-                                    <h2 style="color: #043E7E;">⚠️ تعذّر تحميل بيانات الحساب</h2>
-                                    <p style="color: #5a4f45; margin: 20px 0;">${profileError.message}</p>
-                                    <button onclick="logoutUser()" style="padding: 14px 40px; background: #59CAEA; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #1a1714;">
+                                    <h2 style="color: #1a5276;">⚠️ تعذّر تحميل بيانات الحساب</h2>
+                                    <p style="color: #5d6d7e; margin: 20px 0;">${profileError.message}</p>
+                                    <button onclick="logoutUser()" style="padding: 14px 40px; background: linear-gradient(135deg, #1a5276, #2e86c1); border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #ffffff;">
                                         <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
                                     </button>
                                 </div>
@@ -2409,11 +2422,11 @@
                 if (!profile) {
                     console.warn('⚠️ لا يوجد بروفايل للمستخدم!');
                     document.body.innerHTML = `
-                            <div style="text-align: center; padding: 50px; direction: rtl; font-family: 'Cairo', sans-serif; background: #f0ede8; min-height: 100vh;">
+                            <div style="text-align: center; padding: 50px; direction: rtl; font-family: 'Cairo', sans-serif; background: #f0f4f8; min-height: 100vh;">
                                 <div style="max-width: 500px; margin: 0 auto; background: #ffffff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
-                                    <h2 style="color: #043E7E;">⚠️ حساب غير مكتمل</h2>
-                                    <p style="color: #5a4f45; margin: 20px 0;">لا يوجد بروفايل لهذا الحساب. يرجى التواصل مع الدعم الفني.</p>
-                                    <button onclick="logoutUser()" style="padding: 14px 40px; background: #59CAEA; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #1a1714;">
+                                    <h2 style="color: #1a5276;">⚠️ حساب غير مكتمل</h2>
+                                    <p style="color: #5d6d7e; margin: 20px 0;">لا يوجد بروفايل لهذا الحساب. يرجى التواصل مع الدعم الفني.</p>
+                                    <button onclick="logoutUser()" style="padding: 14px 40px; background: linear-gradient(135deg, #1a5276, #2e86c1); border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #ffffff;">
                                         <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
                                     </button>
                                 </div>
@@ -2471,11 +2484,11 @@
             } catch (error) {
                 console.error('❌ خطأ غير متوقع:', error);
                 document.body.innerHTML = `
-                        <div style="text-align: center; padding: 50px; direction: rtl; font-family: 'Cairo', sans-serif; background: #f0ede8; min-height: 100vh;">
+                        <div style="text-align: center; padding: 50px; direction: rtl; font-family: 'Cairo', sans-serif; background: #f0f4f8; min-height: 100vh;">
                             <div style="max-width: 500px; margin: 0 auto; background: #ffffff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
-                                <h2 style="color: #043E7E;">⚠️ خطأ في النظام</h2>
-                                <p style="color: #5a4f45; margin: 20px 0;">${error.message || 'حدث خطأ غير متوقع'}</p>
-                                <button onclick="logoutUser()" style="padding: 14px 40px; background: #59CAEA; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #1a1714;">
+                                <h2 style="color: #1a5276;">⚠️ خطأ في النظام</h2>
+                                <p style="color: #5d6d7e; margin: 20px 0;">${error.message || 'حدث خطأ غير متوقع'}</p>
+                                <button onclick="logoutUser()" style="padding: 14px 40px; background: linear-gradient(135deg, #1a5276, #2e86c1); border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #ffffff;">
                                     <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
                                 </button>
                             </div>
@@ -2653,8 +2666,8 @@
                 upcoming.forEach(function(item) {
                     var timeLabel = item.diffDays === 0 ? 'يصل اليوم' : (item.diffDays === 1 ? 'يصل غدًا' :
                         'يصل خلال ' + item.diffDays + ' أيام');
-                    var color = item.diffDays === 0 ? 'var(--oxide)' : (item.diffDays === 1 ? 'var(--ochre)' :
-                        'var(--gold-3)');
+                    var color = item.diffDays === 0 ? 'var(--rust)' : (item.diffDays === 1 ? 'var(--ochre)' :
+                        'var(--primary)');
                     html += '<div class="notif-item">';
                     html += '<span class="notif-ic" style="--nc:' + color +
                         '"><i class="fas fa-house-chimney"></i></span>';
@@ -2745,7 +2758,7 @@
          * ============================================================
          */
         Chart.defaults.font.family = "'Cairo', sans-serif";
-        Chart.defaults.color = '#8a7f73';
+        Chart.defaults.color = '#5d6d7e';
 
         var salesChart;
         var pieChart;
@@ -2779,7 +2792,7 @@
                     datasets: [{
                         label: 'الإيرادات',
                         data: chartData.sales,
-                        backgroundColor: '#06B9EA',
+                        backgroundColor: '#2e86c1',
                         borderRadius: 6,
                         barPercentage: 0.5,
                         categoryPercentage: 0.65,
@@ -2811,7 +2824,7 @@
                             display: false
                         },
                         tooltip: {
-                            backgroundColor: '#1a1714',
+                            backgroundColor: '#1a2634',
                             titleColor: '#ffffff',
                             bodyColor: 'rgba(255,255,255,0.8)',
                             borderColor: 'rgba(255,255,255,0.06)',
@@ -2883,7 +2896,7 @@
                 pieData.values = [100];
             }
 
-            var colors = ['#043E7E', '#06B9EA', '#7EB60C', '#b14b2b', '#4E8C09', '#a63a31', '#0890C4', '#59CAEA'];
+            var colors = ['#1a5276', '#2e86c1', '#1a7a6a', '#b14b2b', '#4E8C09', '#a63a31', '#0890C4', '#59CAEA'];
 
             pieChart = new Chart(ctx, {
                 type: 'doughnut',
@@ -2906,7 +2919,7 @@
                             display: false
                         },
                         tooltip: {
-                            backgroundColor: '#1a1714',
+                            backgroundColor: '#1a2634',
                             titleColor: '#ffffff',
                             bodyColor: 'rgba(255,255,255,0.8)',
                             borderColor: 'rgba(255,255,255,0.06)',
@@ -3237,7 +3250,7 @@
                 }
                 renderPieChart();
 
-                var colors = ['#043E7E', '#06B9EA', '#7EB60C', '#b14b2b', '#4E8C09', '#a63a31', '#0890C4', '#59CAEA'];
+                var colors = ['#1a5276', '#2e86c1', '#1a7a6a', '#b14b2b', '#4E8C09', '#a63a31', '#0890C4', '#59CAEA'];
                 var legendHtml = '';
                 pieData.labels.forEach(function(label, index) {
                     if (index < colors.length) {
@@ -3252,7 +3265,7 @@
                     activityContainer.innerHTML =
                         '<div class="empty-state"><i class="fas fa-clock"></i><p>لا توجد حجوزات مسجلة</p></div>';
                 } else {
-                    var colors2 = ['var(--viridian)', 'var(--ochre)', 'var(--prussian)', 'var(--oxide)'];
+                    var colors2 = ['var(--teal)', 'var(--ochre)', 'var(--prussian)', 'var(--rust)'];
                     var activityHtml = '';
                     var activitiesToShow = activities.slice(0, 5);
 
@@ -3284,12 +3297,12 @@
                 for (var i = 0; i < 8; i++) {
                     sparkData.push(Math.round(Math.random() * 100));
                 }
-                renderSpark('spark1', sparkData, '#06B9EA');
-                renderSpark('spark2', sparkData, '#043E7E');
-                renderSpark('spark3', sparkData, '#7EB60C');
+                renderSpark('spark1', sparkData, '#2e86c1');
+                renderSpark('spark2', sparkData, '#1a5276');
+                renderSpark('spark3', sparkData, '#1a7a6a');
                 renderSpark('spark4', sparkData, '#a63a31');
-                renderSpark('spark5', sparkData, '#0890C4');
-                renderSpark('spark6', sparkData, '#0890C4');
+                renderSpark('spark5', sparkData, '#b7950b');
+                renderSpark('spark6', sparkData, '#b7950b');
 
                 document.querySelectorAll('.stat-card.loading').forEach(function(el) {
                     el.classList.remove('loading');
