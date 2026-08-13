@@ -344,9 +344,13 @@
         @media (min-width: 769px) {
             .main {
                 margin-right: var(--sidebar-w);
+                width: calc(100% - var(--sidebar-w));
+                max-width: calc(100vw - var(--sidebar-w));
             }
             .main.expanded {
                 margin-right: 0;
+                width: 100%;
+                max-width: 100vw;
             }
         }
 
