@@ -14,45 +14,50 @@
 
     <style>
         /* ==========================================================
-           ROOT VARIABLES - LIGHT THEME
+           ROOT VARIABLES - مطابقة لألوان فاتورة المبيعات
            ========================================================== */
         :root {
-            /* New Light Color Palette */
-            --primary-soft: #3B82F6;
-            --primary-light: #93C5FD;
-            --primary-dark: #2563EB;
-            --accent-soft: #8B5CF6;
-            --accent-light: #C4B5FD;
-            --warm-gray-1: #F8F7F4;
-            --warm-gray-2: #F1EFEA;
-            --warm-gray-3: #E3DFD8;
-            --warm-gray-4: #C9C4BB;
-            --ink-light: #2D2A24;
-            --ink-mid: #5C554A;
-            --ink-soft: #8A8276;
-            --ink-faint: #B8B0A4;
-
-            /* Gradients and accents */
-            --accent-gradient: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
-            --accent-gradient-soft: linear-gradient(135deg, #93C5FD 0%, #C4B5FD 100%);
-
-            --surface: #FFFFFF;
-            --surface-2: #FAF9F7;
-            --surface-glass: rgba(255, 255, 255, 0.8);
-            --canvas: #F5F3F0;
-
-            --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.04);
-            --shadow-medium: 0 12px 48px rgba(0, 0, 0, 0.07);
-            --shadow-strong: 0 20px 60px rgba(0, 0, 0, 0.10);
-            --shadow-accent: 0 8px 30px rgba(59, 130, 246, 0.15);
-            --shadow-accent-strong: 0 12px 48px rgba(59, 130, 246, 0.20);
-
-            --radius-lg: 24px;
-            --radius-md: 16px;
-            --radius-sm: 12px;
+            --ink: #121821;
+            --ink-soft: #2c3644;
+            --ink-mute: #6d7883;
+            --paper: #eef1ef;
+            --surface: #ffffff;
+            --surface-muted: #f4f6f5;
+            --line: #dde3e0;
+            --line-strong: #c7d0cc;
+            --accent: #dd9f2e;
+            --accent-ink: #7a5312;
+            --accent-soft: #faead0;
+            --teal: #1d7b6c;
+            --teal-soft: #e2f2ee;
+            --rust: #bf4f30;
+            --rust-soft: #fbe8e1;
+            --blue: #2f5b8a;
+            --radius: 14px;
+            --radius-sm: 9px;
+            --shadow: 0 14px 34px -16px rgba(18,24,33,0.28);
+            --shadow-sm: 0 3px 10px -4px rgba(18,24,33,0.18);
+            --font-display: 'Cairo', 'Segoe UI', Tahoma, Arial, sans-serif;
+            --font-serif: 'Marcellus', 'Cairo', serif;
+            --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+            --header-height: 60px;
+            --stripe-height: 4px;
+            --mobile-nav-height: 56px;
             --sidebar-w: 290px;
-            --header-h: 74px;
-
+            --scale-factor: 0.9;
+            --gold-1: #dd9f2e;
+            --gold-2: #c48a1f;
+            --gold-3: #b07a18;
+            --gold-gradient: linear-gradient(135deg, #dd9f2e 0%, #c48a1f 40%, #b07a18 70%, #9a6a14 100%);
+            --primary: #2f5b8a;
+            --primary-dark: #1a4a6b;
+            --canvas: #eef1ef;
+            --surface-glass: rgba(255, 255, 255, 0.72);
+            --shadow-soft: 0 8px 40px rgba(0, 0, 0, 0.05);
+            --shadow-medium: 0 16px 60px rgba(0, 0, 0, 0.08);
+            --shadow-strong: 0 24px 80px rgba(0, 0, 0, 0.12);
+            --shadow-gold: 0 8px 40px rgba(221, 159, 46, 0.2);
+            --shadow-gold-strong: 0 16px 60px rgba(221, 159, 46, 0.3);
             --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
             --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
             --display: 'Bricolage Grotesque', 'Cairo', sans-serif;
@@ -71,8 +76,8 @@
 
         body {
             font-family: var(--body);
-            background: var(--canvas);
-            color: var(--ink-light);
+            background: var(--paper);
+            color: var(--ink);
             direction: rtl;
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
@@ -107,7 +112,7 @@
             background: transparent;
         }
         ::-webkit-scrollbar-thumb {
-            background: var(--primary-soft);
+            background: var(--accent);
             border-radius: 50px;
         }
 
@@ -118,8 +123,8 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(4px);
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(6px);
             z-index: 998;
             opacity: 0;
             transition: opacity 0.3s var(--ease-smooth);
@@ -138,8 +143,8 @@
             right: -100%;
             width: min(85vw, 300px);
             height: 100vh;
-            background: var(--surface-2);
-            border-left: 1px solid rgba(0, 0, 0, 0.04);
+            background: var(--surface);
+            border-left: 1px solid var(--line);
             z-index: 999;
             display: flex;
             flex-direction: column;
@@ -170,7 +175,7 @@
             display: flex;
             align-items: center;
             gap: 14px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+            border-bottom: 1px solid var(--line);
             flex-shrink: 0;
         }
 
@@ -181,9 +186,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--accent-gradient);
+            background: var(--gold-gradient);
             flex-shrink: 0;
-            box-shadow: var(--shadow-accent);
+            box-shadow: var(--shadow-gold);
         }
 
         .sidebar .brand .mark svg {
@@ -195,7 +200,7 @@
             font-weight: 800;
             font-size: 0.95rem;
             line-height: 1.3;
-            background: var(--accent-gradient);
+            background: var(--gold-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -205,8 +210,8 @@
             display: block;
             font-size: 0.55rem;
             font-weight: 500;
-            color: var(--ink-soft);
-            -webkit-text-fill-color: var(--ink-soft);
+            color: var(--ink-mute);
+            -webkit-text-fill-color: var(--ink-mute);
         }
 
         .sidebar .menu {
@@ -217,7 +222,7 @@
 
         .sidebar .menu .label {
             font-size: 0.5rem;
-            color: var(--ink-soft);
+            color: var(--ink-mute);
             text-transform: uppercase;
             letter-spacing: 1.4px;
             padding: 14px 12px 6px;
@@ -234,7 +239,7 @@
             gap: 12px;
             padding: 10px 14px;
             border-radius: var(--radius-sm);
-            color: var(--ink-mid);
+            color: var(--ink-soft);
             font-weight: 600;
             font-size: 0.8rem;
             transition: all 0.2s var(--ease-smooth);
@@ -244,15 +249,15 @@
         }
 
         .sidebar .menu .item:hover {
-            background: rgba(0, 0, 0, 0.03);
-            color: var(--ink-light);
+            background: var(--surface-muted);
+            color: var(--ink);
         }
 
         .sidebar .menu .item.active {
             background: var(--surface);
-            color: var(--ink-light);
-            box-shadow: var(--shadow-soft);
-            border-right-color: var(--primary-soft);
+            color: var(--ink);
+            box-shadow: var(--shadow-sm);
+            border-right-color: var(--accent);
         }
 
         .sidebar .menu .item i {
@@ -264,7 +269,7 @@
 
         .sidebar .menu .item.active i {
             opacity: 1;
-            color: var(--primary-soft);
+            color: var(--accent);
         }
 
         .sidebar .menu .item .badge {
@@ -273,13 +278,13 @@
             font-weight: 800;
             padding: 1px 10px;
             border-radius: 50px;
-            background: var(--accent-gradient);
-            color: #fff;
+            background: var(--gold-gradient);
+            color: var(--ink);
         }
 
         .sidebar .footer {
             padding: 14px 20px 24px;
-            border-top: 1px solid rgba(0, 0, 0, 0.04);
+            border-top: 1px solid var(--line);
             flex-shrink: 0;
         }
 
@@ -293,15 +298,15 @@
             width: 40px;
             height: 40px;
             border-radius: var(--radius-sm);
-            background: var(--accent-gradient);
-            color: #fff;
+            background: var(--gold-gradient);
+            color: var(--ink);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 800;
             font-size: 0.85rem;
             flex-shrink: 0;
-            box-shadow: var(--shadow-accent);
+            box-shadow: var(--shadow-gold);
         }
 
         .sidebar .footer .user .info .name {
@@ -311,7 +316,7 @@
 
         .sidebar .footer .user .info .role {
             font-size: 0.55rem;
-            color: var(--ink-soft);
+            color: var(--ink-mute);
             font-weight: 600;
         }
 
@@ -323,15 +328,15 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--ink-soft);
-            border: 1px solid rgba(0, 0, 0, 0.06);
+            color: var(--ink-mute);
+            border: 1px solid var(--line);
             transition: all 0.3s var(--ease-smooth);
         }
 
         .sidebar .footer .logout:hover {
-            color: #EF4444;
-            border-color: #EF4444;
-            background: rgba(239, 68, 68, 0.08);
+            color: var(--rust);
+            border-color: var(--rust);
+            background: var(--rust-soft);
         }
 
         /* ==========================================================
@@ -379,7 +384,7 @@
             padding: 0 14px;
             background: var(--surface-glass);
             backdrop-filter: blur(20px) saturate(1.4);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+            border-bottom: 1px solid var(--line);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -388,7 +393,7 @@
 
         @media (min-width: 769px) {
             .header {
-                height: var(--header-h);
+                height: var(--header-height);
                 padding: 0 32px;
             }
         }
@@ -406,9 +411,9 @@
             border-radius: var(--radius-sm);
             align-items: center;
             justify-content: center;
-            border: 1px solid rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--line);
             background: var(--surface);
-            color: var(--ink-mid);
+            color: var(--ink-soft);
             transition: 0.2s;
             cursor: pointer;
             font-size: 0.95rem;
@@ -416,17 +421,17 @@
         }
 
         .header .hamburger:hover {
-            border-color: var(--primary-soft);
-            color: var(--ink-light);
+            border-color: var(--accent);
+            color: var(--ink);
         }
 
         .header .breadcrumb {
             font-size: 0.7rem;
-            color: var(--ink-soft);
+            color: var(--ink-mute);
         }
 
         .header .breadcrumb b {
-            color: var(--ink-light);
+            color: var(--ink);
             font-weight: 700;
         }
 
@@ -441,7 +446,7 @@
             align-items: center;
             gap: 10px;
             background: var(--surface);
-            border: 1px solid rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--line);
             border-radius: 50px;
             padding: 7px 16px;
             width: 200px;
@@ -449,27 +454,27 @@
         }
 
         .header .search:focus-within {
-            border-color: var(--primary-soft);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.08);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(221, 159, 46, 0.08);
         }
 
         .header .search i {
             font-size: 0.75rem;
-            color: var(--ink-soft);
+            color: var(--ink-mute);
         }
 
         .header .search input {
             background: none;
             border: none;
             outline: none;
-            color: var(--ink-light);
+            color: var(--ink);
             font-family: inherit;
             font-size: 0.75rem;
             width: 100%;
         }
 
         .header .search input::placeholder {
-            color: var(--ink-soft);
+            color: var(--ink-mute);
         }
 
         @media (min-width: 1024px) {
@@ -494,9 +499,9 @@
             width: 38px;
             height: 38px;
             border-radius: var(--radius-sm);
-            border: 1px solid rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--line);
             background: var(--surface);
-            color: var(--ink-mid);
+            color: var(--ink-soft);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -506,8 +511,8 @@
         }
 
         .header .right .notif:hover {
-            border-color: var(--primary-soft);
-            color: var(--ink-light);
+            border-color: var(--accent);
+            color: var(--ink);
         }
 
         .header .right .notif .dot {
@@ -517,7 +522,7 @@
             width: 7px;
             height: 7px;
             border-radius: 50%;
-            background: #EF4444;
+            background: var(--rust);
             border: 2px solid var(--surface);
         }
 
@@ -531,7 +536,7 @@
             transform: translateX(-50%) translateY(-8px) scale(0.96);
             width: min(360px, calc(100vw - 24px));
             background: var(--surface);
-            border: 1px solid rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--line);
             border-radius: var(--radius-md);
             box-shadow: var(--shadow-strong);
             padding: 8px;
@@ -556,14 +561,14 @@
             padding: 8px 12px 6px;
             font-size: 0.75rem;
             font-weight: 800;
-            color: var(--ink-light);
+            color: var(--ink);
         }
 
         .notif-panel-badge {
             font-size: 0.5rem;
             font-weight: 800;
-            background: var(--accent-gradient);
-            color: #fff;
+            background: var(--gold-gradient);
+            color: var(--ink);
             padding: 1px 8px;
             border-radius: 50px;
         }
@@ -578,7 +583,7 @@
         }
 
         .notif-item:hover {
-            background: var(--canvas);
+            background: var(--paper);
         }
 
         .notif-ic {
@@ -589,28 +594,28 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: color-mix(in srgb, var(--nc, var(--primary-soft)) 14%, transparent);
-            color: var(--nc, var(--primary-soft));
+            background: color-mix(in srgb, var(--nc, var(--primary)) 14%, transparent);
+            color: var(--nc, var(--primary));
             font-size: 0.7rem;
         }
 
         .notif-t {
             font-size: 0.7rem;
             font-weight: 700;
-            color: var(--ink-light);
+            color: var(--ink);
             line-height: 1.3;
         }
 
         .notif-d {
             font-size: 0.6rem;
-            color: var(--ink-soft);
+            color: var(--ink-mute);
             margin-top: 2px;
             line-height: 1.4;
         }
 
         .notif-time {
             font-size: 0.55rem;
-            color: var(--ink-soft);
+            color: var(--ink-mute);
             margin-top: 3px;
             font-weight: 600;
         }
@@ -618,7 +623,7 @@
         .notif-empty {
             text-align: center;
             padding: 20px 12px;
-            color: var(--ink-soft);
+            color: var(--ink-mute);
         }
 
         .notif-empty i {
@@ -635,14 +640,14 @@
         .notif-panel-foot {
             margin-top: 4px;
             padding: 8px 12px 4px;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            border-top: 1px solid var(--line);
             font-size: 0.55rem;
-            color: var(--ink-soft);
+            color: var(--ink-mute);
             text-align: center;
         }
 
         .notif-panel-foot b {
-            color: var(--ink-mid);
+            color: var(--ink-soft);
             font-weight: 700;
         }
 
@@ -652,22 +657,22 @@
             gap: 6px;
             padding: 3px 8px 3px 4px;
             border-radius: 50px;
-            border: 1px solid rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--line);
             background: var(--surface);
             transition: 0.2s;
             cursor: pointer;
         }
 
         .header .right .profile:hover {
-            border-color: var(--primary-soft);
+            border-color: var(--accent);
         }
 
         .header .right .profile .avatar {
             width: 28px;
             height: 28px;
             border-radius: 50%;
-            background: var(--accent-gradient);
-            color: #fff;
+            background: var(--gold-gradient);
+            color: var(--ink);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -687,7 +692,7 @@
 
         .header .right .profile i {
             font-size: 0.5rem;
-            color: var(--ink-soft);
+            color: var(--ink-mute);
         }
 
         @media (min-width: 769px) {
@@ -695,7 +700,7 @@
                 display: block;
                 font-size: 0.5rem;
                 font-weight: 500;
-                color: var(--ink-soft);
+                color: var(--ink-mute);
             }
             .header .right .profile {
                 padding: 4px 14px 4px 6px;
@@ -717,23 +722,23 @@
             border-radius: var(--radius-sm);
             align-items: center;
             justify-content: center;
-            border: 1px solid rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--line);
             background: var(--surface);
-            color: var(--ink-mid);
+            color: var(--ink-soft);
             font-size: 0.85rem;
             transition: 0.2s;
             flex-shrink: 0;
         }
 
         .header .mobile-search-toggle:hover {
-            border-color: var(--primary-soft);
-            color: var(--ink-light);
+            border-color: var(--accent);
+            color: var(--ink);
         }
 
         .header .mobile-search-toggle.active {
-            background: var(--accent-gradient);
-            color: #fff;
-            border-color: var(--primary-soft);
+            background: var(--gold-gradient);
+            color: var(--ink);
+            border-color: var(--accent);
         }
 
         @media (min-width: 1024px) {
@@ -749,7 +754,7 @@
             z-index: 95;
             background: var(--surface-glass);
             backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+            border-bottom: 1px solid var(--line);
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.35s var(--ease-spring), padding 0.35s var(--ease-spring);
@@ -765,14 +770,14 @@
             align-items: center;
             gap: 10px;
             background: var(--surface);
-            border: 1px solid rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--line);
             border-radius: 50px;
             padding: 10px 16px;
-            box-shadow: var(--shadow-soft);
+            box-shadow: var(--shadow-sm);
         }
 
         .mobile-search-bar .inner i.fa-search {
-            color: var(--ink-soft);
+            color: var(--ink-mute);
             font-size: 0.85rem;
             flex-shrink: 0;
         }
@@ -785,15 +790,15 @@
             background: none;
             font-family: inherit;
             font-size: 0.8rem;
-            color: var(--ink-light);
+            color: var(--ink);
         }
 
         .mobile-search-bar .inner input::placeholder {
-            color: var(--ink-soft);
+            color: var(--ink-mute);
         }
 
         .mobile-search-bar .close-search {
-            color: var(--ink-soft);
+            color: var(--ink-mute);
             font-size: 0.9rem;
             padding: 4px;
             flex-shrink: 0;
@@ -828,9 +833,9 @@
             padding: 18px 14px;
             margin-bottom: 18px;
             border-radius: var(--radius-md);
-            background: linear-gradient(145deg, var(--surface) 0%, var(--surface-2) 100%);
-            border: 1px solid rgba(0, 0, 0, 0.04);
-            box-shadow: var(--shadow-soft);
+            background: linear-gradient(145deg, var(--surface) 0%, var(--surface-muted) 100%);
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow-sm);
             text-align: center;
             overflow: hidden;
             width: 100%;
@@ -861,11 +866,11 @@
             font-size: 0.55rem;
             letter-spacing: 1px;
             text-transform: uppercase;
-            color: var(--primary-soft);
+            color: var(--accent-ink);
             font-weight: 800;
             margin-bottom: 8px;
-            background: rgba(59, 130, 246, 0.08);
-            border: 1px solid rgba(59, 130, 246, 0.12);
+            background: var(--accent-soft);
+            border: 1px solid rgba(221, 159, 46, 0.12);
             padding: 4px 12px;
             border-radius: 50px;
         }
@@ -882,14 +887,14 @@
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background: var(--primary-soft);
+            background: var(--accent);
             flex-shrink: 0;
         }
 
         .hero .copy h1 {
             font-weight: 900;
             font-size: 1.4rem;
-            color: var(--ink-light);
+            color: var(--ink);
             letter-spacing: -0.3px;
             line-height: 1.3;
             margin-bottom: 4px;
@@ -902,14 +907,14 @@
         }
 
         .hero .copy h1 .highlight {
-            background: var(--accent-gradient);
+            background: var(--gold-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
         .hero .copy p {
-            color: var(--ink-mid);
+            color: var(--ink-soft);
             font-size: 0.8rem;
             margin-top: 8px;
             max-width: 100%;
@@ -930,12 +935,12 @@
             gap: 8px;
             padding: 11px 20px;
             border-radius: 50px;
-            background: var(--accent-gradient);
-            color: #fff;
+            background: var(--gold-gradient);
+            color: var(--ink);
             font-weight: 800;
             font-size: 0.75rem;
             transition: all 0.3s var(--ease-spring);
-            box-shadow: var(--shadow-accent-strong);
+            box-shadow: var(--shadow-gold-strong);
             margin-top: 12px;
             width: 100%;
             justify-content: center;
@@ -952,7 +957,7 @@
 
         .hero .cta:hover {
             transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 16px 56px rgba(59, 130, 246, 0.35);
+            box-shadow: 0 16px 56px rgba(221, 159, 46, 0.4);
         }
 
         .hero-image {
@@ -1036,12 +1041,12 @@
         .stat-card {
             position: relative;
             background: var(--surface);
-            border: 1px solid rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--line);
             border-radius: var(--radius-sm);
             padding: 0;
             overflow: hidden;
             transition: all 0.3s var(--ease-spring);
-            box-shadow: var(--shadow-soft);
+            box-shadow: var(--shadow-sm);
         }
 
         .stat-card:hover {
@@ -1051,7 +1056,7 @@
 
         .stat-card .bar {
             height: 3px;
-            background: var(--swatch, var(--ink-faint));
+            background: var(--swatch, var(--line-strong));
         }
 
         .stat-card .body {
@@ -1067,7 +1072,7 @@
 
         .stat-card .label {
             font-size: 0.55rem;
-            color: var(--ink-soft);
+            color: var(--ink-mute);
             font-weight: 700;
             display: flex;
             align-items: center;
@@ -1090,7 +1095,7 @@
             width: 22px;
             height: 22px;
             border-radius: 6px;
-            background: color-mix(in srgb, var(--swatch, var(--ink-soft)) 12%, transparent);
+            background: color-mix(in srgb, var(--swatch, var(--ink-mute)) 12%, transparent);
             flex-shrink: 0;
         }
 
@@ -1104,7 +1109,7 @@
 
         .stat-card .icon-chip i {
             font-size: 0.6rem;
-            color: var(--swatch, var(--ink-soft));
+            color: var(--swatch, var(--ink-mute));
         }
 
         @media (min-width: 769px) {
@@ -1119,7 +1124,7 @@
             font-weight: 700;
             margin-top: 4px;
             letter-spacing: -0.2px;
-            color: var(--ink-light);
+            color: var(--ink);
         }
 
         @media (min-width: 769px) {
@@ -1160,13 +1165,13 @@
         }
 
         .stat-card .change.up {
-            color: #10B981;
-            background: rgba(16, 185, 129, 0.1);
+            color: var(--teal);
+            background: var(--teal-soft);
         }
 
         .stat-card .change.down {
-            color: #EF4444;
-            background: rgba(239, 68, 68, 0.1);
+            color: var(--rust);
+            background: var(--rust-soft);
         }
 
         .stat-card .spark {
@@ -1211,10 +1216,10 @@
            ========================================================== */
         .panel {
             background: var(--surface);
-            border: 1px solid rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--line);
             border-radius: var(--radius-md);
             padding: 14px 12px;
-            box-shadow: var(--shadow-soft);
+            box-shadow: var(--shadow-sm);
             transition: all 0.3s var(--ease-spring);
             width: 100%;
             overflow: hidden;
@@ -1262,8 +1267,8 @@
             height: 32px;
             border-radius: 10px;
             flex-shrink: 0;
-            background: color-mix(in srgb, var(--pi, var(--primary-soft)) 10%, transparent);
-            color: var(--pi, var(--primary-soft));
+            background: color-mix(in srgb, var(--pi, var(--primary)) 10%, transparent);
+            color: var(--pi, var(--primary));
             font-size: 0.75rem;
         }
 
@@ -1279,12 +1284,12 @@
         .panel .p-title {
             font-size: 0.78rem;
             font-weight: 800;
-            color: var(--ink-light);
+            color: var(--ink);
         }
 
         .panel .p-sub {
             font-size: 0.6rem;
-            color: var(--ink-soft);
+            color: var(--ink-mute);
             margin-top: 2px;
         }
 
@@ -1300,10 +1305,10 @@
         .panel .tabs {
             display: flex;
             gap: 2px;
-            background: var(--canvas);
+            background: var(--paper);
             padding: 3px;
             border-radius: 8px;
-            border: 1px solid rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--line);
             width: 100%;
         }
 
@@ -1316,7 +1321,7 @@
         .panel .tabs button {
             border: none;
             background: none;
-            color: var(--ink-soft);
+            color: var(--ink-mute);
             font-size: 0.55rem;
             font-weight: 700;
             padding: 5px 10px;
@@ -1334,9 +1339,9 @@
         }
 
         .panel .tabs button.active {
-            background: var(--accent-gradient);
-            color: #fff;
-            box-shadow: var(--shadow-accent);
+            background: var(--gold-gradient);
+            color: var(--ink);
+            box-shadow: var(--shadow-gold);
         }
 
         .chart-canvas-wrap {
@@ -1366,7 +1371,7 @@
             gap: 10px;
             margin-top: 10px;
             padding-top: 10px;
-            border-top: 1px solid rgba(0, 0, 0, 0.04);
+            border-top: 1px solid var(--line);
             flex-wrap: wrap;
             justify-content: center;
         }
@@ -1384,7 +1389,7 @@
             align-items: center;
             gap: 5px;
             font-size: 0.6rem;
-            color: var(--ink-mid);
+            color: var(--ink-soft);
             font-weight: 600;
         }
 
@@ -1433,7 +1438,7 @@
             gap: 8px;
             padding: 8px 6px;
             border-radius: 8px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+            border-bottom: 1px solid var(--line);
             transition: background 0.2s ease;
             flex-wrap: wrap;
         }
@@ -1446,7 +1451,7 @@
         }
 
         .future-booking-item:hover {
-            background: var(--canvas);
+            background: var(--paper);
         }
 
         .future-booking-item:last-child {
@@ -1461,8 +1466,8 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            background: color-mix(in srgb, var(--primary-soft) 12%, transparent);
-            color: var(--primary-soft);
+            background: var(--accent-soft);
+            color: var(--accent-ink);
             font-size: 0.7rem;
         }
 
@@ -1483,7 +1488,7 @@
         .future-booking-item .booking-info .client-name {
             font-size: 0.7rem;
             font-weight: 700;
-            color: var(--ink-light);
+            color: var(--ink);
         }
 
         @media (min-width: 769px) {
@@ -1494,7 +1499,7 @@
 
         .future-booking-item .booking-info .booking-meta {
             font-size: 0.55rem;
-            color: var(--ink-soft);
+            color: var(--ink-mute);
             margin-top: 2px;
             display: flex;
             align-items: center;
@@ -1513,9 +1518,9 @@
             display: inline-block;
             padding: 1px 6px;
             border-radius: 4px;
-            background: var(--warm-gray-2);
+            background: var(--surface-muted);
             font-size: 0.5rem;
-            color: var(--ink-mid);
+            color: var(--ink-soft);
         }
 
         .future-booking-item .booking-info .booking-meta .date-tag {
@@ -1530,7 +1535,7 @@
             font-family: var(--display);
             font-size: 0.65rem;
             font-weight: 700;
-            color: var(--primary-soft);
+            color: var(--accent-ink);
             flex-shrink: 0;
         }
 
@@ -1557,13 +1562,13 @@
         }
 
         .future-booking-item .booking-status-tag.today {
-            background: rgba(239, 68, 68, 0.12);
-            color: #EF4444;
+            background: var(--rust-soft);
+            color: var(--rust);
         }
 
         .future-booking-item .booking-status-tag.future {
-            background: rgba(59, 130, 246, 0.08);
-            color: var(--primary-soft);
+            background: var(--accent-soft);
+            color: var(--accent-ink);
         }
 
         /* ==========================================================
@@ -1590,7 +1595,7 @@
         .future-bookings .head h3 {
             font-size: 0.78rem;
             font-weight: 800;
-            color: var(--ink-light);
+            color: var(--ink);
             display: flex;
             align-items: center;
             gap: 6px;
@@ -1605,7 +1610,7 @@
 
         .activity .head h3 i,
         .future-bookings .head h3 i {
-            color: var(--primary-soft);
+            color: var(--accent-ink);
         }
 
         .activity .head a,
@@ -1614,12 +1619,12 @@
             align-items: center;
             gap: 4px;
             font-size: 0.6rem;
-            color: var(--ink-soft);
+            color: var(--ink-mute);
             font-weight: 700;
             transition: 0.2s;
             padding: 3px 10px;
             border-radius: 50px;
-            border: 1px solid rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--line);
         }
 
         @media (min-width: 769px) {
@@ -1632,9 +1637,9 @@
 
         .activity .head a:hover,
         .future-bookings .head a:hover {
-            color: var(--primary-soft);
-            border-color: var(--primary-soft);
-            background: rgba(59, 130, 246, 0.06);
+            color: var(--accent-ink);
+            border-color: var(--accent);
+            background: var(--accent-soft);
         }
 
         .activity .list .item {
@@ -1643,7 +1648,7 @@
             gap: 10px;
             padding: 8px 6px;
             border-radius: 8px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+            border-bottom: 1px solid var(--line);
             transition: background 0.2s ease;
         }
 
@@ -1655,7 +1660,7 @@
         }
 
         .activity .list .item:hover {
-            background: var(--canvas);
+            background: var(--paper);
         }
 
         .activity .list .item:last-child {
@@ -1679,7 +1684,7 @@
 
         .activity .list .item .content .text {
             font-size: 0.7rem;
-            color: var(--ink-mid);
+            color: var(--ink-soft);
             line-height: 1.5;
         }
 
@@ -1690,13 +1695,13 @@
         }
 
         .activity .list .item .content .text strong {
-            color: var(--ink-light);
+            color: var(--ink);
             font-weight: 700;
         }
 
         .activity .list .item .content .time {
             font-size: 0.55rem;
-            color: var(--ink-soft);
+            color: var(--ink-mute);
             margin-top: 2px;
         }
 
@@ -1712,7 +1717,7 @@
         .empty-state {
             text-align: center;
             padding: 20px 14px;
-            color: var(--ink-soft);
+            color: var(--ink-mute);
         }
 
         @media (min-width: 769px) {
@@ -1726,7 +1731,7 @@
             opacity: 0.3;
             margin-bottom: 8px;
             display: block;
-            color: var(--primary-soft);
+            color: var(--accent);
         }
 
         .empty-state p {
@@ -1747,7 +1752,7 @@
            LOADING
            ========================================================== */
         .loading-text {
-            color: var(--ink-soft);
+            color: var(--ink-mute);
             font-size: 0.65rem;
             font-weight: 400;
             animation: pulse 1.5s ease-in-out infinite;
@@ -1770,7 +1775,7 @@
         }
 
         .stat-card.loading .number {
-            color: var(--ink-soft) !important;
+            color: var(--ink-mute) !important;
         }
 
         /* ==========================================================
@@ -1817,7 +1822,7 @@
             gap: 2px;
             background: var(--surface-glass);
             backdrop-filter: blur(20px) saturate(1.4);
-            border-top: 1px solid rgba(0, 0, 0, 0.06);
+            border-top: 1px solid var(--line);
             padding: 5px 6px calc(5px + env(safe-area-inset-bottom, 0px));
             box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.06);
         }
@@ -1836,7 +1841,7 @@
             align-items: center;
             gap: 2px;
             padding: 5px 2px 4px;
-            color: var(--ink-soft);
+            color: var(--ink-mute);
             font-size: 0.45rem;
             font-weight: 700;
             border-radius: 10px;
@@ -1854,15 +1859,15 @@
         }
 
         .mobile-bottom-nav .bn-item.active {
-            color: var(--ink-light);
+            color: var(--ink);
         }
 
         .mobile-bottom-nav .bn-item.active i {
-            color: var(--primary-soft);
+            color: var(--accent);
         }
 
         .mobile-bottom-nav .bn-item:active {
-            background: rgba(0, 0, 0, 0.03);
+            background: var(--surface-muted);
             transform: scale(0.95);
         }
 
@@ -1874,10 +1879,10 @@
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            background: var(--accent-gradient);
-            color: #fff;
+            background: var(--gold-gradient);
+            color: var(--ink);
             font-size: 1.1rem;
-            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.4);
+            box-shadow: 0 8px 32px rgba(221, 159, 46, 0.4);
             transform: translateY(-14px);
             transition: all 0.2s var(--ease-spring);
             margin: 0 2px;
@@ -1902,8 +1907,8 @@
         <div class="brand">
             <div class="mark">
                 <svg viewBox="0 0 24 24" fill="none">
-                    <path d="M4 19V9l8-5 8 5v10" stroke="#ffffff" stroke-width="2" stroke-linejoin="round"/>
-                    <path d="M9 19v-6h6v6" stroke="#ffffff" stroke-width="2" stroke-linejoin="round"/>
+                    <path d="M4 19V9l8-5 8 5v10" stroke="#121821" stroke-width="2" stroke-linejoin="round"/>
+                    <path d="M9 19v-6h6v6" stroke="#121821" stroke-width="2" stroke-linejoin="round"/>
                 </svg>
             </div>
             <div class="text">
@@ -1936,15 +1941,15 @@
             <a href="abuzeid.html" class="item">
                 <i class="fas fa-hand-holding-heart"></i> عمولة أبو زيد
             </a>
-            <a href="client-accounts.html" class="item" style="border-color: rgba(59, 130, 246, 0.2);">
-                <i class="fas fa-user-clock" style="color: var(--primary-soft);"></i>
+            <a href="client-accounts.html" class="item" style="border-color: rgba(221, 159, 46, 0.2);">
+                <i class="fas fa-user-clock" style="color: var(--accent);"></i>
                 حسابات العملاء
-                <span class="badge" style="background: var(--accent-gradient);">متبقي</span>
+                <span class="badge" style="background: var(--gold-gradient);">متبقي</span>
             </a>
-            <a href="users.html" class="item" style="border-color: rgba(59, 130, 246, 0.2);">
-                <i class="fas fa-users-cog" style="color: var(--primary-soft);"></i>
+            <a href="users.html" class="item" style="border-color: rgba(221, 159, 46, 0.2);">
+                <i class="fas fa-users-cog" style="color: var(--accent);"></i>
                 إدارة المستخدمين
-                <span class="badge" style="background: var(--accent-gradient);">Admin</span>
+                <span class="badge" style="background: var(--gold-gradient);">Admin</span>
             </a>
             <a href="filter.html" class="item">
                 <i class="fas fa-filter"></i> فلترة الحجوزات
@@ -2089,11 +2094,11 @@
                 <!-- ===== STATS ===== -->
                 <div class="stats-wrap">
                     <div class="stats">
-                        <div class="stat-card fade-up loading" style="animation-delay:0.06s;--swatch:var(--primary-soft)">
-                            <div class="bar" style="background:var(--accent-gradient);"></div>
+                        <div class="stat-card fade-up loading" style="animation-delay:0.06s;--swatch:var(--accent)">
+                            <div class="bar" style="background:var(--gold-gradient);"></div>
                             <div class="body">
                                 <div class="label">
-                                    <span class="icon-chip"><i class="fas fa-wallet" style="color:var(--primary-soft);"></i></span>
+                                    <span class="icon-chip"><i class="fas fa-wallet" style="color:var(--accent);"></i></span>
                                     إجمالي الإيرادات
                                 </div>
                                 <div class="number" id="totalRevenue">
@@ -2111,7 +2116,7 @@
                             </div>
                         </div>
 
-                        <div class="stat-card fade-up loading" style="animation-delay:0.09s;--swatch:var(--primary-dark)">
+                        <div class="stat-card fade-up loading" style="animation-delay:0.09s;--swatch:var(--primary)">
                             <div class="bar"></div>
                             <div class="body">
                                 <div class="label">
@@ -2133,7 +2138,7 @@
                             </div>
                         </div>
 
-                        <div class="stat-card fade-up loading" style="animation-delay:0.12s;--swatch:var(--accent-soft)">
+                        <div class="stat-card fade-up loading" style="animation-delay:0.12s;--swatch:var(--teal)">
                             <div class="bar"></div>
                             <div class="body">
                                 <div class="label">
@@ -2155,7 +2160,7 @@
                             </div>
                         </div>
 
-                        <div class="stat-card fade-up loading" style="animation-delay:0.15s;--swatch:var(--primary-light)">
+                        <div class="stat-card fade-up loading" style="animation-delay:0.15s;--swatch:var(--rust)">
                             <div class="bar"></div>
                             <div class="body">
                                 <div class="label">
@@ -2177,11 +2182,11 @@
                             </div>
                         </div>
 
-                        <div class="stat-card fade-up loading" style="animation-delay:0.18s;--swatch:#F59E0B">
-                            <div class="bar" style="background:#F59E0B;"></div>
+                        <div class="stat-card fade-up loading" style="animation-delay:0.18s;--swatch:var(--blue)">
+                            <div class="bar" style="background:var(--blue);"></div>
                             <div class="body">
                                 <div class="label">
-                                    <span class="icon-chip"><i class="fas fa-money-bill-wave" style="color:#F59E0B;"></i></span>
+                                    <span class="icon-chip"><i class="fas fa-money-bill-wave" style="color:var(--blue);"></i></span>
                                     إجمالي المصروفات
                                 </div>
                                 <div class="number" id="totalExpenses">
@@ -2199,11 +2204,11 @@
                             </div>
                         </div>
 
-                        <div class="stat-card fade-up loading" style="animation-delay:0.21s;--swatch:var(--primary-soft)">
-                            <div class="bar" style="background:var(--accent-gradient);"></div>
+                        <div class="stat-card fade-up loading" style="animation-delay:0.21s;--swatch:var(--accent)">
+                            <div class="bar" style="background:var(--gold-gradient);"></div>
                             <div class="body">
                                 <div class="label">
-                                    <span class="icon-chip"><i class="fas fa-hand-holding-heart" style="color:var(--primary-soft);"></i></span>
+                                    <span class="icon-chip"><i class="fas fa-hand-holding-heart" style="color:var(--accent);"></i></span>
                                     عمولة أبو زيد
                                 </div>
                                 <div class="number" id="totalCommission">
@@ -2229,7 +2234,7 @@
                     <div class="panel fade-up" style="animation-delay:0.12s">
                         <div class="p-head">
                             <div class="p-title-group">
-                                <span class="p-icon" style="--pi:var(--primary-soft)"><i class="fas fa-chart-line"></i></span>
+                                <span class="p-icon" style="--pi:var(--accent)"><i class="fas fa-chart-line"></i></span>
                                 <div>
                                     <div class="p-title">أداء الحجوزات الشهري</div>
                                     <div class="p-sub">مقارنة الإيرادات والإشغال خلال السنة</div>
@@ -2245,11 +2250,11 @@
                         </div>
                         <div class="legend-row">
                             <span class="li">
-                                <span class="sw" style="background:var(--primary-soft)"></span>
+                                <span class="sw" style="background:var(--accent)"></span>
                                 الإيرادات
                             </span>
                             <span class="li">
-                                <span class="sw" style="background:#EF4444"></span>
+                                <span class="sw" style="background:var(--rust)"></span>
                                 الإشغال
                             </span>
                         </div>
@@ -2258,7 +2263,7 @@
                     <div class="panel fade-up" style="animation-delay:0.15s">
                         <div class="p-head">
                             <div class="p-title-group">
-                                <span class="p-icon" style="--pi:var(--primary-soft)"><i class="fas fa-chart-pie"></i></span>
+                                <span class="p-icon" style="--pi:var(--accent)"><i class="fas fa-chart-pie"></i></span>
                                 <div>
                                     <div class="p-title">توزيع الإشغال</div>
                                     <div class="p-sub">حسب نوع العقار</div>
@@ -2283,7 +2288,7 @@
                     <div class="panel future-bookings fade-up" style="animation-delay:0.16s">
                         <div class="head">
                             <div class="p-title-group">
-                                <span class="p-icon" style="--pi:var(--primary-soft)"><i class="fas fa-calendar-check"></i></span>
+                                <span class="p-icon" style="--pi:var(--accent)"><i class="fas fa-calendar-check"></i></span>
                                 <h3>الحجوزات المستقبلية</h3>
                             </div>
                             <a href="future.html">عرض الكل <i class="fas fa-arrow-left"></i></a>
@@ -2299,7 +2304,7 @@
                     <div class="panel activity fade-up" style="animation-delay:0.18s">
                         <div class="head">
                             <div class="p-title-group">
-                                <span class="p-icon" style="--pi:var(--accent-soft)"><i class="fas fa-bolt"></i></span>
+                                <span class="p-icon" style="--pi:var(--teal)"><i class="fas fa-bolt"></i></span>
                                 <h3>النشاط الأخير</h3>
                             </div>
                             <a href="bookings.html">عرض الكل <i class="fas fa-arrow-left"></i></a>
@@ -2405,11 +2410,11 @@
                 if (profileError) {
                     console.error('❌ خطأ في جلب البروفايل:', profileError);
                     document.body.innerHTML = `
-                            <div style="text-align: center; padding: 50px; direction: rtl; font-family: 'Cairo', sans-serif; background: #f0ede8; min-height: 100vh;">
+                            <div style="text-align: center; padding: 50px; direction: rtl; font-family: 'Cairo', sans-serif; background: #eef1ef; min-height: 100vh;">
                                 <div style="max-width: 500px; margin: 0 auto; background: #ffffff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
-                                    <h2 style="color: #3B82F6;">⚠️ تعذّر تحميل بيانات الحساب</h2>
-                                    <p style="color: #5a4f45; margin: 20px 0;">${profileError.message}</p>
-                                    <button onclick="logoutUser()" style="padding: 14px 40px; background: #3B82F6; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #ffffff;">
+                                    <h2 style="color: #dd9f2e;">⚠️ تعذّر تحميل بيانات الحساب</h2>
+                                    <p style="color: #2c3644; margin: 20px 0;">${profileError.message}</p>
+                                    <button onclick="logoutUser()" style="padding: 14px 40px; background: #dd9f2e; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #121821;">
                                         <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
                                     </button>
                                 </div>
@@ -2421,11 +2426,11 @@
                 if (!profile) {
                     console.warn('⚠️ لا يوجد بروفايل للمستخدم!');
                     document.body.innerHTML = `
-                            <div style="text-align: center; padding: 50px; direction: rtl; font-family: 'Cairo', sans-serif; background: #f0ede8; min-height: 100vh;">
+                            <div style="text-align: center; padding: 50px; direction: rtl; font-family: 'Cairo', sans-serif; background: #eef1ef; min-height: 100vh;">
                                 <div style="max-width: 500px; margin: 0 auto; background: #ffffff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
-                                    <h2 style="color: #3B82F6;">⚠️ حساب غير مكتمل</h2>
-                                    <p style="color: #5a4f45; margin: 20px 0;">لا يوجد بروفايل لهذا الحساب. يرجى التواصل مع الدعم الفني.</p>
-                                    <button onclick="logoutUser()" style="padding: 14px 40px; background: #3B82F6; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #ffffff;">
+                                    <h2 style="color: #dd9f2e;">⚠️ حساب غير مكتمل</h2>
+                                    <p style="color: #2c3644; margin: 20px 0;">لا يوجد بروفايل لهذا الحساب. يرجى التواصل مع الدعم الفني.</p>
+                                    <button onclick="logoutUser()" style="padding: 14px 40px; background: #dd9f2e; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #121821;">
                                         <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
                                     </button>
                                 </div>
@@ -2483,11 +2488,11 @@
             } catch (error) {
                 console.error('❌ خطأ غير متوقع:', error);
                 document.body.innerHTML = `
-                        <div style="text-align: center; padding: 50px; direction: rtl; font-family: 'Cairo', sans-serif; background: #f0ede8; min-height: 100vh;">
+                        <div style="text-align: center; padding: 50px; direction: rtl; font-family: 'Cairo', sans-serif; background: #eef1ef; min-height: 100vh;">
                             <div style="max-width: 500px; margin: 0 auto; background: #ffffff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
-                                <h2 style="color: #3B82F6;">⚠️ خطأ في النظام</h2>
-                                <p style="color: #5a4f45; margin: 20px 0;">${error.message || 'حدث خطأ غير متوقع'}</p>
-                                <button onclick="logoutUser()" style="padding: 14px 40px; background: #3B82F6; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #ffffff;">
+                                <h2 style="color: #dd9f2e;">⚠️ خطأ في النظام</h2>
+                                <p style="color: #2c3644; margin: 20px 0;">${error.message || 'حدث خطأ غير متوقع'}</p>
+                                <button onclick="logoutUser()" style="padding: 14px 40px; background: #dd9f2e; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: 700; color: #121821;">
                                     <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
                                 </button>
                             </div>
@@ -2665,8 +2670,8 @@
                 upcoming.forEach(function(item) {
                     var timeLabel = item.diffDays === 0 ? 'يصل اليوم' : (item.diffDays === 1 ? 'يصل غدًا' :
                         'يصل خلال ' + item.diffDays + ' أيام');
-                    var color = item.diffDays === 0 ? '#EF4444' : (item.diffDays === 1 ? '#F59E0B' :
-                        'var(--primary-soft)');
+                    var color = item.diffDays === 0 ? 'var(--rust)' : (item.diffDays === 1 ? 'var(--accent)' :
+                        'var(--teal)');
                     html += '<div class="notif-item">';
                     html += '<span class="notif-ic" style="--nc:' + color +
                         '"><i class="fas fa-house-chimney"></i></span>';
@@ -2757,7 +2762,7 @@
          * ============================================================
          */
         Chart.defaults.font.family = "'Cairo', sans-serif";
-        Chart.defaults.color = '#8a7f73';
+        Chart.defaults.color = '#6d7883';
 
         var salesChart;
         var pieChart;
@@ -2791,7 +2796,7 @@
                     datasets: [{
                         label: 'الإيرادات',
                         data: chartData.sales,
-                        backgroundColor: '#3B82F6',
+                        backgroundColor: '#dd9f2e',
                         borderRadius: 6,
                         barPercentage: 0.5,
                         categoryPercentage: 0.65,
@@ -2800,12 +2805,12 @@
                         label: 'الإشغال (%)',
                         data: chartData.occupancy,
                         type: 'line',
-                        borderColor: '#EF4444',
-                        backgroundColor: '#EF4444',
+                        borderColor: '#bf4f30',
+                        backgroundColor: '#bf4f30',
                         borderWidth: 2,
                         pointRadius: 3,
                         pointBackgroundColor: '#ffffff',
-                        pointBorderColor: '#EF4444',
+                        pointBorderColor: '#bf4f30',
                         pointBorderWidth: 2,
                         tension: 0.35,
                         order: 1
@@ -2823,7 +2828,7 @@
                             display: false
                         },
                         tooltip: {
-                            backgroundColor: '#1a1714',
+                            backgroundColor: '#121821',
                             titleColor: '#ffffff',
                             bodyColor: 'rgba(255,255,255,0.8)',
                             borderColor: 'rgba(255,255,255,0.06)',
@@ -2895,7 +2900,7 @@
                 pieData.values = [100];
             }
 
-            var colors = ['#1a4a6b', '#0d9488', '#2e7a5c', '#b14b2b', '#1a6a4a', '#a63a31', '#2a5a7a', '#2dd4bf'];
+            var colors = ['#1a4a6b', '#b98a1e', '#2e7a5c', '#b14b2b', '#1a6a4a', '#a63a31', '#2a5a7a', '#2dd4bf'];
 
             pieChart = new Chart(ctx, {
                 type: 'doughnut',
@@ -2918,7 +2923,7 @@
                             display: false
                         },
                         tooltip: {
-                            backgroundColor: '#1a1714',
+                            backgroundColor: '#121821',
                             titleColor: '#ffffff',
                             bodyColor: 'rgba(255,255,255,0.8)',
                             borderColor: 'rgba(255,255,255,0.06)',
@@ -3183,7 +3188,8 @@
                 var roundedExpenses = Math.round(totalExpenses);
                 var roundedCommission = Math.round(totalCommission);
 
-                console.log('📊 الإيرادات (بعد الخصم):', roundedRevenue, 'المصروفات:', roundedExpenses, 'العمولة:', roundedCommission);
+                console.log('📊 الإيرادات (بعد الخصم):', roundedRevenue, 'المصروفات:', roundedExpenses, 'العمولة:',
+                    roundedCommission);
 
                 document.getElementById('totalRevenue').textContent = roundedRevenue.toLocaleString() + ' ر.س';
                 document.getElementById('totalBookings').textContent = totalBookings.toLocaleString();
@@ -3248,7 +3254,7 @@
                 }
                 renderPieChart();
 
-                var colors = ['#1a4a6b', '#0d9488', '#2e7a5c', '#b14b2b', '#1a6a4a', '#a63a31', '#2a5a7a', '#2dd4bf'];
+                var colors = ['#1a4a6b', '#b98a1e', '#2e7a5c', '#b14b2b', '#1a6a4a', '#a63a31', '#2a5a7a', '#2dd4bf'];
                 var legendHtml = '';
                 pieData.labels.forEach(function(label, index) {
                     if (index < colors.length) {
@@ -3263,7 +3269,7 @@
                     activityContainer.innerHTML =
                         '<div class="empty-state"><i class="fas fa-clock"></i><p>لا توجد حجوزات مسجلة</p></div>';
                 } else {
-                    var colors2 = ['#10B981', '#F59E0B', '#3B82F6', '#EF4444'];
+                    var colors2 = ['var(--teal)', 'var(--accent)', 'var(--primary)', 'var(--rust)'];
                     var activityHtml = '';
                     var activitiesToShow = activities.slice(0, 5);
 
@@ -3295,12 +3301,12 @@
                 for (var i = 0; i < 8; i++) {
                     sparkData.push(Math.round(Math.random() * 100));
                 }
-                renderSpark('spark1', sparkData, '#3B82F6');
-                renderSpark('spark2', sparkData, '#2563EB');
-                renderSpark('spark3', sparkData, '#8B5CF6');
-                renderSpark('spark4', sparkData, '#93C5FD');
-                renderSpark('spark5', sparkData, '#3B82F6');
-                renderSpark('spark6', sparkData, '#F59E0B');
+                renderSpark('spark1', sparkData, '#dd9f2e');
+                renderSpark('spark2', sparkData, '#2f5b8a');
+                renderSpark('spark3', sparkData, '#1d7b6c');
+                renderSpark('spark4', sparkData, '#bf4f30');
+                renderSpark('spark5', sparkData, '#dd9f2e');
+                renderSpark('spark6', sparkData, '#2f5b8a');
 
                 document.querySelectorAll('.stat-card.loading').forEach(function(el) {
                     el.classList.remove('loading');
