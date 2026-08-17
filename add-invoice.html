@@ -4323,6 +4323,9 @@
                 var safeClientName = rawClientName.replace(/[\\\/:*?"<>|]/g, '').trim() || 'فاتورة';
                 var fileName = safeClientName + ' - ' + (invoiceNum || 'invoice') + '.pdf';
 
+                // إعادة الصفحة لأعلى قبل الالتقاط لتفادي مشكلة html2canvas مع position:fixed + scroll
+                window.scrollTo(0, 0);
+
                 var opt = {
                     margin: [12, 12, 12, 12],
                     filename: fileName,
@@ -4338,7 +4341,11 @@
                         allowTaint: true,
                         backgroundColor: '#ffffff',
                         width: element.scrollWidth,
-                        height: element.scrollHeight
+                        height: element.scrollHeight,
+                        scrollX: 0,
+                        scrollY: 0,
+                        windowWidth: document.documentElement.scrollWidth,
+                        windowHeight: document.documentElement.scrollHeight
                     },
                     jsPDF: {
                         unit: 'mm',
@@ -4397,10 +4404,13 @@
                 }
 
                 // إنشاء عنصر مؤقت في الصفحة (وليس خارج الشاشة) لضمان التقاط المحتوى
+                // إعادة الصفحة لأعلى قبل بناء العنصر المؤقت لتفادي مشكلة html2canvas مع position:fixed + scroll
+                window.scrollTo(0, 0);
+
                 var tempContainer = document.createElement('div');
                 tempContainer.id = 'tempPdfContainer';
                 tempContainer.style.cssText = `
-                    position: fixed;
+                    position: absolute;
                     top: 0;
                     left: -9999px;
                     width: 210mm;
@@ -4488,6 +4498,10 @@
                                     backgroundColor: '#ffffff',
                                     width: tempContainer.scrollWidth,
                                     height: tempContainer.scrollHeight,
+                                    scrollX: 0,
+                                    scrollY: 0,
+                                    windowWidth: document.documentElement.scrollWidth,
+                                    windowHeight: document.documentElement.scrollHeight,
                                     onclone: function(doc) {
                                         // التأكد من أن جميع العناصر مرئية
                                         var elements = doc.querySelectorAll('*');
