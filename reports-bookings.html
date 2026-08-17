@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+
+    <!-- ============================================================
+    منع الوصول من البداية - التحقق من تسجيل الدخول عبر Supabase Auth
+    ============================================================ -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        var SUPABASE_URL = 'https://zwuvcblrrrriuylajvba.supabase.co';
+        var SUPABASE_ANON_KEY = 'sb_publishable_YFqwTEs-W_kprUgt4bgpCQ_tf5vVeFa';
+        var supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        (async function checkAuth() {
+            try {
+                var { data: { session }, error } = await supabaseClient.auth.getSession();
+
+                if (error || !session) {
+                    window.location.replace('login.html');
+                    return;
+                }
+
+                var { data: profile, error: profileError } = await supabaseClient
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', session.user.id)
+                    .single();
+
+                if (profileError || !profile) {
+                    await supabaseClient.auth.signOut();
+                    window.location.replace('login.html');
+                    return;
+                }
+
+                window.currentUser = {
+                    id: session.user.id,
+                    email: session.user.email,
+                    name: profile.name || session.user.email,
+                    role: profile.role || 'user'
+                };
+
+            } catch (error) {
+                console.error('خطأ في التحقق من الجلسة:', error);
+                window.location.replace('login.html');
+            }
+        })();
+    </script>
+
+    <title>تقارير الحجوزات - منتجع حياله</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
+    <style>
+        :root {
+            --ink: #121821;
+            --ink-soft: #2c3644;
+            --ink-mute: #6d7883;
+            --paper: #eef1ef;
+            --surface: #ffffff;
+            --surface-muted: #f4f6f5;
+            --line: #dde3e0;
+            --line-strong: #c7d0cc;
+            --accent: #dd9f2e;
+            --accent-ink: #7a5312;
+            --accent-soft: #faead0;
+            --teal: #1d7b6c;
+            --teal-soft: #e2f2ee;
+            --rust: #bf4f30;
+            --rust-soft: #fbe8e1;
+            --blue: #2f5b8a;
+            --blue-soft: #e8eef5;
+            --radius: 14px;
+            --radius-sm: 9px;
+            --shadow: 0 14px 34px -16px rgba(18,24,33,0.28);
+            --shadow-sm: 0 3px 10px -4px rgba(18,24,33,0.18);
+            --font-display: 'Cairo', 'Segoe UI', Tahoma, Arial, sans-serif;
+            --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+            --header-height: 60px;
+            --stripe-height: 4px;
+            --mobile-nav-height: 56px;
+            --sidebar-w: 270px;
+            --scale-factor: 0.9;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: calc(16px * var(--scale-factor)); }
+        body {
+            font-family: var(--font-display);
+            background: var(--paper);
+            color: var(--ink);
+            direction: rtl;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-size: calc(1rem * var(--scale-factor));
+        }
+        a { text-decoration: none; color: inherit; }
+        ::-webkit-scrollbar { width: calc(5px * var(--scale-factor)); height: calc(5px * var(--scale-factor)); }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--ink-mute); }
+
+        .swatch-stripe { height: calc(var(--stripe-height) * var(--scale-factor)); flex-shrink: 0; display: flex; overflow: hidden; }
+        .swatch-stripe span { flex: 1; }
+        .swatch-stripe span:nth-child(1) { background: var(--accent); }
+        .swatch-stripe span:nth-child(2) { background: var(--teal); }
+        .swatch-stripe span:nth-child(3) { background: var(--rust); }
+        .swatch-stripe span:nth-child(4) { background: var(--blue); }
+
+        header {
+            position: sticky; top: 0; z-index: 1000; padding: 0 calc(20px * var(--scale-factor));
+            background: rgba(255, 255, 255, 0.97); backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--line); height: calc(var(--header-height) * var(--scale-factor));
+            display: flex; align-items: center; flex-shrink: 0;
+        }
+        header .header-content { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+        .logo { display: flex; align-items: center; gap: calc(11px * var(--scale-factor)); flex-shrink: 0; }
+        .logo-mark {
+            width: calc(36px * var(--scale-factor)); height: calc(36px * var(--scale-factor));
+            border-radius: calc(10px * var(--scale-factor)); background: var(--ink);
+            display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+            gap: calc(3px * var(--scale-factor)); padding: calc(6px * var(--scale-factor)); flex-shrink: 0;
+        }
+        .logo-mark span { border-radius: calc(2px * var(--scale-factor)); }
+        .logo-mark span:nth-child(1) { background: var(--accent); }
+        .logo-mark span:nth-child(2) { background: var(--teal); }
+        .logo-mark span:nth-child(3) { background: var(--rust); }
+        .logo-mark span:nth-child(4) { background: var(--blue); }
+        .logo-text h1 { font-size: calc(0.95rem * var(--scale-factor)); font-weight: 800; color: var(--ink); line-height: 1.25; letter-spacing: -0.2px; }
+        .logo-text span { font-size: calc(0.62rem * var(--scale-factor)); color: var(--ink-mute); display: block; font-weight: 600; }
+
+        nav {
+            display: flex; align-items: center; gap: calc(2px * var(--scale-factor)); flex-wrap: wrap;
+            background: var(--surface); padding: calc(3px * var(--scale-factor)); border-radius: calc(50px * var(--scale-factor));
+            border: 1px solid var(--line); box-shadow: 0 1px 4px rgba(0,0,0,0.02);
+        }
+        nav a {
+            color: var(--ink-mute); font-weight: 700; font-size: calc(0.65rem * var(--scale-factor)); transition: 0.25s ease;
+            position: relative; padding: calc(6px * var(--scale-factor)) calc(14px * var(--scale-factor));
+            border-radius: calc(50px * var(--scale-factor)); white-space: nowrap; letter-spacing: 0.2px;
+            display: flex; align-items: center; gap: calc(4px * var(--scale-factor));
+        }
+        nav a::after {
+            content: ''; position: absolute; bottom: calc(3px * var(--scale-factor)); right: 50%; width: 0;
+            height: calc(2px * var(--scale-factor)); background: var(--accent); transition: 0.3s ease; border-radius: 10px; transform: translateX(50%);
+        }
+        nav a:hover { color: var(--ink); background: var(--surface-muted); }
+        nav a:hover::after { width: 40%; }
+        nav a.active { color: var(--ink); background: var(--accent-soft); font-weight: 800; }
+        nav a.active::after { width: 40%; background: var(--accent); }
+        nav a .nav-icon { font-size: calc(0.7rem * var(--scale-factor)); opacity: 0.7; }
+        nav a.active .nav-icon { opacity: 1; color: var(--accent-ink); }
+        nav a:hover .nav-icon { opacity: 1; }
+
+        .header-actions { display: flex; align-items: center; gap: calc(6px * var(--scale-factor)); flex-shrink: 0; }
+        .header-actions button {
+            width: calc(32px * var(--scale-factor)); height: calc(32px * var(--scale-factor)); border-radius: calc(8px * var(--scale-factor));
+            border: 1px solid var(--line); background: var(--surface); color: var(--ink-mute); cursor: pointer; transition: 0.2s;
+            display: flex; align-items: center; justify-content: center; font-size: calc(0.8rem * var(--scale-factor));
+        }
+        .header-actions button:hover { background: var(--ink); border-color: var(--ink); color: #fff; }
+        .hamburger {
+            display: none; font-size: calc(1.05rem * var(--scale-factor)); color: var(--ink); cursor: pointer;
+            padding: calc(6px * var(--scale-factor)) calc(10px * var(--scale-factor)); border-radius: calc(8px * var(--scale-factor));
+            border: 1px solid var(--line); background: var(--surface);
+        }
+
+        .sidebar-overlay {
+            display: none; position: fixed; inset: 0; background: rgba(18, 24, 33, 0.35); z-index: 999;
+            backdrop-filter: blur(3px); opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
+        }
+        .sidebar-overlay.active { opacity: 1; pointer-events: auto; }
+        .sidebar {
+            position: fixed; top: 0; right: calc(-1 * var(--sidebar-w)); width: calc(var(--sidebar-w) * 1px); height: 100vh;
+            background: #ffffff; border-left: 1px solid var(--line); z-index: 1000;
+            padding: calc(60px * var(--scale-factor)) calc(18px * var(--scale-factor)) calc(30px * var(--scale-factor));
+            transition: right 0.35s ease; overflow-y: auto; box-shadow: var(--shadow);
+        }
+        .sidebar.open { right: 0; }
+        .sidebar .close-btn {
+            position: absolute; top: calc(12px * var(--scale-factor)); left: calc(12px * var(--scale-factor));
+            font-size: calc(1.2rem * var(--scale-factor)); color: var(--ink-mute); cursor: pointer;
+            padding: calc(4px * var(--scale-factor)) calc(8px * var(--scale-factor)); border-radius: calc(8px * var(--scale-factor)); border: 1px solid var(--line);
+        }
+        .sidebar .close-btn:hover { background: var(--accent-soft); color: var(--accent-ink); }
+        .sidebar .label { font-size: calc(0.65rem * var(--scale-factor)); font-weight: 800; color: var(--ink-mute); text-transform: uppercase; letter-spacing: 0.5px; margin: calc(14px * var(--scale-factor)) calc(10px * var(--scale-factor)) calc(6px * var(--scale-factor)); }
+        .sidebar .menu-items a {
+            display: flex; align-items: center; gap: calc(10px * var(--scale-factor)); padding: calc(9px * var(--scale-factor)) calc(12px * var(--scale-factor));
+            border-radius: calc(8px * var(--scale-factor)); color: var(--ink-soft); font-weight: 700; font-size: calc(0.85rem * var(--scale-factor)); transition: 0.2s;
+        }
+        .sidebar .menu-items a i { width: calc(18px * var(--scale-factor)); color: var(--ink-mute); }
+        .sidebar .menu-items a:hover { background: var(--surface-muted); }
+        .sidebar .menu-items a.active { background: var(--accent-soft); color: var(--accent-ink); }
+        .sidebar .menu-items a.active i { color: var(--accent-ink); }
+
+        .mobile-nav-bottom {
+            display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 998; background: #ffffff;
+            border-top: 1px solid var(--line); padding: calc(4px * var(--scale-factor)) 0 calc(4px * var(--scale-factor) + env(safe-area-inset-bottom));
+            height: calc(var(--mobile-nav-height) * var(--scale-factor)); box-shadow: 0 calc(-4px * var(--scale-factor)) calc(20px * var(--scale-factor)) rgba(0,0,0,0.04);
+        }
+        .mobile-nav-bottom ul { display: flex; justify-content: space-around; list-style: none; height: 100%; align-items: center; margin: 0; padding: 0; }
+        .mobile-nav-bottom ul li {
+            display: flex; flex-direction: column; align-items: center; gap: calc(1px * var(--scale-factor)); font-size: calc(0.4rem * var(--scale-factor));
+            color: var(--ink-mute); transition: 0.2s; padding: calc(2px * var(--scale-factor)) calc(8px * var(--scale-factor)); border-radius: calc(6px * var(--scale-factor)); cursor: pointer; flex: 1;
+        }
+        .mobile-nav-bottom ul li i { font-size: calc(0.85rem * var(--scale-factor)); }
+        .mobile-nav-bottom ul li:hover, .mobile-nav-bottom ul li.active { color: var(--accent-ink); }
+        .mobile-nav-bottom ul li a { display: flex; flex-direction: column; align-items: center; gap: calc(1px * var(--scale-factor)); color: inherit; text-decoration: none; width: 100%; }
+
+        .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; padding: calc(14px * var(--scale-factor)) calc(18px * var(--scale-factor)) calc(16px * var(--scale-factor)) calc(18px * var(--scale-factor)); }
+        .page-wrapper { flex: 1; overflow-y: auto; max-width: 1280px; margin: 0 auto; width: 100%; }
+        .page-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 0 20px; flex-wrap: wrap; gap: 12px; }
+        .page-header h1 { font-size: calc(1.3rem * var(--scale-factor)); font-weight: 800; display: flex; align-items: center; gap: 10px; }
+        .page-header h1 i { color: var(--accent); }
+        .page-header .actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+
+        .btn {
+            padding: calc(8px * var(--scale-factor)) calc(18px * var(--scale-factor)); border: none; border-radius: calc(10px * var(--scale-factor));
+            font-family: var(--font-display); font-weight: 700; font-size: calc(0.8rem * var(--scale-factor)); cursor: pointer; transition: all 0.2s ease;
+            display: inline-flex; align-items: center; gap: 8px;
+        }
+        .btn-primary { background: var(--ink); color: #ffffff; }
+        .btn-primary:hover { background: var(--ink-soft); transform: translateY(calc(-2px * var(--scale-factor))); box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+        .btn-success { background: var(--teal); color: #ffffff; }
+        .btn-success:hover { background: #156b5d; transform: translateY(calc(-2px * var(--scale-factor))); }
+        .btn-outline { background: transparent; border: 1.5px solid var(--line); color: var(--ink-soft); }
+        .btn-outline:hover { background: var(--surface-muted); border-color: var(--line-strong); }
+        .btn-sm { padding: calc(4px * var(--scale-factor)) calc(10px * var(--scale-factor)); font-size: calc(0.65rem * var(--scale-factor)); border-radius: calc(8px * var(--scale-factor)); }
+
+        .report-tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+        .report-tabs a {
+            padding: calc(8px * var(--scale-factor)) calc(16px * var(--scale-factor)); border-radius: 50px; border: 1.5px solid var(--line);
+            background: var(--surface); color: var(--ink-soft); font-weight: 700; font-size: calc(0.75rem * var(--scale-factor));
+            display: inline-flex; align-items: center; gap: 6px; transition: 0.2s;
+        }
+        .report-tabs a:hover { border-color: var(--line-strong); background: var(--surface-muted); }
+        .report-tabs a.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+        .filter-bar {
+            background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+            box-shadow: var(--shadow-sm); padding: calc(14px * var(--scale-factor)) calc(18px * var(--scale-factor));
+            display: flex; align-items: flex-end; gap: 14px; flex-wrap: wrap; margin-bottom: 18px;
+        }
+        .filter-field { display: flex; flex-direction: column; gap: 4px; min-width: 150px; }
+        .filter-field label { font-size: calc(0.65rem * var(--scale-factor)); font-weight: 700; color: var(--ink-mute); }
+        .filter-field input, .filter-field select {
+            padding: calc(7px * var(--scale-factor)) calc(10px * var(--scale-factor)); border: 1.5px solid var(--line);
+            border-radius: calc(8px * var(--scale-factor)); font-family: var(--font-display); font-size: calc(0.75rem * var(--scale-factor));
+            color: var(--ink); background: var(--surface); outline: none; transition: 0.2s;
+        }
+        .filter-field input:focus, .filter-field select:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(221,159,46,0.12); }
+        .filter-actions { display: flex; gap: 8px; }
+
+        .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
+        .kpi-card {
+            background: var(--surface); border-radius: calc(14px * var(--scale-factor)); padding: calc(14px * var(--scale-factor)) calc(16px * var(--scale-factor));
+            border: 1px solid var(--line); box-shadow: var(--shadow-sm); text-align: center; transition: all 0.3s ease; position: relative; overflow: hidden;
+        }
+        .kpi-card::before { content: ''; position: absolute; top: 0; right: 0; left: 0; height: 3px; background: var(--accent); opacity: 0.6; }
+        .kpi-card:hover { transform: translateY(calc(-4px * var(--scale-factor))); box-shadow: var(--shadow); border-color: var(--line-strong); }
+        .kpi-card .icon { font-size: calc(1.3rem * var(--scale-factor)); color: var(--accent); display: block; margin-bottom: 4px; }
+        .kpi-card .number { font-size: calc(1.4rem * var(--scale-factor)); font-weight: 900; color: var(--ink); font-family: var(--font-mono); }
+        .kpi-card .label { font-size: calc(0.6rem * var(--scale-factor)); color: var(--ink-mute); font-weight: 600; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.3px; }
+        .kpi-card.teal::before { background: var(--teal); } .kpi-card.teal .icon { color: var(--teal); }
+        .kpi-card.rust::before { background: var(--rust); } .kpi-card.rust .icon { color: var(--rust); }
+        .kpi-card.blue::before { background: var(--blue); } .kpi-card.blue .icon { color: var(--blue); }
+
+        .grid-2 { display: grid; grid-template-columns: 1.6fr 1fr; gap: 14px; margin-bottom: 18px; align-items: stretch; }
+
+        .card { background: var(--surface); border-radius: calc(16px * var(--scale-factor)); box-shadow: var(--shadow-sm); border: 1px solid var(--line); overflow: hidden; margin-bottom: 18px; }
+        .card-header { padding: calc(16px * var(--scale-factor)) calc(20px * var(--scale-factor)); border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+        .card-header h2 { font-size: calc(0.9rem * var(--scale-factor)); font-weight: 800; display: flex; align-items: center; gap: 8px; }
+        .card-header h2 i { color: var(--accent); }
+        .card-header .badge { background: var(--surface-muted); padding: calc(2px * var(--scale-factor)) calc(12px * var(--scale-factor)); border-radius: 50px; font-size: calc(0.65rem * var(--scale-factor)); font-weight: 700; color: var(--ink-mute); }
+        .card-body { padding: calc(18px * var(--scale-factor)) calc(20px * var(--scale-factor)); overflow-x: auto; }
+        .chart-box { position: relative; height: 300px; }
+        .chart-box.small { height: 260px; }
+
+        table { width: 100%; border-collapse: collapse; font-size: calc(0.8rem * var(--scale-factor)); min-width: 640px; }
+        table thead th {
+            background: var(--surface-muted); padding: calc(10px * var(--scale-factor)) calc(12px * var(--scale-factor)); text-align: center; font-weight: 700;
+            font-size: calc(0.65rem * var(--scale-factor)); color: var(--ink-mute); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid var(--line); white-space: nowrap;
+        }
+        table tbody td { padding: calc(10px * var(--scale-factor)) calc(12px * var(--scale-factor)); text-align: center; border-bottom: 1px solid var(--line); color: var(--ink-soft); }
+        table tbody tr:hover { background: var(--surface-muted); }
+        table tbody tr:last-child td { border-bottom: none; }
+        table tfoot td { padding: calc(10px * var(--scale-factor)) calc(12px * var(--scale-factor)); text-align: center; font-weight: 800; background: var(--surface-muted); border-top: 2px solid var(--line); color: var(--ink); }
+
+        .badge-pill { display: inline-block; padding: calc(4px * var(--scale-factor)) calc(14px * var(--scale-factor)); border-radius: 50px; font-size: calc(0.68rem * var(--scale-factor)); font-weight: 700; white-space: nowrap; }
+        .badge-paid { background: var(--teal-soft); color: var(--teal); }
+        .badge-partial { background: var(--accent-soft); color: var(--accent-ink); }
+        .badge-unpaid { background: var(--rust-soft); color: var(--rust); }
+
+        .empty-state { text-align: center; padding: calc(50px * var(--scale-factor)) calc(20px * var(--scale-factor)); color: var(--ink-mute); }
+        .empty-state i { font-size: calc(3rem * var(--scale-factor)); opacity: 0.3; margin-bottom: 16px; display: block; }
+        .empty-state p { font-size: calc(0.85rem * var(--scale-factor)); color: var(--ink-soft); }
+        .empty-state span { font-size: calc(0.7rem * var(--scale-factor)); color: var(--ink-mute); }
+        .spinner { display: inline-block; width: calc(30px * var(--scale-factor)); height: calc(30px * var(--scale-factor)); border: 3px solid var(--line); border-top: 3px solid var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .toast-container { position: fixed; top: calc(80px * var(--scale-factor)); right: calc(20px * var(--scale-factor)); z-index: 99999; max-width: calc(380px * var(--scale-factor)); width: 90%; pointer-events: none; display: flex; flex-direction: column; gap: calc(8px * var(--scale-factor)); }
+        .toast {
+            background: var(--surface); border: 1px solid var(--line); border-radius: calc(12px * var(--scale-factor)); padding: calc(12px * var(--scale-factor)) calc(16px * var(--scale-factor));
+            display: flex; align-items: center; gap: calc(10px * var(--scale-factor)); transform: translateX(calc(20px * var(--scale-factor))); transition: all 0.4s ease; opacity: 0;
+            pointer-events: auto; box-shadow: var(--shadow); border-right: calc(4px * var(--scale-factor)) solid var(--ink);
+        }
+        .toast.show { transform: translateX(0); opacity: 1; }
+        .toast .toast-icon { font-size: calc(1rem * var(--scale-factor)); width: calc(30px * var(--scale-factor)); height: calc(30px * var(--scale-factor)); min-width: calc(30px * var(--scale-factor)); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .toast .toast-icon.success { color: var(--teal); background: var(--teal-soft); }
+        .toast .toast-icon.error { color: var(--rust); background: var(--rust-soft); }
+        .toast .toast-icon.warning { color: var(--accent-ink); background: var(--accent-soft); }
+        .toast .toast-title { font-size: calc(0.82rem * var(--scale-factor)); font-weight: 800; color: var(--ink); }
+        .toast .toast-message { font-size: calc(0.72rem * var(--scale-factor)); color: var(--ink-mute); margin-top: calc(1px * var(--scale-factor)); }
+        .toast .toast-close { background: none; border: none; color: var(--ink-mute); cursor: pointer; font-size: calc(0.85rem * var(--scale-factor)); padding: calc(4px * var(--scale-factor)); margin-right: auto; }
+
+        @media (max-width: 992px) {
+            .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+            .grid-2 { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            :root { --scale-factor: 1; }
+            .sidebar { right: calc(-1 * var(--sidebar-w)); }
+            .sidebar.open { right: 0; }
+            .sidebar-overlay { display: block; }
+            .main-content { padding: 12px; padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
+            .page-header { flex-direction: column; align-items: stretch; gap: 12px; }
+            .page-header .actions { justify-content: stretch; }
+            .page-header .actions .btn { flex: 1; justify-content: center; }
+            .card-body { padding: 12px 14px; }
+            .filter-bar { flex-direction: column; align-items: stretch; }
+            .filter-field { min-width: 0; }
+            table { font-size: 0.7rem; min-width: 560px; }
+            table thead th, table tbody td { padding: 6px 8px; }
+            .mobile-nav-bottom { display: flex !important; }
+            .hamburger { display: flex !important; }
+            nav { display: none !important; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="swatch-stripe"><span></span><span></span><span></span><span></span></div>
+
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-mark"><span></span><span></span><span></span><span></span></div>
+                <div class="logo-text">
+                    <h1>تقارير الحجوزات</h1>
+                    <span>منتجع حياله</span>
+                </div>
+            </div>
+            <nav>
+                <a href="index.html"><i class="fas fa-home nav-icon"></i> الرئيسية</a>
+                <a href="add-invoice.html"><i class="fas fa-file-invoice nav-icon"></i> فاتورة جديدة</a>
+                <a href="bookings.html"><i class="fas fa-list nav-icon"></i> سجل الحجوزات</a>
+                <a href="clients.html"><i class="fas fa-users nav-icon"></i> العملاء</a>
+                <a href="properties.html"><i class="fas fa-building nav-icon"></i> العقارات</a>
+                <a href="expenses.html"><i class="fas fa-money-bill-wave nav-icon"></i> المصاريف</a>
+                <a href="abuzeid.html"><i class="fas fa-hand-holding-heart nav-icon"></i> عمولة أبو زيد</a>
+                <a href="future.html"><i class="fas fa-calendar-check nav-icon"></i> الحجوزات المستقبلية</a>
+                <a href="users.html"><i class="fas fa-users-cog nav-icon"></i> المستخدمين</a>
+                <a href="reports-bookings.html" class="active"><i class="fas fa-chart-pie nav-icon"></i> التقارير</a>
+            </nav>
+            <div class="header-actions">
+                <button aria-label="بحث"><i class="fas fa-search"></i></button>
+                <button aria-label="إشعارات"><i class="fas fa-bell"></i></button>
+                <div class="hamburger" id="navToggle"><i class="fas fa-bars"></i></div>
+            </div>
+        </div>
+    </header>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="close-btn" id="closeSidebar"><i class="fas fa-times"></i></div>
+        <div class="menu-items">
+            <a href="index.html"><i class="fas fa-home"></i> الرئيسية</a>
+            <a href="add-invoice.html"><i class="fas fa-file-invoice"></i> فاتورة جديدة</a>
+            <a href="bookings.html"><i class="fas fa-list"></i> سجل الحجوزات</a>
+            <a href="clients.html"><i class="fas fa-users"></i> العملاء</a>
+            <a href="properties.html"><i class="fas fa-building"></i> العقارات</a>
+            <a href="expenses.html"><i class="fas fa-money-bill-wave"></i> المصاريف</a>
+            <a href="abuzeid.html"><i class="fas fa-hand-holding-heart"></i> عمولة أبو زيد</a>
+            <a href="future.html"><i class="fas fa-calendar-check"></i> الحجوزات المستقبلية</a>
+            <a href="users.html"><i class="fas fa-users-cog"></i> المستخدمين</a>
+            <div class="label">التقارير</div>
+            <a href="reports-bookings.html" class="active"><i class="fas fa-file-alt"></i> تقارير الحجوزات</a>
+            <a href="reports-financial.html"><i class="fas fa-file-invoice-dollar"></i> التقارير المالية</a>
+            <a href="analytics.html"><i class="fas fa-chart-pie"></i> تحليلات</a>
+        </div>
+    </div>
+
+    <nav class="mobile-nav-bottom">
+        <ul>
+            <li><a href="index.html"><i class="fas fa-home"></i><span>الرئيسية</span></a></li>
+            <li><a href="bookings.html"><i class="fas fa-list"></i><span>الحجوزات</span></a></li>
+            <li class="active"><a href="reports-bookings.html"><i class="fas fa-chart-pie"></i><span>التقارير</span></a></li>
+            <li><a href="expenses.html"><i class="fas fa-money-bill-wave"></i><span>المصاريف</span></a></li>
+            <li><a href="clients.html"><i class="fas fa-users"></i><span>العملاء</span></a></li>
+        </ul>
+    </nav>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <div class="main-content">
+        <div class="page-wrapper">
+
+            <div class="page-header">
+                <h1><i class="fas fa-file-alt"></i> تقارير الحجوزات</h1>
+                <div class="actions">
+                    <button class="btn btn-outline" onclick="loadBookingsData()"><i class="fas fa-sync-alt"></i> تحديث</button>
+                </div>
+            </div>
+
+            <div class="report-tabs">
+                <a href="reports-bookings.html" class="active"><i class="fas fa-file-alt"></i> تقارير الحجوزات</a>
+                <a href="reports-financial.html" ><i class="fas fa-file-invoice-dollar"></i> التقارير المالية</a>
+                <a href="analytics.html" ><i class="fas fa-chart-pie"></i> تحليلات</a>
+            </div>
+
+
+            <div class="filter-bar">
+                <div class="filter-field">
+                    <label>من تاريخ (الدخول)</label>
+                    <input type="date" id="fDateFrom">
+                </div>
+                <div class="filter-field">
+                    <label>إلى تاريخ (الدخول)</label>
+                    <input type="date" id="fDateTo">
+                </div>
+                <div class="filter-field">
+                    <label>نوع العقار</label>
+                    <select id="fPropertyType"><option value="">الكل</option></select>
+                </div>
+                <div class="filter-field">
+                    <label>نوع الإقامة</label>
+                    <select id="fStayType"><option value="">الكل</option></select>
+                </div>
+                <div class="filter-field">
+                    <label>حالة السداد</label>
+                    <select id="fStatus">
+                        <option value="">الكل</option>
+                        <option value="paid">مدفوع بالكامل</option>
+                        <option value="partial">مدفوع جزئياً</option>
+                        <option value="unpaid">غير مدفوع</option>
+                    </select>
+                </div>
+                <div class="filter-actions">
+                    <button class="btn btn-primary btn-sm" onclick="applyFilters()"><i class="fas fa-filter"></i> تطبيق</button>
+                    <button class="btn btn-outline btn-sm" onclick="resetFilters()"><i class="fas fa-undo"></i> إعادة تعيين</button>
+                </div>
+            </div>
+
+            <div class="kpi-grid" id="kpiContainer">
+                <div class="empty-state"><div class="spinner"></div><p>جاري تحميل المؤشرات...</p></div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card" style="margin-bottom:0;">
+                    <div class="card-header">
+                        <h2><i class="fas fa-chart-column"></i> الحجوزات والإيرادات الشهرية</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-box"><canvas id="monthlyChart"></canvas></div>
+                    </div>
+                </div>
+                <div class="card" style="margin-bottom:0;">
+                    <div class="card-header">
+                        <h2><i class="fas fa-chart-pie"></i> توزيع حسب نوع العقار</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-box small"><canvas id="propertyChart"></canvas></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-table"></i> تفصيل حسب نوع العقار</h2>
+                    <button class="btn btn-outline btn-sm" onclick="exportPropertyTable()"><i class="fas fa-file-csv"></i> تصدير CSV</button>
+                </div>
+                <div class="card-body">
+                    <div id="propertyTableContainer"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-calendar-alt"></i> تفصيل شهري</h2>
+                    <button class="btn btn-outline btn-sm" onclick="exportMonthlyTable()"><i class="fas fa-file-csv"></i> تصدير CSV</button>
+                </div>
+                <div class="card-body">
+                    <div id="monthlyTableContainer"></div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <script>
+        var user = window.currentUser || {};
+        (function waitForAuth(attempts) {
+            user = window.currentUser || {};
+            if (user && user.email) return;
+            if (attempts > 30) return;
+            setTimeout(function () { waitForAuth(attempts + 1); }, 100);
+        })(0);
+
+        function showToast(title, message, type) {
+            var container = document.getElementById('toastContainer');
+            var toast = document.createElement('div');
+            toast.className = 'toast';
+            var iconClass = 'warning';
+            if (type === 'success') iconClass = 'success';
+            else if (type === 'error') iconClass = 'error';
+            var iconMap = { 'success': 'fa-check-circle', 'error': 'fa-times-circle', 'warning': 'fa-exclamation-triangle' };
+            toast.innerHTML = `
+                <div class="toast-icon ${iconClass}"><i class="fas ${iconMap[type] || 'fa-info-circle'}"></i></div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+                <button class="toast-close" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
+            `;
+            container.appendChild(toast);
+            setTimeout(function() { toast.classList.add('show'); }, 10);
+            setTimeout(function() {
+                toast.classList.remove('show');
+                setTimeout(function() { if (toast.parentElement) toast.remove(); }, 300);
+            }, 4000);
+        }
+
+        function formatCurrency(amount) {
+            if (amount === undefined || amount === null || isNaN(amount)) return '0.00';
+            return parseFloat(amount).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+            try {
+                var d = new Date(dateStr);
+                if (isNaN(d.getTime())) return dateStr;
+                return d.toLocaleDateString('ar-EG', { year: 'numeric', month: '2-digit', day: '2-digit' });
+            } catch (e) { return dateStr; }
+        }
+
+        function monthKey(dateStr) {
+            var d = new Date(dateStr);
+            if (isNaN(d.getTime())) return null;
+            return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+        }
+
+        function monthLabel(key) {
+            var arMonths = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+            var parts = key.split('-');
+            return arMonths[parseInt(parts[1], 10) - 1] + ' ' + parts[0];
+        }
+
+        function downloadCSV(filename, rows) {
+            var csvContent = rows.map(function(row) {
+                return row.map(function(cell) {
+                    var val = (cell === null || cell === undefined) ? '' : String(cell);
+                    if (val.indexOf(',') !== -1 || val.indexOf('"') !== -1 || val.indexOf('\n') !== -1) {
+                        val = '"' + val.replace(/"/g, '""') + '"';
+                    }
+                    return val;
+                }).join(',');
+            }).join('\n');
+            var blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+            var link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        var navToggle = document.getElementById('navToggle');
+        var sidebar = document.getElementById('sidebar');
+        var overlay = document.getElementById('sidebarOverlay');
+        var closeSidebar = document.getElementById('closeSidebar');
+        if (navToggle) {
+            navToggle.addEventListener('click', function() {
+                sidebar.classList.add('open');
+                overlay.classList.add('active');
+            });
+        }
+        function closeSidebarFn() {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        }
+        if (closeSidebar) closeSidebar.addEventListener('click', closeSidebarFn);
+        if (overlay) overlay.addEventListener('click', closeSidebarFn);
+
+
+        var allBookings = [];
+        var filteredData = [];
+        var monthlyChart = null, propertyChart = null;
+
+        async function loadBookingsData() {
+            try {
+                var response = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=*&order=check_in.asc', {
+                    headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY }
+                });
+                if (!response.ok) throw new Error('فشل في جلب البيانات');
+                allBookings = await response.json();
+                populateFilterOptions();
+                applyFilters();
+                showToast('تم التحميل', 'تم جلب ' + allBookings.length + ' حجز بنجاح', 'success');
+            } catch (error) {
+                console.error(error);
+                showToast('خطأ', 'فشل في تحميل بيانات الحجوزات', 'error');
+                document.getElementById('kpiContainer').innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle" style="color:var(--rust);"></i><p style="color:var(--rust);">حدث خطأ في تحميل البيانات</p></div>';
+            }
+        }
+
+        function populateFilterOptions() {
+            var propTypes = {};
+            var stayTypes = {};
+            allBookings.forEach(function(b) {
+                if (b.property_type) propTypes[b.property_type] = true;
+                if (b.stay_type) stayTypes[b.stay_type] = true;
+            });
+            var propSelect = document.getElementById('fPropertyType');
+            Object.keys(propTypes).sort().forEach(function(p) {
+                var opt = document.createElement('option'); opt.value = p; opt.textContent = p;
+                propSelect.appendChild(opt);
+            });
+            var staySelect = document.getElementById('fStayType');
+            Object.keys(stayTypes).sort().forEach(function(s) {
+                var opt = document.createElement('option'); opt.value = s; opt.textContent = s;
+                staySelect.appendChild(opt);
+            });
+        }
+
+        function getBookingStatus(item) {
+            var remaining = parseFloat(item.remaining) || 0;
+            var paid = parseFloat(item.paid) || 0;
+            if (item.payment_status === 'Fully Paid' || remaining <= 0) return 'paid';
+            if (paid > 0 && remaining > 0) return 'partial';
+            return 'unpaid';
+        }
+
+        function resetFilters() {
+            document.getElementById('fDateFrom').value = '';
+            document.getElementById('fDateTo').value = '';
+            document.getElementById('fPropertyType').value = '';
+            document.getElementById('fStayType').value = '';
+            document.getElementById('fStatus').value = '';
+            applyFilters();
+        }
+
+        function applyFilters() {
+            var dateFrom = document.getElementById('fDateFrom').value;
+            var dateTo = document.getElementById('fDateTo').value;
+            var propertyType = document.getElementById('fPropertyType').value;
+            var stayType = document.getElementById('fStayType').value;
+            var status = document.getElementById('fStatus').value;
+
+            filteredData = allBookings.filter(function(b) {
+                if (dateFrom && (!b.check_in || b.check_in < dateFrom)) return false;
+                if (dateTo && (!b.check_in || b.check_in > dateTo)) return false;
+                if (propertyType && b.property_type !== propertyType) return false;
+                if (stayType && b.stay_type !== stayType) return false;
+                if (status && getBookingStatus(b) !== status) return false;
+                return true;
+            });
+
+            renderKPIs();
+            renderMonthlyChart();
+            renderPropertyChart();
+            renderPropertyTable();
+            renderMonthlyTable();
+        }
+
+        function renderKPIs() {
+            var count = filteredData.length;
+            var totalNights = 0, totalRevenue = 0, paidCount = 0;
+            filteredData.forEach(function(b) {
+                totalNights += parseInt(b.nights) || 0;
+                totalRevenue += (parseFloat(b.total) || 0) - (parseFloat(b.discount) || 0);
+                if (getBookingStatus(b) === 'paid') paidCount++;
+            });
+            var avgValue = count > 0 ? totalRevenue / count : 0;
+            var paidPct = count > 0 ? (paidCount / count * 100) : 0;
+
+            var kpis = [
+                { icon: 'fa-calendar-check', number: count.toLocaleString('en-US'), label: 'إجمالي الحجوزات', cls: '' },
+                { icon: 'fa-moon', number: totalNights.toLocaleString('en-US'), label: 'إجمالي الليالي', cls: 'teal' },
+                { icon: 'fa-sack-dollar', number: formatCurrency(avgValue), label: 'متوسط قيمة الحجز', cls: 'blue' },
+                { icon: 'fa-check-double', number: paidPct.toFixed(0) + '%', label: 'نسبة السداد الكامل', cls: 'rust' }
+            ];
+
+            document.getElementById('kpiContainer').innerHTML = kpis.map(function(k) {
+                return '<div class="kpi-card ' + k.cls + '"><i class="fas ' + k.icon + ' icon"></i><div class="number">' + k.number + '</div><div class="label">' + k.label + '</div></div>';
+            }).join('');
+        }
+
+        function getMonthlyAgg() {
+            var map = {};
+            filteredData.forEach(function(b) {
+                var key = monthKey(b.check_in);
+                if (!key) return;
+                if (!map[key]) map[key] = { count: 0, revenue: 0, nights: 0 };
+                map[key].count++;
+                map[key].revenue += (parseFloat(b.total) || 0) - (parseFloat(b.discount) || 0);
+                map[key].nights += parseInt(b.nights) || 0;
+            });
+            var keys = Object.keys(map).sort();
+            return { keys: keys, map: map };
+        }
+
+        function renderMonthlyChart() {
+            var agg = getMonthlyAgg();
+            var labels = agg.keys.map(monthLabel);
+            var counts = agg.keys.map(function(k) { return agg.map[k].count; });
+            var revenues = agg.keys.map(function(k) { return Math.round(agg.map[k].revenue); });
+
+            if (monthlyChart) monthlyChart.destroy();
+            var ctx = document.getElementById('monthlyChart').getContext('2d');
+            if (labels.length === 0) { labels = ['لا توجد بيانات']; counts = [0]; revenues = [0]; }
+
+            monthlyChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'الإيرادات', data: revenues, backgroundColor: '#dd9f2e', borderRadius: 6, barPercentage: 0.5, categoryPercentage: 0.65, order: 2, yAxisID: 'y' },
+                        { label: 'عدد الحجوزات', data: counts, type: 'line', borderColor: '#1d7b6c', backgroundColor: '#1d7b6c', borderWidth: 2, pointRadius: 3, pointBackgroundColor: '#ffffff', pointBorderColor: '#1d7b6c', pointBorderWidth: 2, tension: 0.35, order: 1, yAxisID: 'y1' }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: { position: 'bottom', labels: { font: { family: "'Cairo', sans-serif", size: 10 }, usePointStyle: true } },
+                        tooltip: {
+                            backgroundColor: '#121821', titleColor: '#ffffff', bodyColor: 'rgba(255,255,255,0.8)',
+                            borderColor: 'rgba(255,255,255,0.06)', borderWidth: 1, padding: 10, cornerRadius: 8,
+                            titleFont: { family: "'Cairo', sans-serif", weight: '700', size: 11 }, bodyFont: { family: "'Cairo', sans-serif", size: 11 }, rtl: true
+                        }
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { font: { size: 10 } } },
+                        y: { position: 'left', grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { font: { size: 10 }, callback: function(v) { if (v >= 1000) return (v/1000) + 'k'; return v; } } },
+                        y1: { position: 'right', grid: { display: false }, ticks: { font: { size: 10 } } }
+                    }
+                }
+            });
+        }
+
+        function renderPropertyChart() {
+            var map = {};
+            filteredData.forEach(function(b) {
+                var t = b.property_type || 'غير محدد';
+                map[t] = (map[t] || 0) + 1;
+            });
+            var labels = Object.keys(map);
+            var values = labels.map(function(l) { return map[l]; });
+            var colors = ['#dd9f2e', '#1d7b6c', '#bf4f30', '#2f5b8a', '#7a5312', '#a63a31', '#2a5a7a', '#2dd4bf'];
+
+            if (propertyChart) propertyChart.destroy();
+            var ctx = document.getElementById('propertyChart').getContext('2d');
+            if (labels.length === 0) { labels = ['لا توجد بيانات']; values = [1]; }
+
+            propertyChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: { labels: labels, datasets: [{ data: values, backgroundColor: colors.slice(0, labels.length), borderColor: '#ffffff', borderWidth: 2, hoverOffset: 8 }] },
+                options: {
+                    responsive: true, maintainAspectRatio: false, cutout: '65%',
+                    plugins: {
+                        legend: { position: 'bottom', labels: { font: { family: "'Cairo', sans-serif", size: 10 }, usePointStyle: true } },
+                        tooltip: {
+                            backgroundColor: '#121821', titleColor: '#ffffff', bodyColor: 'rgba(255,255,255,0.8)',
+                            borderColor: 'rgba(255,255,255,0.06)', borderWidth: 1, padding: 10, cornerRadius: 8, rtl: true,
+                            titleFont: { family: "'Cairo', sans-serif", weight: '700', size: 11 }, bodyFont: { family: "'Cairo', sans-serif", size: 11 }
+                        }
+                    },
+                    animation: { animateRotate: true, duration: 1000 }
+                }
+            });
+        }
+
+        function renderPropertyTable() {
+            var map = {};
+            filteredData.forEach(function(b) {
+                var t = b.property_type || 'غير محدد';
+                if (!map[t]) map[t] = { count: 0, nights: 0, revenue: 0 };
+                map[t].count++;
+                map[t].nights += parseInt(b.nights) || 0;
+                map[t].revenue += (parseFloat(b.total) || 0) - (parseFloat(b.discount) || 0);
+            });
+            var rows = Object.keys(map).map(function(k) { return { type: k, count: map[k].count, nights: map[k].nights, revenue: map[k].revenue, avg: map[k].revenue / map[k].count }; });
+            rows.sort(function(a, b) { return b.revenue - a.revenue; });
+
+            var container = document.getElementById('propertyTableContainer');
+            if (rows.length === 0) {
+                container.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>لا توجد بيانات مطابقة</p></div>';
+                return;
+            }
+            var totalRevenue = rows.reduce(function(s, r) { return s + r.revenue; }, 0);
+            var html = '<table><thead><tr><th>نوع العقار</th><th>عدد الحجوزات</th><th>إجمالي الليالي</th><th>إجمالي الإيرادات</th><th>متوسط قيمة الحجز</th></tr></thead><tbody>';
+            rows.forEach(function(r) {
+                html += '<tr><td style="font-weight:700;">' + r.type + '</td><td>' + r.count + '</td><td>' + r.nights + '</td><td style="font-weight:700;color:var(--teal);">' + formatCurrency(r.revenue) + '</td><td>' + formatCurrency(r.avg) + '</td></tr>';
+            });
+            html += '</tbody><tfoot><tr><td>الإجمالي</td><td>' + filteredData.length + '</td><td>' + rows.reduce(function(s,r){return s+r.nights;},0) + '</td><td>' + formatCurrency(totalRevenue) + '</td><td>-</td></tr></tfoot></table>';
+            container.innerHTML = html;
+        }
+
+        function renderMonthlyTable() {
+            var agg = getMonthlyAgg();
+            var container = document.getElementById('monthlyTableContainer');
+            if (agg.keys.length === 0) {
+                container.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>لا توجد بيانات مطابقة</p></div>';
+                return;
+            }
+            var html = '<table><thead><tr><th>الشهر</th><th>عدد الحجوزات</th><th>إجمالي الليالي</th><th>الإيرادات</th></tr></thead><tbody>';
+            agg.keys.forEach(function(k) {
+                var m = agg.map[k];
+                html += '<tr><td style="font-weight:700;">' + monthLabel(k) + '</td><td>' + m.count + '</td><td>' + m.nights + '</td><td style="font-weight:700;color:var(--teal);">' + formatCurrency(m.revenue) + '</td></tr>';
+            });
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function exportPropertyTable() {
+            var map = {};
+            filteredData.forEach(function(b) {
+                var t = b.property_type || 'غير محدد';
+                if (!map[t]) map[t] = { count: 0, nights: 0, revenue: 0 };
+                map[t].count++;
+                map[t].nights += parseInt(b.nights) || 0;
+                map[t].revenue += (parseFloat(b.total) || 0) - (parseFloat(b.discount) || 0);
+            });
+            var rows = [['نوع العقار', 'عدد الحجوزات', 'إجمالي الليالي', 'إجمالي الإيرادات']];
+            Object.keys(map).forEach(function(k) { rows.push([k, map[k].count, map[k].nights, map[k].revenue.toFixed(2)]); });
+            downloadCSV('تقرير-الحجوزات-حسب-العقار.csv', rows);
+        }
+
+        function exportMonthlyTable() {
+            var agg = getMonthlyAgg();
+            var rows = [['الشهر', 'عدد الحجوزات', 'إجمالي الليالي', 'الإيرادات']];
+            agg.keys.forEach(function(k) { rows.push([monthLabel(k), agg.map[k].count, agg.map[k].nights, agg.map[k].revenue.toFixed(2)]); });
+            downloadCSV('تقرير-الحجوزات-الشهري.csv', rows);
+        }
+
+        loadBookingsData();
+
+    </script>
+</body>
+</html>
