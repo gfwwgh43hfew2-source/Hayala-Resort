@@ -4323,7 +4323,6 @@
                 var safeClientName = rawClientName.replace(/[\\\/:*?"<>|]/g, '').trim() || 'فاتورة';
                 var fileName = safeClientName + ' - ' + (invoiceNum || 'invoice') + '.pdf';
 
-                // إعادة الصفحة لأعلى قبل الالتقاط لتفادي مشكلة html2canvas مع position:fixed + scroll
                 window.scrollTo(0, 0);
 
                 var opt = {
@@ -4341,11 +4340,7 @@
                         allowTaint: true,
                         backgroundColor: '#ffffff',
                         width: element.scrollWidth,
-                        height: element.scrollHeight,
-                        scrollX: 0,
-                        scrollY: 0,
-                        windowWidth: document.documentElement.scrollWidth,
-                        windowHeight: document.documentElement.scrollHeight
+                        height: element.scrollHeight
                     },
                     jsPDF: {
                         unit: 'mm',
@@ -4357,19 +4352,29 @@
                     }
                 };
 
-                html2pdf()
-                    .set(opt)
-                    .from(element)
-                    .save(fileName)
-                    .then(function() {
-                        showToast('✅ تم الحفظ', 'تم حفظ ملف PDF على جهازك باسم: ' + fileName, 'success');
-                        if (onDone) onDone(true);
-                    })
-                    .catch(function(error) {
-                        console.error('❌ خطأ في حفظ PDF:', error);
-                        showToast('❌ خطأ', 'فشل في حفظ PDF: ' + error.message, 'error');
-                        if (onDone) onDone(false);
+                function actuallyCapture() {
+                    html2pdf()
+                        .set(opt)
+                        .from(element)
+                        .save(fileName)
+                        .then(function() {
+                            showToast('✅ تم الحفظ', 'تم حفظ ملف PDF على جهازك باسم: ' + fileName, 'success');
+                            if (onDone) onDone(true);
+                        })
+                        .catch(function(error) {
+                            console.error('❌ خطأ في حفظ PDF:', error);
+                            showToast('❌ خطأ', 'فشل في حفظ PDF: ' + error.message, 'error');
+                            if (onDone) onDone(false);
+                        });
+                }
+
+                // انتظار تحميل الخطوط فعليًا قبل الالتقاط لمنع لقطة فارغة/نص غير مرئي
+                var fontsReady = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+                fontsReady.then(function() {
+                    requestAnimationFrame(function() {
+                        requestAnimationFrame(actuallyCapture);
                     });
+                }).catch(actuallyCapture);
             }
 
             /**
@@ -4403,20 +4408,37 @@
                     btnSavePdfDirect.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري...';
                 }
 
-                // إنشاء عنصر مؤقت في الصفحة (وليس خارج الشاشة) لضمان التقاط المحتوى
-                // إعادة الصفحة لأعلى قبل بناء العنصر المؤقت لتفادي مشكلة html2canvas مع position:fixed + scroll
+                // إنشاء طبقة تغطية كاملة للشاشة أثناء التجهيز (بدل إخفاء العنصر خارج الشاشة،
+                // وهي طريقة أكثر ثباتًا مع html2canvas عبر مختلف المتصفحات/الأجهزة)
                 window.scrollTo(0, 0);
+
+                var pdfOverlay = document.createElement('div');
+                pdfOverlay.id = 'tempPdfOverlay';
+                pdfOverlay.style.cssText = `
+                    position: fixed;
+                    inset: 0;
+                    background: #ffffff;
+                    z-index: 999999;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-family: 'Cairo', 'Segoe UI', Arial, sans-serif;
+                    font-size: 14px;
+                    color: #121821;
+                `;
+                pdfOverlay.innerHTML = '<i class="fas fa-spinner fa-spin"></i>&nbsp; جاري تجهيز ملف PDF...';
+                document.body.appendChild(pdfOverlay);
 
                 var tempContainer = document.createElement('div');
                 tempContainer.id = 'tempPdfContainer';
                 tempContainer.style.cssText = `
-                    position: absolute;
+                    position: fixed;
                     top: 0;
-                    left: -9999px;
+                    left: 0;
                     width: 210mm;
                     padding: 12mm 15mm;
                     background: #ffffff;
-                    z-index: 99999;
+                    z-index: 1000000;
                     opacity: 1;
                     pointer-events: none;
                     overflow: visible;
@@ -4430,6 +4452,11 @@
                 tempContainer.innerHTML = buildSimplifiedInvoiceHTML(
                     client, phone, invNum, book, date, total, discount, paid, remaining, isPaidFull, 'tempPdfQrCode'
                 );
+
+                function cleanupTempPdfNodes() {
+                    if (tempContainer && tempContainer.parentNode) tempContainer.parentNode.removeChild(tempContainer);
+                    if (pdfOverlay && pdfOverlay.parentNode) pdfOverlay.parentNode.removeChild(pdfOverlay);
+                }
 
                 // إنشاء QR Code في الحاوية المؤقتة
                 setTimeout(function() {
@@ -4483,69 +4510,77 @@
                         }
 
                         function startPDFGeneration() {
-                            var opt = {
-                                margin: [10, 10, 10, 10],
-                                filename: (client || 'فاتورة') + ' - ' + invNum + '.pdf',
-                                image: {
-                                    type: 'jpeg',
-                                    quality: 0.98
-                                },
-                                html2canvas: {
-                                    scale: 2,
-                                    useCORS: true,
-                                    logging: false,
-                                    letterRendering: true,
-                                    backgroundColor: '#ffffff',
-                                    width: tempContainer.scrollWidth,
-                                    height: tempContainer.scrollHeight,
-                                    scrollX: 0,
-                                    scrollY: 0,
-                                    windowWidth: document.documentElement.scrollWidth,
-                                    windowHeight: document.documentElement.scrollHeight,
-                                    onclone: function(doc) {
-                                        // التأكد من أن جميع العناصر مرئية
-                                        var elements = doc.querySelectorAll('*');
-                                        elements.forEach(function(el) {
-                                            if (el.style && el.style.visibility === 'hidden') {
-                                                el.style.visibility = 'visible';
-                                            }
-                                            if (el.style && el.style.display === 'none') {
-                                                el.style.display = '';
-                                            }
-                                        });
+                            function actuallyCapture() {
+                                var opt = {
+                                    margin: [10, 10, 10, 10],
+                                    filename: (client || 'فاتورة') + ' - ' + invNum + '.pdf',
+                                    image: {
+                                        type: 'jpeg',
+                                        quality: 0.98
+                                    },
+                                    html2canvas: {
+                                        scale: 2,
+                                        useCORS: true,
+                                        logging: false,
+                                        letterRendering: true,
+                                        backgroundColor: '#ffffff',
+                                        width: tempContainer.scrollWidth,
+                                        height: tempContainer.scrollHeight,
+                                        onclone: function(doc) {
+                                            // التأكد من أن جميع العناصر مرئية
+                                            var elements = doc.querySelectorAll('*');
+                                            elements.forEach(function(el) {
+                                                if (el.style && el.style.visibility === 'hidden') {
+                                                    el.style.visibility = 'visible';
+                                                }
+                                                if (el.style && el.style.display === 'none') {
+                                                    el.style.display = '';
+                                                }
+                                            });
+                                        }
+                                    },
+                                    jsPDF: {
+                                        unit: 'mm',
+                                        format: 'a4',
+                                        orientation: 'portrait'
+                                    },
+                                    pagebreak: {
+                                        mode: ['avoid-all', 'css', 'legacy']
                                     }
-                                },
-                                jsPDF: {
-                                    unit: 'mm',
-                                    format: 'a4',
-                                    orientation: 'portrait'
-                                },
-                                pagebreak: {
-                                    mode: ['avoid-all', 'css', 'legacy']
-                                }
-                            };
+                                };
 
-                            html2pdf()
-                                .set(opt)
-                                .from(tempContainer)
-                                .save()
-                                .then(function() {
-                                    showToast('✅ تم الحفظ', 'تم حفظ ملف PDF على جهازك باسم: ' + (client || 'فاتورة') + ' - ' + invNum + '.pdf', 'success');
-                                    document.body.removeChild(tempContainer);
-                                    if (btnSavePdfDirect) {
-                                        btnSavePdfDirect.disabled = false;
-                                        btnSavePdfDirect.innerHTML = '<i class="fas fa-file-pdf"></i> <span>حفظ PDF</span>';
-                                    }
-                                })
-                                .catch(function(error) {
-                                    console.error('❌ خطأ في حفظ PDF:', error);
-                                    showToast('❌ خطأ', 'فشل في حفظ PDF: ' + error.message, 'error');
-                                    document.body.removeChild(tempContainer);
-                                    if (btnSavePdfDirect) {
-                                        btnSavePdfDirect.disabled = false;
-                                        btnSavePdfDirect.innerHTML = '<i class="fas fa-file-pdf"></i> <span>حفظ PDF</span>';
-                                    }
+                                html2pdf()
+                                    .set(opt)
+                                    .from(tempContainer)
+                                    .save()
+                                    .then(function() {
+                                        showToast('✅ تم الحفظ', 'تم حفظ ملف PDF على جهازك باسم: ' + (client || 'فاتورة') + ' - ' + invNum + '.pdf', 'success');
+                                        cleanupTempPdfNodes();
+                                        if (btnSavePdfDirect) {
+                                            btnSavePdfDirect.disabled = false;
+                                            btnSavePdfDirect.innerHTML = '<i class="fas fa-file-pdf"></i> <span>حفظ PDF</span>';
+                                        }
+                                    })
+                                    .catch(function(error) {
+                                        console.error('❌ خطأ في حفظ PDF:', error);
+                                        showToast('❌ خطأ', 'فشل في حفظ PDF: ' + error.message, 'error');
+                                        cleanupTempPdfNodes();
+                                        if (btnSavePdfDirect) {
+                                            btnSavePdfDirect.disabled = false;
+                                            btnSavePdfDirect.innerHTML = '<i class="fas fa-file-pdf"></i> <span>حفظ PDF</span>';
+                                        }
+                                    });
+                            }
+
+                            // انتظار تحميل الخطوط (Cairo) فعليًا قبل الالتقاط، ثم انتظار
+                            // إطاري رسم (requestAnimationFrame) لضمان اكتمال الرسم على الشاشة
+                            // — هذا يمنع التقاط لقطة فارغة بسبب سباق توقيت مع تحميل الخط
+                            var fontsReady = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+                            fontsReady.then(function() {
+                                requestAnimationFrame(function() {
+                                    requestAnimationFrame(actuallyCapture);
                                 });
+                            }).catch(actuallyCapture);
                         }
                     }, 500);
                 }, 300);
