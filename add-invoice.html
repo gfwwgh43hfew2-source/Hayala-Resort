@@ -3764,6 +3764,18 @@
              * qrContainerId: معرّف حاوية الـ QR الفريدة لكل استخدام
              * ============================================================
              */
+            /**
+             * ============================================================
+             * GET ARABIC DAY NAME — يرجع اسم اليوم بالعربي (السبت، الأحد...)
+             * ============================================================
+             */
+            function getArabicDayName(dateStr) {
+                if (!dateStr) return '';
+                var d = new Date(dateStr);
+                if (isNaN(d.getTime())) return '';
+                return d.toLocaleDateString('ar-EG', { weekday: 'long' });
+            }
+
             function buildInvoiceHTML(client, phone, invNum, book, date, total, discount, paid, remaining, isPaidFull, qrContainerId) {
                 var companyName = settings.companyName || 'منتجع حياله';
                 var companyAddress = settings.companyAddress || '';
@@ -3822,9 +3834,11 @@
                 `;
 
                 bookings.forEach(function(item, index) {
-                    var checkInDateFormatted = item.checkIn ? new Date(item.checkIn).toLocaleDateString('ar-EG') : 'غير محدد';
+                    var checkInDayName = getArabicDayName(item.checkIn);
+                    var checkOutDayName = getArabicDayName(item.checkOut);
+                    var checkInDateFormatted = item.checkIn ? (checkInDayName + ' ' + new Date(item.checkIn).toLocaleDateString('ar-EG')) : 'غير محدد';
                     var checkInTimeFormatted = item.checkInTime ? item.checkInTime : 'غير محدد';
-                    var checkOutDateFormatted = item.checkOut ? new Date(item.checkOut).toLocaleDateString('ar-EG') : 'غير محدد';
+                    var checkOutDateFormatted = item.checkOut ? (checkOutDayName + ' ' + new Date(item.checkOut).toLocaleDateString('ar-EG')) : 'غير محدد';
                     var checkOutTimeFormatted = item.checkOutTime ? item.checkOutTime : 'غير محدد';
 
                     html += `
@@ -4618,9 +4632,11 @@
 
                 var bookingsHtml = '';
                 bookings.forEach(function(item, index) {
-                    var checkInDateFormatted = item.checkIn ? new Date(item.checkIn).toLocaleDateString('ar-EG') : 'غير محدد';
+                    var checkInDayName = getArabicDayName(item.checkIn);
+                    var checkOutDayName = getArabicDayName(item.checkOut);
+                    var checkInDateFormatted = item.checkIn ? (checkInDayName + ' ' + new Date(item.checkIn).toLocaleDateString('ar-EG')) : 'غير محدد';
                     var checkInTimeFormatted = item.checkInTime || 'غير محدد';
-                    var checkOutDateFormatted = item.checkOut ? new Date(item.checkOut).toLocaleDateString('ar-EG') : 'غير محدد';
+                    var checkOutDateFormatted = item.checkOut ? (checkOutDayName + ' ' + new Date(item.checkOut).toLocaleDateString('ar-EG')) : 'غير محدد';
                     var checkOutTimeFormatted = item.checkOutTime || 'غير محدد';
 
                     bookingsHtml += `
