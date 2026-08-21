@@ -1737,136 +1737,359 @@
         }
 
         /**
- * ============================================================
- * 12. حفظ الدفعة من النموذج المضمن (الإصدار المعدل)
- * ============================================================
- */
-async function saveInlinePayment(event) {
-    event.preventDefault();
+         * ============================================================
+         * 12. حفظ الدفعة من النموذج المضمن (الإصدار المعدل - بحث متقدم)
+         * ============================================================
+         */
+        async function saveInlinePayment(event) {
+            event.preventDefault();
 
-    if (!activeClientName) {
-        showToast('خطأ', 'لم يتم تحديد العميل', 'error');
-        return;
-    }
-
-    var amount = parseFloat(document.getElementById('inlinePaymentAmount').value);
-    var paymentDate = document.getElementById('inlinePaymentDate').value;
-    var paymentMethod = document.getElementById('inlinePaymentMethod').value;
-    var notes = document.getElementById('inlinePaymentNotes').value.trim();
-
-    if (!amount || amount <= 0) {
-        showToast('تنبيه', 'يرجى إدخال مبلغ صحيح', 'warning');
-        return;
-    }
-
-    if (!paymentDate) {
-        showToast('تنبيه', 'يرجى إدخال تاريخ الدفع', 'warning');
-        return;
-    }
-
-    var submitBtn = document.querySelector('#inlinePaymentForm .btn-submit-payment');
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
-
-    try {
-        // ============================================================
-        // الخطوة 1: البحث عن العميل للحصول على client_id (UUID)
-        // ============================================================
-        var clientResponse = await fetch(SUPABASE_URL + '/rest/v1/clients?select=id&name=eq.' + encodeURIComponent(activeClientName), {
-            headers: {
-                'apikey': SUPABASE_ANON_KEY,
-                'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+            if (!activeClientName) {
+                showToast('خطأ', 'لم يتم تحديد العميل', 'error');
+                return;
             }
-        });
 
-        if (!clientResponse.ok) {
-            throw new Error('فشل في البحث عن العميل');
+            var amount = parseFloat(document.getElementById('inlinePaymentAmount').value);
+            var paymentDate = document.getElementById('inlinePaymentDate').value;
+            var paymentMethod = document.getElementById('inlinePaymentMethod').value;
+            var notes = document.getElementById('inlinePaymentNotes').value.trim();
+
+            if (!amount || amount <= 0) {
+                showToast('تنبيه', 'يرجى إدخال مبلغ صحيح', 'warning');
+                return;
+            }
+
+            if (!paymentDate) {
+                showToast('تنبيه', 'يرجى إدخال تاريخ الدفع', 'warning');
+                return;
+            }
+
+            var submitBtn = document.querySelector('#inlinePaymentForm .btn-submit-payment');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
+
+            try {
+                /**
+                 * ============================================================
+                 * دالة توليد UUID
+                 * ============================================================
+                 */
+                function generateUUID() {
+                    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                        var r = Math.random() * 16 | 0;
+                        var v = c === 'x' ? r : (r & 0x3 | 0x8);
+                        return v.toString(16);
+                    });
+                }
+
+                // تنظيف اسم العميل من المسافات الزائدة
+                var cleanName = activeClientName.trim().replace(/\s+/g, ' ');
+                console.log('🔍 البحث عن العميل:', cleanName);
+                
+                var clientId = null;
+                var clientPhone = '';
+                var found = false;
+                var foundClient = null;
+
+                // ============================================================
+                // المحاولة 1: بحث دقيق (eq) - حساس لحالة الأحرف
+                // ============================================================
+                var response1 = await fetch(SUPABASE_URL + '/rest/v1/clients?select=id,name,phone&name=eq.' + encodeURIComponent(cleanName), {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                    }
+                });
+                
+                if (response1.ok) {
+                    var clients1 = await response1.json();
+                    if (clients1 && clients1.length > 0) {
+                        clientId = clients1[0].id;
+                        clientPhone = clients1[0].phone || '';
+                        found = true;
+                        foundClient = clients1[0];
+                        console.log('✅ تم العثور على العميل (بحث دقيق eq):', clients1[0].name);
+                    }
+                }
+
+                // ============================================================
+                // المحاولة 2: بحث غير حساس لحالة الأحرف (ilike)
+                // ============================================================
+                if (!found) {
+                    var response2 = await fetch(SUPABASE_URL + '/rest/v1/clients?select=id,name,phone&name=ilike.' + encodeURIComponent(cleanName), {
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                        }
+                    });
+                    
+                    if (response2.ok) {
+                        var clients2 = await response2.json();
+                        if (clients2 && clients2.length > 0) {
+                            clientId = clients2[0].id;
+                            clientPhone = clients2[0].phone || '';
+                            found = true;
+                            foundClient = clients2[0];
+                            console.log('✅ تم العثور على العميل (بحث ilike):', clients2[0].name);
+                        }
+                    }
+                }
+
+                // ============================================================
+                // المحاولة 3: البحث الجزئي (يحتوي على النص)
+                // ============================================================
+                if (!found) {
+                    var response3 = await fetch(SUPABASE_URL + '/rest/v1/clients?select=id,name,phone&name=ilike.' + encodeURIComponent('%' + cleanName + '%'), {
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                        }
+                    });
+                    
+                    if (response3.ok) {
+                        var clients3 = await response3.json();
+                        if (clients3 && clients3.length > 0) {
+                            // اختيار العميل الأقرب تطابقاً
+                            var bestMatch = clients3[0];
+                            var bestScore = 0;
+                            
+                            clients3.forEach(function(client) {
+                                var score = 0;
+                                var clientName = client.name || '';
+                                if (clientName === cleanName) {
+                                    score = 100;
+                                } else if (clientName.toLowerCase() === cleanName.toLowerCase()) {
+                                    score = 90;
+                                } else if (clientName.includes(cleanName)) {
+                                    score = 70;
+                                } else if (cleanName.includes(clientName)) {
+                                    score = 50;
+                                } else {
+                                    // حساب التشابه (Levenshtein-like)
+                                    var maxLen = Math.max(clientName.length, cleanName.length);
+                                    if (maxLen > 0) {
+                                        var commonChars = 0;
+                                        var cleanLower = cleanName.toLowerCase();
+                                        var clientLower = clientName.toLowerCase();
+                                        for (var i = 0; i < Math.min(cleanLower.length, clientLower.length); i++) {
+                                            if (cleanLower[i] === clientLower[i]) commonChars++;
+                                        }
+                                        score = (commonChars / maxLen) * 80;
+                                    }
+                                }
+                                
+                                if (score > bestScore) {
+                                    bestScore = score;
+                                    bestMatch = client;
+                                }
+                            });
+                            
+                            if (bestScore > 30) {
+                                clientId = bestMatch.id;
+                                clientPhone = bestMatch.phone || '';
+                                found = true;
+                                foundClient = bestMatch;
+                                console.log('✅ تم العثور على العميل (بحث جزئي):', bestMatch.name, 'التطابق:', Math.round(bestScore) + '%');
+                            }
+                        }
+                    }
+                }
+
+                // ============================================================
+                // المحاولة 4: جلب جميع العملاء والبحث يدوياً (حل أخير)
+                // ============================================================
+                if (!found) {
+                    console.log('🔍 محاولة جلب جميع العملاء والبحث يدوياً...');
+                    var response4 = await fetch(SUPABASE_URL + '/rest/v1/clients?select=id,name,phone', {
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                        }
+                    });
+                    
+                    if (response4.ok) {
+                        var allClients = await response4.json();
+                        console.log('📋 عدد العملاء الكلي:', allClients.length);
+                        
+                        var cleanLower = cleanName.toLowerCase();
+                        var bestMatch = null;
+                        var bestScore = 0;
+                        
+                        allClients.forEach(function(client) {
+                            var clientName = client.name || '';
+                            var clientLower = clientName.toLowerCase();
+                            
+                            // حساب التشابه
+                            var score = 0;
+                            if (clientName === cleanName) {
+                                score = 100;
+                            } else if (clientLower === cleanLower) {
+                                score = 90;
+                            } else if (clientName.includes(cleanName)) {
+                                score = 70;
+                            } else if (cleanName.includes(clientName)) {
+                                score = 50;
+                            } else {
+                                // حساب الأحرف المشتركة
+                                var commonChars = 0;
+                                var maxLen = Math.max(clientLower.length, cleanLower.length);
+                                for (var i = 0; i < Math.min(clientLower.length, cleanLower.length); i++) {
+                                    if (clientLower[i] === cleanLower[i]) commonChars++;
+                                }
+                                if (maxLen > 0) {
+                                    score = (commonChars / maxLen) * 60;
+                                }
+                            }
+                            
+                            if (score > bestScore) {
+                                bestScore = score;
+                                bestMatch = client;
+                            }
+                        });
+                        
+                        if (bestMatch && bestScore > 20) {
+                            clientId = bestMatch.id;
+                            clientPhone = bestMatch.phone || '';
+                            found = true;
+                            foundClient = bestMatch;
+                            console.log('✅ تم العثور على العميل (بحث يدوي):', bestMatch.name, 'التطابق:', Math.round(bestScore) + '%');
+                        }
+                    }
+                }
+
+                // ============================================================
+                // إذا لم يتم العثور على العميل، نقوم بإنشائه
+                // ============================================================
+                if (!found) {
+                    console.log('⚠️ لم يتم العثور على العميل "' + cleanName + '"، جاري إنشائه...');
+                    
+                    // محاولة جلب رقم الهاتف من bookings
+                    try {
+                        var phoneResponse = await fetch(
+                            SUPABASE_URL + '/rest/v1/bookings?select=client_phone&client_name=ilike.' + encodeURIComponent(cleanName) + '&limit=1',
+                            {
+                                headers: {
+                                    'apikey': SUPABASE_ANON_KEY,
+                                    'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                                }
+                            }
+                        );
+                        
+                        if (phoneResponse.ok) {
+                            var phoneData = await phoneResponse.json();
+                            if (phoneData && phoneData.length > 0 && phoneData[0].client_phone) {
+                                clientPhone = phoneData[0].client_phone;
+                                console.log('📱 تم جلب رقم الهاتف من bookings:', clientPhone);
+                            }
+                        }
+                    } catch (phoneError) {
+                        console.warn('⚠️ تعذر جلب رقم الهاتف من bookings:', phoneError.message);
+                    }
+
+                    var newClientId = generateUUID();
+                    
+                    var newClientData = {
+                        id: newClientId,
+                        name: cleanName,
+                        phone: clientPhone || '',
+                        created_at: new Date().toISOString(),
+                        updated_at: new Date().toISOString()
+                    };
+
+                    console.log('📝 إنشاء عميل جديد:', newClientData);
+
+                    var createClientResponse = await fetch(SUPABASE_URL + '/rest/v1/clients', {
+                        method: 'POST',
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                            'Content-Type': 'application/json',
+                            'Prefer': 'return=representation'
+                        },
+                        body: JSON.stringify(newClientData)
+                    });
+
+                    if (!createClientResponse.ok) {
+                        var errorText = await createClientResponse.text();
+                        console.error('❌ فشل في إنشاء العميل:', errorText);
+                        throw new Error('فشل في إنشاء العميل الجديد: ' + errorText);
+                    }
+
+                    var createdClient = await createClientResponse.json();
+                    clientId = createdClient[0]?.id || newClientId;
+                    console.log('✅ تم إنشاء العميل بنجاح مع ID:', clientId);
+                    
+                    showToast('✅ عميل جديد', 'تم إنشاء العميل "' + cleanName + '" تلقائياً', 'success');
+                }
+
+                // ============================================================
+                // توليد UUID جديد للدفعة
+                // ============================================================
+                var newId = generateUUID();
+                console.log('🆔 تم توليد UUID جديد للدفعة:', newId);
+
+                // ============================================================
+                // إعداد بيانات الدفعة (مطابقة لهيكل الجدول)
+                // ============================================================
+                var paymentData = {
+                    id: newId,
+                    client_id: clientId,
+                    client_name: cleanName,
+                    amount: amount,
+                    payment_date: paymentDate,
+                    payment_method: paymentMethod || 'نقدي',
+                    notes: notes || null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                };
+
+                console.log('📤 البيانات المرسلة للدفعة:', paymentData);
+
+                // ============================================================
+                // إرسال البيانات إلى Supabase
+                // ============================================================
+                var response = await fetch(SUPABASE_URL + '/rest/v1/client_payments', {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify(paymentData)
+                });
+
+                // ============================================================
+                // معالجة الاستجابة
+                // ============================================================
+                if (!response.ok) {
+                    var errorText = await response.text();
+                    console.error('❌ خطأ من Supabase:', response.status, errorText);
+                    throw new Error('فشل في حفظ الدفعة: ' + response.status + ' - ' + errorText);
+                }
+
+                var result = await response.json();
+                console.log('✅ تم حفظ الدفعة بنجاح:', result);
+
+                showToast(
+                    '✅ تم التسجيل',
+                    'تم تسجيل دفعة بقيمة ' + amount.toFixed(2) + ' ر.س للعميل ' + cleanName,
+                    'success'
+                );
+
+                // إغلاق النموذج وإعادة تحميل البيانات
+                closePaymentForm();
+                await loadData();
+
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+                showToast('خطأ', 'فشل في حفظ الدفعة: ' + error.message, 'error');
+            }
+
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-save"></i> حفظ';
         }
 
-        var clients = await clientResponse.json();
-        
-        if (!clients || clients.length === 0) {
-            throw new Error('العميل "' + activeClientName + '" غير موجود في قاعدة البيانات');
-        }
-
-        var clientId = clients[0].id;
-        console.log('✅ تم العثور على العميل:', activeClientName, 'مع ID:', clientId);
-
-        // ============================================================
-        // الخطوة 2: توليد UUID جديد للـ id
-        // ============================================================
-        function generateUUID() {
-            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                var r = Math.random() * 16 | 0;
-                var v = c === 'x' ? r : (r & 0x3 | 0x8);
-                return v.toString(16);
-            });
-        }
-
-        var newId = generateUUID();
-        console.log('🆔 تم توليد UUID جديد:', newId);
-
-        // ============================================================
-        // الخطوة 3: إعداد بيانات الدفعة (مطابقة لهيكل الجدول)
-        // ============================================================
-        var paymentData = {
-            id: newId,                                    // UUID مطلوب
-            client_id: clientId,                          // UUID مطلوب
-            client_name: activeClientName,                // text مطلوب
-            amount: amount,                               // numeric مطلوب
-            payment_date: paymentDate,                    // date مطلوب
-            payment_method: paymentMethod || 'نقدي',     // text اختياري
-            notes: notes || null,                         // text اختياري
-            created_at: new Date().toISOString(),        // timestamp مع قيمة افتراضية
-            updated_at: new Date().toISOString()         // timestamp مع قيمة افتراضية
-        };
-
-        console.log('📤 البيانات المرسلة:', paymentData);
-
-        // ============================================================
-        // الخطوة 4: إرسال البيانات إلى Supabase
-        // ============================================================
-        var response = await fetch(SUPABASE_URL + '/rest/v1/client_payments', {
-            method: 'POST',
-            headers: {
-                'apikey': SUPABASE_ANON_KEY,
-                'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
-                'Content-Type': 'application/json',
-                'Prefer': 'return=representation'
-            },
-            body: JSON.stringify(paymentData)
-        });
-
-        // ============================================================
-        // الخطوة 5: معالجة الاستجابة
-        // ============================================================
-        if (!response.ok) {
-            var errorText = await response.text();
-            console.error('❌ خطأ من Supabase:', response.status, errorText);
-            throw new Error('فشل في حفظ الدفعة: ' + response.status + ' - ' + errorText);
-        }
-
-        var result = await response.json();
-        console.log('✅ تم حفظ الدفعة بنجاح:', result);
-
-        showToast(
-            '✅ تم التسجيل',
-            'تم تسجيل دفعة بقيمة ' + amount.toFixed(2) + ' ر.س للعميل ' + activeClientName,
-            'success'
-        );
-
-        // إغلاق النموذج وإعادة تحميل البيانات
-        closePaymentForm();
-        await loadData();
-
-    } catch (error) {
-        console.error('❌ خطأ:', error);
-        showToast('خطأ', 'فشل في حفظ الدفعة: ' + error.message, 'error');
-    }
-
-    submitBtn.disabled = false;
-    submitBtn.innerHTML = '<i class="fas fa-save"></i> حفظ';
-}
         /**
          * ============================================================
          * 13. تحميل الصفحة
