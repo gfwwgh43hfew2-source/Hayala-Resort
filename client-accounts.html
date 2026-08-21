@@ -1389,154 +1389,160 @@
          * 6. جلب البيانات من Supabase
          * ============================================================
          */
-        async function loadData() {
-            var kpiContainer = document.getElementById('kpiContainer');
-            var tableContainer = document.getElementById('tableContainer');
+        /**
+ * ============================================================
+ * 6. جلب البيانات من Supabase (الإصدار المعدل)
+ * ============================================================
+ */
+async function loadData() {
+    var kpiContainer = document.getElementById('kpiContainer');
+    var tableContainer = document.getElementById('tableContainer');
 
-            kpiContainer.innerHTML = `
-                <div class="empty-state">
-                    <div class="spinner"></div>
-                    <p>جاري تحميل المؤشرات...</p>
-                </div>
-            `;
-            tableContainer.innerHTML = `
-                <div class="empty-state">
-                    <div class="spinner"></div>
-                    <p>جاري تحميل البيانات...</p>
-                </div>
-            `;
+    kpiContainer.innerHTML = `
+        <div class="empty-state">
+            <div class="spinner"></div>
+            <p>جاري تحميل المؤشرات...</p>
+        </div>
+    `;
+    tableContainer.innerHTML = `
+        <div class="empty-state">
+            <div class="spinner"></div>
+            <p>جاري تحميل البيانات...</p>
+        </div>
+    `;
 
-            try {
-                // جلب جميع الحجوزات
-                var response = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=*', {
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error('فشل في جلب الحجوزات');
-                }
-
-                var bookings = await response.json();
-                console.log('📊 تم جلب الحجوزات:', bookings.length);
-
-                // جلب دفعات العملاء
-                var paymentsResponse = await fetch(SUPABASE_URL + '/rest/v1/client_payments?select=*', {
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
-                    }
-                });
-
-                payments = paymentsResponse.ok ? await paymentsResponse.json() : [];
-                console.log('💳 تم جلب الدفعات:', payments.length);
-
-                // ============================================================
-                // تجميع حسابات العملاء - الإصدار المعدل
-                // ============================================================
-                var clientMap = {};
-
-                // الخطوة 1: إضافة جميع العملاء من الحجوزات
-                bookings.forEach(function(booking) {
-                    var clientName = booking.client_name;
-                    if (!clientName) return;
-
-                    var total = parseFloat(booking.total) || 0;
-                    var paid = parseFloat(booking.paid) || 0;
-                    var discount = parseFloat(booking.discount) || 0;
-                    var remaining = parseFloat(booking.remaining) || 0;
-
-                    if (!clientMap[clientName]) {
-                        clientMap[clientName] = {
-                            name: clientName,
-                            phone: booking.client_phone || '',
-                            totalInvoices: 0,
-                            totalPaid: 0,
-                            totalDiscount: 0,
-                            totalRemaining: 0,
-                            bookingsCount: 0
-                        };
-                    }
-
-                    clientMap[clientName].totalInvoices += total;
-                    clientMap[clientName].totalPaid += paid;
-                    clientMap[clientName].totalDiscount += discount;
-                    clientMap[clientName].totalRemaining += remaining;
-                    clientMap[clientName].bookingsCount += 1;
-                });
-
-                // الخطوة 2: إضافة العملاء الذين لديهم دفعات فقط (ليس لديهم حجوزات)
-                payments.forEach(function(payment) {
-                    var clientName = payment.client_name;
-                    if (!clientName) return;
-
-                    // إذا كان العميل غير موجود في clientMap، نقوم بإضافته
-                    if (!clientMap[clientName]) {
-                        clientMap[clientName] = {
-                            name: clientName,
-                            phone: '',
-                            totalInvoices: 0,
-                            totalPaid: 0,
-                            totalDiscount: 0,
-                            totalRemaining: 0,
-                            bookingsCount: 0
-                        };
-                        console.log('📌 إضافة عميل من الدفعات:', clientName);
-                    }
-
-                    var amount = parseFloat(payment.amount) || 0;
-                    clientMap[clientName].totalPaid += amount;
-                    // المتبقي لا يتأثر بالدفعات هنا لأننا سنحسبه بشكل مختلف
-                });
-
-                // الخطوة 3: حساب المتبقي الصحيح
-                // المتبقي = إجمالي الفواتير - إجمالي المدفوع
-                Object.keys(clientMap).forEach(function(key) {
-                    var client = clientMap[key];
-                    client.totalRemaining = Math.max(0, client.totalInvoices - client.totalPaid);
-                });
-
-                // تحويل إلى مصفوفة وفلترة العملاء الذين عليهم متبقي أو لديهم دفعات
-                allClientAccounts = Object.values(clientMap)
-                    .filter(function(client) {
-                        // نعرض العملاء الذين عليهم متبقي أو لديهم دفعات مسجلة
-                        return client.totalRemaining > 0.01 || client.totalPaid > 0;
-                    })
-                    .sort(function(a, b) {
-                        return b.totalRemaining - a.totalRemaining;
-                    });
-
-                filteredAccounts = allClientAccounts.slice();
-                displayData(filteredAccounts);
-                updateKpis(allClientAccounts);
-
-                console.log('✅ تم تحديث حسابات العملاء بنجاح، عدد العملاء:', allClientAccounts.length);
-
-            } catch (error) {
-                console.error('❌ خطأ:', error);
-                kpiContainer.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-exclamation-triangle" style="color:var(--rust);"></i>
-                        <p style="color:var(--rust);">حدث خطأ في تحميل المؤشرات</p>
-                        <span>${error.message}</span>
-                    </div>
-                `;
-                tableContainer.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-exclamation-triangle" style="color:var(--rust);"></i>
-                        <p style="color:var(--rust);">حدث خطأ في تحميل البيانات</p>
-                        <span>${error.message}</span>
-                        <br><br>
-                        <button class="btn btn-primary" onclick="loadData()">
-                            <i class="fas fa-sync-alt"></i> إعادة المحاولة
-                        </button>
-                    </div>
-                `;
-                showToast('خطأ', 'فشل في تحميل البيانات', 'error');
+    try {
+        // جلب جميع الحجوزات
+        var response = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=*', {
+            headers: {
+                'apikey': SUPABASE_ANON_KEY,
+                'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
             }
+        });
+
+        if (!response.ok) {
+            throw new Error('فشل في جلب الحجوزات');
         }
+
+        var bookings = await response.json();
+        console.log('📊 تم جلب الحجوزات:', bookings.length);
+
+        // جلب دفعات العملاء
+        var paymentsResponse = await fetch(SUPABASE_URL + '/rest/v1/client_payments?select=*', {
+            headers: {
+                'apikey': SUPABASE_ANON_KEY,
+                'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+            }
+        });
+
+        payments = paymentsResponse.ok ? await paymentsResponse.json() : [];
+        console.log('💳 تم جلب الدفعات:', payments.length);
+
+        // ============================================================
+        // تجميع حسابات العملاء - الطريقة المبسطة
+        // ============================================================
+        var clientMap = {};
+
+        // الخطوة 1: إضافة جميع العملاء من الحجوزات
+        bookings.forEach(function(booking) {
+            var clientName = booking.client_name;
+            if (!clientName) return;
+
+            var total = parseFloat(booking.total) || 0;
+            var paid = parseFloat(booking.paid) || 0;
+            var discount = parseFloat(booking.discount) || 0;
+            var remaining = parseFloat(booking.remaining) || 0;
+
+            if (!clientMap[clientName]) {
+                clientMap[clientName] = {
+                    name: clientName,
+                    phone: booking.client_phone || '',
+                    totalInvoices: 0,
+                    totalPaid: 0,
+                    totalDiscount: 0,
+                    totalRemaining: 0,
+                    bookingsCount: 0
+                };
+            }
+
+            clientMap[clientName].totalInvoices += total;
+            clientMap[clientName].totalPaid += paid;
+            clientMap[clientName].totalDiscount += discount;
+            clientMap[clientName].totalRemaining += remaining;
+            clientMap[clientName].bookingsCount += 1;
+        });
+
+        // الخطوة 2: إضافة العملاء الذين لديهم دفعات فقط
+        // (هذا هو الجزء المهم لحل المشكلة)
+        payments.forEach(function(payment) {
+            var clientName = payment.client_name;
+            if (!clientName) return;
+
+            // إذا كان العميل غير موجود في clientMap، نقوم بإضافته
+            if (!clientMap[clientName]) {
+                clientMap[clientName] = {
+                    name: clientName,
+                    phone: '',
+                    totalInvoices: 0,
+                    totalPaid: 0,
+                    totalDiscount: 0,
+                    totalRemaining: 0,
+                    bookingsCount: 0
+                };
+                console.log('📌 إضافة عميل من الدفعات:', clientName);
+            }
+
+            var amount = parseFloat(payment.amount) || 0;
+            clientMap[clientName].totalPaid += amount;
+        });
+
+        // الخطوة 3: حساب المتبقي الصحيح لكل عميل
+        // المتبقي = إجمالي الفواتير - إجمالي المدفوع
+        Object.keys(clientMap).forEach(function(key) {
+            var client = clientMap[key];
+            client.totalRemaining = Math.max(0, client.totalInvoices - client.totalPaid);
+        });
+
+        // الخطوة 4: تحويل إلى مصفوفة
+        // نعرض العملاء الذين عليهم متبقي أو لديهم دفعات
+        allClientAccounts = Object.values(clientMap)
+            .filter(function(client) {
+                // نعرض العملاء الذين عليهم متبقي أو لديهم دفعات مسجلة
+                return client.totalRemaining > 0.01 || client.totalPaid > 0;
+            })
+            .sort(function(a, b) {
+                return b.totalRemaining - a.totalRemaining;
+            });
+
+        filteredAccounts = allClientAccounts.slice();
+        displayData(filteredAccounts);
+        updateKpis(allClientAccounts);
+
+        console.log('✅ تم تحديث حسابات العملاء بنجاح، عدد العملاء:', allClientAccounts.length);
+
+    } catch (error) {
+        console.error('❌ خطأ:', error);
+        kpiContainer.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-exclamation-triangle" style="color:var(--rust);"></i>
+                <p style="color:var(--rust);">حدث خطأ في تحميل المؤشرات</p>
+                <span>${error.message}</span>
+            </div>
+        `;
+        tableContainer.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-exclamation-triangle" style="color:var(--rust);"></i>
+                <p style="color:var(--rust);">حدث خطأ في تحميل البيانات</p>
+                <span>${error.message}</span>
+                <br><br>
+                <button class="btn btn-primary" onclick="loadData()">
+                    <i class="fas fa-sync-alt"></i> إعادة المحاولة
+                </button>
+            </div>
+        `;
+        showToast('خطأ', 'فشل في تحميل البيانات', 'error');
+    }
+}
 
         /**
          * ============================================================
