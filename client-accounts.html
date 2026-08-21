@@ -1737,90 +1737,136 @@
         }
 
         /**
-         * ============================================================
-         * 12. حفظ الدفعة من النموذج المضمن
-         * ============================================================
-         */
-        async function saveInlinePayment(event) {
-            event.preventDefault();
+ * ============================================================
+ * 12. حفظ الدفعة من النموذج المضمن (الإصدار المعدل)
+ * ============================================================
+ */
+async function saveInlinePayment(event) {
+    event.preventDefault();
 
-            if (!activeClientName) {
-                showToast('خطأ', 'لم يتم تحديد العميل', 'error');
-                return;
+    if (!activeClientName) {
+        showToast('خطأ', 'لم يتم تحديد العميل', 'error');
+        return;
+    }
+
+    var amount = parseFloat(document.getElementById('inlinePaymentAmount').value);
+    var paymentDate = document.getElementById('inlinePaymentDate').value;
+    var paymentMethod = document.getElementById('inlinePaymentMethod').value;
+    var notes = document.getElementById('inlinePaymentNotes').value.trim();
+
+    if (!amount || amount <= 0) {
+        showToast('تنبيه', 'يرجى إدخال مبلغ صحيح', 'warning');
+        return;
+    }
+
+    if (!paymentDate) {
+        showToast('تنبيه', 'يرجى إدخال تاريخ الدفع', 'warning');
+        return;
+    }
+
+    var submitBtn = document.querySelector('#inlinePaymentForm .btn-submit-payment');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
+
+    try {
+        // ============================================================
+        // الخطوة 1: البحث عن العميل للحصول على client_id (UUID)
+        // ============================================================
+        var clientResponse = await fetch(SUPABASE_URL + '/rest/v1/clients?select=id&name=eq.' + encodeURIComponent(activeClientName), {
+            headers: {
+                'apikey': SUPABASE_ANON_KEY,
+                'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
             }
+        });
 
-            var amount = parseFloat(document.getElementById('inlinePaymentAmount').value);
-            var paymentDate = document.getElementById('inlinePaymentDate').value;
-            var paymentMethod = document.getElementById('inlinePaymentMethod').value;
-            var notes = document.getElementById('inlinePaymentNotes').value.trim();
-
-            if (!amount || amount <= 0) {
-                showToast('تنبيه', 'يرجى إدخال مبلغ صحيح', 'warning');
-                return;
-            }
-
-            if (!paymentDate) {
-                showToast('تنبيه', 'يرجى إدخال تاريخ الدفع', 'warning');
-                return;
-            }
-
-            var submitBtn = document.querySelector('#inlinePaymentForm .btn-submit-payment');
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
-
-            // البحث عن العميل للحصول على ID
-            var clientResponse = await fetch(SUPABASE_URL + '/rest/v1/clients?select=id&name=eq.' + encodeURIComponent(activeClientName), {
-                headers: {
-                    'apikey': SUPABASE_ANON_KEY,
-                    'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
-                }
-            });
-
-            var clients = clientResponse.ok ? await clientResponse.json() : [];
-            var clientId = clients.length > 0 ? clients[0].id : null;
-
-            var paymentData = {
-                client_id: clientId,
-                client_name: activeClientName,
-                amount: amount,
-                payment_date: paymentDate,
-                payment_method: paymentMethod,
-                notes: notes,
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString()
-            };
-
-            try {
-                var response = await fetch(SUPABASE_URL + '/rest/v1/client_payments', {
-                    method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
-                        'Content-Type': 'application/json',
-                        'Prefer': 'return=representation'
-                    },
-                    body: JSON.stringify(paymentData)
-                });
-
-                if (!response.ok) {
-                    throw new Error('فشل في حفظ الدفعة');
-                }
-
-                showToast('✅ تم التسجيل', 'تم تسجيل دفعة بقيمة ' + amount.toFixed(2) + ' ر.س للعميل ' + activeClientName, 'success');
-
-                // إغلاق النموذج وإعادة تحميل البيانات
-                closePaymentForm();
-                await loadData();
-
-            } catch (error) {
-                console.error('❌ خطأ:', error);
-                showToast('خطأ', 'فشل في حفظ الدفعة: ' + error.message, 'error');
-            }
-
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i class="fas fa-save"></i> حفظ';
+        if (!clientResponse.ok) {
+            throw new Error('فشل في البحث عن العميل');
         }
 
+        var clients = await clientResponse.json();
+        
+        if (!clients || clients.length === 0) {
+            throw new Error('العميل "' + activeClientName + '" غير موجود في قاعدة البيانات');
+        }
+
+        var clientId = clients[0].id;
+        console.log('✅ تم العثور على العميل:', activeClientName, 'مع ID:', clientId);
+
+        // ============================================================
+        // الخطوة 2: توليد UUID جديد للـ id
+        // ============================================================
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0;
+                var v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        var newId = generateUUID();
+        console.log('🆔 تم توليد UUID جديد:', newId);
+
+        // ============================================================
+        // الخطوة 3: إعداد بيانات الدفعة (مطابقة لهيكل الجدول)
+        // ============================================================
+        var paymentData = {
+            id: newId,                                    // UUID مطلوب
+            client_id: clientId,                          // UUID مطلوب
+            client_name: activeClientName,                // text مطلوب
+            amount: amount,                               // numeric مطلوب
+            payment_date: paymentDate,                    // date مطلوب
+            payment_method: paymentMethod || 'نقدي',     // text اختياري
+            notes: notes || null,                         // text اختياري
+            created_at: new Date().toISOString(),        // timestamp مع قيمة افتراضية
+            updated_at: new Date().toISOString()         // timestamp مع قيمة افتراضية
+        };
+
+        console.log('📤 البيانات المرسلة:', paymentData);
+
+        // ============================================================
+        // الخطوة 4: إرسال البيانات إلى Supabase
+        // ============================================================
+        var response = await fetch(SUPABASE_URL + '/rest/v1/client_payments', {
+            method: 'POST',
+            headers: {
+                'apikey': SUPABASE_ANON_KEY,
+                'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=representation'
+            },
+            body: JSON.stringify(paymentData)
+        });
+
+        // ============================================================
+        // الخطوة 5: معالجة الاستجابة
+        // ============================================================
+        if (!response.ok) {
+            var errorText = await response.text();
+            console.error('❌ خطأ من Supabase:', response.status, errorText);
+            throw new Error('فشل في حفظ الدفعة: ' + response.status + ' - ' + errorText);
+        }
+
+        var result = await response.json();
+        console.log('✅ تم حفظ الدفعة بنجاح:', result);
+
+        showToast(
+            '✅ تم التسجيل',
+            'تم تسجيل دفعة بقيمة ' + amount.toFixed(2) + ' ر.س للعميل ' + activeClientName,
+            'success'
+        );
+
+        // إغلاق النموذج وإعادة تحميل البيانات
+        closePaymentForm();
+        await loadData();
+
+    } catch (error) {
+        console.error('❌ خطأ:', error);
+        showToast('خطأ', 'فشل في حفظ الدفعة: ' + error.message, 'error');
+    }
+
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = '<i class="fas fa-save"></i> حفظ';
+}
         /**
          * ============================================================
          * 13. تحميل الصفحة
