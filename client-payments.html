@@ -1160,6 +1160,7 @@
                 <a href="expenses.html"><i class="fas fa-money-bill-wave nav-icon"></i> المصاريف</a>
                 <a href="abuzeid.html"><i class="fas fa-hand-holding-heart nav-icon"></i> عمولة أبو زيد</a>
                 <a href="future.html"><i class="fas fa-calendar-check nav-icon"></i> الحجوزات المستقبلية</a>
+                <a href="client-accounts.html"><i class="fas fa-user-clock nav-icon"></i> حسابات العملاء</a>
                 <a href="client-payments.html" class="active"><i class="fas fa-hand-holding-usd nav-icon"></i> دفعات العملاء</a>
                 <a href="users.html"><i class="fas fa-users-cog nav-icon"></i> المستخدمين</a>
             </nav>
@@ -1190,6 +1191,7 @@
             <a href="expenses.html"><i class="fas fa-money-bill-wave"></i> المصاريف</a>
             <a href="abuzeid.html"><i class="fas fa-hand-holding-heart"></i> عمولة أبو زيد</a>
             <a href="future.html"><i class="fas fa-calendar-check"></i> الحجوزات المستقبلية</a>
+            <a href="client-accounts.html"><i class="fas fa-user-clock"></i> حسابات العملاء</a>
             <a href="client-payments.html" class="active"><i class="fas fa-hand-holding-usd"></i> دفعات العملاء</a>
             <a href="users.html"><i class="fas fa-users-cog"></i> المستخدمين</a>
             <a href="#"><i class="fas fa-chart-pie"></i> التقارير</a>
@@ -1421,6 +1423,19 @@
 
         /**
          * ============================================================
+         * دالة توليد UUID
+         * ============================================================
+         */
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0;
+                var v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        /**
+         * ============================================================
          * المتغيرات العامة
          * ============================================================
          */
@@ -1597,7 +1612,6 @@
                 var clientName = payment.client_name;
                 if (!clientName || !clientMap[clientName]) return;
 
-                // الدفعات تقلل المتبقي وتزيد المدفوع
                 var amount = parseFloat(payment.amount) || 0;
                 clientMap[clientName].totalPaid += amount;
                 clientMap[clientName].totalRemaining = Math.max(0, clientMap[clientName].totalRemaining - amount);
@@ -1790,18 +1804,27 @@
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
 
-            var paymentData = {
-                client_id: clientId,
-                client_name: client.name,
-                amount: amount,
-                payment_date: paymentDate,
-                payment_method: paymentMethod,
-                notes: notes,
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString()
-            };
-
             try {
+                // ============================================================
+                // توليد UUID جديد للدفعة (هذا هو الحل للمشكلة!)
+                // ============================================================
+                var newId = generateUUID();
+                console.log('🆔 تم توليد UUID جديد للدفعة:', newId);
+
+                var paymentData = {
+                    id: newId,                                    // ← الحقل المفقود! تم إضافته
+                    client_id: clientId,
+                    client_name: client.name,
+                    amount: amount,
+                    payment_date: paymentDate,
+                    payment_method: paymentMethod,
+                    notes: notes,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                };
+
+                console.log('📤 البيانات المرسلة:', paymentData);
+
                 var response = await fetch(SUPABASE_URL + '/rest/v1/client_payments', {
                     method: 'POST',
                     headers: {
@@ -1815,8 +1838,12 @@
 
                 if (!response.ok) {
                     var errorText = await response.text();
-                    throw new Error('فشل في حفظ الدفعة: ' + errorText);
+                    console.error('❌ خطأ من Supabase:', response.status, errorText);
+                    throw new Error('فشل في حفظ الدفعة: ' + response.status + ' - ' + errorText);
                 }
+
+                var result = await response.json();
+                console.log('✅ تم حفظ الدفعة بنجاح:', result);
 
                 showToast('✅ تم التسجيل', 'تم تسجيل دفعة بقيمة ' + amount.toFixed(2) + ' ر.س للعميل ' + client.name, 'success');
 
@@ -1904,6 +1931,7 @@
         console.log('📊 Supabase URL:', SUPABASE_URL);
         console.log('👤 المستخدم:', user.name || 'غير معروف');
         console.log('✅ جاهزة للعمل');
+        console.log('📌 ملاحظة: تم إضافة توليد UUID تلقائياً للدفعات الجديدة');
     </script>
 
 </body>
