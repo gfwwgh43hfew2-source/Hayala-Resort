@@ -71,7 +71,7 @@
         })();
     </script>
 
-    <title>تسجيل دفعات العملاء - منتجع حياله</title>
+    <title>سجل دفعات العملاء - منتجع حياله</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
@@ -610,180 +610,6 @@
         }
 
         /* ============================================================
-           FORM STYLES
-           ============================================================ */
-        .form-card {
-            background: var(--surface);
-            border-radius: calc(16px * var(--scale-factor));
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--line);
-            padding: calc(24px * var(--scale-factor));
-            margin-bottom: 20px;
-        }
-
-        .form-card .form-title {
-            font-size: calc(1rem * var(--scale-factor));
-            font-weight: 800;
-            color: var(--ink);
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .form-card .form-title i {
-            color: var(--accent);
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
-            gap: 12px;
-            align-items: end;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .form-group label {
-            font-size: calc(0.6rem * var(--scale-factor));
-            font-weight: 700;
-            color: var(--ink-mute);
-            letter-spacing: 0.3px;
-        }
-
-        .form-group label .required {
-            color: var(--rust);
-        }
-
-        .form-group input,
-        .form-group select {
-            padding: calc(8px * var(--scale-factor)) calc(12px * var(--scale-factor));
-            border-radius: calc(10px * var(--scale-factor));
-            border: 1.5px solid var(--line);
-            background: var(--surface-muted);
-            color: var(--ink);
-            font-size: calc(0.75rem * var(--scale-factor));
-            font-family: var(--font-display);
-            transition: all 0.2s ease;
-            width: 100%;
-            height: calc(42px * var(--scale-factor));
-            outline: none;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            border-color: var(--accent);
-            background: var(--surface);
-            box-shadow: 0 0 0 4px rgba(221, 159, 46, 0.12);
-        }
-
-        .form-group input::placeholder {
-            color: var(--ink-mute);
-            opacity: 0.6;
-        }
-
-        .form-group input:disabled {
-            background: var(--surface-muted);
-            opacity: 0.7;
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .btn-submit {
-            padding: calc(8px * var(--scale-factor)) calc(24px * var(--scale-factor));
-            border-radius: calc(10px * var(--scale-factor));
-            border: none;
-            background: var(--teal);
-            color: #ffffff;
-            font-weight: 700;
-            font-size: calc(0.75rem * var(--scale-factor));
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: var(--font-display);
-            height: calc(42px * var(--scale-factor));
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            white-space: nowrap;
-        }
-
-        .btn-submit:hover {
-            background: #156b5d;
-            transform: translateY(calc(-2px * var(--scale-factor)));
-            box-shadow: 0 4px 16px rgba(29, 123, 108, 0.3);
-        }
-
-        .btn-submit:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-close {
-            padding: calc(8px * var(--scale-factor)) calc(18px * var(--scale-factor));
-            border-radius: calc(10px * var(--scale-factor));
-            border: 1.5px solid var(--line);
-            background: transparent;
-            color: var(--ink-soft);
-            font-weight: 700;
-            font-size: calc(0.7rem * var(--scale-factor));
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: var(--font-display);
-            height: calc(42px * var(--scale-factor));
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            white-space: nowrap;
-        }
-
-        .btn-close:hover {
-            background: var(--surface-muted);
-            border-color: var(--line-strong);
-        }
-
-        .client-info-box {
-            background: var(--accent-soft);
-            border: 1px solid var(--accent);
-            border-radius: calc(10px * var(--scale-factor));
-            padding: calc(12px * var(--scale-factor)) calc(16px * var(--scale-factor));
-            margin-top: 12px;
-            display: none;
-        }
-
-        .client-info-box.show {
-            display: block;
-        }
-
-        .client-info-box .info-row {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .client-info-box .info-item {
-            font-size: calc(0.75rem * var(--scale-factor));
-        }
-
-        .client-info-box .info-item strong {
-            color: var(--ink);
-        }
-
-        .client-info-box .info-item .amount {
-            color: var(--rust);
-            font-weight: 700;
-            font-size: calc(0.9rem * var(--scale-factor));
-        }
-
-        /* ============================================================
            CARD
            ============================================================ */
         .card {
@@ -1016,12 +842,6 @@
         /* ============================================================
            RESPONSIVE
            ============================================================ */
-        @media (max-width: 992px) {
-            .form-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
         @media (max-width: 768px) {
             :root {
                 --scale-factor: 1;
@@ -1057,26 +877,6 @@
                 justify-content: center;
             }
 
-            .form-card {
-                padding: 16px;
-            }
-
-            .form-grid {
-                grid-template-columns: 1fr;
-                gap: 10px;
-            }
-
-            .form-actions {
-                flex-direction: column;
-                width: 100%;
-            }
-
-            .form-actions .btn-submit,
-            .form-actions .btn-close {
-                width: 100%;
-                justify-content: center;
-            }
-
             .card-body {
                 padding: 12px 14px;
             }
@@ -1099,11 +899,6 @@
             }
             nav {
                 display: none !important;
-            }
-
-            .client-info-box .info-row {
-                flex-direction: column;
-                gap: 6px;
             }
         }
 
@@ -1147,7 +942,7 @@
                     <span></span><span></span><span></span><span></span>
                 </div>
                 <div class="logo-text">
-                    <h1>دفعات العملاء</h1>
+                    <h1>سجل دفعات العملاء</h1>
                     <span>منتجع حياله</span>
                 </div>
             </div>
@@ -1226,7 +1021,7 @@
             <div class="page-header">
                 <h1>
                     <i class="fas fa-hand-holding-usd"></i>
-                    دفعات العملاء
+                    سجل دفعات العملاء
                 </h1>
                 <div class="actions">
                     <button class="btn btn-outline" onclick="loadData()">
@@ -1235,82 +1030,7 @@
                 </div>
             </div>
 
-            <!-- ===== FORM CARD ===== -->
-            <div class="form-card">
-                <div class="form-title">
-                    <i class="fas fa-plus-circle"></i>
-                    تسجيل دفعة جديدة
-                </div>
-
-                <form id="paymentForm" onsubmit="savePayment(event)">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>اختر العميل <span class="required">*</span></label>
-                            <select id="clientSelect" required onchange="loadClientInfo()">
-                                <option value="">-- اختر العميل --</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label>المبلغ المدفوع (ر.س) <span class="required">*</span></label>
-                            <input type="number" id="paymentAmount" placeholder="0.00" min="0.01" step="0.01" required />
-                        </div>
-
-                        <div class="form-group">
-                            <label>تاريخ الدفع <span class="required">*</span></label>
-                            <input type="date" id="paymentDate" required />
-                        </div>
-
-                        <div class="form-group">
-                            <label>طريقة الدفع</label>
-                            <select id="paymentMethod">
-                                <option value="نقدي">نقدي</option>
-                                <option value="تحويل بنكي">تحويل بنكي</option>
-                                <option value="بطاقة ائتمان">بطاقة ائتمان</option>
-                                <option value="شيك">شيك</option>
-                                <option value="أخرى">أخرى</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group" style="margin-top:8px;">
-                        <label>ملاحظات</label>
-                        <input type="text" id="paymentNotes" placeholder="ملاحظات إضافية..." />
-                    </div>
-
-                    <!-- ===== Client Info Box ===== -->
-                    <div class="client-info-box" id="clientInfoBox">
-                        <div class="info-row">
-                            <div class="info-item">
-                                <strong>اسم العميل:</strong> <span id="infoClientName">-</span>
-                            </div>
-                            <div class="info-item">
-                                <strong>رقم الجوال:</strong> <span id="infoClientPhone">-</span>
-                            </div>
-                            <div class="info-item">
-                                <strong>إجمالي المستحق:</strong> <span class="amount" id="infoTotalDue">0.00 ر.س</span>
-                            </div>
-                            <div class="info-item">
-                                <strong>المدفوع سابقاً:</strong> <span id="infoTotalPaid">0.00 ر.س</span>
-                            </div>
-                            <div class="info-item">
-                                <strong>المتبقي:</strong> <span class="amount" id="infoRemaining">0.00 ر.س</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-actions" style="margin-top:12px;">
-                        <button type="submit" class="btn-submit" id="submitBtn">
-                            <i class="fas fa-save"></i> تسجيل الدفعة
-                        </button>
-                        <button type="reset" class="btn-close" onclick="resetForm()">
-                            <i class="fas fa-undo"></i> تفريغ
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- ===== PAYMENTS HISTORY ===== -->
+            <!-- ===== CARD ===== -->
             <div class="card">
                 <div class="card-header">
                     <h2>
@@ -1339,7 +1059,6 @@
         /**
          * ============================================================
          * التحقق من تسجيل الدخول
-         * (بننتظر لحد ما checkAuth() فوق يخلص فعليًا)
          * ============================================================
          */
         var user = window.currentUser || {};
@@ -1347,20 +1066,19 @@
         (function waitForAuth(attempts) {
             user = window.currentUser || {};
             if (user && user.email) return;
-            if (attempts > 30) return; // checkAuth فوق هو اللي هيحوّل لو فعلاً مفيش جلسة
-            setTimeout(function () { waitForAuth(attempts + 1); }, 100);
+            if (attempts > 30) return;
+            setTimeout(function() { waitForAuth(attempts + 1); }, 100);
         })(0);
 
         /**
          * ============================================================
          * SUPABASE CONFIGURATION
-         * (بنستخدم نفس supabaseClient اللي اتعمل فوق في checkAuth)
          * ============================================================
          */
 
         /**
          * ============================================================
-         * SIDEBAR TOGGLE — نفس آلية جميع الصفحات السابقة
+         * SIDEBAR TOGGLE
          * ============================================================
          */
         var navToggle = document.getElementById('navToggle');
@@ -1423,26 +1141,11 @@
 
         /**
          * ============================================================
-         * دالة توليد UUID
-         * ============================================================
-         */
-        function generateUUID() {
-            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                var r = Math.random() * 16 | 0;
-                var v = c === 'x' ? r : (r & 0x3 | 0x8);
-                return v.toString(16);
-            });
-        }
-
-        /**
-         * ============================================================
          * المتغيرات العامة
          * ============================================================
          */
         var clients = [];
-        var bookings = [];
         var payments = [];
-        var clientAccounts = [];
         var selectedClientId = null;
 
         /**
@@ -1515,21 +1218,6 @@
                 }
 
                 clients = await clientsResponse.json();
-                populateClientSelect(clients);
-
-                // جلب الحجوزات
-                var bookingsResponse = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=*', {
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
-                    }
-                });
-
-                if (!bookingsResponse.ok) {
-                    throw new Error('فشل في جلب الحجوزات');
-                }
-
-                bookings = await bookingsResponse.json();
 
                 // جلب دفعات العملاء
                 var paymentsResponse = await fetch(SUPABASE_URL + '/rest/v1/client_payments?select=*&order=payment_date.desc', {
@@ -1540,14 +1228,10 @@
                 });
 
                 if (!paymentsResponse.ok) {
-                    // إذا كان الجدول غير موجود، ننشئ مصفوفة فارغة
                     payments = [];
                 } else {
                     payments = await paymentsResponse.json();
                 }
-
-                // حساب حسابات العملاء
-                calculateClientAccounts();
 
                 // عرض الدفعات
                 displayPayments(payments);
@@ -1571,114 +1255,6 @@
 
         /**
          * ============================================================
-         * حساب حسابات العملاء
-         * ============================================================
-         */
-        function calculateClientAccounts() {
-            var clientMap = {};
-
-            // تجميع بيانات الحجوزات
-            bookings.forEach(function(booking) {
-                var clientName = booking.client_name;
-                if (!clientName) return;
-
-                var total = parseFloat(booking.total) || 0;
-                var paid = parseFloat(booking.paid) || 0;
-                var discount = parseFloat(booking.discount) || 0;
-                var remaining = parseFloat(booking.remaining) || 0;
-                var net = total - discount;
-
-                if (!clientMap[clientName]) {
-                    clientMap[clientName] = {
-                        name: clientName,
-                        phone: booking.client_phone || '',
-                        totalInvoices: 0,
-                        totalPaid: 0,
-                        totalDiscount: 0,
-                        totalRemaining: 0,
-                        bookingsCount: 0
-                    };
-                }
-
-                clientMap[clientName].totalInvoices += net;
-                clientMap[clientName].totalPaid += paid;
-                clientMap[clientName].totalDiscount += discount;
-                clientMap[clientName].totalRemaining += remaining;
-                clientMap[clientName].bookingsCount += 1;
-            });
-
-            // تطبيق الدفعات على الحسابات
-            payments.forEach(function(payment) {
-                var clientName = payment.client_name;
-                if (!clientName || !clientMap[clientName]) return;
-
-                var amount = parseFloat(payment.amount) || 0;
-                clientMap[clientName].totalPaid += amount;
-                clientMap[clientName].totalRemaining = Math.max(0, clientMap[clientName].totalRemaining - amount);
-            });
-
-            clientAccounts = Object.values(clientMap);
-        }
-
-        /**
-         * ============================================================
-         * تعبئة قائمة العملاء في الفورم
-         * ============================================================
-         */
-        function populateClientSelect(clientsList) {
-            var select = document.getElementById('clientSelect');
-            select.innerHTML = '<option value="">-- اختر العميل --</option>';
-
-            clientsList.forEach(function(client) {
-                var option = document.createElement('option');
-                option.value = client.id;
-                option.textContent = client.name;
-                select.appendChild(option);
-            });
-        }
-
-        /**
-         * ============================================================
-         * تحميل معلومات العميل عند اختياره
-         * ============================================================
-         */
-        function loadClientInfo() {
-            var clientId = document.getElementById('clientSelect').value;
-            var infoBox = document.getElementById('clientInfoBox');
-
-            if (!clientId) {
-                infoBox.classList.remove('show');
-                selectedClientId = null;
-                return;
-            }
-
-            var client = clients.find(function(c) { return c.id === clientId; });
-            if (!client) return;
-
-            selectedClientId = clientId;
-
-            // البحث عن حساب العميل
-            var account = clientAccounts.find(function(a) { return a.name === client.name; });
-
-            document.getElementById('infoClientName').textContent = client.name;
-            document.getElementById('infoClientPhone').textContent = client.phone || '-';
-
-            if (account) {
-                document.getElementById('infoTotalDue').textContent = account.totalInvoices.toFixed(2) + ' ر.س';
-                document.getElementById('infoTotalPaid').textContent = account.totalPaid.toFixed(2) + ' ر.س';
-                document.getElementById('infoRemaining').textContent = account.totalRemaining.toFixed(2) + ' ر.س';
-                document.getElementById('infoRemaining').style.color = account.totalRemaining > 0 ? 'var(--rust)' : 'var(--teal)';
-            } else {
-                document.getElementById('infoTotalDue').textContent = '0.00 ر.س';
-                document.getElementById('infoTotalPaid').textContent = '0.00 ر.س';
-                document.getElementById('infoRemaining').textContent = '0.00 ر.س';
-            }
-
-            infoBox.classList.add('show');
-        }
-
-        /**
-         * ============================================================
          * عرض الدفعات في الجدول
          * ============================================================
          */
@@ -1691,7 +1267,7 @@
                     <div class="empty-state">
                         <i class="fas fa-hand-holding-usd"></i>
                         <p>لا توجد دفعات مسجلة</p>
-                        <span>قم بتسجيل دفعة جديدة من النموذج أعلاه</span>
+                        <span>لا توجد دفعات لعرضها</span>
                     </div>
                 `;
                 countBadge.textContent = '0';
@@ -1726,7 +1302,7 @@
                         <td>
                             <div class="actions-cell">
                                 <button class="btn btn-danger btn-sm" onclick="deletePayment('${item.id}')">
-                                    <i class="fas fa-trash"></i>
+                                    <i class="fas fa-trash"></i> حذف
                                 </button>
                             </div>
                         </td>
@@ -1767,108 +1343,11 @@
 
         /**
          * ============================================================
-         * تسجيل دفعة جديدة
-         * ============================================================
-         */
-        async function savePayment(event) {
-            event.preventDefault();
-
-            var clientId = document.getElementById('clientSelect').value;
-            var amount = parseFloat(document.getElementById('paymentAmount').value);
-            var paymentDate = document.getElementById('paymentDate').value;
-            var paymentMethod = document.getElementById('paymentMethod').value;
-            var notes = document.getElementById('paymentNotes').value.trim();
-
-            if (!clientId) {
-                showToast('تنبيه', 'يرجى اختيار العميل', 'warning');
-                return;
-            }
-
-            if (!amount || amount <= 0) {
-                showToast('تنبيه', 'يرجى إدخال مبلغ صحيح', 'warning');
-                return;
-            }
-
-            if (!paymentDate) {
-                showToast('تنبيه', 'يرجى إدخال تاريخ الدفع', 'warning');
-                return;
-            }
-
-            var client = clients.find(function(c) { return c.id === clientId; });
-            if (!client) {
-                showToast('خطأ', 'العميل غير موجود', 'error');
-                return;
-            }
-
-            var submitBtn = document.getElementById('submitBtn');
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
-
-            try {
-                // ============================================================
-                // توليد UUID جديد للدفعة (هذا هو الحل للمشكلة!)
-                // ============================================================
-                var newId = generateUUID();
-                console.log('🆔 تم توليد UUID جديد للدفعة:', newId);
-
-                var paymentData = {
-                    id: newId,                                    // ← الحقل المفقود! تم إضافته
-                    client_id: clientId,
-                    client_name: client.name,
-                    amount: amount,
-                    payment_date: paymentDate,
-                    payment_method: paymentMethod,
-                    notes: notes,
-                    created_at: new Date().toISOString(),
-                    updated_at: new Date().toISOString()
-                };
-
-                console.log('📤 البيانات المرسلة:', paymentData);
-
-                var response = await fetch(SUPABASE_URL + '/rest/v1/client_payments', {
-                    method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
-                        'Content-Type': 'application/json',
-                        'Prefer': 'return=representation'
-                    },
-                    body: JSON.stringify(paymentData)
-                });
-
-                if (!response.ok) {
-                    var errorText = await response.text();
-                    console.error('❌ خطأ من Supabase:', response.status, errorText);
-                    throw new Error('فشل في حفظ الدفعة: ' + response.status + ' - ' + errorText);
-                }
-
-                var result = await response.json();
-                console.log('✅ تم حفظ الدفعة بنجاح:', result);
-
-                showToast('✅ تم التسجيل', 'تم تسجيل دفعة بقيمة ' + amount.toFixed(2) + ' ر.س للعميل ' + client.name, 'success');
-
-                // إعادة تحميل البيانات
-                await loadData();
-
-                // تفريغ النموذج
-                resetForm();
-
-            } catch (error) {
-                console.error('❌ خطأ:', error);
-                showToast('خطأ', 'فشل في حفظ الدفعة: ' + error.message, 'error');
-            }
-
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i class="fas fa-save"></i> تسجيل الدفعة';
-        }
-
-        /**
-         * ============================================================
          * حذف دفعة
          * ============================================================
          */
         async function deletePayment(id) {
-            if (!confirm('هل أنت متأكد من حذف هذه الدفعة؟')) {
+            if (!confirm('⚠️ هل أنت متأكد من حذف هذه الدفعة؟')) {
                 return;
             }
 
@@ -1882,7 +1361,9 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error('فشل في حذف الدفعة');
+                    var errorText = await response.text();
+                    console.error('❌ خطأ في الحذف:', errorText);
+                    throw new Error('فشل في حذف الدفعة: ' + response.status);
                 }
 
                 showToast('✅ تم الحذف', 'تم حذف الدفعة بنجاح', 'success');
@@ -1890,23 +1371,8 @@
 
             } catch (error) {
                 console.error('❌ خطأ:', error);
-                showToast('خطأ', 'فشل في حذف الدفعة', 'error');
+                showToast('خطأ', 'فشل في حذف الدفعة: ' + error.message, 'error');
             }
-        }
-
-        /**
-         * ============================================================
-         * تفريغ النموذج
-         * ============================================================
-         */
-        function resetForm() {
-            document.getElementById('clientSelect').value = '';
-            document.getElementById('paymentAmount').value = '';
-            document.getElementById('paymentDate').value = '';
-            document.getElementById('paymentMethod').value = 'نقدي';
-            document.getElementById('paymentNotes').value = '';
-            document.getElementById('clientInfoBox').classList.remove('show');
-            selectedClientId = null;
         }
 
         /**
@@ -1915,10 +1381,6 @@
          * ============================================================
          */
         document.addEventListener('DOMContentLoaded', function() {
-            // تعيين تاريخ اليوم كقيمة افتراضية
-            var today = new Date().toISOString().split('T')[0];
-            document.getElementById('paymentDate').value = today;
-
             loadData();
         });
 
@@ -1927,11 +1389,11 @@
          * رسالة الترحيب في Console
          * ============================================================
          */
-        console.log('💳 صفحة دفعات العملاء - منتجع حياله');
+        console.log('💳 صفحة سجل دفعات العملاء - منتجع حياله');
         console.log('📊 Supabase URL:', SUPABASE_URL);
         console.log('👤 المستخدم:', user.name || 'غير معروف');
         console.log('✅ جاهزة للعمل');
-        console.log('📌 ملاحظة: تم إضافة توليد UUID تلقائياً للدفعات الجديدة');
+        console.log('📌 ملاحظة: هذه الصفحة لعرض سجل الدفعات وحذفها فقط');
     </script>
 
 </body>
