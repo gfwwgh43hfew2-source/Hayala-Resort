@@ -1373,192 +1373,134 @@
 
         /**
          * ============================================================
-         * دالة توليد UUID
-         * ============================================================
-         */
-        function generateUUID() {
-            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                var r = Math.random() * 16 | 0;
-                var v = c === 'x' ? r : (r & 0x3 | 0x8);
-                return v.toString(16);
-            });
-        }
-
-        /**
-         * ============================================================
          * 6. جلب البيانات من Supabase
          * ============================================================
          */
-        /**
- * ============================================================
- * 6. جلب البيانات من Supabase (الإصدار المعدل)
- * ============================================================
- */
-async function loadData() {
-    var kpiContainer = document.getElementById('kpiContainer');
-    var tableContainer = document.getElementById('tableContainer');
+        async function loadData() {
+            var kpiContainer = document.getElementById('kpiContainer');
+            var tableContainer = document.getElementById('tableContainer');
 
-    kpiContainer.innerHTML = `
-        <div class="empty-state">
-            <div class="spinner"></div>
-            <p>جاري تحميل المؤشرات...</p>
-        </div>
-    `;
-    tableContainer.innerHTML = `
-        <div class="empty-state">
-            <div class="spinner"></div>
-            <p>جاري تحميل البيانات...</p>
-        </div>
-    `;
+            kpiContainer.innerHTML = `
+                <div class="empty-state">
+                    <div class="spinner"></div>
+                    <p>جاري تحميل المؤشرات...</p>
+                </div>
+            `;
+            tableContainer.innerHTML = `
+                <div class="empty-state">
+                    <div class="spinner"></div>
+                    <p>جاري تحميل البيانات...</p>
+                </div>
+            `;
 
-    try {
-        // جلب جميع الحجوزات
-        var response = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=*', {
-            headers: {
-                'apikey': SUPABASE_ANON_KEY,
-                'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+            try {
+                // جلب جميع الحجوزات
+                var response = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=*', {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('فشل في جلب الحجوزات');
+                }
+
+                var bookings = await response.json();
+                console.log('📊 تم جلب الحجوزات:', bookings.length);
+
+                // جلب دفعات العملاء
+                var paymentsResponse = await fetch(SUPABASE_URL + '/rest/v1/client_payments?select=*', {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                    }
+                });
+
+                payments = paymentsResponse.ok ? await paymentsResponse.json() : [];
+                console.log('💳 تم جلب الدفعات:', payments.length);
+
+                // تجميع حسابات العملاء
+                var clientMap = {};
+
+                bookings.forEach(function(booking) {
+                    var clientName = booking.client_name;
+                    if (!clientName) return;
+
+                    var total = parseFloat(booking.total) || 0;
+                    var paid = parseFloat(booking.paid) || 0;
+                    var discount = parseFloat(booking.discount) || 0;
+                    var remaining = parseFloat(booking.remaining) || 0;
+
+                    // ===== التعديل المطلوب: إضافة total مباشرة (بدون خصم) =====
+                    // هذا يجعل "إجمالي الفواتير" يعكس نفس قيمة "الإجمالي" في سجل الحجوزات
+                    var net = total; // يتم إضافة total كامل بدلاً من total - discount
+
+                    if (!clientMap[clientName]) {
+                        clientMap[clientName] = {
+                            name: clientName,
+                            phone: booking.client_phone || '',
+                            totalInvoices: 0,
+                            totalPaid: 0,
+                            totalDiscount: 0,
+                            totalRemaining: 0,
+                            bookingsCount: 0
+                        };
+                    }
+
+                    clientMap[clientName].totalInvoices += total; // ← التعديل الرئيسي: نضيف total بدلاً من net
+                    clientMap[clientName].totalPaid += paid;
+                    clientMap[clientName].totalDiscount += discount;
+                    clientMap[clientName].totalRemaining += remaining;
+                    clientMap[clientName].bookingsCount += 1;
+                });
+
+                // تطبيق الدفعات على حسابات العملاء
+                payments.forEach(function(payment) {
+                    var clientName = payment.client_name;
+                    if (!clientName || !clientMap[clientName]) return;
+
+                    var amount = parseFloat(payment.amount) || 0;
+                    clientMap[clientName].totalPaid += amount;
+                    clientMap[clientName].totalRemaining = Math.max(0, clientMap[clientName].totalRemaining - amount);
+                });
+
+                // تحويل إلى مصفوفة وفلترة العملاء الذين عليهم متبقي
+                allClientAccounts = Object.values(clientMap)
+                    .filter(function(client) {
+                        return client.totalRemaining > 0.01;
+                    })
+                    .sort(function(a, b) {
+                        return b.totalRemaining - a.totalRemaining;
+                    });
+
+                filteredAccounts = allClientAccounts.slice();
+                displayData(filteredAccounts);
+                updateKpis(allClientAccounts);
+
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+                kpiContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle" style="color:var(--rust);"></i>
+                        <p style="color:var(--rust);">حدث خطأ في تحميل المؤشرات</p>
+                        <span>${error.message}</span>
+                    </div>
+                `;
+                tableContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle" style="color:var(--rust);"></i>
+                        <p style="color:var(--rust);">حدث خطأ في تحميل البيانات</p>
+                        <span>${error.message}</span>
+                        <br><br>
+                        <button class="btn btn-primary" onclick="loadData()">
+                            <i class="fas fa-sync-alt"></i> إعادة المحاولة
+                        </button>
+                    </div>
+                `;
+                showToast('خطأ', 'فشل في تحميل البيانات', 'error');
             }
-        });
-
-        if (!response.ok) {
-            throw new Error('فشل في جلب الحجوزات');
         }
-
-        var bookings = await response.json();
-        console.log('📊 تم جلب الحجوزات:', bookings.length);
-
-        // جلب دفعات العملاء
-        var paymentsResponse = await fetch(SUPABASE_URL + '/rest/v1/client_payments?select=*', {
-            headers: {
-                'apikey': SUPABASE_ANON_KEY,
-                'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
-            }
-        });
-
-        payments = paymentsResponse.ok ? await paymentsResponse.json() : [];
-        console.log('💳 تم جلب الدفعات:', payments.length);
-
-        // ============================================================
-        // تجميع حسابات العملاء - الطريقة المبسطة
-        // ============================================================
-        var clientMap = {};
-
-        // مفتاح موحّد لمطابقة اسم العميل بغض النظر عن الفراغات الزائدة
-        // أو اختلاف حالة الأحرف (مثال: "احمد محمد" مقابل "احمد  محمد ")
-        // هذا يمنع ظهور نفس العميل كصفين منفصلين عندما يُكتب اسمه يدويًا
-        // في صفحة الفواتير بينما يُختار من القائمة المنسدلة في صفحة الدفعات
-        function normalizeClientKey(name) {
-            return (name || '')
-                .toString()
-                .trim()
-                .replace(/\s+/g, ' ')
-                .toLowerCase();
-        }
-
-        // الخطوة 1: إضافة جميع العملاء من الحجوزات
-        bookings.forEach(function(booking) {
-            var clientName = booking.client_name;
-            if (!clientName) return;
-            var key = normalizeClientKey(clientName);
-            if (!key) return;
-
-            var total = parseFloat(booking.total) || 0;
-            var paid = parseFloat(booking.paid) || 0;
-            var discount = parseFloat(booking.discount) || 0;
-            var remaining = parseFloat(booking.remaining) || 0;
-
-            if (!clientMap[key]) {
-                clientMap[key] = {
-                    name: clientName,
-                    phone: booking.client_phone || '',
-                    totalInvoices: 0,
-                    totalPaid: 0,
-                    totalDiscount: 0,
-                    totalRemaining: 0,
-                    bookingsCount: 0
-                };
-            }
-
-            clientMap[key].totalInvoices += total;
-            clientMap[key].totalPaid += paid;
-            clientMap[key].totalDiscount += discount;
-            clientMap[key].totalRemaining += remaining;
-            clientMap[key].bookingsCount += 1;
-        });
-
-        // الخطوة 2: إضافة العملاء الذين لديهم دفعات فقط
-        // (هذا هو الجزء المهم لحل المشكلة)
-        payments.forEach(function(payment) {
-            var clientName = payment.client_name;
-            if (!clientName) return;
-            var key = normalizeClientKey(clientName);
-            if (!key) return;
-
-            // إذا كان العميل غير موجود في clientMap، نقوم بإضافته
-            if (!clientMap[key]) {
-                clientMap[key] = {
-                    name: clientName,
-                    phone: '',
-                    totalInvoices: 0,
-                    totalPaid: 0,
-                    totalDiscount: 0,
-                    totalRemaining: 0,
-                    bookingsCount: 0
-                };
-                console.log('📌 إضافة عميل من الدفعات:', clientName);
-            }
-
-            var amount = parseFloat(payment.amount) || 0;
-            clientMap[key].totalPaid += amount;
-        });
-
-        // الخطوة 3: حساب المتبقي الصحيح لكل عميل
-        // المتبقي = إجمالي الفواتير - إجمالي المدفوع
-        Object.keys(clientMap).forEach(function(key) {
-            var client = clientMap[key];
-            client.totalRemaining = Math.max(0, client.totalInvoices - client.totalPaid);
-        });
-
-        // الخطوة 4: تحويل إلى مصفوفة
-        // نعرض العملاء الذين عليهم متبقي أو لديهم دفعات
-        allClientAccounts = Object.values(clientMap)
-            .filter(function(client) {
-                // نعرض العملاء الذين عليهم متبقي أو لديهم دفعات مسجلة
-                return client.totalRemaining > 0.01 || client.totalPaid > 0;
-            })
-            .sort(function(a, b) {
-                return b.totalRemaining - a.totalRemaining;
-            });
-
-        filteredAccounts = allClientAccounts.slice();
-        displayData(filteredAccounts);
-        updateKpis(allClientAccounts);
-
-        console.log('✅ تم تحديث حسابات العملاء بنجاح، عدد العملاء:', allClientAccounts.length);
-
-    } catch (error) {
-        console.error('❌ خطأ:', error);
-        kpiContainer.innerHTML = `
-            <div class="empty-state">
-                <i class="fas fa-exclamation-triangle" style="color:var(--rust);"></i>
-                <p style="color:var(--rust);">حدث خطأ في تحميل المؤشرات</p>
-                <span>${error.message}</span>
-            </div>
-        `;
-        tableContainer.innerHTML = `
-            <div class="empty-state">
-                <i class="fas fa-exclamation-triangle" style="color:var(--rust);"></i>
-                <p style="color:var(--rust);">حدث خطأ في تحميل البيانات</p>
-                <span>${error.message}</span>
-                <br><br>
-                <button class="btn btn-primary" onclick="loadData()">
-                    <i class="fas fa-sync-alt"></i> إعادة المحاولة
-                </button>
-            </div>
-        `;
-        showToast('خطأ', 'فشل في تحميل البيانات', 'error');
-    }
-}
 
         /**
          * ============================================================
@@ -1576,7 +1518,7 @@ async function loadData() {
             accounts.forEach(function(client) {
                 totalDue += client.totalRemaining;
                 totalPaid += client.totalPaid;
-                totalInvoices += client.totalInvoices;
+                totalInvoices += client.totalInvoices; // الآن تعكس total (بدون خصم)
             });
 
             kpiContainer.innerHTML = `
@@ -1647,7 +1589,7 @@ async function loadData() {
                 var remaining = client.totalRemaining;
 
                 // تحديد حالة الدفع
-                var paidPercent = client.totalInvoices > 0 ? (client.totalPaid / client.totalInvoices) * 100 : 100;
+                var paidPercent = client.totalInvoices > 0 ? (client.totalPaid / client.totalInvoices) * 100 : 0;
                 if (paidPercent > 99) {
                     statusClass = 'status-paid';
                     statusText = 'مسدد';
@@ -1656,22 +1598,19 @@ async function loadData() {
                     statusText = 'دفع جزئي';
                 }
 
-                // إذا كان العميل ليس لديه حجوزات ولكن لديه دفعات
-                var bookingsDisplay = client.bookingsCount > 0 ? client.bookingsCount : '0';
-
                 html += `
                     <tr data-name="${client.name}">
                         <td>${index + 1}</td>
                         <td><strong>${client.name}</strong></td>
                         <td>${client.phone || '-'}</td>
-                        <td>${bookingsDisplay}</td>
+                        <td>${client.bookingsCount}</td>
                         <td style="font-weight:700;color:var(--ink);">${client.totalInvoices.toFixed(2)}</td>
                         <td style="color:var(--accent-ink);">${client.totalDiscount.toFixed(2)}</td>
                         <td style="color:var(--teal);font-weight:600;">${client.totalPaid.toFixed(2)}</td>
-                        <td style="font-weight:700;color:${remaining > 0 ? 'var(--rust)' : 'var(--teal)'};font-size:0.9rem;">${remaining.toFixed(2)}</td>
+                        <td style="font-weight:700;color:var(--rust);font-size:0.9rem;">${client.totalRemaining.toFixed(2)}</td>
                         <td><span class="status-badge ${statusClass}">${statusText}</span></td>
                         <td>
-                            <button class="btn btn-success btn-sm" onclick="openPaymentForm('${client.name}', ${remaining})">
+                            <button class="btn btn-success btn-sm" onclick="openPaymentForm('${client.name}', ${client.totalRemaining})">
                                 <i class="fas fa-hand-holding-usd"></i> تسجيل دفعة
                             </button>
                         </td>
@@ -1830,6 +1769,19 @@ async function loadData() {
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
 
             try {
+                /**
+                 * ============================================================
+                 * دالة توليد UUID
+                 * ============================================================
+                 */
+                function generateUUID() {
+                    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                        var r = Math.random() * 16 | 0;
+                        var v = c === 'x' ? r : (r & 0x3 | 0x8);
+                        return v.toString(16);
+                    });
+                }
+
                 // تنظيف اسم العميل من المسافات الزائدة
                 var cleanName = activeClientName.trim().replace(/\s+/g, ' ');
                 console.log('🔍 البحث عن العميل:', cleanName);
@@ -1913,6 +1865,7 @@ async function loadData() {
                                 } else if (cleanName.includes(clientName)) {
                                     score = 50;
                                 } else {
+                                    // حساب التشابه (Levenshtein-like)
                                     var maxLen = Math.max(clientName.length, cleanName.length);
                                     if (maxLen > 0) {
                                         var commonChars = 0;
@@ -1966,6 +1919,7 @@ async function loadData() {
                             var clientName = client.name || '';
                             var clientLower = clientName.toLowerCase();
                             
+                            // حساب التشابه
                             var score = 0;
                             if (clientName === cleanName) {
                                 score = 100;
@@ -1976,6 +1930,7 @@ async function loadData() {
                             } else if (cleanName.includes(clientName)) {
                                 score = 50;
                             } else {
+                                // حساب الأحرف المشتركة
                                 var commonChars = 0;
                                 var maxLen = Math.max(clientLower.length, cleanLower.length);
                                 for (var i = 0; i < Math.min(clientLower.length, cleanLower.length); i++) {
@@ -2008,6 +1963,7 @@ async function loadData() {
                 if (!found) {
                     console.log('⚠️ لم يتم العثور على العميل "' + cleanName + '"، جاري إنشائه...');
                     
+                    // محاولة جلب رقم الهاتف من bookings
                     try {
                         var phoneResponse = await fetch(
                             SUPABASE_URL + '/rest/v1/bookings?select=client_phone&client_name=ilike.' + encodeURIComponent(cleanName) + '&limit=1',
@@ -2103,6 +2059,9 @@ async function loadData() {
                     body: JSON.stringify(paymentData)
                 });
 
+                // ============================================================
+                // معالجة الاستجابة
+                // ============================================================
                 if (!response.ok) {
                     var errorText = await response.text();
                     console.error('❌ خطأ من Supabase:', response.status, errorText);
@@ -2118,6 +2077,7 @@ async function loadData() {
                     'success'
                 );
 
+                // إغلاق النموذج وإعادة تحميل البيانات
                 closePaymentForm();
                 await loadData();
 
@@ -2152,7 +2112,7 @@ async function loadData() {
         console.log('👤 المستخدم:', user.name || 'غير معروف');
         console.log('🔑 الدور:', user.role || 'user');
         console.log('✅ جاهزة للعمل');
-        console.log('📌 ملاحظة: تم إصلاح مشكلة عرض الدفعات للعملاء الذين ليس لديهم حجوزات');
+        console.log('📌 ملاحظة: تم تعديل حساب "إجمالي الفواتير" ليعكس قيمة total (بدون خصم)');
     </script>
 
 </body>
