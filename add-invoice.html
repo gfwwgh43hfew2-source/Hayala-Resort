@@ -4394,11 +4394,30 @@
                         scale: 2,
                         useCORS: true,
                         logging: false,
-                        letterRendering: true,
                         allowTaint: true,
                         backgroundColor: '#ffffff',
                         width: element.scrollWidth,
-                        height: element.scrollHeight
+                        height: element.scrollHeight,
+                        windowWidth: element.scrollWidth,
+                        windowHeight: element.scrollHeight,
+                        onclone: function(clonedDoc) {
+                            // إلغاء تحديد الارتفاع الأقصى وشريط التمرير الخاصين
+                            // بنافذة المعاينة على الشاشة، حتى لا يُقتطع أي جزء
+                            // (مثل تذييل التوقيع) عند التقاط الصورة لملف PDF
+                            var wrapper = clonedDoc.getElementById('printPreviewContent');
+                            if (wrapper) {
+                                wrapper.style.maxHeight = 'none';
+                                wrapper.style.height = 'auto';
+                                wrapper.style.overflow = 'visible';
+                            }
+                            var overlay = clonedDoc.querySelector('.print-preview-overlay');
+                            if (overlay) {
+                                overlay.style.maxHeight = 'none';
+                                overlay.style.height = 'auto';
+                                overlay.style.overflow = 'visible';
+                                overlay.style.position = 'static';
+                            }
+                        }
                     },
                     jsPDF: {
                         unit: 'mm',
