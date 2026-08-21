@@ -1443,18 +1443,32 @@ async function loadData() {
         // ============================================================
         var clientMap = {};
 
+        // مفتاح موحّد لمطابقة اسم العميل بغض النظر عن الفراغات الزائدة
+        // أو اختلاف حالة الأحرف (مثال: "احمد محمد" مقابل "احمد  محمد ")
+        // هذا يمنع ظهور نفس العميل كصفين منفصلين عندما يُكتب اسمه يدويًا
+        // في صفحة الفواتير بينما يُختار من القائمة المنسدلة في صفحة الدفعات
+        function normalizeClientKey(name) {
+            return (name || '')
+                .toString()
+                .trim()
+                .replace(/\s+/g, ' ')
+                .toLowerCase();
+        }
+
         // الخطوة 1: إضافة جميع العملاء من الحجوزات
         bookings.forEach(function(booking) {
             var clientName = booking.client_name;
             if (!clientName) return;
+            var key = normalizeClientKey(clientName);
+            if (!key) return;
 
             var total = parseFloat(booking.total) || 0;
             var paid = parseFloat(booking.paid) || 0;
             var discount = parseFloat(booking.discount) || 0;
             var remaining = parseFloat(booking.remaining) || 0;
 
-            if (!clientMap[clientName]) {
-                clientMap[clientName] = {
+            if (!clientMap[key]) {
+                clientMap[key] = {
                     name: clientName,
                     phone: booking.client_phone || '',
                     totalInvoices: 0,
@@ -1465,11 +1479,11 @@ async function loadData() {
                 };
             }
 
-            clientMap[clientName].totalInvoices += total;
-            clientMap[clientName].totalPaid += paid;
-            clientMap[clientName].totalDiscount += discount;
-            clientMap[clientName].totalRemaining += remaining;
-            clientMap[clientName].bookingsCount += 1;
+            clientMap[key].totalInvoices += total;
+            clientMap[key].totalPaid += paid;
+            clientMap[key].totalDiscount += discount;
+            clientMap[key].totalRemaining += remaining;
+            clientMap[key].bookingsCount += 1;
         });
 
         // الخطوة 2: إضافة العملاء الذين لديهم دفعات فقط
@@ -1477,10 +1491,12 @@ async function loadData() {
         payments.forEach(function(payment) {
             var clientName = payment.client_name;
             if (!clientName) return;
+            var key = normalizeClientKey(clientName);
+            if (!key) return;
 
             // إذا كان العميل غير موجود في clientMap، نقوم بإضافته
-            if (!clientMap[clientName]) {
-                clientMap[clientName] = {
+            if (!clientMap[key]) {
+                clientMap[key] = {
                     name: clientName,
                     phone: '',
                     totalInvoices: 0,
@@ -1493,7 +1509,7 @@ async function loadData() {
             }
 
             var amount = parseFloat(payment.amount) || 0;
-            clientMap[clientName].totalPaid += amount;
+            clientMap[key].totalPaid += amount;
         });
 
         // الخطوة 3: حساب المتبقي الصحيح لكل عميل
