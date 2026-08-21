@@ -1994,25 +1994,34 @@
             font-size: calc(0.58rem * var(--scale-factor));
         }
 
-        /* --- قسم الملخص المالي والتوقيع --- */
+        /* --- قسم الملخص المالي --- */
         .print-preview-overlay .print-wrapper .invoice-summary {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-start;
             align-items: flex-start;
             gap: calc(24px * var(--scale-factor));
             margin-top: calc(22px * var(--scale-factor));
             padding-top: calc(18px * var(--scale-factor));
             border-top: 1px dashed var(--line-strong);
         }
-        .print-preview-overlay .print-wrapper .summary-notes {
-            flex: 1;
-            min-width: 0;
+        /* --- قسم الشكر والتوقيع (أسفل الفاتورة) --- */
+        .print-preview-overlay .print-wrapper .bottom-signature {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: calc(24px * var(--scale-factor));
+            margin-top: calc(22px * var(--scale-factor));
+            padding-top: calc(18px * var(--scale-factor));
+            border-top: 1px dashed var(--line-strong);
         }
         .print-preview-overlay .print-wrapper .summary-notes .thanks {
             font-family: var(--font-serif);
             font-size: calc(0.85rem * var(--scale-factor));
             color: var(--ink-soft);
             margin-bottom: calc(18px * var(--scale-factor));
+        }
+        .print-preview-overlay .print-wrapper .bottom-signature .thanks {
+            margin-bottom: 0;
         }
         .print-preview-overlay .print-wrapper .signature .sig-label {
             font-size: calc(0.68rem * var(--scale-factor));
@@ -3864,14 +3873,6 @@
                     </table>
 
                     <div class="invoice-summary">
-                        <div class="summary-notes">
-                            <p class="thanks">"${footer}"</p>
-                            <div class="signature">
-                                <p class="sig-label">توقيع واستلام العميل</p>
-                                <div class="line"></div>
-                                <p class="sig-caption">الاسم والتوقيع</p>
-                            </div>
-                        </div>
                         <div class="summary-box">
                             <div class="summary-row"><span>الإجمالي</span><span>${total} ر.س</span></div>
                             <div class="summary-row discount"><span>الخصم</span><span>- ${discount} ر.س</span></div>
@@ -3891,6 +3892,15 @@
                             <p>يرجى التأكد من قراءة التفاصيل بدقة (يمكنكم طلب فيديوهات إضافية للمكان)</p>
                             <p>إدارة المنتجع غير مسؤولة عن فقدان أو تلف المقتنيات الشخصية، لذا توصي بالتأكد من عدم نسيان أي أغراض قبل المغادرة</p>
                             <p>يمنع إحداث أي تلف أو تخريب في مرافق المنتجع أو محتوياته، ويحمل المستأجر قيمة أي أضرار تنتج عن الاستخدام غير المعتدل</p>
+                        </div>
+                    </div>
+
+                    <div class="summary-notes bottom-signature">
+                        <p class="thanks">"${footer}"</p>
+                        <div class="signature">
+                            <p class="sig-label">توقيع واستلام العميل</p>
+                            <div class="line"></div>
+                            <p class="sig-caption">الاسم والتوقيع</p>
                         </div>
                     </div>
 
@@ -4238,7 +4248,7 @@
 
                             .invoice-summary {
                                 display: flex !important;
-                                justify-content: space-between !important;
+                                justify-content: flex-start !important;
                                 align-items: flex-start !important;
                                 flex-direction: row !important;
                                 gap: 20px !important;
@@ -4246,8 +4256,18 @@
                                 padding-top: 14px !important;
                                 border-top: 1px dashed var(--line-strong) !important;
                             }
-                            .summary-notes { flex: 1; min-width: 0; }
+                            .bottom-signature {
+                                display: flex !important;
+                                justify-content: space-between !important;
+                                align-items: flex-end !important;
+                                flex-direction: row !important;
+                                gap: 20px !important;
+                                margin-top: 18px !important;
+                                padding-top: 14px !important;
+                                border-top: 1px dashed var(--line-strong) !important;
+                            }
                             .summary-notes .thanks { font-family: var(--font-serif) !important; font-size: 13px !important; color: var(--ink-soft) !important; margin-bottom: 16px !important; }
+                            .bottom-signature .thanks { margin-bottom: 0 !important; }
                             .signature .sig-label { font-size: 10px !important; color: var(--ink-mute) !important; font-weight: 700 !important; margin-bottom: 22px !important; }
                             .signature .line { width: 130px !important; border-bottom: 1.5px solid var(--line-strong) !important; }
                             .signature .sig-caption { font-size: 9px !important; color: var(--ink-mute) !important; margin-top: 5px !important; }
@@ -4312,6 +4332,7 @@
 
                             table tbody tr { page-break-inside: avoid !important; break-inside: avoid !important; }
                             .invoice-summary { page-break-inside: avoid !important; break-inside: avoid !important; }
+                            .bottom-signature { page-break-inside: avoid !important; break-inside: avoid !important; }
 
                             * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
 
@@ -4708,16 +4729,8 @@
 
                         <!-- الملخص المالي -->
                         <table style="width:100%;border-collapse:collapse;margin-top:15px;padding-top:12px;border-top:2px dashed #c7d0cc;"><tr>
-                            <td style="vertical-align:top;width:60%;padding-top:12px;">
-                                <p style="font-family:serif;font-size:13px;color:#2c3644;margin:0 0 15px;">"${footer}"</p>
-                                <div style="margin-top:20px;">
-                                    <p style="font-size:11px;color:#6d7883;font-weight:700;margin:0 0 20px;">توقيع واستلام العميل</p>
-                                    <div style="width:120px;border-bottom:2px solid #c7d0cc;"></div>
-                                    <p style="font-size:10px;color:#6d7883;margin:4px 0 0;">الاسم والتوقيع</p>
-                                </div>
-                            </td>
-                            <td style="vertical-align:top;width:40%;padding-top:12px;">
-                                <div style="width:100%;max-width:200px;margin-right:0;margin-left:auto;border:2px solid #dd9f2e;border-radius:8px;">
+                            <td style="vertical-align:top;width:100%;padding-top:12px;">
+                                <div style="width:100%;max-width:280px;margin-right:0;margin-left:auto;border:2px solid #dd9f2e;border-radius:8px;">
                                     <div style="overflow:hidden;padding:6px 14px;border-bottom:1px dashed #dde3e0;background:#ffffff;font-size:11px;">
                                         <span style="float:right;color:#2c3644;">الإجمالي</span>
                                         <span style="float:left;font-weight:700;color:#121821;">${total} ر.س</span>
@@ -4752,6 +4765,18 @@
                                 <li>يمنع إحداث أي تلف، ويحمل المستأجر قيمة الأضرار</li>
                             </ol>
                         </div>
+
+                        <!-- الشكر والتوقيع -->
+                        <table style="width:100%;border-collapse:collapse;margin-top:15px;padding-top:12px;border-top:2px dashed #c7d0cc;"><tr>
+                            <td style="vertical-align:bottom;width:55%;">
+                                <p style="font-family:serif;font-size:13px;color:#2c3644;margin:0;">"${footer}"</p>
+                            </td>
+                            <td style="vertical-align:bottom;width:45%;text-align:left;">
+                                <p style="font-size:11px;color:#6d7883;font-weight:700;margin:0 0 20px;">توقيع واستلام العميل</p>
+                                <div style="width:140px;margin-right:0;margin-left:auto;border-bottom:2px solid #c7d0cc;"></div>
+                                <p style="font-size:10px;color:#6d7883;margin:4px 0 0;">الاسم والتوقيع</p>
+                            </td>
+                        </tr></table>
 
                         <!-- تذييل -->
                         <div style="margin-top:12px;padding-top:8px;border-top:1px solid #dde3e0;text-align:center;font-size:10px;color:#6d7883;">
