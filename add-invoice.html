@@ -45,6 +45,7 @@
                 if (!session) {
                     console.warn('⚠️ لا توجد جلسة نشطة');
                     showAuthError('⚠️ يرجى تسجيل الدخول أولاً. سيتم تحويلك خلال 3 ثوان...');
+                    // نأجل الـ Redirect عشان نشوف الـ Console
                     setTimeout(function() {
                         window.location.replace('login.html');
                     }, 3000);
@@ -53,6 +54,7 @@
 
                 console.log('✅ توجد جلسة للمستخدم:', session.user.email);
 
+                // جلب بيانات البروفايل
                 var { data: profile, error: profileError } = await supabaseClient
                     .from('profiles')
                     .select('*')
@@ -78,6 +80,7 @@
 
                 console.log('✅ تم جلب البروفايل بنجاح:', profile.name);
 
+                // تخزين بيانات المستخدم في window.currentUser
                 window.currentUser = {
                     id: session.user.id,
                     email: session.user.email,
@@ -87,8 +90,10 @@
 
                 console.log('👤 المستخدم الحالي:', window.currentUser);
 
+                // إخفاء رسالة الخطأ إذا ظهرت
                 hideAuthError();
 
+                // متابعة تحميل الصفحة
                 initializePage();
 
             } catch (error) {
@@ -97,6 +102,11 @@
             }
         })();
 
+        /**
+         * ============================================================
+         * دوال عرض رسائل الخطأ في الصفحة
+         * ============================================================
+         */
         function showAuthError(message) {
             var existing = document.getElementById('authErrorContainer');
             if (existing) {
@@ -166,13 +176,25 @@
             }
         }
 
+        /**
+         * ============================================================
+         * تهيئة الصفحة بعد التحقق
+         * ============================================================
+         */
         function initializePage() {
             console.log('🚀 بدء تهيئة الصفحة...');
+            // جميع الدوال الأصلية موجودة في الأسفل
         }
 
+        /**
+         * ============================================================
+         * نقل بيانات المستخدم من checkAuth إلى initApp
+         * ============================================================
+         */
         (function waitForUser() {
             if (window.currentUser && window.currentUser.email) {
                 console.log('✅ تم جلب المستخدم بنجاح:', window.currentUser.email);
+                // ننفذ initApp يدوياً بعد تحميل الصفحة
                 if (typeof initApp === 'function') {
                     initApp();
                 }
@@ -222,6 +244,8 @@
             --header-height: 60px;
             --stripe-height: 4px;
             --mobile-nav-height: 56px;
+
+            /* ===== SCALE DOWN 10% ===== */
             --scale-factor: 0.9;
         }
 
@@ -255,6 +279,9 @@
             color: inherit;
         }
 
+        /* ============================================================
+           SCROLLBAR STYLING
+           ============================================================ */
         ::-webkit-scrollbar {
             width: calc(5px * var(--scale-factor));
             height: calc(5px * var(--scale-factor));
@@ -270,6 +297,9 @@
             background: var(--ink-mute);
         }
 
+        /* ============================================================
+           SWATCH STRIPE
+           ============================================================ */
         .swatch-stripe {
             height: calc(var(--stripe-height) * var(--scale-factor));
             flex-shrink: 0;
@@ -293,6 +323,9 @@
             background: var(--blue);
         }
 
+        /* ============================================================
+           HEADER - تصميم محسّن
+           ============================================================ */
         header {
             position: sticky;
             top: 0;
@@ -359,6 +392,7 @@
             font-weight: 600;
         }
 
+        /* ===== القائمة العلوية ===== */
         nav {
             display: flex;
             align-items: center;
@@ -460,6 +494,9 @@
             background: var(--surface);
         }
 
+        /* ============================================================
+           MOBILE NAV
+           ============================================================ */
         .mobile-nav-overlay {
             display: none;
             position: fixed;
@@ -586,6 +623,9 @@
             width: 100%;
         }
 
+        /* ============================================================
+           MAIN CONTENT
+           ============================================================ */
         .main-content {
             display: flex;
             flex: 1;
@@ -634,6 +674,9 @@
             padding: calc(16px * var(--scale-factor)) calc(18px * var(--scale-factor)) calc(18px * var(--scale-factor)) calc(18px * var(--scale-factor));
         }
 
+        /* ============================================================
+           BOTTOM BAR
+           ============================================================ */
         .bottom-bar {
             display: flex;
             align-items: stretch;
@@ -787,6 +830,9 @@
             margin: 0 calc(3px * var(--scale-factor));
         }
 
+        /* ============================================================
+           RESPONSIVE - MOBILE FIXES
+           ============================================================ */
         @media (min-width: 769px) {
             .mobile-nav-bottom,
             .mobile-nav-overlay,
@@ -1065,6 +1111,9 @@
             }
         }
 
+        /* ============================================================
+           SECTION TITLE
+           ============================================================ */
         .section-title {
             font-size: calc(0.68rem * var(--scale-factor));
             color: var(--ink);
@@ -1320,6 +1369,7 @@
             margin-top: calc(6px * var(--scale-factor));
         }
 
+        /* ===== ITEMS TABLE ===== */
         .items-table-wrapper {
             flex: 1;
             overflow: hidden;
@@ -1477,6 +1527,9 @@
             opacity: 0.8;
         }
 
+        /* ============================================================
+           TOAST
+           ============================================================ */
         .toast-container {
             position: fixed;
             top: calc(80px * var(--scale-factor));
@@ -1581,6 +1634,9 @@
             background: var(--line);
         }
 
+        /* ============================================================
+           SYSTEM PRINT PREVIEW OVERLAY
+           ============================================================ */
         .print-preview-overlay {
             display: none;
             position: fixed;
@@ -1654,6 +1710,11 @@
             box-shadow: 0 calc(20px * var(--scale-factor)) calc(60px * var(--scale-factor)) rgba(0, 0, 0, 0.4);
         }
 
+        /* ============================================================
+           PRINT PREVIEW STYLES — تصميم فاتورة راقٍ لبرنامج محاسبة
+           ============================================================ */
+
+        /* --- الإطار العام للفاتورة --- */
         .print-preview-overlay .print-wrapper {
             background: linear-gradient(180deg, #fffefb 0%, #fdfbf5 100%);
             position: relative;
@@ -1668,6 +1729,7 @@
             pointer-events: none;
         }
 
+        /* --- الترويسة --- */
         .print-preview-overlay .print-wrapper .invoice-header {
             display: flex;
             align-items: flex-start;
@@ -1803,6 +1865,7 @@
             font-weight: 600;
         }
 
+        /* --- شارة حالة السداد --- */
         .print-preview-overlay .print-wrapper .status-badge {
             display: inline-flex;
             align-items: center;
@@ -1821,6 +1884,7 @@
             color: var(--rust);
         }
 
+        /* --- شريط بيانات الفاتورة --- */
         .print-preview-overlay .print-wrapper .info-grid {
             display: flex;
             flex-wrap: wrap;
@@ -1860,6 +1924,7 @@
             color: var(--accent-ink);
         }
 
+        /* --- جدول البنود --- */
         .print-preview-overlay .print-wrapper table {
             width: 100%;
             border-collapse: separate;
@@ -1927,6 +1992,7 @@
             font-size: calc(0.58rem * var(--scale-factor));
         }
 
+        /* --- قسم الملخص المالي --- */
         .print-preview-overlay .print-wrapper .invoice-summary {
             display: flex;
             justify-content: flex-start;
@@ -1936,7 +2002,7 @@
             padding-top: calc(18px * var(--scale-factor));
             border-top: 1px dashed var(--line-strong);
         }
-
+        /* --- قسم الشكر والتوقيع (أسفل الفاتورة) --- */
         .print-preview-overlay .print-wrapper .bottom-signature {
             display: flex;
             justify-content: space-between;
@@ -2011,6 +2077,7 @@
             font-weight: 800;
         }
 
+        /* --- قسم الملاحظات --- */
         .print-preview-overlay .print-wrapper .notes-section {
             margin-top: calc(22px * var(--scale-factor));
             padding-top: 0;
@@ -2068,6 +2135,7 @@
             line-height: 1;
         }
 
+        /* --- تذييل ختامي --- */
         .print-preview-overlay .print-wrapper .print-brand-footer {
             margin-top: calc(20px * var(--scale-factor));
             padding-top: calc(12px * var(--scale-factor));
@@ -2114,6 +2182,9 @@
             color: var(--accent-ink);
         }
 
+        /* ============================================================
+           PRINT PREVIEW RESPONSIVE
+           ============================================================ */
         @media (max-width: 768px) {
             .print-preview-overlay .print-wrapper {
                 padding: calc(20px * var(--scale-factor)) calc(16px * var(--scale-factor));
@@ -2217,6 +2288,9 @@
             }
         }
 
+        /* ============================================================
+           CLIENT SUGGESTIONS STYLES
+           ============================================================ */
         .client-suggestions {
             position: relative;
             width: 100%;
@@ -2294,6 +2368,9 @@
             font-size: calc(0.75rem * var(--scale-factor));
         }
 
+        /* ============================================================
+           PROPERTIES SELECT
+           ============================================================ */
         .property-select {
             width: 100%;
             padding: calc(7px * var(--scale-factor)) calc(12px * var(--scale-factor));
@@ -2322,6 +2399,9 @@
             border-style: dashed;
         }
 
+        /* ============================================================
+           DATE INPUT - تنسيق DD/MM/YYYY (flatpickr)
+           ============================================================ */
         .date-wrapper {
             position: relative;
             width: 100%;
@@ -2379,6 +2459,9 @@
             color: var(--ink);
         }
 
+        /* ============================================================
+           FIX: ADD BOOKING BUTTON VISIBILITY
+           ============================================================ */
         .btn-add {
             display: inline-flex !important;
             align-items: center !important;
@@ -2422,6 +2505,9 @@
             opacity: 1 !important;
         }
 
+        /* ============================================================
+           تحسين عرض البطاقات في الموبايل
+           ============================================================ */
         @media (max-width: 768px) {
             .booking-card .card-row {
                 display: flex;
@@ -2486,6 +2572,9 @@
             font-size: calc(0.7rem * var(--scale-factor));
         }
 
+        /* ============================================================
+           PRINT MEDIA QUERY - التصميم المحسن بالكامل للطباعة
+           ============================================================ */
         @media print {
             .print-preview-overlay .print-actions {
                 display: none !important;
@@ -2518,6 +2607,9 @@
             }
         }
 
+        /* ============================================================
+           OFFSCREEN PDF WRAPPER - عنصر مخفي لتوليد PDF بدون معاينة
+           ============================================================ */
         #pdfOffscreenOverlay {
             display: block;
             position: fixed;
@@ -2952,7 +3044,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/l10n/ar.js">
     </script>
 
-    <!-- html2canvas -->
+    <!-- html2canvas (نسخة حديثة مستقلة) — تُستخدم للالتقاط بدل نسخة html2canvas
+         القديمة المدمجة داخل html2pdf.bundle، لأن تلك النسخة القديمة تفشل في
+         عرض هذا القالب (نصوص عربية RTL + جداول) وتنتج صفحة فارغة -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
     </script>
 
@@ -2960,6 +3054,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js">
     </script>
     <script>
+        // نستخدم html2canvas الحديثة (أعلاه) دومًا مع html2pdf، بدل نسختها الداخلية
+        // القديمة، عبر التقاط الصورة يدويًا وتمريرها إلى html2pdf كـ canvas جاهز.
         window.__generatePdfFromElement = function(element, opt) {
             return html2canvas(element, opt.html2canvas || { scale: 2, useCORS: true, backgroundColor: '#ffffff' })
                 .then(function(canvas) {
@@ -2989,291 +3085,14 @@
 
         /**
          * ============================================================
-         * INLINE ICONS — أيقونات SVG مضمّنة (بديل عن Font Awesome)
-         * تُستخدم حصراً داخل قالب الفاتورة (buildInvoiceHTML) لأن
-         * أيقونات الخط الخارجي (Font Awesome) قد لا تُحمَّل بشكل
-         * موثوق عند التقاط الفاتورة كصورة لتوليد PDF
-         * ============================================================
-         */
-        var INVOICE_ICONS = {
-            checkCircle: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.125em;fill:currentColor;"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm-1.2 14.5-4-4 1.4-1.4 2.6 2.6 5.6-5.6 1.4 1.4z"/></svg>',
-            exclamationCircle: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.125em;fill:currentColor;"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 15h-2v-2h2zm0-4h-2V7h2z"/></svg>',
-            mapMarker: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.125em;fill:currentColor;"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 14.5 9 2.5 2.5 0 0 1 12 11.5z"/></svg>',
-            phone: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.125em;fill:currentColor;"><path d="M6.6 10.8c1.4 2.7 3.6 4.9 6.3 6.3l2.1-2.1c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.5.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.8 21 3 13.2 3 4c0-.6.4-1 1-1h3.6c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.5.1.4 0 .8-.2 1z"/></svg>',
-            signIn: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.125em;fill:currentColor;"><path d="M11 4h6a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-6v-2h6V6h-6zm-1.3 4.3 1.4-1.4L15.4 11l-4.3 4.1-1.4-1.4L11.6 12H2v-2h9.6z"/></svg>',
-            signOut: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.125em;fill:currentColor;"><path d="M13 4H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6v-2H7V6h6zm4.3 4.3-1.4 1.4L17.6 11H8v2h9.6l-1.7 1.7 1.4 1.4L21.4 12z"/></svg>',
-            stickyNote: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.125em;fill:currentColor;"><path d="M4 4h13l3 3v13H4zm12.4 1.6L18.4 7H16.4zM6 8h9v2H6zm0 4h9v2H6zm0 4h6v2H6z"/></svg>'
-        };
-
-        /**
-         * ============================================================
-         * IMAGE TO BASE64 (مع تخزين مؤقت) — لتضمين الشعار كصورة داخلية
-         * بدل رابط خارجي، لضمان ظهوره دائمًا عند التقاط الفاتورة كصورة
-         * ============================================================
-         */
-        var logoBase64Cache = null;
-        var logoBase64Promise = null;
-
-        function getLogoAsBase64(url) {
-            if (!url) return Promise.resolve('');
-            if (logoBase64Cache) return Promise.resolve(logoBase64Cache);
-            if (logoBase64Promise) return logoBase64Promise;
-
-            logoBase64Promise = fetch(url)
-                .then(function(res) { return res.blob(); })
-                .then(function(blob) {
-                    return new Promise(function(resolve, reject) {
-                        var reader = new FileReader();
-                        reader.onload = function() { resolve(reader.result); };
-                        reader.onerror = reject;
-                        reader.readAsDataURL(blob);
-                    });
-                })
-                .then(function(dataUrl) {
-                    logoBase64Cache = dataUrl;
-                    return dataUrl;
-                })
-                .catch(function(error) {
-                    console.warn('⚠️ تعذّر تحويل الشعار إلى Base64، سيتم استخدام الرابط مباشرة:', error.message);
-                    return url;
-                });
-
-            return logoBase64Promise;
-        }
-
-        /**
-         * ============================================================
-         * GET ARABIC DAY NAME — يرجع اسم اليوم بالعربي (السبت، الأحد...)
-         * ============================================================
-         */
-        function getArabicDayName(dateStr) {
-            if (!dateStr) return '';
-            var d = new Date(dateStr);
-            if (isNaN(d.getTime())) return '';
-            return d.toLocaleDateString('ar-EG', { weekday: 'long' });
-        }
-
-        /**
-         * ============================================================
-         * BUILD INVOICE HTML — دالة موحّدة تبني قالب الفاتورة
-         * تُستخدم في المعاينة العادية وفي التوليد المخفي لـ PDF معاً
-         * ============================================================
-         */
-        function buildInvoiceHTML(client, phone, invNum, book, date, total, discount, paid, remaining, isPaidFull, qrContainerId, bookingsData) {
-            var companyName = settings.companyName || 'منتجع حياله';
-            var companyAddress = settings.companyAddress || '';
-            var companyPhone = settings.companyPhone || '';
-            var companyLogo = logoBase64Cache || settings.companyLogo || '';
-            var footer = settings.invoiceFooter || 'شكراً لثقتكم بنا';
-
-            var statusBadgeHtml = isPaidFull ?
-                '<span class="status-badge paid">' + INVOICE_ICONS.checkCircle + ' مدفوعة بالكامل</span>' :
-                '<span class="status-badge due">' + INVOICE_ICONS.exclamationCircle + ' يوجد مبلغ مستحق</span>';
-
-            var bookingsArray = bookingsData || bookings || [];
-
-            var html = `
-                <div class="invoice-header">
-                    <div class="logo-section">
-                        <div class="logo-box">
-                            ${companyLogo ? `<img src="${companyLogo}" alt="منتجع حياله" crossorigin="anonymous" />` : `<span style="font-size:2.4rem;font-weight:900;color:#121821;">ح</span>`}
-                        </div>
-                        <div class="company-details">
-                            <span class="eyebrow"></span>
-                            <h2>${companyName}</h2>
-                            <div class="header-rule"></div>
-                            <p>
-                                <span style="color:var(--accent-ink);">${INVOICE_ICONS.mapMarker}</span> ${companyAddress}<br/>
-                                <span style="color:var(--accent-ink);">${INVOICE_ICONS.phone}</span> ${companyPhone}
-                            </p>
-                        </div>
-                    </div>
-                    <div class="invoice-title">
-                        <span class="invoice-title-label">رقم الفاتورة</span>
-                        <span class="invoice-title-number">${invNum}</span>
-                        <div class="qr-code" id="${qrContainerId}">
-                        </div>
-                        <span class="qr-label">امسح للتحقق من الفاتورة</span>
-                    </div>
-                </div>
-
-                <div class="info-grid">
-                    <div class="item"><span class="label">الرقم الدفتري</span><div class="value">${book}</div></div>
-                    <div class="item"><span class="label">تاريخ الإصدار</span><div class="value">${date}</div></div>
-                    <div class="item highlight"><span class="label">اسم العميل</span><div class="value">${client}</div></div>
-                    <div class="item"><span class="label">رقم الجوال</span><div class="value">${phone}</div></div>
-                    <div class="item"><span class="label">حالة الفاتورة</span><div class="value">${statusBadgeHtml}</div></div>
-                </div>
-
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width:30px;">#</th>
-                            <th style="text-align:right;">وصف الخدمة / العقار</th>
-                            <th>عدد الليالي</th>
-                            <th>سعر الليلة</th>
-                            <th>الإجمالي</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-
-            bookingsArray.forEach(function(item, index) {
-                var checkInDayName = getArabicDayName(item.checkIn);
-                var checkOutDayName = getArabicDayName(item.checkOut);
-                var checkInDateFormatted = item.checkIn ? (checkInDayName + ' ' + new Date(item.checkIn).toLocaleDateString('ar-EG')) : 'غير محدد';
-                var checkInTimeFormatted = item.checkInTime || 'غير محدد';
-                var checkOutDateFormatted = item.checkOut ? (checkOutDayName + ' ' + new Date(item.checkOut).toLocaleDateString('ar-EG')) : 'غير محدد';
-                var checkOutTimeFormatted = item.checkOutTime || 'غير محدد';
-
-                html += `
-                    <tr class="data-row">
-                        <td>${index + 1}</td>
-                        <td style="text-align:right;font-weight:600;color:var(--ink);">${item.property}</td>
-                        <td>${item.nights}</td>
-                        <td>${item.dailyPrice.toFixed(2)}</td>
-                        <td class="row-total">${item.total.toFixed(2)} ر.س</td>
-                    </tr>
-                    <tr class="stay-meta-row">
-                        <td colspan="5">
-                            <span class="meta-piece"><span style="color:var(--teal);">${INVOICE_ICONS.signIn}</span> <strong>الدخول:</strong> ${checkInDateFormatted} - ${checkInTimeFormatted}</span>
-                            <span class="meta-piece"><span style="color:var(--rust);">${INVOICE_ICONS.signOut}</span> <strong>الخروج:</strong> ${checkOutDateFormatted} - ${checkOutTimeFormatted}</span>
-                            ${item.stayType ? `<span class="stay-chip">${item.stayType}</span>` : ''}
-                        </td>
-                    </tr>
-                `;
-            });
-
-            html += `
-                    </tbody>
-                </table>
-
-                <div class="invoice-summary">
-                    <div class="summary-box">
-                        <div class="summary-row"><span>الإجمالي</span><span>${total} ر.س</span></div>
-                        <div class="summary-row discount"><span>الخصم</span><span>- ${discount} ر.س</span></div>
-                        <div class="summary-row"><span>المدفوع</span><span>${paid} ر.س</span></div>
-                        <div class="summary-row net"><span>المتبقي المستحق</span><span>${remaining} ر.س</span></div>
-                    </div>
-                </div>
-
-                <div class="notes-section">
-                    <div class="notes-title">
-                        <span style="color:var(--accent-ink);">${INVOICE_ICONS.stickyNote}</span> شروط وملاحظات هامة
-                    </div>
-                    <div class="notes-content">
-                        <p>لا نأخذ تأمين ولا نعمل تشييك بعد الخروج (أمانة المسلم تكفي)</p>
-                        <p>تفهم المرافقون طابع المكان كمزرعة شعبية ليست كالفنادق مثلاً</p>
-                        <p>في حال بقاء أي أغراض (غير مثمنة) دون مراجعة مباشرة من المستأجر يحق لإدارة المنتجع التصرف بها وفق ما تراه</p>
-                        <p>يرجى التأكد من قراءة التفاصيل بدقة (يمكنكم طلب فيديوهات إضافية للمكان)</p>
-                        <p>إدارة المنتجع غير مسؤولة عن فقدان أو تلف المقتنيات الشخصية، لذا توصي بالتأكد من عدم نسيان أي أغراض قبل المغادرة</p>
-                        <p>يمنع إحداث أي تلف أو تخريب في مرافق المنتجع أو محتوياته، ويحمل المستأجر قيمة أي أضرار تنتج عن الاستخدام غير المعتدل</p>
-                    </div>
-                </div>
-
-                <div class="summary-notes bottom-signature">
-                    <p class="thanks">"${footer}"</p>
-                    <div class="signature">
-                        <p class="sig-label">توقيع واستلام العميل</p>
-                        <div class="line"></div>
-                        <p class="sig-caption">الاسم والتوقيع</p>
-                    </div>
-                </div>
-
-                <div class="print-brand-footer">
-                    <strong>${companyName}</strong> — تم إصدار هذه الفاتورة إلكترونياً عبر نظام إدارة الحجوزات
-                </div>
-            `;
-
-            return html;
-        }
-
-        /**
-         * ============================================================
-         * GENERATE QR CODE - حجم مصغر 72px
-         * ============================================================
-         */
-        function generateQRCode(invoiceNumberVal, client, total, containerId) {
-            containerId = containerId || 'qrCodeContainer';
-            var qrContainer = document.getElementById(containerId);
-            if (!qrContainer) {
-                console.warn('⚠️ حاوية QR Code غير موجودة:', containerId);
-                return;
-            }
-
-            qrContainer.innerHTML = '';
-
-            var qrText = 'INV:' + (invoiceNumberVal || '----');
-
-            if (qrText.length > 200) {
-                qrText = qrText.substring(0, 200);
-            }
-
-            try {
-                if (typeof QRCode !== 'undefined') {
-                    var qr = new QRCode(qrContainer, {
-                        text: qrText,
-                        width: 72,
-                        height: 72,
-                        colorDark: '#121821',
-                        colorLight: '#ffffff',
-                        correctLevel: QRCode.CorrectLevel.M
-                    });
-                    console.log('✅ تم إنشاء QR Code مصغر (72px) بنجاح في', containerId);
-                    return;
-                }
-            } catch (error) {
-                console.warn('⚠️ فشل إنشاء QR Code داخلياً، استخدام API خارجي:', error.message);
-            }
-
-            generateQRCodeExternal(invoiceNumberVal, client, total, containerId);
-        }
-
-        function generateQRCodeExternal(invoiceNumberVal, client, total, containerId) {
-            containerId = containerId || 'qrCodeContainer';
-            var qrContainer = document.getElementById(containerId);
-            if (!qrContainer) return;
-
-            qrContainer.innerHTML = '';
-
-            var qrText = 'INV:' + (invoiceNumberVal || '----');
-            var encodedText = encodeURIComponent(qrText);
-
-            var qrImageUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=72x72&data=' + encodedText +
-                '&bgcolor=ffffff&color=121821&margin=4';
-
-            var img = document.createElement('img');
-            img.crossOrigin = 'anonymous';
-            img.src = qrImageUrl;
-            img.alt = 'QR Code';
-            img.style.width = '100%';
-            img.style.height = '100%';
-            img.style.objectFit = 'contain';
-
-            img.onerror = function() {
-                qrContainer.innerHTML = `
-                            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;background:#f8f9fa;border-radius:4px;">
-                                <i class="fas fa-qrcode" style="font-size:1.5rem;color:var(--accent);"></i>
-                                <span style="font-size:0.4rem;color:var(--ink-mute);">${invoiceNumberVal || ''}</span>
-                            </div>
-                        `;
-            };
-
-            img.onload = function() {
-                console.log('✅ تم إنشاء QR Code مصغر بواسطة API خارجي في', containerId);
-            };
-
-            qrContainer.appendChild(img);
-        }
-
-        /**
-         * ============================================================
          * استخدام المتغير العام من التحقق الأولي - مع انتظار تحميل المستخدم
          * ============================================================
          */
         (function initApp() {
+            // ننتظر حتى يتم تعبئة window.currentUser
             if (!window.currentUser || !window.currentUser.email) {
                 console.log('⏳ جاري انتظار تحميل بيانات المستخدم...');
+                // نعيد المحاولة بعد 100 مللي ثانية
                 setTimeout(initApp, 100);
                 return;
             }
@@ -3463,13 +3282,15 @@
                     if (buttons && buttons.length > 0) {
                         buttonsHtml = '<div class="toast-actions">';
                         buttons.forEach(function(btn) {
-                            buttonsHtml += '<button class="' + btn.class + '" data-value="' + btn.value + '">' + btn.label + '</button>';
+                            buttonsHtml += '<button class="' + btn.class + '" data-value="' + btn.value + '">' + btn
+                                .label + '</button>';
                         });
                         buttonsHtml += '</div>';
                     }
 
                     toast.innerHTML = '' +
-                        '<div class="toast-icon ' + iconClass + '"><i class="fas ' + (iconMap[type] || 'fa-info-circle') + '"></i></div>' +
+                        '<div class="toast-icon ' + iconClass + '"><i class="fas ' + (iconMap[type] || 'fa-info-circle') +
+                        '"></i></div>' +
                         '<div class="toast-content">' +
                         '<div class="toast-title">' + title + '</div>' +
                         '<div class="toast-message">' + message + '</div>' +
@@ -3771,16 +3592,16 @@
             function renderBookings() {
                 if (bookings.length === 0) {
                     itemsBody.innerHTML = `
-                        <tr>
-                            <td colspan="6">
-                                <div class="empty-items">
-                                    <i class="fas fa-box-open"></i>
-                                    <p>لا توجد حجوزات مضافة</p>
-                                    <span>أضف حجزاً من النموذج على اليمين ليظهر هنا</span>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
+                                <tr>
+                                    <td colspan="6">
+                                        <div class="empty-items">
+                                            <i class="fas fa-box-open"></i>
+                                            <p>لا توجد حجوزات مضافة</p>
+                                            <span>أضف حجزاً من النموذج على اليمين ليظهر هنا</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `;
                     itemsCount.textContent = '0 حجز';
                     return;
                 }
@@ -3788,18 +3609,18 @@
                 var html = '';
                 bookings.forEach(function(item, index) {
                     html += `
-                        <tr>
-                            <td class="num">${index + 1}</td>
-                            <td style="text-align:right;">${item.property}</td>
-                            <td class="num">${item.nights}</td>
-                            <td class="money">${item.dailyPrice.toFixed(2)}</td>
-                            <td class="money" style="color:var(--teal);font-weight:700;">${item.total.toFixed(2)}</td>
-                            <td>
-                                <button class="btn-edit-item" onclick="editBooking(${index})"><i class="fas fa-edit"></i></button>
-                                <button class="btn-remove" onclick="removeBooking(${index})"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                    `;
+                                <tr>
+                                    <td class="num">${index + 1}</td>
+                                    <td style="text-align:right;">${item.property}</td>
+                                    <td class="num">${item.nights}</td>
+                                    <td class="money">${item.dailyPrice.toFixed(2)}</td>
+                                    <td class="money" style="color:var(--teal);font-weight:700;">${item.total.toFixed(2)}</td>
+                                    <td>
+                                        <button class="btn-edit-item" onclick="editBooking(${index})"><i class="fas fa-edit"></i></button>
+                                        <button class="btn-remove" onclick="removeBooking(${index})"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            `;
                 });
 
                 itemsBody.innerHTML = html;
@@ -3856,7 +3677,298 @@
 
             /**
              * ============================================================
-             * PREVIEW INVOICE
+             * GENERATE QR CODE - حجم مصغر 72px (مبسّط لتجنب overflow)
+             * containerId: معرّف العنصر المستهدف (يدعم أكثر من حاوية QR)
+             * ============================================================
+             */
+            function generateQRCode(invoiceNumberVal, client, total, containerId) {
+                containerId = containerId || 'qrCodeContainer';
+                var qrContainer = document.getElementById(containerId);
+                if (!qrContainer) {
+                    console.warn('⚠️ حاوية QR Code غير موجودة:', containerId);
+                    return;
+                }
+
+                qrContainer.innerHTML = '';
+
+                // استخدام بيانات مختصرة جداً لتجنب overflow
+                var qrText = 'INV:' + (invoiceNumberVal || '----');
+
+                // التأكد من أن النص لا يتجاوز الحد المسموح (1440 حرف)
+                if (qrText.length > 200) {
+                    qrText = qrText.substring(0, 200);
+                }
+
+                // محاولة استخدام المكتبة الداخلية أولاً
+                try {
+                    if (typeof QRCode !== 'undefined') {
+                        var qr = new QRCode(qrContainer, {
+                            text: qrText,
+                            width: 72,
+                            height: 72,
+                            colorDark: '#121821',
+                            colorLight: '#ffffff',
+                            correctLevel: QRCode.CorrectLevel.M // استخدام مستوى متوسط لتقليل الحجم
+                        });
+                        currentQRCode = qr;
+                        console.log('✅ تم إنشاء QR Code مصغر (72px) بنجاح في', containerId);
+                        return;
+                    }
+                } catch (error) {
+                    console.warn('⚠️ فشل إنشاء QR Code داخلياً، استخدام API خارجي:', error.message);
+                }
+
+                // استخدام API خارجي كحل بديل
+                generateQRCodeExternal(invoiceNumberVal, client, total, containerId);
+            }
+
+            /**
+             * ============================================================
+             * GENERATE QR CODE - API خارجي (حجم 72px)
+             * ============================================================
+             */
+            function generateQRCodeExternal(invoiceNumberVal, client, total, containerId) {
+                containerId = containerId || 'qrCodeContainer';
+                var qrContainer = document.getElementById(containerId);
+                if (!qrContainer) return;
+
+                qrContainer.innerHTML = '';
+
+                // استخدام بيانات مختصرة جداً
+                var qrText = 'INV:' + (invoiceNumberVal || '----');
+                var encodedText = encodeURIComponent(qrText);
+
+                var qrImageUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=72x72&data=' + encodedText +
+                    '&bgcolor=ffffff&color=121821&margin=4';
+
+                var img = document.createElement('img');
+                img.crossOrigin = 'anonymous';
+                img.src = qrImageUrl;
+                img.alt = 'QR Code';
+                img.style.width = '100%';
+                img.style.height = '100%';
+                img.style.objectFit = 'contain';
+
+                img.onerror = function() {
+                    qrContainer.innerHTML = `
+                                <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;background:#f8f9fa;border-radius:4px;">
+                                    <i class="fas fa-qrcode" style="font-size:1.5rem;color:var(--accent);"></i>
+                                    <span style="font-size:0.4rem;color:var(--ink-mute);">${invoiceNumberVal || ''}</span>
+                                </div>
+                            `;
+                };
+
+                img.onload = function() {
+                    console.log('✅ تم إنشاء QR Code مصغر بواسطة API خارجي في', containerId);
+                };
+
+                qrContainer.appendChild(img);
+            }
+
+            /**
+             * ============================================================
+             * BUILD INVOICE HTML — دالة موحّدة تبني قالب الفاتورة
+             * تُستخدم في المعاينة العادية وفي التوليد المخفي لـ PDF معاً
+             * qrContainerId: معرّف حاوية الـ QR الفريدة لكل استخدام
+             * ============================================================
+             */
+            /**
+             * ============================================================
+             * GET ARABIC DAY NAME — يرجع اسم اليوم بالعربي (السبت، الأحد...)
+             * ============================================================
+             */
+            function getArabicDayName(dateStr) {
+                if (!dateStr) return '';
+                var d = new Date(dateStr);
+                if (isNaN(d.getTime())) return '';
+                return d.toLocaleDateString('ar-EG', { weekday: 'long' });
+            }
+
+
+            /**
+             * ============================================================
+             * INLINE ICONS — أيقونات SVG مضمّنة (بديل عن Font Awesome)
+             * تُستخدم حصراً داخل قالب الفاتورة (buildInvoiceHTML) لأن
+             * أيقونات الخط الخارجي (Font Awesome) قد لا تُحمَّل بشكل
+             * موثوق عند التقاط الفاتورة كصورة لتوليد PDF
+             * ============================================================
+             */
+            var INVOICE_ICONS = {
+                checkCircle: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.125em;fill:currentColor;"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm-1.2 14.5-4-4 1.4-1.4 2.6 2.6 5.6-5.6 1.4 1.4z"/></svg>',
+                exclamationCircle: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.125em;fill:currentColor;"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 15h-2v-2h2zm0-4h-2V7h2z"/></svg>',
+                mapMarker: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.125em;fill:currentColor;"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 14.5 9 2.5 2.5 0 0 1 12 11.5z"/></svg>',
+                phone: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.125em;fill:currentColor;"><path d="M6.6 10.8c1.4 2.7 3.6 4.9 6.3 6.3l2.1-2.1c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.5.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.8 21 3 13.2 3 4c0-.6.4-1 1-1h3.6c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.5.1.4 0 .8-.2 1z"/></svg>',
+                signIn: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.125em;fill:currentColor;"><path d="M11 4h6a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-6v-2h6V6h-6zm-1.3 4.3 1.4-1.4L15.4 11l-4.3 4.1-1.4-1.4L11.6 12H2v-2h9.6z"/></svg>',
+                signOut: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.125em;fill:currentColor;"><path d="M13 4H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6v-2H7V6h6zm4.3 4.3-1.4 1.4L17.6 11H8v2h9.6l-1.7 1.7 1.4 1.4L21.4 12z"/></svg>',
+                stickyNote: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.125em;fill:currentColor;"><path d="M4 4h13l3 3v13H4zm12.4 1.6L18.4 7H16.4zM6 8h9v2H6zm0 4h9v2H6zm0 4h6v2H6z"/></svg>'
+            };
+
+            /**
+             * ============================================================
+             * IMAGE TO BASE64 (مع تخزين مؤقت) — لتضمين الشعار كصورة داخلية
+             * بدل رابط خارجي، لضمان ظهوره دائمًا عند التقاط الفاتورة كصورة
+             * ============================================================
+             */
+            var logoBase64Cache = null;
+            var logoBase64Promise = null;
+            function getLogoAsBase64(url) {
+                if (!url) return Promise.resolve('');
+                if (logoBase64Cache) return Promise.resolve(logoBase64Cache);
+                if (logoBase64Promise) return logoBase64Promise;
+
+                logoBase64Promise = fetch(url)
+                    .then(function(res) { return res.blob(); })
+                    .then(function(blob) {
+                        return new Promise(function(resolve, reject) {
+                            var reader = new FileReader();
+                            reader.onload = function() { resolve(reader.result); };
+                            reader.onerror = reject;
+                            reader.readAsDataURL(blob);
+                        });
+                    })
+                    .then(function(dataUrl) {
+                        logoBase64Cache = dataUrl;
+                        return dataUrl;
+                    })
+                    .catch(function(error) {
+                        console.warn('⚠️ تعذّر تحويل الشعار إلى Base64، سيتم استخدام الرابط مباشرة:', error.message);
+                        return url;
+                    });
+
+                return logoBase64Promise;
+            }
+
+            function buildInvoiceHTML(client, phone, invNum, book, date, total, discount, paid, remaining, isPaidFull, qrContainerId) {
+                var companyName = settings.companyName || 'منتجع حياله';
+                var companyAddress = settings.companyAddress || '';
+                var companyPhone = settings.companyPhone || '';
+                var companyLogo = logoBase64Cache || settings.companyLogo || '';
+                var footer = settings.invoiceFooter || 'شكراً لثقتكم بنا';
+
+                var statusBadgeHtml = isPaidFull ?
+                    '<span class="status-badge paid">' + INVOICE_ICONS.checkCircle + ' مدفوعة بالكامل</span>' :
+                    '<span class="status-badge due">' + INVOICE_ICONS.exclamationCircle + ' يوجد مبلغ مستحق</span>';
+
+                var html = `
+                    <div class="invoice-header">
+                        <div class="logo-section">
+                            <div class="logo-box">
+                                ${companyLogo ? `<img src="${companyLogo}" alt="منتجع حياله" crossorigin="anonymous" />` : `<span style="font-size:2.4rem;font-weight:900;color:#121821;">ح</span>`}
+                            </div>
+                            <div class="company-details">
+                                <span class="eyebrow"></span>
+                                <h2>${companyName}</h2>
+                                <div class="header-rule"></div>
+                                <p>
+                                    <span style="color:var(--accent-ink);">${INVOICE_ICONS.mapMarker}</span> ${companyAddress}<br/>
+                                    <span style="color:var(--accent-ink);">${INVOICE_ICONS.phone}</span> ${companyPhone}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="invoice-title">
+                            <span class="invoice-title-label">رقم الفاتورة</span>
+                            <span class="invoice-title-number">${invNum}</span>
+                            <div class="qr-code" id="${qrContainerId}">
+                            </div>
+                            <span class="qr-label">امسح للتحقق من الفاتورة</span>
+                        </div>
+                    </div>
+
+                    <div class="info-grid">
+                        <div class="item"><span class="label">الرقم الدفتري</span><div class="value">${book}</div></div>
+                        <div class="item"><span class="label">تاريخ الإصدار</span><div class="value">${date}</div></div>
+                        <div class="item highlight"><span class="label">اسم العميل</span><div class="value">${client}</div></div>
+                        <div class="item"><span class="label">رقم الجوال</span><div class="value">${phone}</div></div>
+                        <div class="item"><span class="label">حالة الفاتورة</span><div class="value">${statusBadgeHtml}</div></div>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:30px;">#</th>
+                                <th style="text-align:right;">وصف الخدمة / العقار</th>
+                                <th>عدد الليالي</th>
+                                <th>سعر الليلة</th>
+                                <th>الإجمالي</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                bookings.forEach(function(item, index) {
+                    var checkInDayName = getArabicDayName(item.checkIn);
+                    var checkOutDayName = getArabicDayName(item.checkOut);
+                    var checkInDateFormatted = item.checkIn ? (checkInDayName + ' ' + new Date(item.checkIn).toLocaleDateString('ar-EG')) : 'غير محدد';
+                    var checkInTimeFormatted = item.checkInTime ? item.checkInTime : 'غير محدد';
+                    var checkOutDateFormatted = item.checkOut ? (checkOutDayName + ' ' + new Date(item.checkOut).toLocaleDateString('ar-EG')) : 'غير محدد';
+                    var checkOutTimeFormatted = item.checkOutTime ? item.checkOutTime : 'غير محدد';
+
+                    html += `
+                        <tr class="data-row">
+                            <td>${index + 1}</td>
+                            <td style="text-align:right;font-weight:600;color:var(--ink);">${item.property}</td>
+                            <td>${item.nights}</td>
+                            <td>${item.dailyPrice.toFixed(2)}</td>
+                            <td class="row-total">${item.total.toFixed(2)} ر.س</td>
+                        </tr>
+                        <tr class="stay-meta-row">
+                            <td colspan="5">
+                                <span class="meta-piece"><span style="color:var(--teal);">${INVOICE_ICONS.signIn}</span> <strong>الدخول:</strong> ${checkInDateFormatted} - ${checkInTimeFormatted}</span>
+                                <span class="meta-piece"><span style="color:var(--rust);">${INVOICE_ICONS.signOut}</span> <strong>الخروج:</strong> ${checkOutDateFormatted} - ${checkOutTimeFormatted}</span>
+                                ${item.stayType ? `<span class="stay-chip">${item.stayType}</span>` : ''}
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                html += `
+                        </tbody>
+                    </table>
+
+                    <div class="invoice-summary">
+                        <div class="summary-box">
+                            <div class="summary-row"><span>الإجمالي</span><span>${total} ر.س</span></div>
+                            <div class="summary-row discount"><span>الخصم</span><span>- ${discount} ر.س</span></div>
+                            <div class="summary-row"><span>المدفوع</span><span>${paid} ر.س</span></div>
+                            <div class="summary-row net"><span>المتبقي المستحق</span><span>${remaining} ر.س</span></div>
+                        </div>
+                    </div>
+
+                    <div class="notes-section">
+                        <div class="notes-title">
+                            <span style="color:var(--accent-ink);">${INVOICE_ICONS.stickyNote}</span> شروط وملاحظات هامة
+                        </div>
+                        <div class="notes-content">
+                            <p>لا نأخذ تأمين ولا نعمل تشييك بعد الخروج (أمانة المسلم تكفي)</p>
+                            <p>تفهم المرافقون طابع المكان كمزرعة شعبية ليست كالفنادق مثلاً</p>
+                            <p>في حال بقاء أي أغراض (غير مثمنة) دون مراجعة مباشرة من المستأجر يحق لإدارة المنتجع التصرف بها وفق ما تراه</p>
+                            <p>يرجى التأكد من قراءة التفاصيل بدقة (يمكنكم طلب فيديوهات إضافية للمكان)</p>
+                            <p>إدارة المنتجع غير مسؤولة عن فقدان أو تلف المقتنيات الشخصية، لذا توصي بالتأكد من عدم نسيان أي أغراض قبل المغادرة</p>
+                            <p>يمنع إحداث أي تلف أو تخريب في مرافق المنتجع أو محتوياته، ويحمل المستأجر قيمة أي أضرار تنتج عن الاستخدام غير المعتدل</p>
+                        </div>
+                    </div>
+
+                    <div class="summary-notes bottom-signature">
+                        <p class="thanks">"${footer}"</p>
+                        <div class="signature">
+                            <p class="sig-label">توقيع واستلام العميل</p>
+                            <div class="line"></div>
+                            <p class="sig-caption">الاسم والتوقيع</p>
+                        </div>
+                    </div>
+
+                    <div class="print-brand-footer">
+                        <strong>${companyName}</strong> — تم إصدار هذه الفاتورة إلكترونياً عبر نظام إدارة الحجوزات
+                    </div>
+                `;
+
+                return html;
+            }
+
+            /**
+             * ============================================================
+             * PREVIEW INVOICE - تصميم راقٍ لفاتورة برنامج محاسبة
+             * (نفس البيانات تماماً — تستخدم buildInvoiceHTML المشتركة)
              * ============================================================
              */
             function previewInvoice() {
@@ -3878,8 +3990,10 @@
 
                 var printContent = document.getElementById('printPreviewContent');
 
+                // ننتظر تجهيز الشعار كصورة مضمّنة (Base64) قبل البناء، حتى يظهر
+                // بشكل مضمون في المعاينة والتقاط PDF لاحقًا معًا بنفس الطريقة
                 getLogoAsBase64(settings.companyLogo).then(function() {
-                    printContent.innerHTML = buildInvoiceHTML(client, phone, invNum, book, date, total, discount, paid, remaining, isPaidFull, 'qrCodeContainer', bookings);
+                    printContent.innerHTML = buildInvoiceHTML(client, phone, invNum, book, date, total, discount, paid, remaining, isPaidFull, 'qrCodeContainer');
 
                     setTimeout(function() {
                         generateQRCode(invNum, client, total, 'qrCodeContainer');
@@ -4308,6 +4422,9 @@
                     }, 1000);
                 }
 
+                // ننتظر تحميل خط Cairo فعليًا داخل مستند الـ iframe نفسه قبل
+                // استدعاء الطباعة، حتى لا يطبع المتصفح بخط احتياطي غير مُشكَّل
+                // بشكل صحيح للأحرف العربية (وهو ما يسبب تقطّع الحروف عن بعضها)
                 iframe.contentWindow.onload = function() {
                     var fontsReady = (iframe.contentWindow.document.fonts && iframe.contentWindow.document.fonts.ready) ?
                         iframe.contentWindow.document.fonts.ready : Promise.resolve();
@@ -4324,6 +4441,7 @@
             /**
              * ============================================================
              * GENERATE PDF FROM ELEMENT — دالة موحّدة لالتقاط أي عنصر وتحويله PDF
+             * وتنزيله فوراً باسم "اسم العميل - رقم الفاتورة.pdf"
              * ============================================================
              */
             function generatePDFFromElement(element, clientNameValue, invoiceNum, onDone) {
@@ -4352,12 +4470,19 @@
                         logging: false,
                         allowTaint: true,
                         backgroundColor: '#ffffff',
+                        // مهم لإصلاح تقطّع/انفصال الحروف العربية: هذا الخيار يجعل
+                        // html2canvas يفوّض رسم النص فعليًا لمحرك المتصفح (عبر SVG
+                        // foreignObject) بدل رسمه بنفسه حرفًا حرفًا على الـ canvas،
+                        // وهو ما يكسر تشكيل/ربط الحروف العربية بدونه
                         foreignObjectRendering: true,
                         width: element.scrollWidth,
                         height: element.scrollHeight,
                         windowWidth: element.scrollWidth,
                         windowHeight: element.scrollHeight,
                         onclone: function(clonedDoc) {
+                            // إلغاء تحديد الارتفاع الأقصى وشريط التمرير الخاصين
+                            // بنافذة المعاينة على الشاشة، حتى لا يُقتطع أي جزء
+                            // (مثل تذييل التوقيع) عند التقاط الصورة لملف PDF
                             var wrapper = clonedDoc.getElementById('printPreviewContent');
                             if (wrapper) {
                                 wrapper.style.maxHeight = 'none';
@@ -4396,6 +4521,7 @@
                         });
                 }
 
+                // انتظار تحميل الخطوط فعليًا قبل الالتقاط لمنع لقطة فارغة/نص غير مرئي
                 var fontsReady = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
                 fontsReady.then(function() {
                     requestAnimationFrame(function() {
@@ -4407,6 +4533,8 @@
             /**
              * ============================================================
              * SAVE INVOICE PDF DIRECT — تنزيل تلقائي فوري بدون فتح المعاينة
+             * يبني الفاتورة في عنصر مؤقت داخل الصفحة (وليس خارج الشاشة)
+             * لضمان التقاط المحتوى بشكل صحيح بواسطة html2canvas
              * ============================================================
              */
             function saveInvoicePDFDirect() {
@@ -4440,13 +4568,23 @@
                     }
                 }
 
+                // ============================================================
+                // نستخدم بالضبط نفس دالة بناء القالب المستخدمة في المعاينة
+                // (buildInvoiceHTML) ونضعها داخل الحاوية المخفية "pdfHiddenWrapper"
+                // (المزوّدة بنفس كلاسات CSS الخاصة بالمعاينة عبر .print-preview-overlay)
+                // بهذا يخرج PDF بنفس تصميم المعاينة تمامًا حرفيًا، بدون فتح أي نافذة
+                // معاينة على الشاشة، وبدون الحاجة لصيانة قالب مبسّط منفصل يمكن أن
+                // ينحرف تصميمه عن القالب الأصلي بمرور الوقت.
+                // ============================================================
                 var hiddenWrapper = document.getElementById('pdfHiddenWrapper');
 
                 window.scrollTo(0, 0);
 
+                // ننتظر تجهيز شعار المنتجع كصورة مضمّنة (Base64) أولاً، لضمان
+                // ظهوره في ملف PDF بدلاً من أيقونة "صورة معطّلة"
                 getLogoAsBase64(settings.companyLogo).then(function() {
                     hiddenWrapper.innerHTML = buildInvoiceHTML(
-                        client, phone, invNum, book, date, total, discount, paid, remaining, isPaidFull, 'pdfHiddenQrCode', bookings
+                        client, phone, invNum, book, date, total, discount, paid, remaining, isPaidFull, 'pdfHiddenQrCode'
                     );
 
                     setTimeout(function() {
@@ -4464,7 +4602,160 @@
 
             /**
              * ============================================================
-             * DOWNLOAD PDF (من داخل نافذة المعاينة)
+             * BUILD SIMPLIFIED INVOICE HTML — نسخة مبسطة للطباعة
+             * تستخدم تنسيقات CSS مضمونة التوافق مع html2canvas
+             * ============================================================
+             */
+            function buildSimplifiedInvoiceHTML(client, phone, invNum, book, date, total, discount, paid, remaining, isPaidFull, qrContainerId) {
+                var companyName = settings.companyName || 'منتجع حياله';
+                var companyAddress = settings.companyAddress || '';
+                var companyPhone = settings.companyPhone || '';
+                var companyLogo = settings.companyLogo || '';
+                var footer = settings.invoiceFooter || 'شكراً لثقتكم بنا';
+
+                var statusText = isPaidFull ? '✅ مدفوعة بالكامل' : '⚠️ يوجد مبلغ مستحق';
+                var statusColor = isPaidFull ? '#1d7b6c' : '#bf4f30';
+
+                var bookingsHtml = '';
+                bookings.forEach(function(item, index) {
+                    var checkInDayName = getArabicDayName(item.checkIn);
+                    var checkOutDayName = getArabicDayName(item.checkOut);
+                    var checkInDateFormatted = item.checkIn ? (checkInDayName + ' ' + new Date(item.checkIn).toLocaleDateString('ar-EG')) : 'غير محدد';
+                    var checkInTimeFormatted = item.checkInTime || 'غير محدد';
+                    var checkOutDateFormatted = item.checkOut ? (checkOutDayName + ' ' + new Date(item.checkOut).toLocaleDateString('ar-EG')) : 'غير محدد';
+                    var checkOutTimeFormatted = item.checkOutTime || 'غير محدد';
+
+                    bookingsHtml += `
+                        <tr style="border-bottom:1px solid #dde3e0;">
+                            <td style="padding:8px 10px;text-align:center;font-size:11px;">${index + 1}</td>
+                            <td style="padding:8px 10px;text-align:right;font-size:11px;font-weight:600;color:#121821;">${item.property}</td>
+                            <td style="padding:8px 10px;text-align:center;font-size:11px;">${item.nights}</td>
+                            <td style="padding:8px 10px;text-align:center;font-size:11px;">${item.dailyPrice.toFixed(2)}</td>
+                            <td style="padding:8px 10px;text-align:center;font-size:11px;font-weight:700;color:#7a5312;">${item.total.toFixed(2)} ر.س</td>
+                        </tr>
+                        <tr style="border-bottom:1px solid #dde3e0;">
+                            <td colspan="5" style="padding:4px 14px;text-align:right;font-size:9px;color:#6d7883;background:#f4f6f5;">
+                                <span>🛏️ الدخول: ${checkInDateFormatted} - ${checkInTimeFormatted}</span>
+                                <span style="margin-right:15px;">🚪 الخروج: ${checkOutDateFormatted} - ${checkOutTimeFormatted}</span>
+                                ${item.stayType ? `<span style="margin-right:15px;background:#faead0;padding:1px 8px;border-radius:4px;color:#7a5312;font-size:9px;">${item.stayType}</span>` : ''}
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                return `
+                    <div class="print-wrapper" style="max-width:180mm;margin:0 auto;background:#ffffff;padding:10mm 12mm;font-family:'Cairo',Arial,sans-serif;direction:rtl;color:#121821;border:1px solid #dd9f2e;border-radius:8px;">
+                        
+                        <!-- الرأس -->
+                        <table style="width:100%;border-collapse:collapse;border-bottom:3px solid #dd9f2e;margin-bottom:15px;"><tr>
+                            <td style="vertical-align:middle;width:70px;height:70px;padding-bottom:15px;">
+                                <div style="width:70px;height:70px;border-radius:12px;background:#121821;text-align:center;line-height:70px;color:#dd9f2e;font-size:28px;font-weight:900;">ح</div>
+                            </td>
+                            <td style="vertical-align:top;padding-right:12px;padding-bottom:15px;">
+                                <h1 style="font-size:20px;margin:0;color:#121821;font-weight:700;">${companyName}</h1>
+                                <div style="width:40px;height:3px;background:#dd9f2e;margin:4px 0 6px;"></div>
+                                <p style="font-size:11px;color:#6d7883;margin:0;line-height:1.7;">${companyAddress}</p>
+                                <p style="font-size:11px;color:#6d7883;margin:0;line-height:1.7;">📞 ${companyPhone}</p>
+                            </td>
+                            <td style="vertical-align:top;text-align:center;padding-bottom:15px;width:150px;">
+                                <div style="text-align:center;background:#ffffff;padding:10px 18px;border:2px solid #dd9f2e;border-radius:10px;">
+                                    <div style="font-size:11px;font-weight:700;color:#7a5312;">رقم الفاتورة</div>
+                                    <div style="font-size:14px;font-weight:700;font-family:'JetBrains Mono',monospace;color:#121821;">${invNum}</div>
+                                    <div style="width:60px;height:60px;margin:6px auto;border:1px dashed #c7d0cc;padding:4px;border-radius:6px;overflow:hidden;box-sizing:border-box;" id="${qrContainerId}"></div>
+                                    <style>#${qrContainerId} canvas, #${qrContainerId} img { width: 100% !important; height: 100% !important; display: block; }</style>
+                                    <div style="font-size:10px;color:#6d7883;">امسح للتحقق</div>
+                                </div>
+                            </td>
+                        </tr></table>
+
+                        <!-- معلومات العميل -->
+                        <table style="width:100%;border-collapse:collapse;background:#f8f9fa;border-radius:8px;margin-bottom:15px;border:1px solid #dde3e0;"><tr>
+                            <td style="padding:10px 14px;text-align:center;"><div style="font-size:10px;color:#6d7883;font-weight:700;">الرقم الدفتري</div><div style="font-weight:700;font-size:12px;margin-top:3px;">${book}</div></td>
+                            <td style="padding:10px 14px;text-align:center;"><div style="font-size:10px;color:#6d7883;font-weight:700;">التاريخ</div><div style="font-weight:700;font-size:12px;margin-top:3px;">${date}</div></td>
+                            <td style="padding:8px 10px;text-align:center;background:#faead0;border-radius:6px;"><div style="font-size:10px;color:#7a5312;font-weight:700;">العميل</div><div style="font-weight:700;font-size:12px;margin-top:3px;">${client}</div></td>
+                            <td style="padding:10px 14px;text-align:center;"><div style="font-size:10px;color:#6d7883;font-weight:700;">الجوال</div><div style="font-weight:700;font-size:12px;margin-top:3px;">${phone}</div></td>
+                            <td style="padding:10px 14px;text-align:center;"><div style="font-size:10px;color:#6d7883;font-weight:700;">الحالة</div><div style="font-weight:700;font-size:12px;margin-top:3px;color:${statusColor};">${statusText}</div></td>
+                        </tr></table>
+
+                        <!-- جدول الحجوزات -->
+                        <table style="width:100%;border-collapse:collapse;font-size:11px;margin-bottom:12px;border:1px solid #dde3e0;border-radius:8px;overflow:hidden;">
+                            <thead>
+                                <tr style="background:#121821;color:#ffffff;">
+                                    <th style="padding:8px 10px;text-align:center;width:30px;font-size:11px;">#</th>
+                                    <th style="padding:8px 10px;text-align:right;font-size:11px;">نوع العقار</th>
+                                    <th style="padding:8px 10px;text-align:center;font-size:11px;">عدد الأيام</th>
+                                    <th style="padding:8px 10px;text-align:center;font-size:11px;">السعر اليومي</th>
+                                    <th style="padding:8px 10px;text-align:center;font-size:11px;">الإجمالي</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${bookingsHtml}
+                            </tbody>
+                        </table>
+
+                        <!-- الملخص المالي -->
+                        <table style="width:100%;border-collapse:collapse;margin-top:15px;padding-top:12px;border-top:2px dashed #c7d0cc;"><tr>
+                            <td style="vertical-align:top;width:100%;padding-top:12px;">
+                                <div style="width:100%;max-width:280px;margin-right:0;margin-left:auto;border:2px solid #dd9f2e;border-radius:8px;">
+                                    <div style="overflow:hidden;padding:6px 14px;border-bottom:1px dashed #dde3e0;background:#ffffff;font-size:11px;">
+                                        <span style="float:right;color:#2c3644;">الإجمالي</span>
+                                        <span style="float:left;font-weight:700;color:#121821;">${total} ر.س</span>
+                                    </div>
+                                    <div style="overflow:hidden;padding:6px 14px;border-bottom:1px dashed #dde3e0;background:#ffffff;font-size:11px;">
+                                        <span style="float:right;color:#2c3644;">الخصم</span>
+                                        <span style="float:left;font-weight:700;color:#bf4f30;">- ${discount} ر.س</span>
+                                    </div>
+                                    <div style="overflow:hidden;padding:6px 14px;border-bottom:1px dashed #dde3e0;background:#ffffff;font-size:11px;">
+                                        <span style="float:right;color:#2c3644;">المدفوع</span>
+                                        <span style="float:left;font-weight:700;color:#121821;">${paid} ر.س</span>
+                                    </div>
+                                    <div style="overflow:hidden;padding:10px 14px;background:#121821;border-radius:0 0 6px 6px;font-size:12px;">
+                                        <span style="float:right;color:rgba(255,255,255,0.75);font-weight:700;">المتبقي المستحق</span>
+                                        <span style="float:left;color:#dd9f2e;font-weight:800;">${remaining} ر.س</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr></table>
+
+                        <!-- الملاحظات -->
+                        <div style="margin-top:15px;background:#f4f6f5;border-radius:8px;border-right:4px solid #dd9f2e;padding:12px 16px;font-size:10px;color:#2c3644;line-height:1.9;">
+                            <div style="font-weight:800;font-size:11px;margin-bottom:6px;color:#121821;">
+                                📋 شروط وملاحظات هامة
+                            </div>
+                            <ol style="margin:0;padding-right:20px;list-style-type:decimal;font-size:10px;color:#2c3644;">
+                                <li>لا نأخذ تأمين ولا نعمل تشييك بعد الخروج (أمانة المسلم تكفي)</li>
+                                <li>تفهم المرافقون طابع المكان كمزرعة شعبية ليست كالفنادق</li>
+                                <li>في حال بقاء أي أغراض دون مراجعة، يحق للإدارة التصرف بها</li>
+                                <li>يرجى التأكد من قراءة التفاصيل بدقة</li>
+                                <li>الإدارة غير مسؤولة عن فقدان المقتنيات الشخصية</li>
+                                <li>يمنع إحداث أي تلف، ويحمل المستأجر قيمة الأضرار</li>
+                            </ol>
+                        </div>
+
+                        <!-- الشكر والتوقيع -->
+                        <table style="width:100%;border-collapse:collapse;margin-top:15px;padding-top:12px;border-top:2px dashed #c7d0cc;"><tr>
+                            <td style="vertical-align:bottom;width:55%;">
+                                <p style="font-family:serif;font-size:13px;color:#2c3644;margin:0;">"${footer}"</p>
+                            </td>
+                            <td style="vertical-align:bottom;width:45%;text-align:left;">
+                                <p style="font-size:11px;color:#6d7883;font-weight:700;margin:0 0 20px;">توقيع واستلام العميل</p>
+                                <div style="width:140px;margin-right:0;margin-left:auto;border-bottom:2px solid #c7d0cc;"></div>
+                                <p style="font-size:10px;color:#6d7883;margin:4px 0 0;">الاسم والتوقيع</p>
+                            </td>
+                        </tr></table>
+
+                        <!-- تذييل -->
+                        <div style="margin-top:12px;padding-top:8px;border-top:1px solid #dde3e0;text-align:center;font-size:10px;color:#6d7883;">
+                            <strong style="color:#7a5312;">${companyName}</strong> — تم إصدار هذه الفاتورة إلكترونياً عبر نظام إدارة الحجوزات
+                        </div>
+                    </div>
+                `;
+            }
+
+            /**
+             * ============================================================
+             * DOWNLOAD PDF (من داخل نافذة المعاينة) — يُستخدم فقط عندما
+             * تكون نافذة المعاينة مفتوحة بالفعل (زر PDF داخل print-preview-overlay)
              * ============================================================
              */
             function downloadPDF() {
@@ -4487,7 +4778,8 @@
 
             /**
              * ============================================================
-             * GENERATE PDF FROM PREVIEW
+             * GENERATE PDF FROM PREVIEW — يستخدم العنصر الظاهر في نافذة
+             * المعاينة (يُستدعى فقط من زر PDF داخل النافذة نفسها)
              * ============================================================
              */
             function generatePDFFromPreview() {
@@ -4598,11 +4890,11 @@
 
                 if (results.length === 0) {
                     suggestionsList.innerHTML = `
-                        <div class="suggestion-item add-new" onclick="openAddClientModal('${searchTerm}')" data-index="0">
-                            <span><i class="fas fa-plus-circle"></i> إضافة عميل جديد: "${searchTerm}"</span>
-                        </div>
-                        <div class="no-results">لا توجد نتائج مطابقة</div>
-                    `;
+                                <div class="suggestion-item add-new" onclick="openAddClientModal('${searchTerm}')" data-index="0">
+                                    <span><i class="fas fa-plus-circle"></i> إضافة عميل جديد: "${searchTerm}"</span>
+                                </div>
+                                <div class="no-results">لا توجد نتائج مطابقة</div>
+                            `;
                     suggestionsList.classList.add('show');
                     selectedSuggestionIndex = -1;
                     return;
@@ -4611,18 +4903,18 @@
                 var html = '';
                 results.forEach(function(client, index) {
                     html += `
-                        <div class="suggestion-item" onclick="selectClient('${client.id}', '${client.name}', '${client.phone || ''}')" data-index="${index + 1}">
-                            <span>${client.name}</span>
-                            ${client.phone ? `<span class="client-phone">📱 ${client.phone}</span>` : ''}
-                        </div>
-                    `;
+                                <div class="suggestion-item" onclick="selectClient('${client.id}', '${client.name}', '${client.phone || ''}')" data-index="${index + 1}">
+                                    <span>${client.name}</span>
+                                    ${client.phone ? `<span class="client-phone">📱 ${client.phone}</span>` : ''}
+                                </div>
+                            `;
                 });
 
                 html += `
-                    <div class="suggestion-item add-new" onclick="openAddClientModal('${searchTerm}')" data-index="${results.length + 1}">
-                        <span><i class="fas fa-plus-circle"></i> إضافة عميل جديد</span>
-                    </div>
-                `;
+                            <div class="suggestion-item add-new" onclick="openAddClientModal('${searchTerm}')" data-index="${results.length + 1}">
+                                <span><i class="fas fa-plus-circle"></i> إضافة عميل جديد</span>
+                            </div>
+                        `;
 
                 suggestionsList.innerHTML = html;
                 suggestionsList.classList.add('show');
@@ -4836,7 +5128,9 @@
 
                     if (keys.length === 1) {
                         loadInvoiceDataFromSupabase(groupedByInvoice[keys[0]]);
-                        showToast('✅ تم العثور', 'تم العثور على ' + groupedByInvoice[keys[0]].length + ' حجز في الفاتورة ' + keys[0], 'success');
+                        showToast('✅ تم العثور', 'تم العثور على ' + groupedByInvoice[keys[0]].length + ' حجز في الفاتورة ' + keys[
+                            0],
+                            'success');
                         return;
                     }
 
@@ -5036,7 +5330,7 @@
 
             /**
              * ============================================================
-             * SAVE TO SUPABASE
+             * SAVE TO SUPABASE - متوافق مع هيكل الجدول
              * ============================================================
              */
             async function saveInvoiceToSupabase(invoiceData) {
@@ -5169,11 +5463,9 @@
                 }
             });
 
-            /**
-             * ============================================================
-             * جعل الدوال عامة (Global) عشان أزرار الـ HTML (onclick) تلاقيها
-             * ============================================================
-             */
+            // ============================================================
+            // جعل الدوال عامة (Global) عشان أزرار الـ HTML (onclick) تلاقيها
+            // ============================================================
             window.previewInvoice = previewInvoice;
             window.resetForm = resetForm;
             window.closePrintPreview = closePrintPreview;
@@ -5187,6 +5479,10 @@
             /**
              * ============================================================
              * INIT
+             * (الصفحة أصلاً جاهزة تمامًا في اللحظة دي، لأن initApp() ما كانش
+             * هيشتغل غير بعد ما بيانات المستخدم تجهز، وده بياخد وقت أطول
+             * بكتير من تحميل الصفحة نفسها - فمفيش داعي ننتظر DOMContentLoaded
+             * لأنه أصلاً بيكون حصل من زمان قبل ما نوصل هنا)
              * ============================================================
              */
             console.log('🏕️ منتجع حياله - فاتورة المبيعات (Supabase Auth)');
@@ -5200,17 +5496,18 @@
             console.log('🎨 تصميم فاتورة راقٍ بطابع محاسبي احترافي');
             console.log('📁 زر "حفظ PDF" ينزّل الملف مباشرة على الجهاز باسم العميل، بدون فتح أي معاينة');
 
+            // ===== تحميل العملاء والعقارات =====
             loadClientsForSuggestions();
             loadProperties();
             console.log('🔄 تم تحميل العملاء والعقارات');
 
-            getLogoAsBase64(settings.companyLogo).then(function() {
-                console.log('✅ تم تجهيز شعار المنتجع (Base64) مسبقاً');
-            });
-
-        })();
+            // ===== تجهيز شعار المنتجع مسبقًا (Base64) لضمان ظهوره دائمًا
+            // في المعاينة وملف PDF دون تأخير عند أول استخدام =====
+            getLogoAsBase64(settings.companyLogo);
+        })(); // نهاية IIFE initApp
     </script>
 
+    <!-- ===== التحقق من وجود user بعد التهيئة ===== -->
     <script>
         if (!window.currentUser || !window.currentUser.email) {
             console.warn('⚠️ انتظر التحقق من الجلسة...');
