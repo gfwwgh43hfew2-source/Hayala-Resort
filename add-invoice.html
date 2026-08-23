@@ -3742,6 +3742,7 @@
                     '&bgcolor=ffffff&color=121821&margin=4';
 
                 var img = document.createElement('img');
+                img.crossOrigin = 'anonymous';
                 img.src = qrImageUrl;
                 img.alt = 'QR Code';
                 img.style.width = '100%';
@@ -4023,7 +4024,10 @@
                                 --font-serif: 'Marcellus', 'Cairo', serif;
                                 --font-mono: 'JetBrains Mono', ui-monospace, monospace;
                             }
-                            * { box-sizing: border-box; }
+                            * {
+                                box-sizing: border-box;
+                                font-variant-ligatures: normal !important;
+                            }
                             body {
                                 background: #ffffff !important;
                                 padding: 0 !important;
@@ -4031,6 +4035,9 @@
                                 font-family: var(--font-display) !important;
                                 direction: rtl;
                                 color: var(--ink);
+                                letter-spacing: normal !important;
+                                text-rendering: optimizeLegibility !important;
+                                -webkit-font-smoothing: antialiased;
                             }
                             ::-webkit-scrollbar { display: none !important; }
 
@@ -4094,10 +4101,9 @@
                             .invoice-header .company-details .eyebrow {
                                 display: inline-block;
                                 font-size: 9px !important;
-                                letter-spacing: 1.4px;
+                                letter-spacing: normal !important;
                                 color: var(--accent-ink) !important;
                                 font-weight: 800 !important;
-                                text-transform: uppercase;
                                 margin-bottom: 4px;
                             }
                             .invoice-header .company-details h2 {
@@ -4191,7 +4197,7 @@
                             .info-grid .item.highlight { background: var(--accent-soft) !important; }
                             .info-grid .item .label {
                                 font-size: 8.5px !important; color: var(--ink-mute) !important; font-weight: 700 !important;
-                                letter-spacing: 0.4px; text-transform: uppercase; display: block; margin-bottom: 4px;
+                                letter-spacing: normal !important; display: block; margin-bottom: 4px;
                             }
                             .info-grid .item .value { font-size: 13px !important; font-weight: 700 !important; color: var(--ink) !important; }
                             .info-grid .item.highlight .value { color: var(--accent-ink) !important; }
@@ -4342,7 +4348,7 @@
                 `);
                 doc.close();
 
-                setTimeout(function() {
+                function triggerPrint() {
                     try {
                         iframe.contentWindow.focus();
                         iframe.contentWindow.print();
@@ -4355,7 +4361,20 @@
                             iframe.remove();
                         }
                     }, 1000);
-                }, 600);
+                }
+
+                // ننتظر تحميل خط Cairo فعليًا داخل مستند الـ iframe نفسه قبل
+                // استدعاء الطباعة، حتى لا يطبع المتصفح بخط احتياطي غير مُشكَّل
+                // بشكل صحيح للأحرف العربية (وهو ما يسبب تقطّع الحروف عن بعضها)
+                iframe.contentWindow.onload = function() {
+                    var fontsReady = (iframe.contentWindow.document.fonts && iframe.contentWindow.document.fonts.ready) ?
+                        iframe.contentWindow.document.fonts.ready : Promise.resolve();
+                    fontsReady.then(function() {
+                        setTimeout(triggerPrint, 250);
+                    }).catch(function() {
+                        setTimeout(triggerPrint, 600);
+                    });
+                };
 
                 closePrintPreview();
             }
@@ -4392,6 +4411,11 @@
                         logging: false,
                         allowTaint: true,
                         backgroundColor: '#ffffff',
+                        // مهم لإصلاح تقطّع/انفصال الحروف العربية: هذا الخيار يجعل
+                        // html2canvas يفوّض رسم النص فعليًا لمحرك المتصفح (عبر SVG
+                        // foreignObject) بدل رسمه بنفسه حرفًا حرفًا على الـ canvas،
+                        // وهو ما يكسر تشكيل/ربط الحروف العربية بدونه
+                        foreignObjectRendering: true,
                         width: element.scrollWidth,
                         height: element.scrollHeight,
                         windowWidth: element.scrollWidth,
