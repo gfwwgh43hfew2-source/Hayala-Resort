@@ -2632,6 +2632,91 @@
             padding: 12mm 15mm;
             box-shadow: none;
         }
+
+        /* ============================================================
+           فرض تصميم سطح المكتب دائمًا داخل الحاوية المخفية لتوليد PDF،
+           بصرف النظر عن عرض شاشة الجهاز (موبايل/تابلت). هذا ضروري لأن
+           استعلامات @media (max-width: 768px / 480px) أعلاه تُطبَّق حسب
+           عرض الشاشة الفعلي للجهاز، وليس حسب حجم هذا العنصر نفسه (الذي
+           يبقى بعرض 210mm ثابت دومًا)، فتُفسد تصميم الفاتورة عند التصدير
+           من الهاتف دون هذا التجاوز. محدد المعرّف (#) هنا له أولوية أعلى
+           تلقائيًا من أي محدد صنف (.) موجود داخل تلك الاستعلامات، لذا هذا
+           التجاوز يعمل دائمًا بغض النظر عن ترتيبه في الملف.
+           ============================================================ */
+        #pdfOffscreenOverlay .invoice-header {
+            flex-direction: row;
+            text-align: right;
+            gap: calc(20px * var(--scale-factor));
+        }
+        #pdfOffscreenOverlay .invoice-header .logo-section {
+            flex-direction: row;
+        }
+        #pdfOffscreenOverlay .invoice-header .logo-section .logo-box {
+            width: calc(110px * var(--scale-factor));
+            height: calc(110px * var(--scale-factor));
+            min-width: calc(110px * var(--scale-factor));
+            max-width: calc(110px * var(--scale-factor));
+            min-height: calc(110px * var(--scale-factor));
+            max-height: calc(110px * var(--scale-factor));
+            border-radius: calc(16px * var(--scale-factor));
+            padding: calc(8px * var(--scale-factor));
+        }
+        #pdfOffscreenOverlay .invoice-header .company-details h2 {
+            font-size: calc(1.55rem * var(--scale-factor));
+        }
+        #pdfOffscreenOverlay .invoice-title {
+            width: auto;
+        }
+        #pdfOffscreenOverlay .invoice-title .qr-code {
+            width: calc(72px * var(--scale-factor));
+            height: calc(72px * var(--scale-factor));
+            padding: calc(4px * var(--scale-factor));
+        }
+        #pdfOffscreenOverlay .info-grid {
+            flex-direction: row;
+        }
+        #pdfOffscreenOverlay .info-grid .item {
+            border-left: 1px dashed var(--line);
+            border-bottom: none;
+        }
+        #pdfOffscreenOverlay .info-grid .item:last-child {
+            border-left: none;
+        }
+        #pdfOffscreenOverlay table {
+            font-size: calc(0.85rem * var(--scale-factor));
+        }
+        #pdfOffscreenOverlay table th {
+            padding: calc(10px * var(--scale-factor)) calc(12px * var(--scale-factor));
+            font-size: calc(0.62rem * var(--scale-factor));
+        }
+        #pdfOffscreenOverlay table td {
+            padding: calc(9px * var(--scale-factor)) calc(12px * var(--scale-factor));
+            font-size: calc(0.8rem * var(--scale-factor));
+        }
+        #pdfOffscreenOverlay .invoice-summary {
+            flex-direction: row;
+        }
+        #pdfOffscreenOverlay .summary-box {
+            flex: 0 0 calc(260px * var(--scale-factor));
+            width: auto;
+        }
+        #pdfOffscreenOverlay .signature {
+            text-align: right;
+        }
+        #pdfOffscreenOverlay .signature .line {
+            margin: 0;
+        }
+        #pdfOffscreenOverlay .notes-section {
+            padding: calc(15px * var(--scale-factor)) calc(18px * var(--scale-factor));
+            margin-top: calc(22px * var(--scale-factor));
+        }
+        #pdfOffscreenOverlay .notes-section .notes-title {
+            font-size: calc(0.72rem * var(--scale-factor));
+        }
+        #pdfOffscreenOverlay .notes-section .notes-content {
+            font-size: calc(0.63rem * var(--scale-factor));
+            line-height: 1.85;
+        }
     </style>
 </head>
 <body>
