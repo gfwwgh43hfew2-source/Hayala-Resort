@@ -3872,6 +3872,25 @@
 
             /**
              * ============================================================
+             * FORMAT TIME 12H — يحوّل الوقت من نظام 24 ساعة إلى 12 ساعة
+             * مع تحديد صباحاً / مساءً (يدعم صيغة "HH:MM")
+             * ============================================================
+             */
+            function formatTime12h(timeStr) {
+                if (!timeStr) return '';
+                var match = String(timeStr).match(/(\d{1,2}):(\d{2})/);
+                if (!match) return timeStr;
+                var hours = parseInt(match[1], 10);
+                var minutes = match[2];
+                var period = hours >= 12 ? 'م' : 'ص';
+                var hours12 = hours % 12;
+                if (hours12 === 0) hours12 = 12;
+                return hours12 + ':' + minutes + ' ' + period;
+            }
+
+
+            /**
+             * ============================================================
              * INLINE ICONS — أيقونات SVG مضمّنة (بديل عن Font Awesome)
              * تُستخدم حصراً داخل قالب الفاتورة (buildInvoiceHTML) لأن
              * أيقونات الخط الخارجي (Font Awesome) قد لا تُحمَّل بشكل
@@ -3984,9 +4003,9 @@
                     var checkInDayName = getArabicDayName(item.checkIn);
                     var checkOutDayName = getArabicDayName(item.checkOut);
                     var checkInDateFormatted = item.checkIn ? (checkInDayName + ' ' + new Date(item.checkIn).toLocaleDateString('ar-EG')) : 'غير محدد';
-                    var checkInTimeFormatted = item.checkInTime ? item.checkInTime : 'غير محدد';
+                    var checkInTimeFormatted = item.checkInTime ? formatTime12h(item.checkInTime) : 'غير محدد';
                     var checkOutDateFormatted = item.checkOut ? (checkOutDayName + ' ' + new Date(item.checkOut).toLocaleDateString('ar-EG')) : 'غير محدد';
-                    var checkOutTimeFormatted = item.checkOutTime ? item.checkOutTime : 'غير محدد';
+                    var checkOutTimeFormatted = item.checkOutTime ? formatTime12h(item.checkOutTime) : 'غير محدد';
 
                     html += `
                         <tr class="data-row">
@@ -4028,8 +4047,11 @@
                             <p>تفهم المرافقون طابع المكان كمزرعة شعبية ليست كالفنادق مثلاً</p>
                             <p>في حال بقاء أي أغراض (غير مثمنة) دون مراجعة مباشرة من المستأجر يحق لإدارة المنتجع التصرف بها وفق ما تراه</p>
                             <p>يرجى التأكد من قراءة التفاصيل بدقة (يمكنكم طلب فيديوهات إضافية للمكان)</p>
-                            <p>إدارة المنتجع غير مسؤولة عن فقدان أو تلف المقتنيات الشخصية، لذا توصي بالتأكد من عدم نسيان أي أغراض قبل المغادرة</p>
                             <p>يمنع إحداث أي تلف أو تخريب في مرافق المنتجع أو محتوياته، ويحمل المستأجر قيمة أي أضرار تنتج عن الاستخدام غير المعتدل</p>
+                            <p>يمنع دخول السيارات للمسطحات الخضراء منعاً باتاً حيث توجد رشاشات وشبكات مياه</p>
+                            <p>يمنع وضع (المنقل) على الثيل</p>
+                            <p>في حال الرغبة باستخدام حفرة المندي يجب أن يكون ذلك بإشراف الحارس</p>
+                            <p>شاكرين لتفهمكم</p>
                         </div>
                     </div>
 
@@ -4706,9 +4728,9 @@
                     var checkInDayName = getArabicDayName(item.checkIn);
                     var checkOutDayName = getArabicDayName(item.checkOut);
                     var checkInDateFormatted = item.checkIn ? (checkInDayName + ' ' + new Date(item.checkIn).toLocaleDateString('ar-EG')) : 'غير محدد';
-                    var checkInTimeFormatted = item.checkInTime || 'غير محدد';
+                    var checkInTimeFormatted = item.checkInTime ? formatTime12h(item.checkInTime) : 'غير محدد';
                     var checkOutDateFormatted = item.checkOut ? (checkOutDayName + ' ' + new Date(item.checkOut).toLocaleDateString('ar-EG')) : 'غير محدد';
-                    var checkOutTimeFormatted = item.checkOutTime || 'غير محدد';
+                    var checkOutTimeFormatted = item.checkOutTime ? formatTime12h(item.checkOutTime) : 'غير محدد';
 
                     bookingsHtml += `
                         <tr style="border-bottom:1px solid #dde3e0;">
@@ -4812,8 +4834,11 @@
                                 <li>تفهم المرافقون طابع المكان كمزرعة شعبية ليست كالفنادق</li>
                                 <li>في حال بقاء أي أغراض دون مراجعة، يحق للإدارة التصرف بها</li>
                                 <li>يرجى التأكد من قراءة التفاصيل بدقة</li>
-                                <li>الإدارة غير مسؤولة عن فقدان المقتنيات الشخصية</li>
                                 <li>يمنع إحداث أي تلف، ويحمل المستأجر قيمة الأضرار</li>
+                                <li>يمنع دخول السيارات للمسطحات الخضراء منعاً باتاً حيث توجد رشاشات وشبكات مياه</li>
+                                <li>يمنع وضع (المنقل) على الثيل</li>
+                                <li>في حال الرغبة باستخدام حفرة المندي يجب أن يكون ذلك بإشراف الحارس</li>
+                                <li>شاكرين لتفهمكم</li>
                             </ol>
                         </div>
 
