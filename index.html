@@ -3075,6 +3075,31 @@
                     console.warn('⚠️ فشل في جلب المصروفات');
                 }
 
+                console.log('🔄 جلب دفعات أبو زيد...');
+                var totalAbuzeidPayments = 0;
+                try {
+                    var abuzeidPaymentsResponse = await fetch(SUPABASE_URL + '/rest/v1/abuzaid_payments?select=amount', {
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                        }
+                    });
+                    if (abuzeidPaymentsResponse.ok) {
+                        var abuzeidPayments = await abuzeidPaymentsResponse.json();
+                        abuzeidPayments.forEach(function(payment) {
+                            var amount = parseFloat(payment.amount || 0);
+                            if (!isNaN(amount) && amount > 0) {
+                                totalAbuzeidPayments += amount;
+                            }
+                        });
+                        console.log('💳 إجمالي دفعات أبو زيد:', totalAbuzeidPayments);
+                    } else {
+                        console.warn('⚠️ فشل في جلب دفعات أبو زيد');
+                    }
+                } catch (e) {
+                    console.warn('⚠️ خطأ في جلب دفعات أبو زيد:', e.message);
+                }
+
                 var totalRevenue = 0;
                 var totalBookings = bookings.length;
                 var totalClients = clients.length;
@@ -3182,14 +3207,16 @@
 
                 var netProfit = Math.max(0, totalRevenue - totalExpenses);
                 var commissionRate = 0.20;
-                var totalCommission = netProfit * commissionRate;
+                var commissionDue = netProfit * commissionRate;
+                var totalCommission = Math.max(0, commissionDue - totalAbuzeidPayments);
 
                 var roundedRevenue = Math.round(totalRevenue);
                 var roundedExpenses = Math.round(totalExpenses);
                 var roundedCommission = Math.round(totalCommission);
 
-                console.log('📊 الإيرادات (بعد الخصم):', roundedRevenue, 'المصروفات:', roundedExpenses, 'العمولة:',
-                    roundedCommission);
+                console.log('📊 الإيرادات (بعد الخصم):', roundedRevenue, 'المصروفات:', roundedExpenses,
+                    'العمولة المستحقة:', Math.round(commissionDue), 'المدفوع لأبو زيد:', Math.round(totalAbuzeidPayments),
+                    'المتبقي:', roundedCommission);
 
                 document.getElementById('totalRevenue').textContent = roundedRevenue.toLocaleString() + ' ر.س';
                 document.getElementById('totalBookings').textContent = totalBookings.toLocaleString();
