@@ -3228,7 +3228,7 @@
                 var netProfit = Math.max(0, totalRevenue - totalExpenses);
                 var commissionRate = 0.20;
                 var commissionDue = netProfit * commissionRate;
-                var totalCommission = Math.max(0, commissionDue - totalAbuzeidPayments);
+                var totalCommission = commissionDue - totalAbuzeidPayments; // يُسمح بالسالب (دفعات أكثر من المستحق) ليطابق صفحة أبو زيد
 
                 var roundedRevenue = Math.round(totalRevenue);
                 var roundedExpenses = Math.round(totalExpenses);
@@ -3243,7 +3243,7 @@
                 document.getElementById('totalClients').textContent = (totalClients || 0).toLocaleString();
                 document.getElementById('upcomingBookings').textContent = futureBookings.toLocaleString();
                 document.getElementById('totalExpenses').textContent = roundedExpenses.toLocaleString() + ' ر.س';
-                document.getElementById('totalCommission').textContent = roundedCommission.toLocaleString() + ' ر.س';
+                document.getElementById('totalCommission').textContent = (roundedCommission < 0 ? '\u200E' : '') + roundedCommission.toLocaleString() + ' ر.س';
 
                 renderRealNotifications(bookings);
 
