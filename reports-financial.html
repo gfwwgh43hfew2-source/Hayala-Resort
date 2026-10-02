@@ -592,7 +592,7 @@
 
         async function loadFinancialData() {
             try {
-                var bookingsResp = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=total,discount,check_in', {
+                var bookingsResp = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=total,discount,remaining,check_in', {
                     headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY }
                 });
                 if (!bookingsResp.ok) throw new Error('فشل في جلب بيانات الحجوزات');
@@ -602,15 +602,6 @@
                     headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY }
                 });
                 allExpenses = expensesResp.ok ? await expensesResp.json() : [];
-
-                var bookingsRemResp = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=remaining', {
-                    headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY }
-                });
-                window.totalReceivables = 0;
-                if (bookingsRemResp.ok) {
-                    var remData = await bookingsRemResp.json();
-                    remData.forEach(function(r) { window.totalReceivables += parseFloat(r.remaining) || 0; });
-                }
 
                 populateFilterOptions();
                 applyFilters();
@@ -669,12 +660,13 @@
             var totalExpenses = filteredExpenses.reduce(function(s, e) { return s + (parseFloat(e.total) || parseFloat(e.amount) || 0); }, 0);
             var netProfit = totalRevenue - totalExpenses;
             var margin = totalRevenue > 0 ? (netProfit / totalRevenue * 100) : 0;
+            var totalReceivables = filteredBookings.reduce(function(s, b) { return s + (parseFloat(b.remaining) || 0); }, 0);
 
             var kpis = [
                 { icon: 'fa-arrow-trend-up', number: formatCurrency(totalRevenue), label: 'إجمالي الإيرادات', cls: 'teal' },
                 { icon: 'fa-arrow-trend-down', number: formatCurrency(totalExpenses), label: 'إجمالي المصروفات', cls: 'rust' },
                 { icon: 'fa-scale-balanced', number: formatCurrency(netProfit), label: 'صافي الربح (هامش ' + margin.toFixed(0) + '%)', cls: netProfit >= 0 ? 'teal' : 'rust' },
-                { icon: 'fa-hand-holding-dollar', number: formatCurrency(window.totalReceivables || 0), label: 'إجمالي المتبقي (مستحقات)', cls: 'blue' }
+                { icon: 'fa-hand-holding-dollar', number: formatCurrency(totalReceivables), label: 'مستحقات الفترة (متبقي على العملاء)', cls: 'blue' }
             ];
 
             document.getElementById('kpiContainer').innerHTML = kpis.map(function(k) {
