@@ -18,6 +18,26 @@
         var SUPABASE_URL = 'https://zwuvcblrrrriuylajvba.supabase.co';
         var SUPABASE_ANON_KEY = 'sb_publishable_YFqwTEs-W_kprUgt4bgpCQ_tf5vVeFa';
         var supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // ===== [AUTH-PATCH] توجيه طلبات REST بتوكن المستخدم المسجّل بدل مفتاح anon =====
+        // يلزم بعد إغلاق سياسات RLS المفتوحة. لا تحذف هذا الجزء.
+        (function () {
+            var _origFetch = window.fetch.bind(window);
+            window.fetch = async function (input, init) {
+                try {
+                    var url = typeof input === 'string' ? input : ((input && input.url) || '');
+                    if (url.indexOf(SUPABASE_URL + '/rest/v1/') === 0 && init && init.headers && !(init.headers instanceof Headers)) {
+                        if (init.headers['Authorization'] === 'Bearer ' + SUPABASE_ANON_KEY) {
+                            var sess = (await supabaseClient.auth.getSession()).data.session;
+                            if (sess && sess.access_token) {
+                                var newHeaders = Object.assign({}, init.headers, { 'Authorization': 'Bearer ' + sess.access_token });
+                                init = Object.assign({}, init, { headers: newHeaders });
+                            }
+                        }
+                    }
+                } catch (e) { console.warn('[AUTH-PATCH]', e); }
+                return _origFetch(input, init);
+            };
+        })();
 
         /**
          * ============================================================

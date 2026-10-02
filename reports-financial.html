@@ -12,6 +12,26 @@
         var SUPABASE_URL = 'https://zwuvcblrrrriuylajvba.supabase.co';
         var SUPABASE_ANON_KEY = 'sb_publishable_YFqwTEs-W_kprUgt4bgpCQ_tf5vVeFa';
         var supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // ===== [AUTH-PATCH] توجيه طلبات REST بتوكن المستخدم المسجّل بدل مفتاح anon =====
+        // يلزم بعد إغلاق سياسات RLS المفتوحة. لا تحذف هذا الجزء.
+        (function () {
+            var _origFetch = window.fetch.bind(window);
+            window.fetch = async function (input, init) {
+                try {
+                    var url = typeof input === 'string' ? input : ((input && input.url) || '');
+                    if (url.indexOf(SUPABASE_URL + '/rest/v1/') === 0 && init && init.headers && !(init.headers instanceof Headers)) {
+                        if (init.headers['Authorization'] === 'Bearer ' + SUPABASE_ANON_KEY) {
+                            var sess = (await supabaseClient.auth.getSession()).data.session;
+                            if (sess && sess.access_token) {
+                                var newHeaders = Object.assign({}, init.headers, { 'Authorization': 'Bearer ' + sess.access_token });
+                                init = Object.assign({}, init, { headers: newHeaders });
+                            }
+                        }
+                    }
+                } catch (e) { console.warn('[AUTH-PATCH]', e); }
+                return _origFetch(input, init);
+            };
+        })();
 
         (async function checkAuth() {
             try {
@@ -592,7 +612,7 @@
 
         async function loadFinancialData() {
             try {
-                var bookingsResp = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=total,discount,remaining,check_in', {
+                var bookingsResp = await fetch(SUPABASE_URL + '/rest/v1/bookings?select=total,discount,remaining,check_in,client_name', {
                     headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY }
                 });
                 if (!bookingsResp.ok) throw new Error('فشل في جلب بيانات الحجوزات');
@@ -602,6 +622,22 @@
                     headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY }
                 });
                 allExpenses = expensesResp.ok ? await expensesResp.json() : [];
+
+                // المستحقات الحالية على العملاء = (متبقي الحجوزات لكل عميل − دفعاته اللاحقة)، بنفس منطق client-accounts.html
+                var paymentsResp = await fetch(SUPABASE_URL + '/rest/v1/client_payments?select=client_name,amount', {
+                    headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY }
+                });
+                var allPayments = paymentsResp.ok ? await paymentsResp.json() : [];
+                var remByClient = {};
+                allBookings.forEach(function(b) {
+                    if (!b.client_name) return;
+                    remByClient[b.client_name] = (remByClient[b.client_name] || 0) + (parseFloat(b.remaining) || 0);
+                });
+                allPayments.forEach(function(p) {
+                    if (!p.client_name || remByClient[p.client_name] === undefined) return;
+                    remByClient[p.client_name] = Math.max(0, remByClient[p.client_name] - (parseFloat(p.amount) || 0));
+                });
+                window.totalReceivables = Object.keys(remByClient).reduce(function(sum, k) { return sum + (remByClient[k] > 0.01 ? remByClient[k] : 0); }, 0);
 
                 populateFilterOptions();
                 applyFilters();
@@ -660,13 +696,12 @@
             var totalExpenses = filteredExpenses.reduce(function(s, e) { return s + (parseFloat(e.total) || parseFloat(e.amount) || 0); }, 0);
             var netProfit = totalRevenue - totalExpenses;
             var margin = totalRevenue > 0 ? (netProfit / totalRevenue * 100) : 0;
-            var totalReceivables = filteredBookings.reduce(function(s, b) { return s + (parseFloat(b.remaining) || 0); }, 0);
 
             var kpis = [
                 { icon: 'fa-arrow-trend-up', number: formatCurrency(totalRevenue), label: 'إجمالي الإيرادات', cls: 'teal' },
                 { icon: 'fa-arrow-trend-down', number: formatCurrency(totalExpenses), label: 'إجمالي المصروفات', cls: 'rust' },
                 { icon: 'fa-scale-balanced', number: formatCurrency(netProfit), label: 'صافي الربح (هامش ' + margin.toFixed(0) + '%)', cls: netProfit >= 0 ? 'teal' : 'rust' },
-                { icon: 'fa-hand-holding-dollar', number: formatCurrency(totalReceivables), label: 'مستحقات الفترة (متبقي على العملاء)', cls: 'blue' }
+                { icon: 'fa-hand-holding-dollar', number: formatCurrency(window.totalReceivables || 0), label: 'المستحقات الحالية على العملاء (بعد الدفعات)', cls: 'blue' }
             ];
 
             document.getElementById('kpiContainer').innerHTML = kpis.map(function(k) {
