@@ -2091,6 +2091,14 @@
                     </div>
                 </div>
 
+                <!-- ===== طلبات الموقع (عدّاد الطلبات الجديدة) ===== -->
+                <a href="website-requests.html" id="wrBanner" class="fade-up" style="display:flex;align-items:center;gap:14px;margin:0 0 18px;padding:14px 18px;border-radius:14px;background:var(--surface,#fff);border:1px solid var(--line,#dde3e0);box-shadow:var(--shadow-sm);text-decoration:none;color:inherit;animation-delay:0.04s">
+                    <span style="width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:var(--accent-soft,#faead0);color:var(--accent-ink,#7a5312);font-size:1.1rem"><i class="fas fa-globe"></i></span>
+                    <span style="flex:1"><strong id="wrTitle" style="display:block;font-size:0.95rem">طلبات الموقع</strong><span id="wrSub" style="color:var(--ink-mute,#6d7883);font-size:0.8rem">جاري التحقق من الطلبات الجديدة...</span></span>
+                    <span id="wrCount" style="display:none;min-width:30px;text-align:center;background:var(--accent,#dd9f2e);color:var(--ink,#121821);border-radius:999px;padding:3px 12px;font-weight:800"></span>
+                    <i class="fas fa-arrow-left" style="color:var(--ink-mute,#6d7883)"></i>
+                </a>
+
                 <!-- ===== STATS ===== -->
                 <div class="stats-wrap">
                     <div class="stats">
@@ -3396,5 +3404,19 @@
         console.log('📱 تم إصلاح قائمة التنبيهات');
     </script>
 
+    <script>
+        /* عدّاد طلبات الموقع الجديدة (يعتمد على جلسة الدخول، ولا يؤثر على باقي اللوحة إن فشل) */
+        (async function wrCounter() {
+            try {
+                var s = await supabaseClient.auth.getSession();
+                if (!s.data || !s.data.session) return;
+                var r = await supabaseClient.from("website_requests").select("id", { count: "exact", head: true }).eq("status", "new");
+                if (r.error) throw r.error;
+                var n = r.count || 0, c = document.getElementById("wrCount");
+                document.getElementById("wrSub").textContent = n ? (n === 1 ? "طلب حجز جديد بانتظار التواصل" : n + " طلبات حجز جديدة بانتظار التواصل") : "لا توجد طلبات جديدة";
+                if (n) { c.textContent = n; c.style.display = "inline-block"; document.getElementById("wrBanner").style.borderColor = "var(--accent,#dd9f2e)"; }
+            } catch (e) { var el = document.getElementById("wrSub"); if (el) el.textContent = "افتح الصفحة لعرض الطلبات"; }
+        })();
+    </script>
 </body>
 </html>

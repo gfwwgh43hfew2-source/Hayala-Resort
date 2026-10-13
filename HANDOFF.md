@@ -55,3 +55,10 @@
 ## 7) تلميحات للاختبار
 - اختبار RLS بدون لمس البيانات: داخل `begin; ... rollback;` مع `set local role anon|authenticated` و`set_config('request.jwt.claims', ...)`. `profiles.id` مرتبط بـ auth.users فلا يمكن إنشاء مستخدمين وهميين؛ بدّل role/status لحساب المدير مؤقتًا داخل المعاملة. للحذف: يُرجع RLS صفر صفوف بلا خطأ، فاختبره على صف موجود.
 - فحص صياغة JS لكل كتل `<script>` بـ `node --check` بعد أي تعديل.
+
+## طلبات الموقع (website_requests)
+
+- الزائر في الموقع العام يرسل طلب حجز، فتستقبله دالة `receive-website-request` (Edge Function، verify_jwt=true) وتسجّله في جدول `website_requests` بقاعدة الإدارة (تحقق صارم + منع التكرار + حد 5 طلبات/ساعة لكل جهاز). الدالة تكتب فقط.
+- صفحة `website-requests.html` يقرؤها الفريق المسجّل النشط (RLS): فلاتر الحالة، زر واتساب، تحذير لو تواريخ الطلب تتعارض مع حجز مسجّل، نسخ بيانات الطلب لإدخالها في الفاتورة. وفي `index.html` كارت بعدد الطلبات الجديدة.
+- تحويل الطلب لفاتورة يدوي (الفاتورة فيها سعر ومدفوع ومتبقي). بعد إنشاء الفاتورة يظهر الحجز تلقائيًا في تقويم الموقع عبر دالة `public-availability`.
+- الجدول صلاحياته: authenticated (select/update/delete) و service_role (select/insert/update/delete) فقط، وanon محجوب.
