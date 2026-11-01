@@ -432,6 +432,20 @@
         @media (max-width: 992px) { .grid-2e { grid-template-columns: 1fr; } }
         @media (max-width: 768px) { .tabs-seg { flex-wrap: nowrap; overflow-x: auto; } .tabs-seg button { white-space: nowrap; } }
         @media print { .tabs-seg { display: none !important; } .pane { display: none !important; } .pane.on { display: block !important; } }
+
+        /* ===== قائمة الدخل ===== */
+        table.is td, table.is th { white-space: nowrap; }
+        table.is td:first-child { text-align: right; min-width: 230px; position: sticky; right: 0; background: var(--surface); z-index: 1; }
+        table.is th:first-child { position: sticky; right: 0; z-index: 2; }
+        table.is tr.sec td { background: var(--surface-muted); font-weight: 800; color: var(--ink); text-align: right; }
+        table.is tr.sub td { font-weight: 800; background: var(--blue-soft); color: var(--blue); }
+        table.is tr.sub td:first-child { background: var(--blue-soft); }
+        table.is tr.grand td { font-weight: 900; background: var(--ink); color: #fff; }
+        table.is tr.grand td:first-child { background: var(--ink); }
+        table.is tr.pct td { color: var(--ink-mute); font-size: 0.9em; }
+        table.is td.ind { padding-right: 28px; font-weight: 600; }
+        table.is td.tot, table.is th.tot { border-right: 2px solid var(--line-strong); font-weight: 800; }
+        @media print { table.is td:first-child, table.is th:first-child { position: static; } }
     </style>
 </head>
 <body>
@@ -545,6 +559,7 @@
 
             <div class="seg tabs-seg" id="segTab">
                 <button data-t="summary"><i class="fas fa-gauge-high"></i> الملخص التنفيذي</button>
+                <button data-t="income"><i class="fas fa-file-invoice-dollar"></i> قائمة الدخل</button>
                 <button data-t="bookings"><i class="fas fa-bed"></i> الحجوزات والإيرادات</button>
                 <button data-t="payments"><i class="fas fa-hand-holding-dollar"></i> التحصيلات والمستحقات</button>
                 <button data-t="expenses"><i class="fas fa-money-bill-wave"></i> المصروفات</button>
@@ -564,6 +579,16 @@
                         <button class="btn btn-outline btn-sm" id="btnCsvSum"><i class="fas fa-file-csv"></i> CSV</button></div>
                     <div class="card-body"><div id="sumTable"></div></div>
                 </div>
+            </div>
+
+            <!-- ===== قائمة الدخل ===== -->
+            <div class="pane" id="pane-income">
+                <div class="card">
+                    <div class="card-header"><h2><i class="fas fa-file-invoice-dollar"></i> قائمة الدخل <span class="badge" id="isRange"></span></h2>
+                        <button class="btn btn-success btn-sm" id="btnCsvIS"><i class="fas fa-file-csv"></i> تصدير CSV</button></div>
+                    <div class="card-body"><div id="isTable"></div></div>
+                </div>
+                <div class="note-box" id="isNotes"></div>
             </div>
 
             <!-- ===== الحجوزات والإيرادات ===== -->
@@ -1323,6 +1348,76 @@
                 : emptyBox('لا توجد دفعات في هذه الفترة');
         }
 
+
+        // ---------- قائمة الدخل ----------
+        function renderIncomeTab() {
+            var bs = bookingsScope(), ps = paymentsScope(), es = expensesScope();
+            var ma = monthlyActivity(bs, ps, es), keys = ma.keys, rate = state.rate;
+            document.getElementById('isRange').textContent = (state.from || state.to ? ((state.from ? fmtDate(state.from) : 'البداية') + ' ← ' + (state.to ? fmtDate(state.to) : 'اليوم')) : 'كل الفترة');
+            if (!keys.length) { document.getElementById('isTable').innerHTML = emptyBox('لا توجد بيانات في هذه الفترة'); window.__IS = null; return; }
+            var propRev = {}, catExp = {};
+            bs.forEach(function (b) { var d = bDate(b); if (!d) return; var k = d.substring(0, 7); var p = propRev[b.prop] || (propRev[b.prop] = {}); p[k] = (p[k] || 0) + b.total; });
+            es.forEach(function (e) { var c = catExp[e.cat] || (catExp[e.cat] = {}); c[e.month] = (c[e.month] || 0) + e.amount; });
+            function tot(o) { return keys.reduce(function (s, k) { return s + (o[k] || 0); }, 0); }
+            var props = Object.keys(propRev).sort(function (a, b) { return tot(propRev[b]) - tot(propRev[a]); });
+            var cats = Object.keys(catExp).sort(function (a, b) {
+                function rank(c) { return c === CAT_PURCH ? 0 : (c === CAT_SAL ? 1 : 2); }
+                return rank(a) - rank(b) || tot(catExp[b]) - tot(catExp[a]);
+            });
+            var rows = [];   // {t: type, l: label, v: function(k)->number | null, pct: bool}
+            function mget(o) { return function (k) { return o[k] || 0; }; }
+            function gross(k) { return ma.m[k].gross; }
+            function disc(k) { return ma.m[k].disc; }
+            function net(k) { return ma.m[k].rev; }
+            function expT(k) { return ma.m[k].exp; }
+            function op(k) { return net(k) - expT(k); }
+            function comm(k) { return Math.max(0, op(k)) * rate / 100; }
+            function fin(k) { return op(k) - comm(k); }
+            rows.push({ t: 'sec', l: 'الإيرادات' });
+            props.forEach(function (p) { rows.push({ t: 'ind', l: (p.indexOf('إيرادات') === 0 ? p : 'إيرادات ' + p), v: mget(propRev[p]) }); });
+            rows.push({ t: 'sub', l: 'إجمالي الإيرادات قبل الخصم', v: gross });
+            rows.push({ t: 'ind', l: '(−) الخصومات الممنوحة', v: function (k) { return -disc(k); } });
+            rows.push({ t: 'sub', l: 'صافي الإيرادات', v: net });
+            rows.push({ t: 'sec', l: 'المصروفات التشغيلية' });
+            cats.forEach(function (c) { rows.push({ t: 'ind', l: c, v: mget(catExp[c]) }); });
+            rows.push({ t: 'sub', l: 'إجمالي المصروفات', v: expT });
+            rows.push({ t: 'sub', l: 'الربح التشغيلي (قبل عمولة أبو زيد)', v: op });
+            rows.push({ t: 'ind', l: '(−) عمولة أبو زيد (' + rate + '% من الربح التشغيلي)', v: function (k) { return -comm(k); } });
+            rows.push({ t: 'grand', l: 'صافي الربح بعد العمولة', v: fin });
+            rows.push({ t: 'pct', l: 'هامش الربح التشغيلي %', p: function (k) { return net(k) > 0 ? op(k) / net(k) * 100 : null; } });
+            rows.push({ t: 'pct', l: 'المصروفات كنسبة من صافي الإيرادات %', p: function (k) { return net(k) > 0 ? expT(k) / net(k) * 100 : null; } });
+            rows.push({ t: 'sec', l: 'ملحق نقدي' });
+            rows.push({ t: 'ind', l: 'المقبوضات (عند الحجز + دفعات العملاء)', v: function (k) { return ma.m[k].paidAt + ma.m[k].later; } });
+            rows.push({ t: 'ind', l: '(−) المصروفات', v: function (k) { return -expT(k); } });
+            rows.push({ t: 'sub', l: 'صافي النقد من العمليات', v: function (k) { return ma.m[k].paidAt + ma.m[k].later - expT(k); } });
+            function total(r) {
+                if (r.p) {   // النسب تُحسب من الإجماليات لا بمتوسط النسب
+                    var n = keys.reduce(function (s, k) { return s + net(k); }, 0), o = keys.reduce(function (s, k) { return s + op(k); }, 0), x = keys.reduce(function (s, k) { return s + expT(k); }, 0);
+                    return n > 0 ? (r.l.indexOf('هامش') === 0 ? o / n * 100 : x / n * 100) : null;
+                }
+                return keys.reduce(function (s, k) { return s + r.v(k); }, 0);
+            }
+            var oddFlag = function (k) { return (!ma.m[k].real && ma.m[k].exp) ? ' ⚠' : ''; };
+            var h = '<div class="table-wrapper" style="overflow-x:auto;"><table class="is"><thead><tr><th style="text-align:right;">البند</th>' + keys.map(function (k) { return '<th>' + mLabel(k) + oddFlag(k) + '</th>'; }).join('') + '<th class="tot">الإجمالي</th></tr></thead><tbody>';
+            var csv = [['البند'].concat(keys.map(mLabel), ['الإجمالي'])];
+            function cell(v, isPct) { if (v === null) return '<td class="num">–</td>'; return '<td class="num ' + (isPct ? '' : (v < -0.005 ? 'neg' : '')) + '">' + (isPct ? v.toFixed(1) + '%' : fmt(v)) + '</td>'; }
+            rows.forEach(function (r) {
+                if (r.t === 'sec') { h += '<tr class="sec"><td colspan="' + (keys.length + 2) + '">' + r.l + '</td></tr>'; csv.push([r.l]); return; }
+                var isP = !!r.p, vals = keys.map(function (k) { return isP ? r.p(k) : r.v(k); }), tv = total(r);
+                h += '<tr class="' + (r.t === 'ind' ? '' : r.t) + '"><td class="' + (r.t === 'ind' ? 'ind' : '') + '">' + esc(r.l) + '</td>' + vals.map(function (v) { return cell(v, isP); }).join('') + cell(tv, isP).replace('<td class="num', '<td class="tot num') + '</tr>';
+                csv.push([r.l].concat(vals.map(function (v) { return v === null ? '' : (isP ? v.toFixed(1) + '%' : v.toFixed(2)); }), [tv === null ? '' : (isP ? tv.toFixed(1) + '%' : tv.toFixed(2))]));
+            });
+            h += '</tbody></table></div>';
+            document.getElementById('isTable').innerHTML = h;
+            window.__IS = csv;
+            var n = [];
+            n.push('الإيرادات حسب ' + (state.basis === 'check_in' ? '<b>تاريخ الدخول</b>' : '<b>تاريخ الفاتورة</b>') + (state.exFuture ? ' مع استبعاد الحجوزات المستقبلية.' : ' وتشمل الحجوزات المستقبلية.') + ' الأساس استحقاقي: الحجز يُحتسب كاملاً في شهره حتى لو لم يُسدَّد بعد.');
+            n.push('عمولة أبو زيد تُحتسب لكل شهر على الربح التشغيلي بالنسبة المحددة في تبويب «عمولة أبو زيد» (حالياً ' + rate + '%)، ولا تقل عن صفر. قد يختلف إجماليها قليلاً عن تبويب أبو زيد لأنه يحتسب على الفترة كلها بتاريخ الفاتورة.');
+            n.push('لا تشمل القائمة أي مصروف غير مسجّل في النظام (مثل تجديد الإقامات). الصف المعلّم ⚠ هو شهر مصروف تاريخه مشتبه (غالباً خطأ سنة) ويحتاج تصحيحاً من صفحة المصاريف.');
+            document.getElementById('isNotes').innerHTML = '<i class="fas fa-circle-info"></i> <b>ملاحظات</b><ul>' + n.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ul>';
+        }
+        bind('btnCsvIS', 'click', function () { if (!window.__IS) { toast('لا توجد بيانات', 'لا يوجد ما يُصدَّر', 'warning'); return; } downloadCSV('قائمة-الدخل.csv', window.__IS); });
+
         // ---------- العرض العام ----------
         function render() {
             var exp = applyFilters();
@@ -1333,6 +1428,7 @@
             document.getElementById('fBasis').value = state.basis;
             document.getElementById('fExFuture').checked = state.exFuture;
             if (state.tab === 'summary') renderSummaryTab();
+            else if (state.tab === 'income') renderIncomeTab();
             else if (state.tab === 'bookings') renderBookingsTab();
             else if (state.tab === 'payments') renderPaymentsTab();
             else if (state.tab === 'expenses') renderExpensesTab();
