@@ -447,8 +447,9 @@
         table.is td.tot, table.is th.tot { border-right: 2px solid var(--line-strong); font-weight: 800; }
         @media print { table.is td:first-child, table.is th:first-child { position: static; } }
     </style>
+    <link rel="stylesheet" href="report-readability.css">
 </head>
-<body>
+<body class="report-page">
 
     <div class="swatch-stripe"><span></span><span></span><span></span><span></span></div>
 
@@ -703,7 +704,7 @@
         var ALL = [], B = [], P = [], Z = [], TODAY = ymd(new Date());
         var state = { from: '', to: '', month: '', prop: '', min: '', max: '', q: '', cats: new Set(),
                       pivot: 'groups', view: 'list', sortKey: 'date', sortDir: 'desc', shown: 100,
-                      tab: 'summary', basis: 'check_in', exFuture: true, b: { prop: '', status: '', stay: '', q: '' }, bSortKey: 'date', bSortDir: 'desc', bShown: 100, pSortDir: 'desc', rate: 20 };
+                      tab: (function () { var h = (location.hash || '').replace('#', ''); return ['summary', 'income', 'bookings', 'payments', 'expenses', 'abz'].indexOf(h) > -1 ? h : 'summary'; })(), basis: 'check_in', exFuture: true, b: { prop: '', status: '', stay: '', q: '' }, bSortKey: 'date', bSortDir: 'desc', bShown: 100, pSortDir: 'desc', rate: 20 };
         var chMonthly = null, chCats = null, lastFiltered = [];
 
         function esc(s) { return String(s === null || s === undefined ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -1420,6 +1421,8 @@
 
         // ---------- العرض العام ----------
         function render() {
+            if ((location.hash || '').replace('#', '') !== state.tab) { try { history.replaceState(null, '', '#' + state.tab); } catch (e) { } }
+            if (window.rmRefresh) window.rmRefresh();
             var exp = applyFilters();
             renderControls(exp);
             globalSummaryText();
@@ -1436,6 +1439,10 @@
         }
 
         // ---------- أحداث التبويبات الجديدة ----------
+        window.addEventListener('hashchange', function () {
+            var h = (location.hash || '').replace('#', '');
+            if (['summary', 'income', 'bookings', 'payments', 'expenses', 'abz'].indexOf(h) > -1 && h !== state.tab) { state.tab = h; render(); window.scrollTo(0, 0); }
+        });
         document.getElementById('segTab').addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) { state.tab = b.dataset.t; render(); } });
         bind('fBasis', 'change', function (e) { state.basis = e.target.value; render(); });
         bind('fExFuture', 'change', function (e) { state.exFuture = e.target.checked; render(); });
@@ -1482,5 +1489,6 @@
         load();
 
     </script>
+    <script src="reports-menu.js"></script>
 </body>
 </html>

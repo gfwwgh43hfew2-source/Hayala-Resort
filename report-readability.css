@@ -1,0 +1,62 @@
+/* report-readability.css — تكبير الخطوط والأرقام في صفحات التقارير فقط (body.report-page).
+   سبب الصغر الأصلي: عامل التصغير 0.9 كان يُطبَّق على rem المُصغَّر أصلاً. */
+body.report-page { font-size: 1rem; }
+body.report-page .page-header h1 { font-size: 1.7rem; }
+body.report-page .report-tabs a { font-size: 1rem; padding: 10px 18px; }
+body.report-page .report-tabs a i { font-size: 1rem; }
+
+/* الفلاتر */
+body.report-page .filter-label,
+body.report-page .filter-bar label,
+body.report-page .filter-field label { font-size: 0.92rem; font-weight: 800; color: var(--ink-soft, #2b3440); margin-bottom: 6px; }
+body.report-page .filter-bar input,
+body.report-page .filter-bar select,
+body.report-page .filter-field input,
+body.report-page .filter-field select { font-size: 1.02rem; padding: 10px 12px; min-height: 44px; }
+body.report-page .seg button { font-size: 0.98rem; padding: 9px 20px; }
+body.report-page .tabs-seg button { font-size: 1.02rem; padding: 12px 16px; }
+body.report-page .chip { font-size: 0.96rem; padding: 7px 16px; }
+body.report-page .filter-bar .btn,
+body.report-page .btn { font-size: 0.98rem; padding: 10px 18px; }
+body.report-page .btn-sm { font-size: 0.92rem; padding: 8px 14px; }
+body.report-page label.chk { font-size: 0.96rem; }
+body.report-page .hint { font-size: 0.95rem; }
+body.report-page .filter-summary { font-size: 1rem; padding: 12px 18px; }
+body.report-page .note-box { font-size: 0.98rem; padding: 14px 20px; line-height: 2; }
+
+/* المؤشرات */
+body.report-page .kpi-card { padding: 20px 22px; }
+body.report-page .kpi-card .number { font-size: 2.1rem; line-height: 1.25; overflow-wrap: anywhere; }
+body.report-page .kpi-card .label { font-size: 0.95rem; text-transform: none; letter-spacing: 0; line-height: 1.7; margin-top: 6px; font-weight: 700; color: var(--ink-soft, #2b3440); }
+body.report-page .kpi-card .icon { font-size: 1.6rem; }
+
+/* البطاقات والجداول */
+body.report-page .card-header h2 { font-size: 1.2rem; }
+body.report-page .card-header .badge { font-size: 0.88rem; }
+body.report-page table { font-size: 1.05rem; }
+body.report-page table thead th { font-size: 0.98rem; padding: 14px 14px; font-weight: 800; }
+body.report-page table tbody td { padding: 13px 14px; }
+body.report-page table tfoot td { padding: 14px; font-size: 1.08rem; }
+body.report-page table td.num, body.report-page table th.num { font-size: 1.08rem; }
+body.report-page .badge-pill { font-size: 0.85rem; padding: 3px 12px; }
+body.report-page .warn-badge, body.report-page .future-badge { font-size: 0.8rem; padding: 2px 10px; }
+body.report-page .empty-state p { font-size: 1.15rem; }
+body.report-page .empty-state span { font-size: 1rem; }
+body.report-page .chart-box { min-height: 340px; }
+
+/* قائمة الدخل */
+body.report-page table.is { font-size: 1.08rem; }
+body.report-page table.is td:first-child { min-width: 270px; }
+body.report-page table.is tr.sub td { font-size: 1.12rem; }
+body.report-page table.is tr.grand td { font-size: 1.2rem; padding-top: 16px; padding-bottom: 16px; }
+body.report-page table.is tr.pct td { font-size: 1rem; }
+
+@media (max-width: 768px) {
+    body.report-page .page-header h1 { font-size: 1.35rem; }
+    body.report-page .kpi-card .number { font-size: 1.6rem; }
+    body.report-page .kpi-card .label { font-size: 0.9rem; }
+    body.report-page table, body.report-page table.is { font-size: 0.98rem; }
+    body.report-page table thead th { font-size: 0.9rem; padding: 10px; }
+    body.report-page table tbody td { padding: 10px; }
+    body.report-page .tabs-seg button { font-size: 0.95rem; padding: 10px 12px; }
+}
