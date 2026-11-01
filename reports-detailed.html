@@ -570,7 +570,6 @@
             <!-- ===== الملخص التنفيذي ===== -->
             <div class="pane" id="pane-summary">
                 <div class="kpi-grid k6" id="sumKpis"><div class="empty-state"><div class="spinner"></div><p>جاري تحميل البيانات...</p></div></div>
-                <div id="sumNotes"></div>
                 <div class="card">
                     <div class="card-header"><h2><i class="fas fa-chart-column"></i> الإيرادات والمصروفات وصافي الربح شهرياً</h2></div>
                     <div class="card-body"><div class="chart-box"><canvas id="chSum"></canvas></div></div>
@@ -589,7 +588,6 @@
                         <button class="btn btn-success btn-sm" id="btnCsvIS"><i class="fas fa-file-csv"></i> تصدير CSV</button></div>
                     <div class="card-body"><div id="isTable"></div></div>
                 </div>
-                <div class="note-box" id="isNotes"></div>
             </div>
 
             <!-- ===== الحجوزات والإيرادات ===== -->
@@ -708,7 +706,7 @@
         var chMonthly = null, chCats = null, lastFiltered = [];
 
         function esc(s) { return String(s === null || s === undefined ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
-        function fmt(n) { return (parseFloat(n) || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+        function fmt(n) { return (parseFloat(n) || 0).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0, signDisplay: 'negative' }); }
         function fmtDate(s) { if (!s) return '-'; var p = s.split('-'); return p.length === 3 ? p[2] + '/' + p[1] + '/' + p[0] : s; }
         function mLabel(k) { var p = k.split('-'); return AR_MONTHS[parseInt(p[1], 10) - 1] + ' ' + p[0]; }
         function ymd(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
@@ -1182,19 +1180,6 @@
                 abzKpiCard()
             ].join('');
 
-            // ملاحظات جودة البيانات (قاعدية، تتغير مع الفلاتر)
-            var notes = [];
-            var futAll = B.filter(function (b) { return b.future && inRange(bDate(b)); });
-            if (state.exFuture && futAll.length) notes.push('<b>' + futAll.length + ' حجز مستقبلي</b> مستبعد من الأرقام (قيمتها الصافية ' + fmt(sumBy(futAll, function (b) { return b.net; })) + '، المدفوع منها عربوناً ' + fmt(sumBy(futAll, function (b) { return b.paid; })) + '). ألغِ خيار «استبعاد الحجوزات المستقبلية» لإدراجها.');
-            var longs = bs.filter(function (b) { return b.nights > 30; });
-            longs.forEach(function (b) { notes.push('حجز طويل المدى: <b>' + esc(b.client) + '</b> (' + b.nights + ' ليلة، ' + fmt(b.net) + ' ر.س، من ' + fmtDate(b.ci) + ' إلى ' + fmtDate(b.co) + ') يُحتسب بالكامل في شهر ' + (state.basis === 'check_in' ? 'الدخول' : 'الفاتورة') + ' وليس موزعاً على أشهر الإقامة.'); });
-            var mism = bs.filter(function (b) { return Math.abs((b.paid + b.rem) - b.net) > 1; });
-            if (mism.length) notes.push('<b>' + mism.length + ' فواتير</b> مجموع (المدفوع + المتبقي) فيها لا يساوي الصافي بعد الخصم، وقد تتأثر الإيرادات أو المستحقات: ' + mism.slice(0, 6).map(function (b) { return esc(b.inv); }).join('، ') + (mism.length > 6 ? ' ...' : '') + '. راجعها مع المحاسب.');
-            var sus = es.filter(function (e) { return e.sus; });
-            if (sus.length) notes.push('<b>' + sus.length + ' مصروف</b> تاريخه أقدم بكثير من تاريخ إدخاله (غالباً خطأ سنة): ' + sus.map(function (e) { return esc(e.desc) + ' (' + fmt(e.amount) + ' – ' + fmtDate(e.date) + ')'; }).join('، ') + '. يظهر منفصلاً في الجدول الشهري، وتصحيح تاريخه من صفحة المصاريف.');
-            notes.push('الإيرادات = إجمالي الفاتورة − الخصم. المصروفات لا تشمل عمولة أبو زيد (تظهر في تبويبها). غير مسجّل في النظام: تجديد الإقامات وأي مصروفات لم تُدخل بعد.');
-            document.getElementById('sumNotes').innerHTML = '<div class="note-box"><i class="fas fa-circle-info"></i> <b>ملاحظات على الأرقام</b><ul>' + notes.map(function (n) { return '<li>' + n + '</li>'; }).join('') + '</ul></div>';
-
             // الجدول الشهري + الرسم
             var ma = monthlyActivity(bs, ps, es), rows = ma.keys;
             if (!rows.length) { document.getElementById('sumTable').innerHTML = emptyBox('لا توجد بيانات في هذه الفترة'); drawSumChart([], ma); return; }
@@ -1276,7 +1261,7 @@
             document.getElementById('bKpis').innerHTML = [
                 kpi('fa-bed', '', rows.length + ' حجز / ' + nights + ' ليلة', 'عدد الحجوزات وليالي الإقامة', true),
                 kpi('fa-arrow-trend-up', 'teal', net, 'الإيراد الصافي بعد الخصم (ر.س)'),
-                kpi('fa-tags', 'rust', disc, 'الخصومات (' + (gross > 0 ? (disc / gross * 100).toFixed(1) : '0') + '% من الإجمالي ' + fmt(gross) + ')'),
+                kpi('fa-tags', 'rust', disc, 'الخصومات (' + (gross > 0 ? (disc / gross * 100).toFixed(0) : '0') + '% من الإجمالي ' + fmt(gross) + ')'),
                 kpi('fa-receipt', '', rows.length ? net / rows.length : 0, 'متوسط قيمة الحجز (ر.س)'),
                 kpi('fa-sack-dollar', 'blue', paid, 'المدفوع عند الحجز (ر.س)'),
                 kpi('fa-hourglass-half', 'blue', rem, 'المتبقي المسجّل على الفواتير (قبل الدفعات اللاحقة) (ر.س)')
@@ -1286,7 +1271,7 @@
             function tbl(arr, first) {
                 if (!arr.length) return emptyBox('لا توجد بيانات');
                 return '<table style="min-width:0;"><thead><tr><th style="text-align:right;">' + first + '</th><th>الحجوزات</th><th>الليالي</th><th>الخصم</th><th>الصافي</th><th>النسبة</th></tr></thead><tbody>' +
-                    arr.map(function (r) { return '<tr><td class="txt" style="font-weight:700;">' + esc(r.k) + '</td><td class="num">' + r.n + '</td><td class="num">' + r.nights + '</td><td class="num">' + fmt(r.disc) + '</td><td class="num">' + fmt(r.net) + '</td><td>' + (net > 0 ? (r.net / net * 100).toFixed(1) : '0') + '%</td></tr>'; }).join('') + '</tbody></table>';
+                    arr.map(function (r) { return '<tr><td class="txt" style="font-weight:700;">' + esc(r.k) + '</td><td class="num">' + r.n + '</td><td class="num">' + r.nights + '</td><td class="num">' + fmt(r.disc) + '</td><td class="num">' + fmt(r.net) + '</td><td>' + (net > 0 ? (r.net / net * 100).toFixed(0) : '0') + '%</td></tr>'; }).join('') + '</tbody></table>';
             }
             document.getElementById('bByProp').innerHTML = tbl(gp, 'العقار');
             document.getElementById('bByClient').innerHTML = tbl(gc, 'العميل');
@@ -1337,7 +1322,7 @@
             var meth = {}; ps.forEach(function (p) { var r = meth[p.method] || (meth[p.method] = { k: p.method, n: 0, s: 0 }); r.n++; r.s += p.amount; });
             var ma = Object.keys(meth).map(function (k) { return meth[k]; }).sort(function (a, b) { return b.s - a.s; });
             document.getElementById('pByMethod').innerHTML = ma.length
-                ? '<table style="min-width:0;"><thead><tr><th style="text-align:right;">الطريقة</th><th>عدد الدفعات</th><th>المبلغ</th><th>النسبة</th></tr></thead><tbody>' + ma.map(function (r) { return '<tr><td class="txt" style="font-weight:700;">' + esc(r.k) + '</td><td class="num">' + r.n + '</td><td class="num">' + fmt(r.s) + '</td><td>' + (later > 0 ? (r.s / later * 100).toFixed(1) : 0) + '%</td></tr>'; }).join('') + '</tbody><tfoot><tr><td style="text-align:right;">الإجمالي</td><td class="num">' + ps.length + '</td><td class="num">' + fmt(later) + '</td><td>100%</td></tr></tfoot></table>'
+                ? '<table style="min-width:0;"><thead><tr><th style="text-align:right;">الطريقة</th><th>عدد الدفعات</th><th>المبلغ</th><th>النسبة</th></tr></thead><tbody>' + ma.map(function (r) { return '<tr><td class="txt" style="font-weight:700;">' + esc(r.k) + '</td><td class="num">' + r.n + '</td><td class="num">' + fmt(r.s) + '</td><td>' + (later > 0 ? (r.s / later * 100).toFixed(0) : 0) + '%</td></tr>'; }).join('') + '</tbody><tfoot><tr><td style="text-align:right;">الإجمالي</td><td class="num">' + ps.length + '</td><td class="num">' + fmt(later) + '</td><td>100%</td></tr></tfoot></table>'
                 : emptyBox('لا توجد دفعات في هذه الفترة');
             document.getElementById('pBalCount').textContent = bals.length + ' عميل';
             document.getElementById('pBalances').innerHTML = bals.length
@@ -1385,12 +1370,6 @@
             rows.push({ t: 'sub', l: 'الربح التشغيلي (قبل عمولة أبو زيد)', v: op });
             rows.push({ t: 'ind', l: '(−) عمولة أبو زيد (' + rate + '% من الربح التشغيلي)', v: function (k) { return -comm(k); } });
             rows.push({ t: 'grand', l: 'صافي الربح بعد العمولة', v: fin });
-            rows.push({ t: 'pct', l: 'هامش الربح التشغيلي %', p: function (k) { return net(k) > 0 ? op(k) / net(k) * 100 : null; } });
-            rows.push({ t: 'pct', l: 'المصروفات كنسبة من صافي الإيرادات %', p: function (k) { return net(k) > 0 ? expT(k) / net(k) * 100 : null; } });
-            rows.push({ t: 'sec', l: 'ملحق نقدي' });
-            rows.push({ t: 'ind', l: 'المقبوضات (عند الحجز + دفعات العملاء)', v: function (k) { return ma.m[k].paidAt + ma.m[k].later; } });
-            rows.push({ t: 'ind', l: '(−) المصروفات', v: function (k) { return -expT(k); } });
-            rows.push({ t: 'sub', l: 'صافي النقد من العمليات', v: function (k) { return ma.m[k].paidAt + ma.m[k].later - expT(k); } });
             function total(r) {
                 if (r.p) {   // النسب تُحسب من الإجماليات لا بمتوسط النسب
                     var n = keys.reduce(function (s, k) { return s + net(k); }, 0), o = keys.reduce(function (s, k) { return s + op(k); }, 0), x = keys.reduce(function (s, k) { return s + expT(k); }, 0);
@@ -1401,21 +1380,16 @@
             var oddFlag = function (k) { return (!ma.m[k].real && ma.m[k].exp) ? ' ⚠' : ''; };
             var h = '<div class="table-wrapper" style="overflow-x:auto;"><table class="is"><thead><tr><th style="text-align:right;">البند</th>' + keys.map(function (k) { return '<th>' + mLabel(k) + oddFlag(k) + '</th>'; }).join('') + '<th class="tot">الإجمالي</th></tr></thead><tbody>';
             var csv = [['البند'].concat(keys.map(mLabel), ['الإجمالي'])];
-            function cell(v, isPct) { if (v === null) return '<td class="num">–</td>'; return '<td class="num ' + (isPct ? '' : (v < -0.005 ? 'neg' : '')) + '">' + (isPct ? v.toFixed(1) + '%' : fmt(v)) + '</td>'; }
+            function cell(v, isPct) { if (v === null) return '<td class="num">–</td>'; return '<td class="num ' + (isPct ? '' : (v < -0.005 ? 'neg' : '')) + '">' + (isPct ? v.toFixed(0) + '%' : fmt(v)) + '</td>'; }
             rows.forEach(function (r) {
                 if (r.t === 'sec') { h += '<tr class="sec"><td colspan="' + (keys.length + 2) + '">' + r.l + '</td></tr>'; csv.push([r.l]); return; }
                 var isP = !!r.p, vals = keys.map(function (k) { return isP ? r.p(k) : r.v(k); }), tv = total(r);
                 h += '<tr class="' + (r.t === 'ind' ? '' : r.t) + '"><td class="' + (r.t === 'ind' ? 'ind' : '') + '">' + esc(r.l) + '</td>' + vals.map(function (v) { return cell(v, isP); }).join('') + cell(tv, isP).replace('<td class="num', '<td class="tot num') + '</tr>';
-                csv.push([r.l].concat(vals.map(function (v) { return v === null ? '' : (isP ? v.toFixed(1) + '%' : v.toFixed(2)); }), [tv === null ? '' : (isP ? tv.toFixed(1) + '%' : tv.toFixed(2))]));
+                csv.push([r.l].concat(vals.map(function (v) { return v === null ? '' : (isP ? v.toFixed(0) + '%' : v.toFixed(2)); }), [tv === null ? '' : (isP ? tv.toFixed(0) + '%' : tv.toFixed(2))]));
             });
             h += '</tbody></table></div>';
             document.getElementById('isTable').innerHTML = h;
             window.__IS = csv;
-            var n = [];
-            n.push('الإيرادات حسب ' + (state.basis === 'check_in' ? '<b>تاريخ الدخول</b>' : '<b>تاريخ الفاتورة</b>') + (state.exFuture ? ' مع استبعاد الحجوزات المستقبلية.' : ' وتشمل الحجوزات المستقبلية.') + ' الأساس استحقاقي: الحجز يُحتسب كاملاً في شهره حتى لو لم يُسدَّد بعد.');
-            n.push('عمولة أبو زيد تُحتسب لكل شهر على الربح التشغيلي بالنسبة المحددة في تبويب «عمولة أبو زيد» (حالياً ' + rate + '%)، ولا تقل عن صفر. قد يختلف إجماليها قليلاً عن تبويب أبو زيد لأنه يحتسب على الفترة كلها بتاريخ الفاتورة.');
-            n.push('لا تشمل القائمة أي مصروف غير مسجّل في النظام (مثل تجديد الإقامات). الصف المعلّم ⚠ هو شهر مصروف تاريخه مشتبه (غالباً خطأ سنة) ويحتاج تصحيحاً من صفحة المصاريف.');
-            document.getElementById('isNotes').innerHTML = '<i class="fas fa-circle-info"></i> <b>ملاحظات</b><ul>' + n.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ul>';
         }
         bind('btnCsvIS', 'click', function () { if (!window.__IS) { toast('لا توجد بيانات', 'لا يوجد ما يُصدَّر', 'warning'); return; } downloadCSV('قائمة-الدخل.csv', window.__IS); });
 

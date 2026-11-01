@@ -544,7 +544,7 @@
 
         function formatCurrency(amount) {
             if (amount === undefined || amount === null || isNaN(amount)) return '0.00';
-            return parseFloat(amount).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            return parseFloat(amount).toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0, signDisplay: 'negative'});
         }
 
         function formatDate(dateStr) {

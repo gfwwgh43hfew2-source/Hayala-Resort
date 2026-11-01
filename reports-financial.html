@@ -548,7 +548,7 @@
 
         function formatCurrency(amount) {
             if (amount === undefined || amount === null || isNaN(amount)) return '0.00';
-            return parseFloat(amount).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            return parseFloat(amount).toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0, signDisplay: 'negative'});
         }
 
         function formatDate(dateStr) {
@@ -841,7 +841,7 @@
             var html = '<table><thead><tr><th>الفئة</th><th>الإجمالي</th><th>النسبة من المصروفات</th></tr></thead><tbody>';
             rows.forEach(function(r) {
                 var pct = totalExp > 0 ? (r.total / totalExp * 100) : 0;
-                html += '<tr><td style="font-weight:700;">' + r.cat + '</td><td style="font-weight:700;color:var(--rust);">' + formatCurrency(r.total) + '</td><td>' + pct.toFixed(1) + '%</td></tr>';
+                html += '<tr><td style="font-weight:700;">' + r.cat + '</td><td style="font-weight:700;color:var(--rust);">' + formatCurrency(r.total) + '</td><td>' + pct.toFixed(0) + '%</td></tr>';
             });
             html += '</tbody><tfoot><tr><td>الإجمالي</td><td>' + formatCurrency(totalExp) + '</td><td>100%</td></tr></tfoot></table>';
             container.innerHTML = html;
